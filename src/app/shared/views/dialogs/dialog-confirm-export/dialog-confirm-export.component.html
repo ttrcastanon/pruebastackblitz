@@ -1,0 +1,17 @@
+<h1 mat-dialog-title class="title">
+    <span class="title-text">&nbsp;{{data_.titulo}}</span>
+</h1>
+
+<div mat-dialog-content>
+    <p>{{data_.mensaje}}</p>
+    <mat-radio-group class="er-group" [(ngModel)]="optionSelected">
+        <mat-radio-button class="er-button" *ngFor="let option of dataOptions" [value]="option.Id">
+            {{ option.Text }}
+        </mat-radio-button>
+    </mat-radio-group>
+</div>
+
+<div mat-dialog-actions style="padding-top: 16px;">
+    <button mat-button (click)="ConfirmExport()" cdkFocusInitial>{{data_.buttonLabel}}</button>
+    <button mat-button (click)="CancelExport()">Cancelar</button>
+</div>

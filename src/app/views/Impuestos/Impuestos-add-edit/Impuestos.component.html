@@ -1,0 +1,199 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Configuración de Impuestos</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Impuestos/list">Configuración de Impuestos</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="ImpuestosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="true">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="ImpuestosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="ImpuestosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divIVA_Nacional" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>IVA Nacional %</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">percent</mat-icon>
+                        </span>
+                        <input (change)="IVA_Nacional_ExecuteBusinessRules()" matInput formControlName="IVA_Nacional"
+                          mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="ImpuestosForm.get('IVA_Nacional').hasError('required')">
+                          IVA Nacional % es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divIVA_Internacional" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>IVA Internacional %</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">percent</mat-icon>
+                        </span>
+                        <input (change)="IVA_Internacional_ExecuteBusinessRules()" matInput
+                          formControlName="IVA_Internacional" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error *ngIf="ImpuestosForm.get('IVA_Internacional').hasError('required')">
+                          IVA Internacional % es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divIVA_Frontera" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>IVA Frontera %</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">percent</mat-icon>
+                        </span>
+                        <input (change)="IVA_Frontera_ExecuteBusinessRules()" matInput formControlName="IVA_Frontera"
+                          mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="ImpuestosForm.get('IVA_Frontera').hasError('required')">
+                          IVA Frontera % es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTUA_Nacional" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>TUA Nacional</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="TUA_Nacional_ExecuteBusinessRules()" matInput formControlName="TUA_Nacional"
+                          mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="ImpuestosForm.get('TUA_Nacional').hasError('required')">
+                          TUA Nacional es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTUA_Internacional" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>TUA Internacional</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="TUA_Internacional_ExecuteBusinessRules()" matInput
+                          formControlName="TUA_Internacional" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error *ngIf="ImpuestosForm.get('TUA_Internacional').hasError('required')">
+                          TUA Internacional es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCargos_por_vuelo_internacional" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cargos por vuelo internacional %</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">percent</mat-icon>
+                        </span>
+                        <input (change)="Cargos_por_vuelo_internacional_ExecuteBusinessRules()" matInput
+                          formControlName="Cargos_por_vuelo_internacional" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error *ngIf="ImpuestosForm.get('Cargos_por_vuelo_internacional').hasError('required')">
+                          Cargos por vuelo internacional % es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDerechos_por_servicios_migratorios" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Derechos por servicios migratorios</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Derechos_por_servicios_migratorios_ExecuteBusinessRules()" matInput
+                          formControlName="Derechos_por_servicios_migratorios" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error *ngIf="ImpuestosForm.get('Derechos_por_servicios_migratorios').hasError('required')">
+                          Derechos por servicios migratorios es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_ultima_modificacion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha última modificación</mat-label>
+                        <input (dateChange)="Fecha_ultima_modificacion_ExecuteBusinessRules()"
+                          (blur)="Fecha_ultima_modificacion_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_ultima_modificacion.open()"
+                          [matDatepicker]="datePickerFecha_ultima_modificacion"
+                          formControlName="Fecha_ultima_modificacion" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerFecha_ultima_modificacion"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_ultima_modificacion></mat-datepicker>
+                        <mat-error *ngIf="ImpuestosForm.get('Fecha_ultima_modificacion').hasError('required')">
+                          Fecha última modificación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_ultima_modificacion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2" disabled>
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora última modificación</mat-label>
+                        <input (change)="Hora_ultima_modificacion_ExecuteBusinessRules()"
+                          (blur)="Hora_ultima_modificacion_ExecuteBusinessRules()"
+                          formControlName="Hora_ultima_modificacion" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0"
+                          required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="ImpuestosForm.get('Hora_ultima_modificacion').hasError('required')">
+                          Hora última modificación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!ImpuestosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!ImpuestosForm.valid || consult" mat-raised-button color="primary" hidden>Guardar y
+                    Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!ImpuestosForm.valid || consult" mat-raised-button color="primary" hidden>Guardar y
+                    Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!ImpuestosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

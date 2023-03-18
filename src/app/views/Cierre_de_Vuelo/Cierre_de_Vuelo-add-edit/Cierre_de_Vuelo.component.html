@@ -1,0 +1,563 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Cierre de Vuelo</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Cierre_de_Vuelo/list">Cierre de Vuelo</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Cierre_de_VueloForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Cierre_de_VueloForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNumero_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Vuelo</mat-label>
+                        <input type="text" matInput formControlName="Numero_de_Vuelo" [matAutocomplete]="autoNumero_de_Vuelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNumero_de_Vuelo="matAutocomplete" [displayWith]="displayFnNumero_de_Vuelo">
+                          <mat-option (onSelectionChange)="Numero_de_Vuelo_ExecuteBusinessRules()" *ngFor="let option of optionsNumero_de_Vuelo | async" [value]="option">
+                            {{option.Numero_de_Vuelo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNumero_de_Vuelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsNumero_de_Vuelo && !isLoadingNumero_de_Vuelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Numero_de_Vuelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Numero_de_Vuelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Número de Vuelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <input type="text" matInput formControlName="Matricula" [matAutocomplete]="autoMatricula">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMatricula="matAutocomplete" [displayWith]="displayFnMatricula">
+                          <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules()" *ngFor="let option of optionsMatricula | async" [value]="option">
+                            {{option.Matricula}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Matricula').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSolicitud" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Solicitud</mat-label>
+                        <input (dateChange)="Solicitud_ExecuteBusinessRules()" (blur)="Solicitud_ExecuteBusinessRules()" matInput (focus)="datePickerSolicitud.open()" [matDatepicker]="datePickerSolicitud" formControlName="Solicitud" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerSolicitud"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerSolicitud></mat-datepicker>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Solicitud').hasError('required')">
+                          Solicitud  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTramo_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tramo de Vuelo</mat-label>
+                        <input type="text" matInput formControlName="Tramo_de_Vuelo" [matAutocomplete]="autoTramo_de_Vuelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoTramo_de_Vuelo="matAutocomplete" [displayWith]="displayFnTramo_de_Vuelo">
+                          <mat-option (onSelectionChange)="Tramo_de_Vuelo_ExecuteBusinessRules()" *ngFor="let option of optionsTramo_de_Vuelo | async" [value]="option">
+                            {{option.Numero_de_Tramo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingTramo_de_Vuelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsTramo_de_Vuelo && !isLoadingTramo_de_Vuelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Tramo_de_Vuelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Tramo_de_Vuelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Tramo de Vuelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divOrigen" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Origen</mat-label>
+                        <input type="text" matInput formControlName="Origen" [matAutocomplete]="autoOrigen">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoOrigen="matAutocomplete" [displayWith]="displayFnOrigen">
+                          <mat-option (onSelectionChange)="Origen_ExecuteBusinessRules()" *ngFor="let option of optionsOrigen | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingOrigen" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsOrigen && !isLoadingOrigen">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Origen').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Origen').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Origen de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDestino" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Destino</mat-label>
+                        <input type="text" matInput formControlName="Destino" [matAutocomplete]="autoDestino">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoDestino="matAutocomplete" [displayWith]="displayFnDestino">
+                          <mat-option (onSelectionChange)="Destino_ExecuteBusinessRules()" *ngFor="let option of optionsDestino | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingDestino" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsDestino && !isLoadingDestino">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Destino').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Destino').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Destino de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_Salida" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha Salida</mat-label>
+                        <input (dateChange)="Fecha_Salida_ExecuteBusinessRules()" (blur)="Fecha_Salida_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_Salida.open()" [matDatepicker]="datePickerFecha_Salida" formControlName="Fecha_Salida" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_Salida"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_Salida></mat-datepicker>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Fecha_Salida').hasError('required')">
+                          Fecha Salida  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_Salida" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora Salida</mat-label>
+                        <input (change)="Hora_Salida_ExecuteBusinessRules()" (blur)="Hora_Salida_ExecuteBusinessRules()" formControlName="Hora_Salida" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Hora_Salida').hasError('required')">
+                          Hora Salida  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_Despegue" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha Despegue</mat-label>
+                        <input (dateChange)="Fecha_Despegue_ExecuteBusinessRules()" (blur)="Fecha_Despegue_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_Despegue.open()" [matDatepicker]="datePickerFecha_Despegue" formControlName="Fecha_Despegue" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_Despegue"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_Despegue></mat-datepicker>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Fecha_Despegue').hasError('required')">
+                          Fecha Despegue  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_Despegue" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora Despegue</mat-label>
+                        <input (change)="Hora_Despegue_ExecuteBusinessRules()" (blur)="Hora_Despegue_ExecuteBusinessRules()" formControlName="Hora_Despegue" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Hora_Despegue').hasError('required')">
+                          Hora Despegue  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_Aterrizaje" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha Aterrizaje</mat-label>
+                        <input (dateChange)="Fecha_Aterrizaje_ExecuteBusinessRules()" (blur)="Fecha_Aterrizaje_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_Aterrizaje.open()" [matDatepicker]="datePickerFecha_Aterrizaje" formControlName="Fecha_Aterrizaje" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_Aterrizaje"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_Aterrizaje></mat-datepicker>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Fecha_Aterrizaje').hasError('required')">
+                          Fecha Aterrizaje  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_Aterrizaje" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora Aterrizaje</mat-label>
+                        <input (change)="Hora_Aterrizaje_ExecuteBusinessRules()" (blur)="Hora_Aterrizaje_ExecuteBusinessRules()" formControlName="Hora_Aterrizaje" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Hora_Aterrizaje').hasError('required')">
+                          Hora Aterrizaje  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_Llegada" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha Llegada</mat-label>
+                        <input (dateChange)="Fecha_Llegada_ExecuteBusinessRules()" (blur)="Fecha_Llegada_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_Llegada.open()" [matDatepicker]="datePickerFecha_Llegada" formControlName="Fecha_Llegada" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_Llegada"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_Llegada></mat-datepicker>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Fecha_Llegada').hasError('required')">
+                          Fecha Llegada  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_Llegada" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora Llegada</mat-label>
+                        <input (change)="Hora_Llegada_ExecuteBusinessRules()" (blur)="Hora_Llegada_ExecuteBusinessRules()" formControlName="Hora_Llegada" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Hora_Llegada').hasError('required')">
+                          Hora Llegada  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPasajeros_Adicionales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Pasajeros Adicionales</mat-label>
+                        <input (change)="Pasajeros_Adicionales_ExecuteBusinessRules()" matInput formControlName="Pasajeros_Adicionales" [type]="Cierre_de_VueloForm.get('Pasajeros_Adicionales').value == 'Auto'  ? 'text':'number' " maxlength="3" required />
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Pasajeros_Adicionales').hasError('required')">
+                          Pasajeros Adicionales  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCombustible_Inicial" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Combustible Inicial</mat-label>
+                        <input (change)="Combustible_Inicial_ExecuteBusinessRules()" matInput formControlName="Combustible_Inicial" [value]="Cierre_de_VueloForm.get('Combustible_Inicial').value | number:'6.1-2'" type="number" maxlength="6" required />
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Combustible_Inicial').hasError('required')">
+                          Combustible Inicial  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCumbustible_Final_Consumido" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cumbustible Final Consumido</mat-label>
+                        <input (change)="Cumbustible_Final_Consumido_ExecuteBusinessRules()" matInput formControlName="Cumbustible_Final_Consumido" [value]="Cierre_de_VueloForm.get('Cumbustible_Final_Consumido').value | number:'6.1-2'" type="number" maxlength="6" required />
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Cumbustible_Final_Consumido').hasError('required')">
+                          Cumbustible Final Consumido  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCombustible_Total_Consumido" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Combustible Total Consumido</mat-label>
+                        <input (change)="Combustible_Total_Consumido_ExecuteBusinessRules()" matInput formControlName="Combustible_Total_Consumido" [value]="Cierre_de_VueloForm.get('Combustible_Total_Consumido').value | number:'6.1-2'" type="number" maxlength="6" required />
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Combustible_Total_Consumido').hasError('required')">
+                          Combustible Total Consumido  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNotas_de_Tramo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Notas de Tramo</mat-label>
+                        <input (change)="Notas_de_Tramo_ExecuteBusinessRules()" #Notas_de_Tramo matInput formControlName="Notas_de_Tramo" type="text" maxlength="2000" required />
+                        <mat-error *ngIf="Cierre_de_VueloForm.get('Notas_de_Tramo').hasError('required')">
+                          Notas de Tramo  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divcerrar_vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>¿Desea cerrar el vuelo?</mat-label>
+                        <mat-select (selectionChange)="cerrar_vuelo_ExecuteBusinessRules()" placeholder="¿Desea cerrar el vuelo?" formControlName="cerrar_vuelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varRespuesta" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Cierre_de_VueloForm.get('cerrar_vuelo').hasError('required')">
+                          ¿Desea cerrar el vuelo? es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                </div>
+                </mat-tab>
+
+<mat-tab aria-label="Tripulacion" label="Tripulación"> <br> <div id="tabTripulacion" class="row">
+                    <div id="divTripulacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Tripulación</h4>    
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" (click)="addTripulacionToMR(); $event.stopPropagation();"(click)="MRaddTripulacion = true" [hidden]="MRaddTripulacion">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="Tripulacion" mat-table [dataSource]="dataSourceTripulacion"  multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Cierre_de_VueloForm.disabled"  matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit"  type="button" (click)="editTripulacion(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteTripulacion(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Cargo">
+                            <th mat-header-cell *matHeaderCellDef> Cargo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Cargo_Cargo_de_Tripulante?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tripulante">
+                            <th mat-header-cell *matHeaderCellDef> Tripulante</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Tripulante_Tripulacion?.Nombre_completo}}
+                            </td>
+                          </ng-container>
+
+                 
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;" [attr.colspan]="getTripulacionColumns().length">
+                        
+                              <div  [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">                       
+                                <div *ngIf="element.edit">                              
+                                    <form  [formArrayName]="TripulacionItems"  >                               
+                                      
+                                      <div class="row form-group" [formGroup]="TripulacionItemsByElemet(element)">
+
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Cargo</mat-label>
+                                                <mat-select placeholder="Cargo"
+                                                  formControlName="Cargo" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varCargo_de_Tripulante" [value]="item.Clave">
+                                                    {{ item.Descripcion }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field  appearance="outline">
+                                                <mat-label>Tripulante</mat-label>
+                                                <input type="text"  matInput formControlName="Tripulante" [matAutocomplete]="auto">
+                                                  <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>                         
+                                                <mat-autocomplete (optionSelected)="selectTripulante_Detalle_Cierre_Tripulacion($event, element)" #auto="matAutocomplete"
+                                                  [displayWith]="displayFnTripulante_Detalle_Cierre_Tripulacion.bind(cthis, element)">
+                                                  <mat-option *ngFor="let option of varTripulacion" [value]="option.Clave" (onSelectionChange)="updateOptionTripulante_Detalle_Cierre_Tripulacion($event, element)">
+                                                    {{option.Nombre_completo}}
+                                                  </mat-option>
+                                                  <mat-option *ngIf="isLoadingTripulante_Detalle_Cierre_Tripulacion" class="is-loading">
+                                                    <mat-spinner diameter="50"></mat-spinner>
+                                                  </mat-option>
+                                                </mat-autocomplete>
+												<mat-hint *ngIf="varTripulacion.length ==0 &&  !isLoadingTripulante_Detalle_Cierre_Tripulacion && searchTripulante_Detalle_Cierre_TripulacionCompleted">No se encontraron registros.</mat-hint>
+                                              </mat-form-field>
+                                            </div>
+    
+											
+                                      </div>
+                                      <!-- inicio seccion botones -->
+                                      <!-- fin seccion botones -->
+                                      <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                            (click)="element.edit = false; saveTripulacion(element);" color="primary">Guardar(click)="MRaddTripulacion = false"
+                                          </button>
+                                          <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                            (click)="cancelEditTripulacion(element)"(click)="MRaddTripulacion = false"
+                                            mat-button>Cancelar</button>
+                                        </div>
+                                      </div>
+                              
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getTripulacionColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}" *matRowDef="let row; columns: getTripulacionColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}" *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                </div>
+                </mat-tab>
+
+<mat-tab aria-label="Pasajeros" label="Pasajeros"> <br> <div id="tabPasajeros" class="row">
+                    <div id="divPasajeros" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Pasajeros</h4>    
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" (click)="addPasajerosToMR(); $event.stopPropagation();"(click)="MRaddPasajeros = true" [hidden]="MRaddPasajeros">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="Pasajeros" mat-table [dataSource]="dataSourcePasajeros"  multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Cierre_de_VueloForm.disabled"  matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit"  type="button" (click)="editPasajeros(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deletePasajeros(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Pasajero">
+                            <th mat-header-cell *matHeaderCellDef> Pasajero</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Pasajero_Pasajeros?.Nombre_completo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="PasajeroEjecucionId">
+                            <th mat-header-cell *matHeaderCellDef> PasajeroEjecucionId</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.PasajeroEjecucionId}} </td>
+                          </ng-container>
+
+                 
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;" [attr.colspan]="getPasajerosColumns().length">
+                        
+                              <div  [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">                       
+                                <div *ngIf="element.edit">                              
+                                    <form  [formArrayName]="PasajerosItems"  >                               
+                                      
+                                      <div class="row form-group" [formGroup]="PasajerosItemsByElemet(element)">
+
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field  appearance="outline">
+                                                <mat-label>Pasajero</mat-label>
+                                                <input type="text"  matInput formControlName="Pasajero" [matAutocomplete]="auto">
+                                                  <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>                         
+                                                <mat-autocomplete (optionSelected)="selectPasajero_Detalle_Cierre_Pasajeros($event, element)" #auto="matAutocomplete"
+                                                  [displayWith]="displayFnPasajero_Detalle_Cierre_Pasajeros.bind(cthis, element)">
+                                                  <mat-option *ngFor="let option of varPasajeros" [value]="option.Clave" (onSelectionChange)="updateOptionPasajero_Detalle_Cierre_Pasajeros($event, element)">
+                                                    {{option.Nombre_completo}}
+                                                  </mat-option>
+                                                  <mat-option *ngIf="isLoadingPasajero_Detalle_Cierre_Pasajeros" class="is-loading">
+                                                    <mat-spinner diameter="50"></mat-spinner>
+                                                  </mat-option>
+                                                </mat-autocomplete>
+												<mat-hint *ngIf="varPasajeros.length ==0 &&  !isLoadingPasajero_Detalle_Cierre_Pasajeros && searchPasajero_Detalle_Cierre_PasajerosCompleted">No se encontraron registros.</mat-hint>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>PasajeroEjecucionId</mat-label>
+                                                <input matInput formControlName="PasajeroEjecucionId" type="number" />
+                                              </mat-form-field>
+                                            </div>
+    
+											
+                                      </div>
+                                      <!-- inicio seccion botones -->
+                                      <!-- fin seccion botones -->
+                                      <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                            (click)="element.edit = false; savePasajeros(element);" color="primary">Guardar(click)="MRaddPasajeros = false"
+                                          </button>
+                                          <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                            (click)="cancelEditPasajeros(element)"(click)="MRaddPasajeros = false"
+                                            mat-button>Cancelar</button>
+                                        </div>
+                                      </div>
+                              
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getPasajerosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}" *matRowDef="let row; columns: getPasajerosColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}" *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Cierre_de_VueloForm.valid || consult" mat-raised-button
+                    color="primary" (click)="closeWindowSave()">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Cierre_de_VueloForm.valid || consult"
+                    mat-raised-button color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Cierre_de_VueloForm.valid || consult"
+                    mat-raised-button color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Cierre_de_VueloForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" (click)="closeWindowCancel()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

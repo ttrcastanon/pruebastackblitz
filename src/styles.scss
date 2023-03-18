@@ -1,0 +1,105 @@
+/*
+/* Esto se quita ya que provoca el efecto de que el label hacer overload sobre el border de un mat-input
+  mat-form-field.mat-form-field.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    transform: translateY(-1.6em) scale(0.95);
+    width: 133.33333%;
+    padding-right: 2px;
+  }
+  */
+.disableDiv {
+  opacity       : 0.96;
+  pointer-events: none;
+}
+
+.row {
+  margin: 0 !important;
+}
+
+.ck-editor__editable_inline {
+  min-height: 400px !important;
+}
+
+
+.ck ol,
+.ck ul,
+.ck dl,
+app-curriculum ol,
+app-curriculum ul,
+app-curriculum dl {
+  padding-left   : 20px !important;
+  list-style-type: inherit !important;
+}
+
+.ck ol,
+app-curriculum ol {
+  list-style-type: decimal !important;
+}
+
+.hidden {
+  display   : block;
+  visibility: hidden;
+}
+
+div[mattooltip="Imprimir"] {
+  display: none !important;
+}
+
+div[mattooltip="Búsqueda Avanzada"] {
+  display: none !important;
+}
+
+.mat-row {
+  border: none !important;
+}
+
+#snackbar {
+  /* Hidden by default. Visible on click */
+  visibility      : hidden;
+  /* Set a default minimum width */
+  min-width       : 250px;
+  /* Divide value of min-width by 2 */
+  margin-left     : -125px;
+  /* Black background color */
+  background-color: #04AA6D;
+  /* White text color */
+  color           : #fff;
+  /* Centered text */
+  text-align      : center;
+  /* Rounded borders */
+  border-radius   : 2px;
+  /* Padding */
+  padding         : 16px;
+  /* Sit on top of the screen */
+  position        : fixed;
+  /* Add a z-index if needed */
+  z-index         : 1;
+  /* Center the snackbar */
+  left            : 90%;
+  /* 30px from the bottom */
+  bottom          : 88%;
+}
+
+#snackbar.show {
+  visibility: visible;
+  /* Show the snackbar */
+}
+
+mat-form-field,
+ng-select {
+  width: 100%;
+}
+
+.input-Buscador {
+  font-size: 11px;
+  height: 3.5em;
+  width: 100%;
+}
+
+.not-truncated-text {
+  word-break: break-all !important;
+  white-space: normal !important;
+}
+
+::ng-deep .mat-tooltip  {
+  white-space: pre-line !important;
+}

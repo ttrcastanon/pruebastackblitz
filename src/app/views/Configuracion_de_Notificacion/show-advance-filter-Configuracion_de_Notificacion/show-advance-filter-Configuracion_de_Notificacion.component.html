@@ -1,0 +1,448 @@
+﻿<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Búsqueda Avanzada de Configuración de Notificación</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/dashboard/main">
+                  <i class="fas fa-home"></i> Inicio</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Configuración de Notificación</a>
+              </li>
+              <li class="breadcrumb-item active">Búsqueda Avanzada</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Basic Validation -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="header">
+              <h2>
+                Búsqueda Avanzada
+              </h2>
+              <ul class="header-dropdown m-r--5">
+                <li class="dropdown">
+                  <a href="#" onClick="return false;" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="material-icons">more_vert</i>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a href="#" onClick="return false;">Action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Another action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Something else here</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="body">
+              <form class="advancefilter-form m-4" [formGroup]="advancefilter" (ngSubmit)="onadvancefilter()">
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio De</mat-label>
+                      <input matInput formControlName="fromFolio">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio A</mat-label>
+                      <input matInput formControlName="toFolio">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Registro De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_Registro" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Registro A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_Registro" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora de Registro De</mat-label>
+                      <input formControlName="fromHora_de_Registro" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora de Registro A</mat-label>
+                      <input formControlName="toHora_de_Registro" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Usuario_que_RegistraFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Id_User">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Usuario que Registra</mat-label>
+                      <input matInput formControlName="Usuario_que_Registra" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Usuario que Registra</mat-label>
+                      <mat-select placeholder="Usuario que Registra"
+                        formControlName="Usuario_que_RegistraMultiple" multiple>
+                        <mat-option *ngFor="let item of spartan_users" [value]="item.Id_User">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Nombre de la Notificación"
+                        formControlName="Nombre_de_la_NotificacionFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Nombre de la Notificación</mat-label>
+                      <input matInput formControlName="Nombre_de_la_Notificacion" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="FuncionalidadFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                          {{ item.Funcionalidad }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Funcionalidad</mat-label>
+                      <input matInput formControlName="Funcionalidad" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Funcionalidad</mat-label>
+                      <mat-select placeholder="Funcionalidad"
+                        formControlName="FuncionalidadMultiple" multiple>
+                        <mat-option *ngFor="let item of funcionalidades_para_notificacions" [value]="item.Folio">
+                          {{ item.Funcionalidad }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Tipo_de_NotificacionFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Tipo de Notificación</mat-label>
+                      <input matInput formControlName="Tipo_de_Notificacion" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Tipo de Notificación</mat-label>
+                      <mat-select placeholder="Tipo de Notificación"
+                        formControlName="Tipo_de_NotificacionMultiple" multiple>
+                        <mat-option *ngFor="let item of tipo_de_notificacions" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Tipo_de_AccionFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Tipo de Acción</mat-label>
+                      <input matInput formControlName="Tipo_de_Accion" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Tipo de Acción</mat-label>
+                      <mat-select placeholder="Tipo de Acción"
+                        formControlName="Tipo_de_AccionMultiple" multiple>
+                        <mat-option *ngFor="let item of tipo_de_accion_notificacions" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Tipo_de_RecordatorioFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Tipo de Recordatorio</mat-label>
+                      <input matInput formControlName="Tipo_de_Recordatorio" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Tipo de Recordatorio</mat-label>
+                      <mat-select placeholder="Tipo de Recordatorio"
+                        formControlName="Tipo_de_RecordatorioMultiple" multiple>
+                        <mat-option *ngFor="let item of tipo_de_recordatorio_notificacions" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Inicio De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_Inicio" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Inicio A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_Inicio" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Cantidad de Días a Validar De</mat-label>
+                      <input matInput formControlName="fromCantidad_de_Dias_a_Validar">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Cantidad de Días a Validar A</mat-label>
+                      <input matInput formControlName="toCantidad_de_Dias_a_Validar">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Fecha_a_ValidarFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Fecha a Validar</mat-label>
+                      <input matInput formControlName="Fecha_a_Validar" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Fecha a Validar</mat-label>
+                      <mat-select placeholder="Fecha a Validar"
+                        formControlName="Fecha_a_ValidarMultiple" multiple>
+                        <mat-option *ngFor="let item of nombre_del_campo_en_mss" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha Fin De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_Fin" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha Fin A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_Fin" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="EstatusFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Estatus</mat-label>
+                      <input matInput formControlName="Estatus" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Estatus</mat-label>
+                      <mat-select placeholder="Estatus"
+                        formControlName="EstatusMultiple" multiple>
+                        <mat-option *ngFor="let item of estatus_notificacions" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Texto que llevara el Correo"
+                        formControlName="Texto_que_llevara_el_CorreoFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Texto que llevara el Correo</mat-label>
+                      <input matInput formControlName="Texto_que_llevara_el_Correo" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Texto a Mostrar en la Notificación push"
+                        formControlName="Texto_a_Mostrar_en_la_Notificacion_pushFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Texto a Mostrar en la Notificación push</mat-label>
+                      <input matInput formControlName="Texto_a_Mostrar_en_la_Notificacion_push" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="mr-3 mb-2" mat-raised-button
+                      color="primary" (click)="buscar()" > Buscar </button>
+                    <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Validation -->
+    </div>
+  </section>
+<div id="snackbar"></div>

@@ -1,0 +1,109 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Horarios de Trabajo</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Horarios_de_Trabajo/list">Horarios de Trabajo</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Horarios_de_TrabajoForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divClave" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Clave</mat-label>
+                        <input matInput formControlName="Clave" [type]="Horarios_de_TrabajoForm.get('Clave').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Horarios_de_TrabajoForm.get('Clave').hasError('required')">
+                          Clave es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divDescripcion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción</mat-label>
+                        <input (change)="Descripcion_ExecuteBusinessRules()" #Descripcion matInput formControlName="Descripcion" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Horarios_de_TrabajoForm.get('Descripcion').hasError('required')">
+                          Descripción  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHoras_de_trabajo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Horas de trabajo</mat-label>
+                        <input (change)="Horas_de_trabajo_ExecuteBusinessRules()" matInput formControlName="Horas_de_trabajo" [value]="Horarios_de_TrabajoForm.get('Horas_de_trabajo').value | number:'6.1-2'" type="number" maxlength="6" required />
+                        <mat-error *ngIf="Horarios_de_TrabajoForm.get('Horas_de_trabajo').hasError('required')">
+                          Horas de trabajo  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divInicio_de_hora_laboral" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Inicio de hora laboral</mat-label>
+                        <input (change)="Inicio_de_hora_laboral_ExecuteBusinessRules()" (blur)="Inicio_de_hora_laboral_ExecuteBusinessRules()" formControlName="Inicio_de_hora_laboral" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Horarios_de_TrabajoForm.get('Inicio_de_hora_laboral').hasError('required')">
+                          Inicio de hora laboral  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFin_de_hora_laboral" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fin de hora laboral</mat-label>
+                        <input (change)="Fin_de_hora_laboral_ExecuteBusinessRules()" (blur)="Fin_de_hora_laboral_ExecuteBusinessRules()" formControlName="Fin_de_hora_laboral" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Horarios_de_TrabajoForm.get('Fin_de_hora_laboral').hasError('required')">
+                          Fin de hora laboral  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Horarios_de_TrabajoForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Horarios_de_TrabajoForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Horarios_de_TrabajoForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Horarios_de_TrabajoForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

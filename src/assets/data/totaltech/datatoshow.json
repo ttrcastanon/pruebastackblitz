@@ -1,0 +1,738 @@
+{
+   "Data":[
+      {
+         "Label":"Imagen",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Información General",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"@@@@_documentos.png",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"NUAT",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"NUAT-0000001-2020-D/CNT",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Tipo de Denuncia",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"Denuncia",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Estatus",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"Orientador",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Orientador",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"Orientador",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Delitos / Hechos",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"@@@@_hechos.png",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Delitos",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Hechos",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"Robo de casa habitación ",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Fecha",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"09-DIC-2020 , 30-NOV-2020 ",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Lugar de los Hechos",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":", Calle Benito Juárez, No. 40, Badiraguato, Sinaloa",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Involucrados",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"@@@@_personas.png",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Involucrados1",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"CRISTIAN SIFUENTES COVARRUBIAS, MIGUEL ANGEL SIFUENTES COVARRUBIA, HILDA  COVARRUBIAS CARRANZA, LUIS CARMON, FELIPE RODRIGUEZ ESPINOZA, X X X, GOKU LOPEZ ASD",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Probables Responsables",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"DANIEL  CALDERA MARTINEZ",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Acuerdos",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"@@@@_acuerdos.png",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"¿Se Acepta Acuerdo?",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"NO",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Motivo de NO Acuerdo",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Tipo de Acuerdo",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Fecha de Cumplimiento",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Monto de Reparación",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"$ 0.00",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Cierre",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"@@@@_Logo-white.png",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      },
+      {
+         "Label":"Fecha de Cierre",
+         "TypeControl":null,
+         "FieldDB":null,
+         "Value":"",
+         "Values":null,
+         "Group":"",
+         "SelAllName":null
+      }
+   ],
+   "Label":"No. Expediente",
+   "LabelValue":"CLN/MASC/0000006/2020/D",
+   "Details":[
+      {
+         "Details":{
+            "Columns":null,
+            "ValuesColumns":null
+         },
+         "Counter":0,
+         "Label":"Servicios Periciales",
+         "Icon":"http://192.168.1.101/WebApifiscaliasinaloa//api/Spartan_File/Files/1313/acuerdos.png",
+         "ObjectId":45039
+      },
+      {
+         "Details":{
+            "Columns":[
+               "Clave",
+               "Tipo de Compareciente",
+               "Nombre Completo",
+               "Fecha de Nacimiento",
+               "Edad",
+               "Sexo",
+               "Estado Civil",
+               "Tipo de Identificación",
+               "Número de Identificación",
+               "CURP",
+               "RFC",
+               "Nacionalidad",
+               "Ocupación",
+               "Estado",
+               "Municipio",
+               "Población",
+               "Colonia",
+               "Código Postal",
+               "Calle",
+               "Número Exterior",
+               "Número Interior",
+               "Teléfono",
+               "Extensión",
+               "Celular",
+               "Email"
+            ],
+            "ValuesColumns":[
+               {
+                  "Values":[
+                     "323",
+                     "Testigo",
+                     "LUIS CARMON ",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     ""
+                  ]
+               },
+               {
+                  "Values":[
+                     "246",
+                     "Denunciante",
+                     "CRISTIAN SIFUENTES  COVARRUBIAS",
+                     "17-JUL-1985",
+                     "35",
+                     "Masculino",
+                     "CASADO(A)                     ",
+                     "CREDENCIAL DE ELECTOR",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "SIFUENTESCOVARRUBIASITSL@GMAIL.COM"
+                  ]
+               },
+               {
+                  "Values":[
+                     "324",
+                     "Testigo",
+                     "FELIPE RODRIGUEZ  ESPINOZA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     ""
+                  ]
+               },
+               {
+                  "Values":[
+                     "328",
+                     "Testigo",
+                     "GOKU LOPEZ  ASD",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     ""
+                  ]
+               },
+               {
+                  "Values":[
+                     "248",
+                     "Testigo",
+                     "HILDA  COVARRUBIAS  CARRANZA",
+                     "21-ABR-2020",
+                     "45",
+                     "Femenino",
+                     "CASADO(A)                     ",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     ""
+                  ]
+               },
+               {
+                  "Values":[
+                     "247",
+                     "Primer Respondiente",
+                     "MIGUEL ANGEL SIFUENTES  COVARRUBIA",
+                     "13-ABR-2020",
+                     "24",
+                     "Masculino",
+                     "CASADO(A)                     ",
+                     "LICENCIA DE CONDUCIR",
+                     "D",
+                     "",
+                     "",
+                     "MEXICANA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     ""
+                  ]
+               },
+               {
+                  "Values":[
+                     "327",
+                     "Primer Respondiente",
+                     "X X  X",
+                     "09-NOV-2020",
+                     "0",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     ""
+                  ]
+               }
+            ]
+         },
+         "Counter":7,
+         "Label":"Involucrados",
+         "Icon":"http://192.168.1.101/WebApifiscaliasinaloa//api/Spartan_File/Files/179/involucrados.png",
+         "ObjectId":45106
+      },
+      {
+         "Details":{
+            "Columns":[
+               "Clave",
+               "Título del Hecho",
+               "Prioridad del Hecho",
+               "Fecha del Hecho",
+               "Tipo de Lugar",
+               "Estado",
+               "Municipio",
+               "Población",
+               "Colonia",
+               "C.P.",
+               "Calle",
+               "Entre Calle",
+               "Y Calle",
+               "No. Exterior",
+               "No. Interior",
+               "Referencia",
+               "Documento Extraviado?",
+               "Tipo de Documento"
+            ],
+            "ValuesColumns":[
+               {
+                  "Values":[
+                     "16",
+                     "Robo de casa",
+                     "Alta",
+                     "15-ABR-2020 10:50",
+                     "",
+                     "Sinaloa",
+                     "Badiraguato",
+                     "",
+                     "",
+                     "",
+                     "Benito Juárez",
+                     "",
+                     "",
+                     "40",
+                     "",
+                     "",
+                     "No",
+                     ""
+                  ]
+               }
+            ]
+         },
+         "Counter":1,
+         "Label":"Datos de los Hechos",
+         "Icon":"http://192.168.1.101/WebApifiscaliasinaloa//api/Spartan_File/Files/1314/hechos.png",
+         "ObjectId":45619
+      },
+      {
+         "Details":{
+            "Columns":[
+               "Clave",
+               "Quién Resulte Responsable",
+               "Se presenta con detenido",
+               "Folio Registro Nacional de Detenciones",
+               "Nombre Completo",
+               "Alias",
+               "Fecha de Nacimiento",
+               "Edad",
+               "Sexo",
+               "Estado Civil",
+               "Tipo de Identificación",
+               "Número de Identificación",
+               "CURP",
+               "RFC",
+               "Nacionalidad",
+               "Ocupación",
+               "Estado",
+               "Municipio",
+               "Población",
+               "Colonia",
+               "Código Postal",
+               "Calle_del_imputado",
+               "Número Exterior",
+               "Número Interior",
+               "Teléfono",
+               "Extensión",
+               "Celular",
+               "Email"
+            ],
+            "ValuesColumns":[
+               {
+                  "Values":[
+                     "82",
+                     "No",
+                     "No",
+                     "SS",
+                     "DANIEL  CALDERA  MARTINEZ",
+                     "SR",
+                     "17-MAY-2020",
+                     "0",
+                     "Masculino",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     ""
+                  ]
+               }
+            ]
+         },
+         "Counter":1,
+         "Label":"Probable Responsable",
+         "Icon":"http://192.168.1.101/WebApifiscaliasinaloa//api/Spartan_File/Files/181/responsable.png",
+         "ObjectId":45037
+      },
+      {
+         "Details":{
+            "Columns":[
+               "Clave",
+               "Fecha",
+               "¿Hubo Violencia de Género?",
+               "Delito Violencia Genero",
+               "Tipo de Delito",
+               "Grupo del Delito",
+               "Delito",
+               "Forma Comisión Delito",
+               "Forma Acción Delito",
+               "Modalidad Delito",
+               "Elementos Comisión Delito",
+               "Clasificación con Orden de Resultado"
+            ],
+            "ValuesColumns":[
+               {
+                  "Values":[
+                     "11",
+                     "30-NOV-2020 22:50",
+                     "No",
+                     "",
+                     "EXPOSICIÓN DE INCAPACES",
+                     "CONTRA LA SEGURIDAD DE LAS INSTITUCIONES DE SEGURIDAD PUBLICA DEL ESTADO",
+                     "HOMICIDIO AGRAVADO EN GRADO DE TENTATIVA",
+                     "",
+                     "",
+                     "",
+                     "",
+                     ""
+                  ]
+               },
+               {
+                  "Values":[
+                     "6",
+                     "09-DIC-2020 10:50",
+                     "No",
+                     "",
+                     "DELITOS COMETIDO EN EL EJERCICIO DE LA PROFESIÓN",
+                     "CONTRA LA SEGURIDAD DE LAS INSTITUCIONES DE SEGURIDAD PUBLICA DEL ESTADO",
+                     "HOMICIDIO ATENUADO EN GRADO DE TENTATIVA",
+                     "\tDOLOSO\t",
+                     "",
+                     "",
+                     "",
+                     ""
+                  ]
+               }
+            ]
+         },
+         "Counter":2,
+         "Label":"Delitos",
+         "Icon":"http://192.168.1.101/WebApifiscaliasinaloa//api/Spartan_File/Files/182/delitos.png",
+         "ObjectId":45078
+      },
+      {
+         "Details":{
+            "Columns":[
+               "Clave",
+               "Involucrado",
+               "Probable Responsable",
+               "Delito",
+               "Es Familiar",
+               "Parentesco"
+            ],
+            "ValuesColumns":[
+               {
+                  "Values":[
+                     "15",
+                     "CRISTIAN SIFUENTES COVARRUBIAS",
+                     "DANIEL  CALDERA MARTINEZ",
+                     "HOMICIDIO AGRAVADO EN GRADO DE TENTATIVA",
+                     "si",
+                     "\tCOMADRE O COMPADRE\t"
+                  ]
+               },
+               {
+                  "Values":[
+                     "81",
+                     "CRISTIAN SIFUENTES COVARRUBIAS",
+                     "DANIEL  CALDERA MARTINEZ",
+                     "HOMICIDIO ATENUADO EN GRADO DE TENTATIVA",
+                     "no",
+                     ""
+                  ]
+               }
+            ]
+         },
+         "Counter":2,
+         "Label":"Relaciones",
+         "Icon":"http://192.168.1.101/WebApifiscaliasinaloa//api/Spartan_File/Files/183/seguimiento.png",
+         "ObjectId":45315
+      },
+      {
+         "Details":{
+            "Columns":[
+               "Clave",
+               "No. Expediente",
+               "Probables Responsables",
+               "Delitos",
+               "Victimas",
+               "Relaciones",
+               "Hechos"
+            ],
+            "ValuesColumns":[
+               {
+                  "Values":[
+                     "6",
+                     "CLN/MASC/0000006/2020/D",
+                     "(HOMICIDIO AGRAVADO EN GRADO DE TENTATIVA) DANIEL  CALDERA MARTINEZ , (HOMICIDIO ATENUADO EN GRADO DE TENTATIVA) DANIEL  CALDERA MARTINEZ ",
+                     "HOMICIDIO ATENUADO EN GRADO DE TENTATIVA, HOMICIDIO AGRAVADO EN GRADO DE TENTATIVA",
+                     "",
+                     "(Denunciante) CRISTIAN SIFUENTES COVARRUBIAS  (Probable responsable) DANIEL  CALDERA MARTINEZ (Delito) HOMICIDIO AGRAVADO EN GRADO DE TENTATIVA ,(Denunciante) CRISTIAN SIFUENTES COVARRUBIAS  (Probable responsable) DANIEL  CALDERA MARTINEZ (Delito) HOMICIDIO ATENUADO EN GRADO DE TENTATIVA ",
+                     ""
+                  ]
+               }
+            ]
+         },
+         "Counter":1,
+         "Label":"Generar Expediente",
+         "Icon":"http://192.168.1.101/WebApifiscaliasinaloa//api/Spartan_File/Files/1288/datosHechos.jpeg",
+         "ObjectId":45620
+      },
+      {
+         "Details":{
+            "Columns":[
+               "Clave",
+               "Documento",
+               "Fecha",
+               "ID Documento"
+            ],
+            "ValuesColumns":[
+               {
+                  "Values":[
+                     "76",
+                     " MP PROCESAMIENTO DE LOS INDICIOS O EVIDENCIAS FORMATO II",
+                     "17-DIC-2020",
+                     "170"
+                  ]
+               }
+            ]
+         },
+         "Counter":1,
+         "Label":"Documentos",
+         "Icon":"http://192.168.1.101/WebApifiscaliasinaloa//api/Spartan_File/Files/185/documentos.png",
+         "ObjectId":45109
+      },
+      {
+         "Details":{
+            "Columns":null,
+            "ValuesColumns":null
+         },
+         "Counter":0,
+         "Label":"Desestimación",
+         "Icon":"http://192.168.1.101/WebApifiscaliasinaloa//api/Spartan_File/Files/186/diligencias.png",
+         "ObjectId":45192
+      }
+   ]
+}

@@ -1,0 +1,258 @@
+﻿<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Búsqueda Avanzada de Notificaciones de mantenimiento</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/dashboard/main">
+                  <i class="fas fa-home"></i> Inicio</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Notificaciones de mantenimiento</a>
+              </li>
+              <li class="breadcrumb-item active">Búsqueda Avanzada</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Basic Validation -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="header">
+              <h2>
+                Búsqueda Avanzada
+              </h2>
+              <ul class="header-dropdown m-r--5">
+                <li class="dropdown">
+                  <a href="#" onClick="return false;" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="material-icons">more_vert</i>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a href="#" onClick="return false;">Action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Another action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Something else here</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="body">
+              <form class="advancefilter-form m-4" [formGroup]="advancefilter" (ngSubmit)="onadvancefilter()">
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio De</mat-label>
+                      <input matInput formControlName="fromFolio">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio A</mat-label>
+                      <input matInput formControlName="toFolio">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Codigo_computarizadoFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Codigo">
+                          {{ item.Descripcion_Busqueda }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Código computarizado</mat-label>
+                      <input matInput formControlName="Codigo_computarizado" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Código computarizado</mat-label>
+                      <mat-select placeholder="Código computarizado"
+                        formControlName="Codigo_computarizadoMultiple" multiple>
+                        <mat-option *ngFor="let item of codigo_computarizados" [value]="item.Codigo">
+                          {{ item.Descripcion_Busqueda }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="ModeloFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Modelo</mat-label>
+                      <input matInput formControlName="Modelo" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Modelo</mat-label>
+                      <mat-select placeholder="Modelo"
+                        formControlName="ModeloMultiple" multiple>
+                        <mat-option *ngFor="let item of modeloss" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="PropietarioFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Propietario</mat-label>
+                      <input matInput formControlName="Propietario" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Propietario</mat-label>
+                      <mat-select placeholder="Propietario"
+                        formControlName="PropietarioMultiple" multiple>
+                        <mat-option *ngFor="let item of propietarioss" [value]="item.Folio">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="MatriculaFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Matricula">
+                          {{ item.Matricula }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Matricula</mat-label>
+                      <input matInput formControlName="Matricula" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Matricula</mat-label>
+                      <mat-select placeholder="Matricula"
+                        formControlName="MatriculaMultiple" multiple>
+                        <mat-option *ngFor="let item of aeronaves" [value]="item.Matricula">
+                          {{ item.Matricula }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="ATA"
+                        formControlName="ATAFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>ATA</mat-label>
+                      <input matInput formControlName="ATA" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> No. Bitácora De</mat-label>
+                      <input matInput formControlName="fromNo__Bitacora">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> No. Bitácora A</mat-label>
+                      <input matInput formControlName="toNo__Bitacora">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de mantenimiento De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_mantenimiento" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de mantenimiento A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_mantenimiento" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="mr-3 mb-2" mat-raised-button
+                      color="primary" (click)="buscar()" > Buscar </button>
+                    <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Validation -->
+    </div>
+  </section>
+<div id="snackbar"></div>

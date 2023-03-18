@@ -1,0 +1,251 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Pago de servicios de operaciones</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Pago_de_servicios_de_operaciones/list">Pago de servicios de operaciones</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Pago_de_servicios_de_operacionesForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Pago_de_servicios_de_operacionesForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divIdLisPagServOp" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>IdLisPagServOp</mat-label>
+                        <input (change)="IdLisPagServOp_ExecuteBusinessRules()" matInput formControlName="IdLisPagServOp" [type]="Pago_de_servicios_de_operacionesForm.get('IdLisPagServOp').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('IdLisPagServOp').hasError('required')">
+                          IdLisPagServOp  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo_de_Solicitud" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Solicitud</mat-label>
+                        <mat-select (selectionChange)="No_de_Solicitud_ExecuteBusinessRules()" placeholder="No. de Solicitud" formControlName="No_de_Solicitud" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSolicitud_de_Servicios_para_Operaciones" [value]="item.No_de_Solicitud">
+                            {{ item.No_Solicitud }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('No_de_Solicitud').hasError('required')">
+                          No. de Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divProveedor" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor</mat-label>
+                        <mat-select (selectionChange)="Proveedor_ExecuteBusinessRules()" placeholder="Proveedor" formControlName="Proveedor" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCreacion_de_Proveedores" [value]="item.Clave">
+                            {{ item.Razon_social }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Proveedor').hasError('required')">
+                          Proveedor es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo_Vuelo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. Vuelo</mat-label>
+                        <mat-select (selectionChange)="No_Vuelo_ExecuteBusinessRules()" placeholder="No. Vuelo" formControlName="No_Vuelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSolicitud_de_Vuelo" [value]="item.Folio">
+                            {{ item.Numero_de_Vuelo }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('No_Vuelo').hasError('required')">
+                          No. Vuelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAeropuerto" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Aeropuerto</mat-label>
+                        <mat-select (selectionChange)="Aeropuerto_ExecuteBusinessRules()" placeholder="Aeropuerto" formControlName="Aeropuerto" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAeropuertos" [value]="item.Aeropuerto_ID">
+                            {{ item.Nombre }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Aeropuerto').hasError('required')">
+                          Aeropuerto es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción</mat-label>
+                        <input (change)="Descripcion_ExecuteBusinessRules()" #Descripcion matInput formControlName="Descripcion" type="text" maxlength="100" required />
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Descripcion').hasError('required')">
+                          Descripción  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCantidad" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Cantidad</mat-label>
+                        <input (change)="Cantidad_ExecuteBusinessRules()" matInput formControlName="Cantidad" [type]="Pago_de_servicios_de_operacionesForm.get('Cantidad').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Cantidad').hasError('required')">
+                          Cantidad  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUnidad" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Unidad</mat-label>
+                        <mat-select (selectionChange)="Unidad_ExecuteBusinessRules()" placeholder="Unidad" formControlName="Unidad" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varUnidad" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Unidad').hasError('required')">
+                          Unidad es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCosto" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Costo $</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Costo_ExecuteBusinessRules()" matInput formControlName="Costo" mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Costo').hasError('required')">
+                          Costo $  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo_de_Factura" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>No. de Factura</mat-label>
+                        <input (change)="No_de_Factura_ExecuteBusinessRules()" matInput formControlName="No_de_Factura" [type]="Pago_de_servicios_de_operacionesForm.get('No_de_Factura').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('No_de_Factura').hasError('required')">
+                          No. de Factura  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Factura" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Factura</mat-label>
+                        <input (dateChange)="Fecha_de_Factura_ExecuteBusinessRules()" (blur)="Fecha_de_Factura_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Factura.open()" [matDatepicker]="datePickerFecha_de_Factura" formControlName="Fecha_de_Factura" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Factura"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Factura></mat-datepicker>
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Fecha_de_Factura').hasError('required')">
+                          Fecha de Factura  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempos_de_Pago" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Tiempos de Pago</mat-label>
+                        <input (change)="Tiempos_de_Pago_ExecuteBusinessRules()" matInput formControlName="Tiempos_de_Pago" [type]="Pago_de_servicios_de_operacionesForm.get('Tiempos_de_Pago').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Tiempos_de_Pago').hasError('required')">
+                          Tiempos de Pago  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus" formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Seguimiento" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo_de_Referencia" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Referencia</mat-label>
+                        <input (change)="No_de_Referencia_ExecuteBusinessRules()" #No_de_Referencia matInput formControlName="No_de_Referencia" type="text" maxlength="10" required />
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('No_de_Referencia').hasError('required')">
+                          No. de Referencia  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Ejecucion_del_Pago" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Ejecución del Pago</mat-label>
+                        <input (dateChange)="Fecha_de_Ejecucion_del_Pago_ExecuteBusinessRules()" (blur)="Fecha_de_Ejecucion_del_Pago_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Ejecucion_del_Pago.open()" [matDatepicker]="datePickerFecha_de_Ejecucion_del_Pago" formControlName="Fecha_de_Ejecucion_del_Pago" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Ejecucion_del_Pago"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Ejecucion_del_Pago></mat-datepicker>
+                        <mat-error *ngIf="Pago_de_servicios_de_operacionesForm.get('Fecha_de_Ejecucion_del_Pago').hasError('required')">
+                          Fecha de Ejecución del Pago  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Pago_de_servicios_de_operacionesForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Pago_de_servicios_de_operacionesForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Pago_de_servicios_de_operacionesForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Pago_de_servicios_de_operacionesForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

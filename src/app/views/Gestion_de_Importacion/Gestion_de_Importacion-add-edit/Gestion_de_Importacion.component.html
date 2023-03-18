@@ -1,0 +1,232 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Información de Importación</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Gestion_de_Importacion/list">Información de Importación</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Gestion_de_ImportacionForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales">
+                  <br />
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="
+                            Gestion_de_ImportacionForm.get('Folio').value ==
+                            'Auto'
+                              ? 'text'
+                              : 'number'
+                          " required />
+                        <mat-error *ngIf="
+                            Gestion_de_ImportacionForm.get('Folio').hasError(
+                              'required'
+                            )
+                          ">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNo__Items_asociados" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. Items asociados</mat-label>
+                        <input (change)="No__Items_asociados_ExecuteBusinessRules()" matInput
+                          formControlName="No__Items_asociados" [type]="
+                            Gestion_de_ImportacionForm.get(
+                              'No__Items_asociados'
+                            ).value == 'Auto'
+                              ? 'text'
+                              : 'number'
+                          " maxlength="9" required />
+                        <mat-error *ngIf="
+                            Gestion_de_ImportacionForm.get(
+                              'No__Items_asociados'
+                            ).hasError('required')
+                          ">
+                          No. Items asociados es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTransporte" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Transporte</mat-label>
+                        <mat-select (selectionChange)="Transporte_ExecuteBusinessRules()" placeholder="Transporte"
+                          formControlName="Transporte" required>
+                          <mat-option> </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Transporte" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="
+                            Gestion_de_ImportacionForm.get(
+                              'Transporte'
+                            ).hasError('required')
+                          ">
+                          Transporte es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divClave_de_Pedimento" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Clave de Pedimento</mat-label>
+                        <input (change)="Clave_de_Pedimento_ExecuteBusinessRules()" #Clave_de_Pedimento matInput
+                          formControlName="Clave_de_Pedimento" type="text" maxlength="10" required />
+                        <mat-error *ngIf="
+                            Gestion_de_ImportacionForm.get(
+                              'Clave_de_Pedimento'
+                            ).hasError('required')
+                          ">
+                          Clave de Pedimento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Pedimento" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Pedimento</mat-label>
+                        <input (change)="No__de_Pedimento_ExecuteBusinessRules()" matInput
+                          formControlName="No__de_Pedimento" [type]="
+                            Gestion_de_ImportacionForm.get('No__de_Pedimento')
+                              .value == 'Auto'
+                              ? 'text'
+                              : 'number'
+                          " maxlength="9" required />
+                        <mat-error *ngIf="
+                            Gestion_de_ImportacionForm.get(
+                              'No__de_Pedimento'
+                            ).hasError('required')
+                          ">
+                          No. de Pedimento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMiscelanea" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Miscelánea</mat-label>
+                        <mat-select (selectionChange)="Miscelanea_ExecuteBusinessRules()" placeholder="Miscelánea"
+                          formControlName="Miscelanea" required>
+                          <mat-option> </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Miscelaneas" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="
+                            Gestion_de_ImportacionForm.get(
+                              'Miscelanea'
+                            ).hasError('required')
+                          ">
+                          Miscelánea es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Guia" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Guía</mat-label>
+                        <input (change)="No__de_Guia_ExecuteBusinessRules()" matInput formControlName="No__de_Guia"
+                          [type]="
+                            Gestion_de_ImportacionForm.get('No__de_Guia')
+                              .value == 'Auto'
+                              ? 'text'
+                              : 'number'
+                          " maxlength="9" required />
+                        <mat-error *ngIf="
+                            Gestion_de_ImportacionForm.get(
+                              'No__de_Guia'
+                            ).hasError('required')
+                          ">
+                          No. de Guía es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divServicio_Aduanales" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Agencia Aduanal</mat-label>
+                        <mat-select (selectionChange)="
+                            Servicio_Aduanales_ExecuteBusinessRules()
+                          " placeholder="Agencia Aduanal" formControlName="Servicio_Aduanales" required>
+                          <mat-option> </mat-option>
+                          <mat-option *ngFor="let item of varServicios_Aduanales" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="
+                            Gestion_de_ImportacionForm.get(
+                              'Servicio_Aduanales'
+                            ).hasError('required')
+                          ">
+                          Agencia Aduanal es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFolioGestiondeImportacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>FolioGestiondeImportacion</mat-label>
+                        <input (change)="
+                            FolioGestiondeImportacion_ExecuteBusinessRules()
+                          " #FolioGestiondeImportacion matInput formControlName="FolioGestiondeImportacion" type="text"
+                          maxlength="50" required />
+                        <mat-error *ngIf="
+                            Gestion_de_ImportacionForm.get(
+                              'FolioGestiondeImportacion'
+                            ).hasError('required')
+                          ">
+                          FolioGestiondeImportacion es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button type="submit" class="mr-3 mb-2" [disabled]="!Gestion_de_ImportacionForm.valid || consult"
+                    mat-raised-button color="primary">
+                    Guardar
+                  </button>
+                  <button type="button" class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Gestion_de_ImportacionForm.valid || consult" mat-raised-button color="primary" hidden>
+                    Guardar y Nuevo
+                  </button>
+                  <button type="button" class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Gestion_de_ImportacionForm.valid || consult" mat-raised-button color="primary" hidden>
+                    Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Gestion_de_ImportacionForm.valid || consult" mat-raised-button color="primary">
+                    Configurar
+                  </button>
+                  <button type="button" class="mr-3 mb-2" mat-raised-button color="warning" (click)="cancel()"
+                    style="background-color:#ed5565 !important" mat-button>
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

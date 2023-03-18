@@ -1,0 +1,28 @@
+<h3 mat-dialog-title class="titles">
+    <mat-icon>build_circle</mat-icon>
+    <span class="title-text">&nbsp;Reglas de Negocio</span>
+</h3>
+
+<mat-divider></mat-divider>
+
+<div mat-dialog-content style="padding-top: 16px;"> 
+    <button mat-flat-button color="primary" (click)="ActionAddRule()" cdkFocusInitial>
+        <mat-icon>add_circle_outline</mat-icon>
+        Nueva Regla
+    </button>
+    <div class="row">
+        <div class="table-responsive" style="max-height: 70vh;">        
+            <!-- <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" [matSortActive]="listConfig.sortField" [matSortDirection]="listConfig.sortDirecction">
+                <ng-container matColumnDef="sueldo">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{'registro_de_empleado.Sueldo'|translate}}</mat-header-cell>
+                    <mat-cell *matCellDef="let row">{{row.Sueldo|currency}}</mat-cell>
+                </ng-container>
+            </mat-table>
+            <mat-paginator [length]="dataSource.total$ | async" [pageSize]="listConfig.size" [pageIndex]="listConfig.page" [pageSizeOptions]="[5, 10, 15, 20]"></mat-paginator> -->
+        </div>
+    </div>
+</div>
+
+<div mat-dialog-actions style="padding-top: 16px; text-align: right;" class="mb-1">
+    <button mat-button (click)="ActionClose()" style="background-color:lightslategray;">Cancelar</button>
+</div>

@@ -1,0 +1,108 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Ingreso de Costos de Servicios</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Ingreso_de_Costos_de_Servicios/list">Ingreso de Costos de Servicios</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Ingreso_de_Costos_de_ServiciosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Ingreso_de_Costos_de_ServiciosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Ingreso_de_Costos_de_ServiciosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divCosto_" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Costo $</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Costo__ExecuteBusinessRules()" matInput formControlName="Costo_" mask="separator.0" thousandSeparator="," maxlength="9" required />
+                        <mat-error *ngIf="Ingreso_de_Costos_de_ServiciosForm.get('Costo_').hasError('required')">
+                          Costo $  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Factura" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Factura</mat-label>
+                        <input (change)="No__de_Factura_ExecuteBusinessRules()" #No__de_Factura matInput formControlName="No__de_Factura" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Ingreso_de_Costos_de_ServiciosForm.get('No__de_Factura').hasError('required')">
+                          No. de Factura  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Factura" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Factura</mat-label>
+                        <input (dateChange)="Fecha_de_Factura_ExecuteBusinessRules()" (blur)="Fecha_de_Factura_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Factura.open()" [matDatepicker]="datePickerFecha_de_Factura" formControlName="Fecha_de_Factura" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Factura"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Factura></mat-datepicker>
+                        <mat-error *ngIf="Ingreso_de_Costos_de_ServiciosForm.get('Fecha_de_Factura').hasError('required')">
+                          Fecha de Factura  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFolioIngresoCostosServ" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>FolioIngresoCostosServ</mat-label>
+                        <input (change)="FolioIngresoCostosServ_ExecuteBusinessRules()" #FolioIngresoCostosServ matInput formControlName="FolioIngresoCostosServ" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Ingreso_de_Costos_de_ServiciosForm.get('FolioIngresoCostosServ').hasError('required')">
+                          FolioIngresoCostosServ  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Ingreso_de_Costos_de_ServiciosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Ingreso_de_Costos_de_ServiciosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Ingreso_de_Costos_de_ServiciosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Ingreso_de_Costos_de_ServiciosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

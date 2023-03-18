@@ -1,0 +1,88 @@
+﻿.f-w{
+    width: 100%;
+}
+
+mat-table {
+    display: flex;
+    flex-direction: column;
+}
+    
+mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type{
+    padding-left: 0;
+}
+    
+.spinner-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+    
+mat-form-field.filter {
+    width: 100%;
+}
+    
+mat-form-field.filter .mat-form-field-infix {
+    border: 1px solid #9e9e9e;
+}
+    
+.filter{
+    font-size: 8px;
+    height: 38px;
+}
+    
+.mat-column-acciones,.mat-column-acciones_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+
+.mat-column-Folio,.mat-column-Folio_filtro{
+    width:  50px;
+    flex: 0 0 50px !important;
+}
+.mat-column-Campo_para_Estatus,.mat-column-Campo_para_Estatus_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Nombre_Fisico_del_Campo,.mat-column-Nombre_Fisico_del_Campo_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Nombre_Fisico_de_la_Tabla,.mat-column-Nombre_Fisico_de_la_Tabla_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+    
+    
+.mat-filtro-row mat-cell{
+    padding: 0 2px;
+}
+    
+.mat-filtro-row :host ::ng-deep .mat-form-field-infix{
+    padding: 1px 2px 6px !important;
+}
+    
+mat-datepicker-toggle{
+    display: inline-block;
+    width: 25px;
+}
+    
+.mat-header-row, .mat-row {
+    display: inline-flex;
+}
+    
+.filter-select{
+    font-size: 9.5px;
+    height: 38px;
+}
+    
+.filter-select mat-option{
+    font-size: 12px !important;
+}
+    
+:host ::ng-deep .mat-sort-header-container{
+    margin:0 auto;
+}
+    
+.mat-raised-button {
+    line-height: 20px;
+}

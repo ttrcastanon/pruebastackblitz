@@ -1,0 +1,123 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Historial de Cambios</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Historial_de_Cambios/list">Historial de Cambios</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Historial_de_CambiosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Historial_de_CambiosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Historial_de_CambiosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNumero_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Vuelo</mat-label>
+                        <input type="text" matInput formControlName="Numero_de_Vuelo" [matAutocomplete]="autoNumero_de_Vuelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNumero_de_Vuelo="matAutocomplete" [displayWith]="displayFnNumero_de_Vuelo">
+                          <mat-option (onSelectionChange)="Numero_de_Vuelo_ExecuteBusinessRules()" *ngFor="let option of optionsNumero_de_Vuelo | async" [value]="option">
+                            {{option.Numero_de_Vuelo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNumero_de_Vuelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsNumero_de_Vuelo && !isLoadingNumero_de_Vuelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Historial_de_CambiosForm.get('Numero_de_Vuelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Historial_de_CambiosForm.get('Numero_de_Vuelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Número de Vuelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha</mat-label>
+                        <input (dateChange)="Fecha_ExecuteBusinessRules()" (blur)="Fecha_ExecuteBusinessRules()" matInput (focus)="datePickerFecha.open()" [matDatepicker]="datePickerFecha" formControlName="Fecha" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha></mat-datepicker>
+                        <mat-error *ngIf="Historial_de_CambiosForm.get('Fecha').hasError('required')">
+                          Fecha  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora</mat-label>
+                        <input (change)="Hora_ExecuteBusinessRules()" (blur)="Hora_ExecuteBusinessRules()" formControlName="Hora" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Historial_de_CambiosForm.get('Hora').hasError('required')">
+                          Hora  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCambio_Realizado" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cambio Realizado</mat-label>
+                        <input (change)="Cambio_Realizado_ExecuteBusinessRules()" #Cambio_Realizado matInput formControlName="Cambio_Realizado" type="text" maxlength="2000" required />
+                        <mat-error *ngIf="Historial_de_CambiosForm.get('Cambio_Realizado').hasError('required')">
+                          Cambio Realizado  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Historial_de_CambiosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Historial_de_CambiosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Historial_de_CambiosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Historial_de_CambiosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

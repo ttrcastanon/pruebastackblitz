@@ -1,0 +1,854 @@
+﻿<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Cotización</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/dashboard/main">
+                                <i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Cotización
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+
+                        <!-- Exportar -->
+                        <div class="row" style="float: right; padding-right: 20px;">
+                            <div>
+                                <button [hidden]="!hasPermision('Export')" mat-raised-button title="Copiar"
+                                    [disabled]="false" (click)="ActionExport(1)">
+                                    Copiar
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Export')" mat-raised-button title="CSV"
+                                    [disabled]="false" (click)="ActionExport(3)">
+                                    CSV
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Export')" mat-raised-button title="Excel"
+                                    [disabled]="false" (click)="ActionExport(2)">
+                                    Excel
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Export')" mat-raised-button title="PDF"
+                                    [disabled]="false" (click)="ActionExport(4)">
+                                    PDF
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Print')" mat-raised-button title="Imprimir"
+                                    [disabled]="false" (click)="ActionExport(5)">
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive" style="max-height: 70vh;">
+
+                            <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+                                <mat-spinner></mat-spinner>
+                            </div>
+
+                            <mat-table #table [dataSource]="dataSource" matSort class="mat-cell"
+                                [matSortActive]="listConfig.sortField" [matSortDirection]="listConfig.sortDirecction">
+
+                                <ng-container matColumnDef="acciones">
+
+                                    <mat-header-cell *matHeaderCellDef class="pr-0" style="height: 18px; width:18px;">
+
+
+                                        <div matTooltip="Agregar">
+                                            <button mat-mini-fab color="primary" [hidden]="!hasPermision('New')"
+                                                [routerLink]="'/Cotizacion/add'" [state]="{ data: listConfig}">
+                                                <mat-icon class="col-white">add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <div matTooltip="Búsqueda Avanzada">
+                                            <button mat-mini-fab color="primary"
+                                                [routerLink]="'/Cotizacion/showadvancefilter'"
+                                                [state]="{ data: listConfig}">
+                                                <mat-icon class="col-white">search</mat-icon>
+                                            </button>
+                                        </div>
+                                        <div matTooltip="Limpiar Filtro">
+
+                                            <button mat-mini-fab color="primary" (click)="clearFilter()">
+                                                <mat-icon class="col-white">refresh</mat-icon>
+                                            </button>
+                                        </div>
+
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+
+                                        <div matTooltip="Modificar">
+                                            <button mat-icon-button class="btn-tbl-edit"
+                                                [hidden]="!hasPermision('Edit') || row.Estatus == 3  || row.Estatus == 4"
+                                                [routerLink]="['/Cotizacion/edit', row.Folio ]"
+                                                [state]="{ data: listConfig}">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                        </div>
+
+                                        <div matTooltip="Consultar">
+                                            <button mat-icon-button class="btn-tbl-show"
+                                                [hidden]="!hasPermision('Consult')"
+                                                [routerLink]="['/Cotizacion/consult', row.Folio ]"
+                                                [state]="{ data: listConfig}">
+                                                <mat-icon>preview</mat-icon>
+                                            </button>
+                                        </div>
+
+                                        <div matTooltip="Borrar">
+                                            <button mat-icon-button class="btn-tbl-delete"
+                                                [hidden]="!hasPermision('Delete') || true " (click)="remove(row)">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+
+                                        <div>
+                                            <button mat-icon-button class="btn-tbl-print" (click)="ActionPrint(row)"
+                                                *ngIf="Phase==3 || Phase==4 || Phase==5">
+                                                <mat-icon>print</mat-icon>
+                                            </button>
+
+                                        </div>
+
+                                    </mat-cell>
+
+                                </ng-container>
+
+                                <ng-container matColumnDef="acciones_filtro">
+                                    <mat-cell *matHeaderCellDef>
+
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Folio">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Folio'] ? listConfig?.styles['Folio'] : ''">
+                                        Folio
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Folio'] ? listConfig?.styles['Folio'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Folio}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Folio_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Folio'] ? listConfig?.styles['Folio'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Folio" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Fecha_de_Registro">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_de_Registro'] ? listConfig?.styles['Fecha_de_Registro'] : ''">Fecha
+                                        de Registro</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_de_Registro'] ? listConfig?.styles['Fecha_de_Registro'] : ''">{{row.Fecha_de_Registro
+                                        | date: 'dd-MM-yyyy'}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Fecha_de_Registro_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_de_Registro'] ? listConfig?.styles['Fecha_de_Registro'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput type="text" [matDatepicker]="picker" disabled="true"
+                                                [(ngModel)]="listConfig.filter.Fecha_de_Registro"
+                                                (dateChange)="refresh()">
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker-toggle matSuffix
+                                                (click)="listConfig.filter.Fecha_de_Registro = '';refresh()"
+                                                *ngIf="listConfig.filter.Fecha_de_Registro">
+                                                <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker disabled="false"></mat-datepicker>
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Hora_de_Registro">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Hora_de_Registro'] ? listConfig?.styles['Hora_de_Registro'] : ''">
+                                        Hora de Registro</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Hora_de_Registro'] ? listConfig?.styles['Hora_de_Registro'] : ''">{{row.Hora_de_Registro}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Hora_de_Registro_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Hora_de_Registro'] ? listConfig?.styles['Hora_de_Registro'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Hora_de_Registro"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Usuario_que_Registra">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Usuario_que_Registra'] ? listConfig?.styles['Usuario_que_Registra'] : ''">Usuario
+                                        que Registra</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Usuario_que_Registra'] ? listConfig?.styles['Usuario_que_Registra'] : ''">{{row.Usuario_que_Registra_Spartan_User.Name}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Usuario_que_Registra_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Usuario_que_Registra'] ? listConfig?.styles['Usuario_que_Registra'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Usuario_que_Registra"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Numero_de_Cotizacion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Numero_de_Cotizacion'] ? listConfig?.styles['Numero_de_Cotizacion'] : ''">Numero
+                                        de Cotización</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Numero_de_Cotizacion'] ? listConfig?.styles['Numero_de_Cotizacion'] : ''">{{row.Numero_de_Cotizacion}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Numero_de_Cotizacion_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Numero_de_Cotizacion'] ? listConfig?.styles['Numero_de_Cotizacion'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Numero_de_Cotizacion"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Orden_de_Trabajo_Origen">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Orden_de_Trabajo_Origen'] ? listConfig?.styles['Orden_de_Trabajo_Origen'] : ''">Orden
+                                        de Trabajo Origen</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Orden_de_Trabajo_Origen'] ? listConfig?.styles['Orden_de_Trabajo_Origen'] : ''">{{row.Orden_de_Trabajo_Origen_Orden_de_Trabajo.numero_de_orden}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Orden_de_Trabajo_Origen_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Orden_de_Trabajo_Origen'] ? listConfig?.styles['Orden_de_Trabajo_Origen'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Orden_de_Trabajo_Origen"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Orden_de_Trabajo_Generada">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Orden_de_Trabajo_Generada'] ? listConfig?.styles['Orden_de_Trabajo_Generada'] : ''">Orden
+                                        de Trabajo Generada</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Orden_de_Trabajo_Generada'] ? listConfig?.styles['Orden_de_Trabajo_Generada'] : ''">{{row.Orden_de_Trabajo_Generada_Orden_de_Trabajo.numero_de_orden}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Orden_de_Trabajo_Generada_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Orden_de_Trabajo_Generada'] ? listConfig?.styles['Orden_de_Trabajo_Generada'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Orden_de_Trabajo_Generada"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Tipo_de_Reporte">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Tipo_de_Reporte'] ? listConfig?.styles['Tipo_de_Reporte'] : ''">Tipo
+                                        de Reporte</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Tipo_de_Reporte'] ? listConfig?.styles['Tipo_de_Reporte'] : ''">{{row.Tipo_de_Reporte_Tipo_de_Reporte.Descripcion}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Tipo_de_Reporte_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Tipo_de_Reporte'] ? listConfig?.styles['Tipo_de_Reporte'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Tipo_de_Reporte"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Tipo_de_ingreso">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Tipo_de_ingreso'] ? listConfig?.styles['Tipo_de_ingreso'] : ''">Tipo
+                                        de ingreso</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Tipo_de_ingreso'] ? listConfig?.styles['Tipo_de_ingreso'] : ''">{{row.Tipo_de_ingreso_Tipo_de_Ingreso_a_Cotizacion.Descripcion}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Tipo_de_ingreso_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Tipo_de_ingreso'] ? listConfig?.styles['Tipo_de_ingreso'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Tipo_de_ingreso"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Cliente">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Cliente'] ? listConfig?.styles['Cliente'] : ''">Cliente</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Cliente'] ? listConfig?.styles['Cliente'] : ''">{{row.Cliente_Cliente.Razon_Social}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Cliente_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Cliente'] ? listConfig?.styles['Cliente'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Cliente"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Matricula">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Matricula'] ? listConfig?.styles['Matricula'] : ''">Matrícula</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Matricula'] ? listConfig?.styles['Matricula'] : ''">{{row.Matricula_Aeronave.Matricula}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Matricula_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Matricula'] ? listConfig?.styles['Matricula'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Matricula"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Modelo">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Modelo'] ? listConfig?.styles['Modelo'] : ''">Modelo</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Modelo'] ? listConfig?.styles['Modelo'] : ''">{{row.Modelo_Modelos.Descripcion}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Modelo_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Modelo'] ? listConfig?.styles['Modelo'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Modelo" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Contacto">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Contacto'] ? listConfig?.styles['Contacto'] : ''">Contacto</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Contacto'] ? listConfig?.styles['Contacto'] : ''">{{row.Contacto}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Contacto_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Contacto'] ? listConfig?.styles['Contacto'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Contacto"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Tiempo_de_Ejecucion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Tiempo_de_Ejecucion'] ? listConfig?.styles['Tiempo_de_Ejecucion'] : ''">
+                                        Tiempo de Ejecución (días)
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Tiempo_de_Ejecucion'] ? listConfig?.styles['Tiempo_de_Ejecucion'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Tiempo_de_Ejecucion}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Tiempo_de_Ejecucion_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Tiempo_de_Ejecucion'] ? listConfig?.styles['Tiempo_de_Ejecucion'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Tiempo_de_Ejecucion"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Enviar_Cotizacion_a_Cliente">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Enviar_Cotizacion_a_Cliente'] ? listConfig?.styles['Enviar_Cotizacion_a_Cliente'] : ''">Enviar
+                                        Cotización a Cliente</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Enviar_Cotizacion_a_Cliente'] ? listConfig?.styles['Enviar_Cotizacion_a_Cliente'] : ''">
+                                        <div class="text-center f-w">
+                                            <mat-checkbox [disabled]="true" [checked]="row.Enviar_Cotizacion_a_Cliente"
+                                                [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Enviar_Cotizacion_a_Cliente_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Enviar_Cotizacion_a_Cliente'] ? listConfig?.styles['Enviar_Cotizacion_a_Cliente'] : ''">
+                                        <mat-form-field class="filter filter-select" appearance="outline">
+                                            <mat-select [(value)]="listConfig.filter.Enviar_Cotizacion_a_Cliente"
+                                                (selectionChange)="refresh()">
+                                                <mat-option value="2">Todos</mat-option>
+                                                <mat-option value="1">Activos</mat-option>
+                                                <mat-option value="0">Inactivos</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Redaccion_Correo_para_Cliente">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Redaccion_Correo_para_Cliente'] ? listConfig?.styles['Redaccion_Correo_para_Cliente'] : ''">Redacción
+                                        Correo para Cliente</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Redaccion_Correo_para_Cliente'] ? listConfig?.styles['Redaccion_Correo_para_Cliente'] : ''">{{row.Redaccion_Correo_para_Cliente}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Redaccion_Correo_para_Cliente_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Redaccion_Correo_para_Cliente'] ? listConfig?.styles['Redaccion_Correo_para_Cliente'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput
+                                                [(ngModel)]="listConfig.filter.Redaccion_Correo_para_Cliente"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Clausulas_Especificas">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Clausulas_Especificas'] ? listConfig?.styles['Clausulas_Especificas'] : ''">Claúsulas
+                                        Específicas</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Clausulas_Especificas'] ? listConfig?.styles['Clausulas_Especificas'] : ''">
+                                        <div class="text-center f-w">
+                                            <button mat-button [disabled]="!row.Clausulas_Especificas"
+                                                matTooltip="Ver Contenido HTML"
+                                                (click)="Editor_HTML('Claúsulas Específicas', row.Clausulas_Especificas)">
+                                                <mat-icon>assignment</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Clausulas_Especificas_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Clausulas_Especificas'] ? listConfig?.styles['Clausulas_Especificas'] : ''">
+
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Clausulas_Generales">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Clausulas_Generales'] ? listConfig?.styles['Clausulas_Generales'] : ''">Claúsulas
+                                        Generales</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Clausulas_Generales'] ? listConfig?.styles['Clausulas_Generales'] : ''">
+                                        <div class="text-center f-w">
+                                            <button mat-button [disabled]="!row.Clausulas_Generales"
+                                                matTooltip="Ver Contenido HTML"
+                                                (click)="Editor_HTML('Claúsulas Generales', row.Clausulas_Generales)">
+                                                <mat-icon>assignment</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Clausulas_Generales_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Clausulas_Generales'] ? listConfig?.styles['Clausulas_Generales'] : ''">
+
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Estatus">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Estatus'] ? listConfig?.styles['Estatus'] : ''">Estatus</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Estatus'] ? listConfig?.styles['Estatus'] : ''">{{row.Estatus_Estatus_de_Cotizacion.Descripcion}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Estatus_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Estatus'] ? listConfig?.styles['Estatus'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Estatus"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Mano_de_Obra">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Mano_de_Obra'] ? listConfig?.styles['Mano_de_Obra'] : ''">Mano
+                                        de Obra</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Mano_de_Obra'] ? listConfig?.styles['Mano_de_Obra'] : ''">{{row.Mano_de_Obra|currency}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Mano_de_Obra_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Mano_de_Obra'] ? listConfig?.styles['Mano_de_Obra'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Mano_de_Obra"
+                                                (change)="refresh()" mask="separator.2">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Partes">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Partes'] ? listConfig?.styles['Partes'] : ''">Partes</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Partes'] ? listConfig?.styles['Partes'] : ''">{{row.Partes|currency}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Partes_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Partes'] ? listConfig?.styles['Partes'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Partes" (change)="refresh()"
+                                                mask="separator.2">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Consumibles">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Consumibles'] ? listConfig?.styles['Consumibles'] : ''">Consumibles</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Consumibles'] ? listConfig?.styles['Consumibles'] : ''">{{row.Consumibles|currency}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Consumibles_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Consumibles'] ? listConfig?.styles['Consumibles'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Consumibles"
+                                                (change)="refresh()" mask="separator.2">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Total">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Total'] ? listConfig?.styles['Total'] : ''">Total</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Total'] ? listConfig?.styles['Total'] : ''">{{row.Total|currency}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Total_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Total'] ? listConfig?.styles['Total'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Total" (change)="refresh()"
+                                                mask="separator.2">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Porcentaje_de_Consumibles">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_de_Consumibles'] ? listConfig?.styles['Porcentaje_de_Consumibles'] : ''">
+                                        Porcentaje de Consumibles
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_de_Consumibles'] ? listConfig?.styles['Porcentaje_de_Consumibles'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Porcentaje_de_Consumibles}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Porcentaje_de_Consumibles_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_de_Consumibles'] ? listConfig?.styles['Porcentaje_de_Consumibles'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Porcentaje_de_Consumibles"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Porcentaje_de_Anticipo">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_de_Anticipo'] ? listConfig?.styles['Porcentaje_de_Anticipo'] : ''">
+                                        Porcentaje de Anticipo
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_de_Anticipo'] ? listConfig?.styles['Porcentaje_de_Anticipo'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Porcentaje_de_Anticipo}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Porcentaje_de_Anticipo_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_de_Anticipo'] ? listConfig?.styles['Porcentaje_de_Anticipo'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Porcentaje_de_Anticipo"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Comentarios_Mantenimiento">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Comentarios_Mantenimiento'] ? listConfig?.styles['Comentarios_Mantenimiento'] : ''">Comentarios
+                                        Mantenimiento</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Comentarios_Mantenimiento'] ? listConfig?.styles['Comentarios_Mantenimiento'] : ''">{{row.Comentarios_Mantenimiento}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Comentarios_Mantenimiento_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Comentarios_Mantenimiento'] ? listConfig?.styles['Comentarios_Mantenimiento'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Comentarios_Mantenimiento"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Reporte">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Reporte'] ? listConfig?.styles['Reporte'] : ''">Reporte</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Reporte'] ? listConfig?.styles['Reporte'] : ''">{{row.Reporte_Crear_Reporte.No_Reporte}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Reporte_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Reporte'] ? listConfig?.styles['Reporte'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Reporte"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Item_de_Inspeccion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Item_de_Inspeccion'] ? listConfig?.styles['Item_de_Inspeccion'] : ''">
+                                        Item de Inspección
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Item_de_Inspeccion'] ? listConfig?.styles['Item_de_Inspeccion'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Item_de_Inspeccion}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Item_de_Inspeccion_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Item_de_Inspeccion'] ? listConfig?.styles['Item_de_Inspeccion'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Item_de_Inspeccion"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Motivo_de_Edicion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Motivo_de_Edicion'] ? listConfig?.styles['Motivo_de_Edicion'] : ''">Motivo
+                                        de Edición</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Motivo_de_Edicion'] ? listConfig?.styles['Motivo_de_Edicion'] : ''">{{row.Motivo_de_Edicion_Motivo_de_Edicion_de_Cotizacion.Descripcion}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Motivo_de_Edicion_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Motivo_de_Edicion'] ? listConfig?.styles['Motivo_de_Edicion'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Motivo_de_Edicion"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Observaciones">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Observaciones'] ? listConfig?.styles['Observaciones'] : ''">Observaciones</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Observaciones'] ? listConfig?.styles['Observaciones'] : ''">{{row.Observaciones}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Observaciones_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Observaciones'] ? listConfig?.styles['Observaciones'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Observaciones"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Fecha_de_Respuesta">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_de_Respuesta'] ? listConfig?.styles['Fecha_de_Respuesta'] : ''">Fecha
+                                        de Respuesta</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_de_Respuesta'] ? listConfig?.styles['Fecha_de_Respuesta'] : ''">{{row.Fecha_de_Respuesta
+                                        | date: 'dd-MM-yyyy'}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Fecha_de_Respuesta_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_de_Respuesta'] ? listConfig?.styles['Fecha_de_Respuesta'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput type="text" [matDatepicker]="picker" disabled="true"
+                                                [(ngModel)]="listConfig.filter.Fecha_de_Respuesta"
+                                                (dateChange)="refresh()">
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker-toggle matSuffix
+                                                (click)="listConfig.filter.Fecha_de_Respuesta = '';refresh()"
+                                                *ngIf="listConfig.filter.Fecha_de_Respuesta">
+                                                <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker disabled="false"></mat-datepicker>
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Hora_de_Respuesta">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Hora_de_Respuesta'] ? listConfig?.styles['Hora_de_Respuesta'] : ''">Hora
+                                        de Respuesta</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Hora_de_Respuesta'] ? listConfig?.styles['Hora_de_Respuesta'] : ''">{{row.Hora_de_Respuesta}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Hora_de_Respuesta_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Hora_de_Respuesta'] ? listConfig?.styles['Hora_de_Respuesta'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Hora_de_Respuesta"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Usuario_que_Registra_Respuesta">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Usuario_que_Registra_Respuesta'] ? listConfig?.styles['Usuario_que_Registra_Respuesta'] : ''">Usuario
+                                        que Registra</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Usuario_que_Registra_Respuesta'] ? listConfig?.styles['Usuario_que_Registra_Respuesta'] : ''">{{row.Usuario_que_Registra_Respuesta_Spartan_User.Name}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Usuario_que_Registra_Respuesta_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Usuario_que_Registra_Respuesta'] ? listConfig?.styles['Usuario_que_Registra_Respuesta'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput
+                                                [(ngModel)]="listConfig.filter.Usuario_que_Registra_Respuesta"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Respuesta">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Respuesta'] ? listConfig?.styles['Respuesta'] : ''">Respuesta</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Respuesta'] ? listConfig?.styles['Respuesta'] : ''">{{row.Respuesta_Respuesta_del_Cliente_a_Cotizacion.Descripcion}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Respuesta_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Respuesta'] ? listConfig?.styles['Respuesta'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Respuesta"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Observaciones_Respeusta">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Observaciones_Respeusta'] ? listConfig?.styles['Observaciones_Respeusta'] : ''">Observaciones</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Observaciones_Respeusta'] ? listConfig?.styles['Observaciones_Respeusta'] : ''">{{row.Observaciones_Respeusta}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Observaciones_Respeusta_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Observaciones_Respeusta'] ? listConfig?.styles['Observaciones_Respeusta'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Observaciones_Respeusta"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Dia_de_Llegada_del_Avion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Dia_de_Llegada_del_Avion'] ? listConfig?.styles['Dia_de_Llegada_del_Avion'] : ''">Día
+                                        de Llegada del Avión</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Dia_de_Llegada_del_Avion'] ? listConfig?.styles['Dia_de_Llegada_del_Avion'] : ''">{{row.Dia_de_Llegada_del_Avion
+                                        | date: 'dd-MM-yyyy'}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Dia_de_Llegada_del_Avion_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Dia_de_Llegada_del_Avion'] ? listConfig?.styles['Dia_de_Llegada_del_Avion'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput type="text" [matDatepicker]="picker" disabled="true"
+                                                [(ngModel)]="listConfig.filter.Dia_de_Llegada_del_Avion"
+                                                (dateChange)="refresh()">
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker-toggle matSuffix
+                                                (click)="listConfig.filter.Dia_de_Llegada_del_Avion = '';refresh()"
+                                                *ngIf="listConfig.filter.Dia_de_Llegada_del_Avion">
+                                                <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker disabled="false"></mat-datepicker>
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Hora_de_Llegada_del_Avion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Hora_de_Llegada_del_Avion'] ? listConfig?.styles['Hora_de_Llegada_del_Avion'] : ''">Hora
+                                        de Llegada del Avión</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;"
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Hora_de_Llegada_del_Avion'] ? listConfig?.styles['Hora_de_Llegada_del_Avion'] : ''">{{row.Hora_de_Llegada_del_Avion}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Hora_de_Llegada_del_Avion_filtro">
+                                    <mat-cell *matHeaderCellDef
+                                        [attr.style]="listConfig?.styles && listConfig?.styles['Hora_de_Llegada_del_Avion'] ? listConfig?.styles['Hora_de_Llegada_del_Avion'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Hora_de_Llegada_del_Avion"
+                                                (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+
+
+                                <mat-header-row *matHeaderRowDef="listConfig.columns"></mat-header-row>
+
+                                <mat-row class="mat-filtro-row" *matHeaderRowDef="listConfig.columns_filters"></mat-row>
+
+                                <mat-row *matRowDef="let row; columns: listConfig.columns;" [style.cursor]="'pointer'"
+                                    matRipple>
+                                </mat-row>
+
+                            </mat-table>
+                        </div>
+                        <mat-paginator [length]="dataSource.total$ | async" [pageSize]="listConfig.size"
+                            [pageIndex]="listConfig.page" [pageSizeOptions]="[5, 10, 15, 20]"></mat-paginator>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="snackbar"></div>

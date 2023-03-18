@@ -1,0 +1,150 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Piezas</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Piezas/list">Piezas</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="PiezasForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divCodigo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Código</mat-label>
+                        <input (change)="Codigo_ExecuteBusinessRules()" #Codigo matInput formControlName="Codigo" type="text" maxlength="50" required />
+                        <mat-error *ngIf="PiezasForm.get('Codigo').hasError('required')">
+                          Código  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divDescripcion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción</mat-label>
+                        <input (change)="Descripcion_ExecuteBusinessRules()" #Descripcion matInput formControlName="Descripcion" type="text" maxlength="100" required />
+                        <mat-error *ngIf="PiezasForm.get('Descripcion').hasError('required')">
+                          Descripción  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divInstalacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Instalación</mat-label>
+                        <input (dateChange)="Instalacion_ExecuteBusinessRules()" (blur)="Instalacion_ExecuteBusinessRules()" matInput (focus)="datePickerInstalacion.open()" [matDatepicker]="datePickerInstalacion" formControlName="Instalacion" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerInstalacion"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerInstalacion></mat-datepicker>
+                        <mat-error *ngIf="PiezasForm.get('Instalacion').hasError('required')">
+                          Instalación  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divN_de_Serie" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>N° de Serie</mat-label>
+                        <input (change)="N_de_Serie_ExecuteBusinessRules()" #N_de_Serie matInput formControlName="N_de_Serie" type="text" maxlength="20" required />
+                        <mat-error *ngIf="PiezasForm.get('N_de_Serie').hasError('required')">
+                          N° de Serie  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPosicion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Posición</mat-label>
+                        <mat-select (selectionChange)="Posicion_ExecuteBusinessRules()" placeholder="Posición" formControlName="Posicion" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Posicion_de_Piezas" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="PiezasForm.get('Posicion').hasError('required')">
+                          Posición es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divOT" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>OT</mat-label>
+                        <input (change)="OT_ExecuteBusinessRules()" matInput formControlName="OT" [type]="PiezasForm.get('OT').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="PiezasForm.get('OT').hasError('required')">
+                          OT  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPeriodicidad_meses" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Periodicidad (meses)</mat-label>
+                        <input (change)="Periodicidad_meses_ExecuteBusinessRules()" matInput formControlName="Periodicidad_meses" [type]="PiezasForm.get('Periodicidad_meses').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="PiezasForm.get('Periodicidad_meses').hasError('required')">
+                          Periodicidad (meses)  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divVencimiento" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Vencimiento</mat-label>
+                        <input (dateChange)="Vencimiento_ExecuteBusinessRules()" (blur)="Vencimiento_ExecuteBusinessRules()" matInput (focus)="datePickerVencimiento.open()" [matDatepicker]="datePickerVencimiento" formControlName="Vencimiento" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerVencimiento"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerVencimiento></mat-datepicker>
+                        <mat-error *ngIf="PiezasForm.get('Vencimiento').hasError('required')">
+                          Vencimiento  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion_Busqueda" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción Búsqueda</mat-label>
+                        <input (change)="Descripcion_Busqueda_ExecuteBusinessRules()" #Descripcion_Busqueda matInput formControlName="Descripcion_Busqueda" type="text" maxlength="100" required />
+                        <mat-error *ngIf="PiezasForm.get('Descripcion_Busqueda').hasError('required')">
+                          Descripción Búsqueda  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!PiezasForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!PiezasForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!PiezasForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!PiezasForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

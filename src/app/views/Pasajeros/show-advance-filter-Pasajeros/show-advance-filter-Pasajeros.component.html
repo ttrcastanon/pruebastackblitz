@@ -1,0 +1,777 @@
+﻿<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Búsqueda Avanzada de Catálogo de Pasajeros</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/dashboard/main">
+                  <i class="fas fa-home"></i> Inicio</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Catálogo de Pasajeros</a>
+              </li>
+              <li class="breadcrumb-item active">Búsqueda Avanzada</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Basic Validation -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="header">
+              <h2>
+                Búsqueda Avanzada
+              </h2>
+              <ul class="header-dropdown m-r--5">
+                <li class="dropdown">
+                  <a href="#" onClick="return false;" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="material-icons">more_vert</i>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a href="#" onClick="return false;">Action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Another action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Something else here</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="body">
+              <form class="advancefilter-form m-4" [formGroup]="advancefilter" (ngSubmit)="onadvancefilter()">
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Pax ID De</mat-label>
+                      <input matInput formControlName="fromClave">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Pax ID A</mat-label>
+                      <input matInput formControlName="toClave">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Identificador (Alias)"
+                        formControlName="Identificador_AliasFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Identificador (Alias)</mat-label>
+                      <input matInput formControlName="Identificador_Alias" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Nombre (s)"
+                        formControlName="Nombre_sFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Nombre (s)</mat-label>
+                      <input matInput formControlName="Nombre_s" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Apellido paterno"
+                        formControlName="Apellido_paternoFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Apellido paterno</mat-label>
+                      <input matInput formControlName="Apellido_paterno" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Apellido materno"
+                        formControlName="Apellido_maternoFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Apellido materno</mat-label>
+                      <input matInput formControlName="Apellido_materno" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Nombre completo"
+                        formControlName="Nombre_completoFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Nombre completo</mat-label>
+                      <input matInput formControlName="Nombre_completo" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Teléfono"
+                        formControlName="TelefonoFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Teléfono</mat-label>
+                      <input matInput formControlName="Telefono" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Celular"
+                        formControlName="CelularFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Celular</mat-label>
+                      <input matInput formControlName="Celular" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Correo electrónico"
+                        formControlName="Correo_electronicoFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Correo electrónico</mat-label>
+                      <input matInput formControlName="Correo_electronico" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de nacimiento De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_nacimiento" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de nacimiento A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_nacimiento" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Edad De</mat-label>
+                      <input matInput formControlName="fromEdad">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Edad A</mat-label>
+                      <input matInput formControlName="toEdad">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Nacionalidad_1Filter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Nacionalidad }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Nacionalidad (1)</mat-label>
+                      <input matInput formControlName="Nacionalidad_1" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Nacionalidad (1)</mat-label>
+                      <mat-select placeholder="Nacionalidad (1)"
+                        formControlName="Nacionalidad_1Multiple" multiple>
+                        <mat-option *ngFor="let item of paiss" [value]="item.Clave">
+                          {{ item.Nacionalidad }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Nacionalidad_2Filter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Nacionalidad }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Nacionalidad (2)</mat-label>
+                      <input matInput formControlName="Nacionalidad_2" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Nacionalidad (2)</mat-label>
+                      <mat-select placeholder="Nacionalidad (2)"
+                        formControlName="Nacionalidad_2Multiple" multiple>
+                        <mat-option *ngFor="let item of paiss" [value]="item.Clave">
+                          {{ item.Nacionalidad }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="GeneroFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Género</mat-label>
+                      <input matInput formControlName="Genero" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Género</mat-label>
+                      <mat-select placeholder="Género"
+                        formControlName="GeneroMultiple" multiple>
+                        <mat-option *ngFor="let item of generos" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Pertenece_al_grupoFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>¿Pertenece al grupo?</mat-label>
+                      <input matInput formControlName="Pertenece_al_grupo" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar ¿Pertenece al grupo?</mat-label>
+                      <mat-select placeholder="¿Pertenece al grupo?"
+                        formControlName="Pertenece_al_grupoMultiple" multiple>
+                        <mat-option *ngFor="let item of respuestas" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="ActivoFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Estatus</mat-label>
+                      <input matInput formControlName="Activo" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Estatus</mat-label>
+                      <mat-select placeholder="Estatus"
+                        formControlName="ActivoMultiple" multiple>
+                        <mat-option *ngFor="let item of estatus_aeronaves" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Número de Pasaporte (1)"
+                        formControlName="Numero_de_Pasaporte_1Filter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Número de Pasaporte (1)</mat-label>
+                      <input matInput formControlName="Numero_de_Pasaporte_1" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Emisión Pasaporte (1) De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_Emision_Pasaporte_1" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Emisión Pasaporte (1) A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_Emision_Pasaporte_1" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de vencimiento Pasaporte (1) De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_vencimiento_pasaporte_1" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de vencimiento Pasaporte (1) A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_vencimiento_pasaporte_1" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="PaisFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>País</mat-label>
+                      <input matInput formControlName="Pais" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar País</mat-label>
+                      <mat-select placeholder="País"
+                        formControlName="PaisMultiple" multiple>
+                        <mat-option *ngFor="let item of paiss" [value]="item.Clave">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Número de Pasaporte (2)"
+                        formControlName="Numero_de_Pasaporte_2Filter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Número de Pasaporte (2)</mat-label>
+                      <input matInput formControlName="Numero_de_Pasaporte_2" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Emisión Pasaporte (2) De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_Emision_Pasaporte_2" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Emisión Pasaporte (2) A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_Emision_Pasaporte_2" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de vencimiento Pasaporte (2) De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_vencimiento_pasaporte_2" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de vencimiento Pasaporte (2) A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_vencimiento_pasaporte_2" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Pais_1Filter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>País</mat-label>
+                      <input matInput formControlName="Pais_1" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar País</mat-label>
+                      <mat-select placeholder="País"
+                        formControlName="Pais_1Multiple" multiple>
+                        <mat-option *ngFor="let item of paiss" [value]="item.Clave">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Número de Visa (1)"
+                        formControlName="Numero_de_Visa_1Filter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Número de Visa (1)</mat-label>
+                      <input matInput formControlName="Numero_de_Visa_1" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Emisión Visa (1) De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_Emision_Visa_1" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Emisión Visa (1) A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_Emision_Visa_1" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de vencimiento Visa (1) De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_vencimiento_visa_1" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de vencimiento Visa (1) A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_vencimiento_visa_1" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Pais_2Filter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>País</mat-label>
+                      <input matInput formControlName="Pais_2" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar País</mat-label>
+                      <mat-select placeholder="País"
+                        formControlName="Pais_2Multiple" multiple>
+                        <mat-option *ngFor="let item of paiss" [value]="item.Clave">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Número de Visa (2)"
+                        formControlName="Numero_de_Visa_2Filter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Número de Visa (2)</mat-label>
+                      <input matInput formControlName="Numero_de_Visa_2" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Emisión Visa (2) De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_Emision_Visa_2" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Emisión Visa (2) A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_Emision_Visa_2" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de vencimiento Visa (2) De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_vencimiento_visa_2" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de vencimiento Visa (2) A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_vencimiento_visa_2" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Pais_4Filter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>País</mat-label>
+                      <input matInput formControlName="Pais_4" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar País</mat-label>
+                      <mat-select placeholder="País"
+                        formControlName="Pais_4Multiple" multiple>
+                        <mat-option *ngFor="let item of paiss" [value]="item.Clave">
+                          {{ item.Nombre }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="mr-3 mb-2" mat-raised-button
+                      color="primary" (click)="buscar()" > Buscar </button>
+                    <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Validation -->
+    </div>
+  </section>
+<div id="snackbar"></div>

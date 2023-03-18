@@ -1,0 +1,145 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Carga Manual</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Carga_Manual/list">Carga Manual</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Carga_ManualForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Carga_ManualForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Carga_ManualForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha_de_carga" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de carga</mat-label>
+                        <input (dateChange)="Fecha_de_carga_ExecuteBusinessRules()" (blur)="Fecha_de_carga_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_carga.open()" [matDatepicker]="datePickerFecha_de_carga" formControlName="Fecha_de_carga" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_carga"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_carga></mat-datepicker>
+                        <mat-error *ngIf="Carga_ManualForm.get('Fecha_de_carga').hasError('required')">
+                          Fecha de carga  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_carga" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de carga</mat-label>
+                        <input (change)="Hora_de_carga_ExecuteBusinessRules()" (blur)="Hora_de_carga_ExecuteBusinessRules()" formControlName="Hora_de_carga" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Carga_ManualForm.get('Hora_de_carga').hasError('required')">
+                          Hora de carga  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario</mat-label>
+                        <mat-select (selectionChange)="Usuario_ExecuteBusinessRules()" placeholder="Usuario" formControlName="Usuario" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Carga_ManualForm.get('Usuario').hasError('required')">
+                          Usuario es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_carga" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de carga</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_carga_ExecuteBusinessRules()" placeholder="Tipo de carga" formControlName="Tipo_de_carga" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_carga" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Carga_ManualForm.get('Tipo_de_carga').hasError('required')">
+                          Tipo de carga es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divArchivo_a_cargar" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="Archivo_a_cargarName == '' && !Carga_ManualForm.disabled" class="example-full-width no-padding" appearance="outline" >
+                        <mat-label>Archivo a cargar</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="Archivo_a_cargarFile" required>
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+						<mat-error *ngIf="Carga_ManualForm.get('Archivo_a_cargarFile').hasError('required')">
+                          Archivo a cargar es requerido
+                        </mat-error>
+                      </mat-form-field>
+                      <div *ngIf="Archivo_a_cargarName != '' ">
+                        <mat-label>Archivo a cargar</mat-label>
+                        <a href="{{Archivo_a_cargarUrl()}}"  target="_blank">
+                          {{Archivo_a_cargarName }} 
+                        </a>
+                        <button mat-icon-button (click)="removeArchivo_a_cargar()" *ngIf="!Carga_ManualForm.disabled" >
+                          <mat-icon aria-label="eliminar">close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Carga_ManualForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Carga_ManualForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Carga_ManualForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Carga_ManualForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

@@ -1,0 +1,216 @@
+﻿<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Búsqueda Avanzada de Coord de Vuelo - Tripulación</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/dashboard/main">
+                  <i class="fas fa-home"></i> Inicio</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Coord de Vuelo - Tripulación</a>
+              </li>
+              <li class="breadcrumb-item active">Búsqueda Avanzada</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Basic Validation -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="header">
+              <h2>
+                Búsqueda Avanzada
+              </h2>
+              <ul class="header-dropdown m-r--5">
+                <li class="dropdown">
+                  <a href="#" onClick="return false;" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="material-icons">more_vert</i>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a href="#" onClick="return false;">Action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Another action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Something else here</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="body">
+              <form class="advancefilter-form m-4" [formGroup]="advancefilter" (ngSubmit)="onadvancefilter()">
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio De</mat-label>
+                      <input matInput formControlName="fromFolio">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio A</mat-label>
+                      <input matInput formControlName="toFolio">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Numero_de_VueloFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                          {{ item.Numero_de_Vuelo }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Número de Vuelo</mat-label>
+                      <input matInput formControlName="Numero_de_Vuelo" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Número de Vuelo</mat-label>
+                      <mat-select placeholder="Número de Vuelo"
+                        formControlName="Numero_de_VueloMultiple" multiple>
+                        <mat-option *ngFor="let item of solicitud_de_vuelos" [value]="item.Folio">
+                          {{ item.Numero_de_Vuelo }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="MatriculaFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Matricula">
+                          {{ item.Matricula }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Matrícula</mat-label>
+                      <input matInput formControlName="Matricula" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Matrícula</mat-label>
+                      <mat-select placeholder="Matrícula"
+                        formControlName="MatriculaMultiple" multiple>
+                        <mat-option *ngFor="let item of aeronaves" [value]="item.Matricula">
+                          {{ item.Matricula }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Ruta de Vuelo"
+                        formControlName="Ruta_de_VueloFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Ruta de Vuelo</mat-label>
+                      <input matInput formControlName="Ruta_de_Vuelo" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Fecha y Hora de Salida"
+                        formControlName="Fecha_y_Hora_de_SalidaFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Fecha y Hora de Salida</mat-label>
+                      <input matInput formControlName="Fecha_y_Hora_de_Salida" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Calificación De</mat-label>
+                      <input matInput formControlName="fromCalificacion">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Calificación A</mat-label>
+                      <input matInput formControlName="toCalificacion">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Observaciones"
+                        formControlName="ObservacionesFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Observaciones</mat-label>
+                      <input matInput formControlName="Observaciones" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="mr-3 mb-2" mat-raised-button
+                      color="primary" (click)="buscar()" > Buscar </button>
+                    <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Validation -->
+    </div>
+  </section>
+<div id="snackbar"></div>

@@ -1,0 +1,893 @@
+﻿<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Búsqueda Avanzada de Cotización</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/dashboard/main">
+                  <i class="fas fa-home"></i> Inicio</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Cotización</a>
+              </li>
+              <li class="breadcrumb-item active">Búsqueda Avanzada</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Basic Validation -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="header">
+              <h2>
+                Búsqueda Avanzada
+              </h2>
+              <ul class="header-dropdown m-r--5">
+                <li class="dropdown">
+                  <a href="#" onClick="return false;" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="material-icons">more_vert</i>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a href="#" onClick="return false;">Action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Another action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Something else here</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="body">
+              <form class="advancefilter-form m-4" [formGroup]="advancefilter" (ngSubmit)="onadvancefilter()">
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio De</mat-label>
+                      <input matInput formControlName="fromFolio">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio A</mat-label>
+                      <input matInput formControlName="toFolio">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Registro De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_Registro" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Registro A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_Registro" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora de Registro De</mat-label>
+                      <input formControlName="fromHora_de_Registro" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora de Registro A</mat-label>
+                      <input formControlName="toHora_de_Registro" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Usuario_que_RegistraFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Id_User">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Usuario que Registra</mat-label>
+                      <input matInput formControlName="Usuario_que_Registra" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Usuario que Registra</mat-label>
+                      <mat-select placeholder="Usuario que Registra"
+                        formControlName="Usuario_que_RegistraMultiple" multiple>
+                        <mat-option *ngFor="let item of spartan_users" [value]="item.Id_User">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Numero de Cotización"
+                        formControlName="Numero_de_CotizacionFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Numero de Cotización</mat-label>
+                      <input matInput formControlName="Numero_de_Cotizacion" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Orden_de_Trabajo_OrigenFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                          {{ item.numero_de_orden }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Orden de Trabajo Origen</mat-label>
+                      <input matInput formControlName="Orden_de_Trabajo_Origen" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Orden de Trabajo Origen</mat-label>
+                      <mat-select placeholder="Orden de Trabajo Origen"
+                        formControlName="Orden_de_Trabajo_OrigenMultiple" multiple>
+                        <mat-option *ngFor="let item of orden_de_trabajos" [value]="item.Folio">
+                          {{ item.numero_de_orden }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Orden_de_Trabajo_GeneradaFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                          {{ item.numero_de_orden }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Orden de Trabajo Generada</mat-label>
+                      <input matInput formControlName="Orden_de_Trabajo_Generada" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Orden de Trabajo Generada</mat-label>
+                      <mat-select placeholder="Orden de Trabajo Generada"
+                        formControlName="Orden_de_Trabajo_GeneradaMultiple" multiple>
+                        <mat-option *ngFor="let item of orden_de_trabajos" [value]="item.Folio">
+                          {{ item.numero_de_orden }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Tipo_de_ReporteFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Tipo de Reporte</mat-label>
+                      <input matInput formControlName="Tipo_de_Reporte" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Tipo de Reporte</mat-label>
+                      <mat-select placeholder="Tipo de Reporte"
+                        formControlName="Tipo_de_ReporteMultiple" multiple>
+                        <mat-option *ngFor="let item of tipo_de_reportes" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Tipo_de_ingresoFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Tipo de ingreso</mat-label>
+                      <input matInput formControlName="Tipo_de_ingreso" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Tipo de ingreso</mat-label>
+                      <mat-select placeholder="Tipo de ingreso"
+                        formControlName="Tipo_de_ingresoMultiple" multiple>
+                        <mat-option *ngFor="let item of tipo_de_ingreso_a_cotizacions" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="ClienteFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Razon_Social }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Cliente</mat-label>
+                      <input matInput formControlName="Cliente" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Cliente</mat-label>
+                      <mat-select placeholder="Cliente"
+                        formControlName="ClienteMultiple" multiple>
+                        <mat-option *ngFor="let item of clientes" [value]="item.Clave">
+                          {{ item.Razon_Social }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="MatriculaFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Matricula">
+                          {{ item.Matricula }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Matrícula</mat-label>
+                      <input matInput formControlName="Matricula" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Matrícula</mat-label>
+                      <mat-select placeholder="Matrícula"
+                        formControlName="MatriculaMultiple" multiple>
+                        <mat-option *ngFor="let item of aeronaves" [value]="item.Matricula">
+                          {{ item.Matricula }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="ModeloFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Modelo</mat-label>
+                      <input matInput formControlName="Modelo" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Modelo</mat-label>
+                      <mat-select placeholder="Modelo"
+                        formControlName="ModeloMultiple" multiple>
+                        <mat-option *ngFor="let item of modeloss" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Contacto"
+                        formControlName="ContactoFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Contacto</mat-label>
+                      <input matInput formControlName="Contacto" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Tiempo de Ejecución (días) De</mat-label>
+                      <input matInput formControlName="fromTiempo_de_Ejecucion">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Tiempo de Ejecución (días) A</mat-label>
+                      <input matInput formControlName="toTiempo_de_Ejecucion">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Redacción Correo para Cliente"
+                        formControlName="Redaccion_Correo_para_ClienteFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Redacción Correo para Cliente</mat-label>
+                      <input matInput formControlName="Redaccion_Correo_para_Cliente" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Claúsulas Específicas"
+                        formControlName="Clausulas_EspecificasFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Claúsulas Específicas</mat-label>
+                      <input matInput formControlName="Clausulas_Especificas" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Claúsulas Generales"
+                        formControlName="Clausulas_GeneralesFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Claúsulas Generales</mat-label>
+                      <input matInput formControlName="Clausulas_Generales" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="EstatusFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Estatus</mat-label>
+                      <input matInput formControlName="Estatus" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Estatus</mat-label>
+                      <mat-select placeholder="Estatus"
+                        formControlName="EstatusMultiple" multiple>
+                        <mat-option *ngFor="let item of estatus_de_cotizacions" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Mano de Obra de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromMano_de_Obra" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Mano de Obra a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toMano_de_Obra" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Partes de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromPartes" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Partes a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toPartes" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Consumibles de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromConsumibles" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Consumibles a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toConsumibles" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromTotal" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toTotal" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Porcentaje de Consumibles De</mat-label>
+                      <input matInput formControlName="fromPorcentaje_de_Consumibles">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Porcentaje de Consumibles A</mat-label>
+                      <input matInput formControlName="toPorcentaje_de_Consumibles">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Porcentaje de Anticipo De</mat-label>
+                      <input matInput formControlName="fromPorcentaje_de_Anticipo">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Porcentaje de Anticipo A</mat-label>
+                      <input matInput formControlName="toPorcentaje_de_Anticipo">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Comentarios Mantenimiento"
+                        formControlName="Comentarios_MantenimientoFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Comentarios Mantenimiento</mat-label>
+                      <input matInput formControlName="Comentarios_Mantenimiento" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="ReporteFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                          {{ item.No_Reporte }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Reporte</mat-label>
+                      <input matInput formControlName="Reporte" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Reporte</mat-label>
+                      <mat-select placeholder="Reporte"
+                        formControlName="ReporteMultiple" multiple>
+                        <mat-option *ngFor="let item of crear_reportes" [value]="item.Folio">
+                          {{ item.No_Reporte }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Item de Inspección De</mat-label>
+                      <input matInput formControlName="fromItem_de_Inspeccion">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Item de Inspección A</mat-label>
+                      <input matInput formControlName="toItem_de_Inspeccion">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Motivo_de_EdicionFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Motivo de Edición</mat-label>
+                      <input matInput formControlName="Motivo_de_Edicion" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Motivo de Edición</mat-label>
+                      <mat-select placeholder="Motivo de Edición"
+                        formControlName="Motivo_de_EdicionMultiple" multiple>
+                        <mat-option *ngFor="let item of motivo_de_edicion_de_cotizacions" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Observaciones"
+                        formControlName="ObservacionesFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Observaciones</mat-label>
+                      <input matInput formControlName="Observaciones" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Respuesta De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_Respuesta" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha de Respuesta A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_Respuesta" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora de Respuesta De</mat-label>
+                      <input formControlName="fromHora_de_Respuesta" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora de Respuesta A</mat-label>
+                      <input formControlName="toHora_de_Respuesta" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Usuario_que_Registra_RespuestaFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Id_User">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Usuario que Registra</mat-label>
+                      <input matInput formControlName="Usuario_que_Registra_Respuesta" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Usuario que Registra</mat-label>
+                      <mat-select placeholder="Usuario que Registra"
+                        formControlName="Usuario_que_Registra_RespuestaMultiple" multiple>
+                        <mat-option *ngFor="let item of spartan_users" [value]="item.Id_User">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="RespuestaFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Respuesta</mat-label>
+                      <input matInput formControlName="Respuesta" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Respuesta</mat-label>
+                      <mat-select placeholder="Respuesta"
+                        formControlName="RespuestaMultiple" multiple>
+                        <mat-option *ngFor="let item of respuesta_del_cliente_a_cotizacions" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Observaciones"
+                        formControlName="Observaciones_RespeustaFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Observaciones</mat-label>
+                      <input matInput formControlName="Observaciones_Respeusta" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Día de Llegada del Avión De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromDia_de_Llegada_del_Avion" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Día de Llegada del Avión A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toDia_de_Llegada_del_Avion" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora de Llegada del Avión De</mat-label>
+                      <input formControlName="fromHora_de_Llegada_del_Avion" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora de Llegada del Avión A</mat-label>
+                      <input formControlName="toHora_de_Llegada_del_Avion" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="mr-3 mb-2" mat-raised-button
+                      color="primary" (click)="buscar()" > Buscar </button>
+                    <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Validation -->
+    </div>
+  </section>
+<div id="snackbar"></div>

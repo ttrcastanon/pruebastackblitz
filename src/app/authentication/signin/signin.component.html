@@ -1,0 +1,118 @@
+<div class="limiter">
+  <div
+    class="container-login100"
+    style="
+      background-image: url('assets/images/pages/login-cover.jpg');
+      background-size: cover;
+      background-position: 300px center;
+    "
+  >
+    <div class="wrap-login100">
+      <form
+        class="login100-form validate-form"
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
+      >
+        <div style="text-align: center">
+          <img src="assets/images/main-logo.png" alt="" width="350px" />
+        </div>
+        <span class="login100-form-title pb-5"> Acceso al Sistema </span>
+        <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+          <p style="color: white">Procesando</p>
+        </ngx-spinner>
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Clave de Acceso</mat-label>
+              <input
+                #username
+                tabindex="1"
+                matInput
+                formControlName="username"
+                required
+              />
+              <mat-icon matSuffix>face</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Contraseña</mat-label>
+              <input
+                tabindex="2"
+                matInput
+                [type]="passwordVisible ? 'text' : 'password'"
+                formControlName="password"
+                required
+              />
+              <mat-icon class="hideIcoPassword" *ngIf="passwordVisible" matSuffix (click)="setPasswordVisible()">visibility</mat-icon>
+              <mat-icon class="hideIcoPassword" *ngIf="!passwordVisible" matSuffix (click)="setPasswordVisible()">visibility_off</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- ToDo - No se hace uso de la carga de lenguaje por tener solo español -->
+        <!-- <div class="row">
+          <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Idioma</mat-label>
+              <mat-select
+                tabindex="3"
+                tabindex="0"
+                placeholder="Idioma"
+                formControlName="language"
+                required
+              >
+                <mat-option
+                  *ngFor="let lang of languages"
+                  [value]="lang.System_Language_Id"
+                >
+                  {{ lang.Language }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div> -->
+
+        <div class="row">
+          <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="checkbox" style="text-align: left; margin-bottom:10px;">
+              <label>
+                <input type="checkbox" (change)="toggleEditable($event)"> He leído y acepto el <a href="https://www.aerovics.com/aviso-de-privacidad" target="_blank">Aviso de privacidad</a>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-sb-m w-full p-t-15 p-b-20">
+          <mat-error *ngIf="error !== ''">{{ error }}</mat-error>
+        </div>
+        <div class="flex-sb-m w-full p-t-15 p-b-20">
+          <div *ngIf="IsSignIn">
+            <a class="txt1" routerLink="/authentication/forgot-password"
+              >He olvidado mi contraseña</a
+            >
+          </div>
+          <div *ngIf="!IsSignIn">
+            <a class="txt1" routerLink="/authentication/change-password"
+              >¿Cambiar contraseña?</a
+            >
+          </div>
+        </div>
+        <div class="container-login100-form-btn">
+          <button
+            tabindex="4"
+            mat-flat-button
+            color="primary"
+            class="login100-form-btn"
+            type="submit"
+            [disabled]="isDisabled"
+          >
+            Iniciar sesión
+          </button>
+        </div>
+        <mat-label>Version 1.0.92</mat-label>
+      </form>
+    </div>
+  </div>
+</div>

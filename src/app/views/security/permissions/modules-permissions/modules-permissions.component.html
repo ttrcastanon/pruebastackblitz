@@ -1,0 +1,147 @@
+<div style="background-color: white;" >
+  <div class="row">
+      <div class="ml-2 col-xl-4 col-lg-4 col-md-4 col-sm-5 col-xs-5">
+          <h2><strong>{{ 'Seguridad.Permisos.modulesPermissions.Permisos para el módulo' | translate }}</strong></h2>
+      </div>
+      <div class="col" style="margin-top: 15px;"> 
+        {{moduleName}}
+      </div>
+  </div>
+  <hr>
+  <div class="container">
+    <div class="row">
+        <span >
+            <mat-form-field class="">
+                <mat-label>{{ 'Seguridad.Permisos.modulesPermissions.Objeto' | translate }}</mat-label>
+                <input matInput id="inputObjPermission" placeholder="" [(ngModel)]="inputObjPermission">
+            </mat-form-field>
+        </span>
+        <span>
+            <i class="fas fa-filter" (click)="filterObjectPermission()" style="margin-top: 15px; cursor: pointer;"></i>
+        </span>
+    </div>
+    <div class="row" *ngIf="dataSource.length>0">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;" id="tblPermission">
+
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+          
+            <!-- object Column -->
+            <ng-container matColumnDef="object">
+              <th mat-header-cell *matHeaderCellDef style="width:230px;"> Objeto </th>
+              <td mat-cell *matCellDef="let element" style="text-align: left;">{{element.object}} </td>
+            </ng-container>
+          
+            <!-- allowAll Column -->
+            <ng-container matColumnDef="allowAll">
+                <th mat-header-cell *matHeaderCellDef> 
+                    <div class="row" style="text-align:center">
+                        <i class="fa fa-users" aria-hidden="true" style="width: 100%;"></i>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <label style="width: 100%;">{{ 'Seguridad.Permisos.modulesPermissions.Permitir todo' | translate }}</label>
+                    </div>
+                </th>
+              <td mat-cell *matCellDef="let element"><mat-checkbox #refAll (click)="chkkPermissionAll(refAll)" [idSelectedRole]="element.idSelectedRole" [moduleId]="element.moduleId" functionid="0" permission="allowall" class="cbPermission chkkPermissionAll" userruleobjectfunctionid="0" [value]="element.trId" [checked]="element.allowAll" ></mat-checkbox></td>
+            </ng-container>
+          
+            <!-- consult Column -->
+            <ng-container matColumnDef="consult">
+                <th mat-header-cell *matHeaderCellDef> 
+                    <div class="row" style="text-align:center">
+                        <i class="fa fa-male" aria-hidden="true" style="width: 100%;"></i>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <label style="width: 100%;">{{ 'Seguridad.Permisos.modulesPermissions.Consultar' | translate }}</label>
+                    </div>
+                </th>
+              <td mat-cell *matCellDef="let element"><mat-checkbox #refEl (click)="chkkPermission(refEl)" [idSelectedRole]="element.idSelectedRole" [moduleId]="element.moduleId" functionid="1" permission="consult" class="cbPermission" userruleobjectfunctionid="0" [value]="element.trId" [checked]="element.consult" ></mat-checkbox></td>
+            </ng-container>
+          
+            <!-- new Column -->
+            <ng-container matColumnDef="new">
+                <th mat-header-cell *matHeaderCellDef> 
+                    <div class="row" style="text-align:center">
+                        <i class="fa fa-plus" aria-hidden="true" style="width: 100%;"></i>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <label style="width: 100%;">{{ 'Seguridad.Permisos.modulesPermissions.Nuevo' | translate }}</label>
+                    </div>
+                </th>
+              <td mat-cell *matCellDef="let element"><mat-checkbox #refEl (click)="chkkPermission(refEl)" [idSelectedRole]="element.idSelectedRole" [moduleId]="element.moduleId" functionid="2" permission="new" class="cbPermission" userruleobjectfunctionid="0" [value]="element.trId" [checked]="element.new" ></mat-checkbox></td>
+            </ng-container>
+
+            <!-- edit Column -->
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef> 
+                    <div class="row" style="text-align:center">
+                        <i class="fa fa-edit" aria-hidden="true" style="width: 100%;"></i>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <label style="width: 100%;">{{ 'Seguridad.Permisos.modulesPermissions.Editar' | translate }}</label>
+                    </div>
+                </th>
+            <td mat-cell *matCellDef="let element"><mat-checkbox #refEl (click)="chkkPermission(refEl)" [idSelectedRole]="element.idSelectedRole" [moduleId]="element.moduleId" functionid="3" permission="edit" class="cbPermission" userruleobjectfunctionid="0" [value]="element.trId" [checked]="element.edit" ></mat-checkbox></td>
+            </ng-container>
+        
+            <!-- delete Column -->
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef> 
+                    <div class="row" style="text-align:center">
+                        <i class="fa fa-times" aria-hidden="true" style="width: 100%;"></i>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <label style="width: 100%;">{{ 'Seguridad.Permisos.modulesPermissions.Borrar' | translate }}</label>
+                    </div>
+                </th>
+            <td mat-cell *matCellDef="let element"><mat-checkbox #refEl (click)="chkkPermission(refEl)" [idSelectedRole]="element.idSelectedRole" [moduleId]="element.moduleId" functionid="4" permission="delete" class="cbPermission" userruleobjectfunctionid="0" [value]="element.trId" [checked]="element.delete" ></mat-checkbox></td>
+            </ng-container>
+        
+            <!-- export Column -->
+            <ng-container matColumnDef="export">
+                <th mat-header-cell *matHeaderCellDef> 
+                    <div class="row" style="text-align:center">
+                        <i class="fa fa-share" aria-hidden="true" style="width: 100%;"></i>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <label style="width: 100%;">{{ 'Seguridad.Permisos.modulesPermissions.Exportar' | translate }}</label>
+                    </div>
+                </th>
+            <td mat-cell *matCellDef="let element"><mat-checkbox #refEl (click)="chkkPermission(refEl)" [idSelectedRole]="element.idSelectedRole" [moduleId]="element.moduleId" functionid="5" permission="export" class="cbPermission" userruleobjectfunctionid="0" [value]="element.trId" [checked]="element.export" ></mat-checkbox></td>
+            </ng-container>
+        
+            <!-- print Column -->
+            <ng-container matColumnDef="print">
+                <th mat-header-cell *matHeaderCellDef> 
+                    <div class="row" style="text-align:center">
+                        <i class="fa fa-print" aria-hidden="true" style="width: 100%;"></i>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <label style="width: 100%;">{{ 'Seguridad.Permisos.modulesPermissions.Imprimir' | translate }}</label>
+                    </div>
+                </th>
+            <td mat-cell *matCellDef="let element"><mat-checkbox #refEl (click)="chkkPermission(refEl)" [idSelectedRole]="element.idSelectedRole" [moduleId]="element.moduleId" functionid="6" permission="print" class="cbPermission" userruleobjectfunctionid="0" [value]="element.trId" [checked]="element.print" ></mat-checkbox></td>
+            </ng-container>
+
+            <!-- configure Column -->
+            <ng-container matColumnDef="configure">
+                <th mat-header-cell *matHeaderCellDef> 
+                    <div class="row" style="text-align:center">
+                        <i class="fa fa-cogs" aria-hidden="true" style="width: 100%;"></i>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <label style="width: 100%;">{{ 'Seguridad.Permisos.modulesPermissions.Configurar' | translate }}</label>
+                    </div>
+                </th>
+            <td mat-cell *matCellDef="let element"><mat-checkbox #refEl (click)="chkkPermission(refEl)" [idSelectedRole]="element.idSelectedRole" [moduleId]="element.moduleId" functionid="7" permission="configure" class="cbPermission" userruleobjectfunctionid="0" [value]="element.trId" [checked]="element.configure" ></mat-checkbox></td>
+            </ng-container>
+          
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row [id]="row.trId" #reftr *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          
+
+    </div>
+  </div>
+
+</div>

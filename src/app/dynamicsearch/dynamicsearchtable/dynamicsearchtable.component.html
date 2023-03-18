@@ -1,0 +1,243 @@
+<section class="content">
+    <div class="container-fluid">
+       <div class="row clearfix">
+          <div class="col-xs-12 col-sm-12" [ngClass]="expanded ? 'col-md-8 col-lg-8' : 'col-md-12 col-lg-12'">
+             <div class="card">
+                <div style="display: flex !important; ">
+                   <div class="col-lg-10" style="height: 20px !important; float: right !important;">
+                      <button (click)="toggleClassSeach()" mat-icon-button aria-label="Example icon-button with a heart icon">
+                         <mat-icon>search</mat-icon>
+                         <strong> ORIENTADOR </strong>
+                      </button>
+                   </div>
+                   <div class="col-lg-2" style="float: left !important;">
+                      <button (click)="toggleClass()" *ngIf="expanded"  mat-icon-button aria-label="Example icon-button with a keyboard_arrow_right icon">
+                      <mat-icon>keyboard_arrow_right</mat-icon>
+                      </button>    
+                      <button (click)="toggleClass()" *ngIf="!expanded"  mat-icon-button aria-label="Example icon-button with a keyboard_arrow_left icon">
+                      <mat-icon>keyboard_arrow_left</mat-icon>
+                      </button>    
+                   </div>
+                </div>
+                <div class="col-lg-10" *ngIf="!expandedSearch">
+                   <form [formGroup]="myFormGroup" (ngSubmit)="onSubmit()" class="myForm">
+                   <div *ngFor="let form_elem of DataSearchField">
+                      <div [ngSwitch]="form_elem.TypeControl">
+                         <div *ngSwitchCase="'text'">
+                            <label>{{form_elem.Label}}</label>
+                            <input id="{{ form_elem.Label }}"  type="text" formControlName="{{form_elem.Label}}" [attr.data-target] = "form_elem.FieldDB"     class="form-control field-search" />
+                         </div>
+                         <div *ngSwitchCase="'number'">
+                            <input type="number" formControlName="{{form_elem.Label}}"/>
+                         </div>
+                         <div *ngSwitchCase="'select'">
+                            <select formControlName="{{form_elem.Label}}">
+                               <option *ngFor="let opt of form_elem.options">
+                                  {{opt}}
+                               </option>
+                            </select>
+                         </div>
+                      </div>
+                   </div>
+                   </form>
+                </div>
+                <div class="col-lg-2"  *ngIf="!expandedSearch">
+                   <button class="btn-wide btn btn-success" (click)="buscar()"   id="btnSearch">Buscar</button>
+                </div>
+                <!-- <div class="header">
+                   <h2>Titulo busqueda</h2>
+                   </div> -->
+                <div class="tableBody detailsSection">
+                   <div class="table-responsive ">
+                      <table class="table table-hover" style=" cursor: pointer;">
+                         <thead>
+                            <th  style="text-align:center" *ngFor="let group of displayedColumns">
+
+                                {{group}}
+                            </th>
+                         </thead>
+                         <tbody>
+                            <tr *ngFor="let group of tableData" (click)="getRecord(group)">
+                              <td  style="text-align:center" *ngFor="let information of group">{{ information }}</td>
+                            </tr>
+                         </tbody>
+                         <div *ngIf="!withoutdata" class="alert alert-danger" role="alert">No se encontraron resultados</div>
+
+                      </table>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" *ngIf="expanded">
+             <div class="card">
+                <div class="header">
+                   <strong> {{  expedienteLabel }} {{ expedienteText  }}  </strong> 
+                </div>
+                <button class="btn-wide btn btn-success" (click)="editar()">Editar registro</button>
+
+                <div class="tableBody">
+                   <div class="table-responsive detailsSection">
+                      <table class="table table-hover ">
+                         <!-- <thead>
+                            <th>Uno</th>
+                            <th>Dos</th>
+                            
+                            </thead> -->
+                         <tbody>
+                            <tr *ngFor="let group of tableData2">
+                               <td>{{group[0]}}</td>
+                               <td>{{group[1]}}</td>
+                            </tr>
+                      </table>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+       <div class="row clearfix">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+             <div class="card">
+                <ul class="nav nav-tabs">
+                   <li *ngFor="let group of tableDataHeaders" (click)="tabChanged(group)" >
+                       <a data-target=".tab-pane" data-toggle="tab" (click)="tabChanged(group)" style=" cursor: pointer;"> 
+                           <strong> {{group[1]}} </strong>  
+                           <span class="badge badge-pill badge-primary" style="background-color: black;font-size:9px;">{{ myFunction(group) }}</span>
+                        </a>
+                     </li>
+                </ul>
+                <div class="header" style="display: flex;">
+                   <strong>DETALLE</strong>  
+                </div>
+                <div class="tableBody">
+                   <div class="table-responsive detailsSection">
+                     <button class="btn-wide btn btn-success">Nuevo</button>
+
+                      <table class="table table-hover ">
+                         <thead>
+                            <th></th>
+                            <th  style="text-align:center" 
+                            *ngFor="let group of displayedColumnsDetail">
+
+                              <div *ngIf="objectId == 45018; else dis">
+                                <div *ngIf="group == 'Clave' 
+                                || (group == 'Documento' && idModule == '1') 
+                                || (group == 'Campo' && idModule == '1') 
+                                || (group == 'Archivo' && idModule == '1') 
+                                || (group == 'Descripcion' && idModule == '1') 
+                                || (group == 'Lista_para_periciales')
+                                || (group == 'Documento_Pericial')
+                                || (group == 'Archivo_Pericial');
+                                 else dis2">
+                                    <!-- {{  group  }} -->
+                                </div>
+                                <ng-template #dis2>
+                                    {{ group }}
+                                  </ng-template>
+                              </div>
+                              
+                              <ng-template #dis>
+                                    <div *ngIf="group == 'Clave' 
+                                    || (group == 'Lista_para_periciales')
+                                    || (group == 'Documento_Pericial')
+                                    || (group == 'Archivo_Pericial');
+                                    else dis3">
+                                        <!-- {{  group  }} -->
+                                    </div>
+                                    <ng-template #dis3>
+                                        {{ group }}
+                                      </ng-template>
+                              </ng-template>
+                        
+                        </th>
+                         </thead>
+                         <tbody>
+                            <tr *ngFor="let group of tableDataDetail" (click)="getRecord(group)">
+                               
+                                <div *ngIf="idTablero == 1 || idTablero == 3; else dis4">
+                                    <div *ngIf="objectId == 45018 || objectId == 45474; else dis5">   
+                                     
+                                       <div *ngIf="idModule == '1' && group[11] == 1">
+                                             <td  style="display: flex;">
+                                                <button mat-icon-button>
+                                                      <mat-icon>edit</mat-icon>
+                                                </button>
+                                                <button mat-icon-button style="display: none;">
+                                                   <mat-icon>print</mat-icon>
+                                                </button>
+                                                <button mat-icon-button>
+                                                      <mat-icon>delete</mat-icon>
+                                                </button>
+                                             </td>
+                                       </div>
+
+                                       <div *ngIf="idModule == '3'  && group[13] == 1">
+                                          <td  style="display: flex;">
+                                             <button mat-icon-button>
+                                                   <mat-icon>edit</mat-icon>
+                                             </button>
+                                             <button mat-icon-button style="display: none;">
+                                                <mat-icon>print</mat-icon>
+                                             </button>
+                                             <button mat-icon-button>
+                                                   <mat-icon>delete</mat-icon>
+                                             </button>
+                                          </td>                                    
+                                       </div>
+
+                                       <div *ngIf="idModule == '2'  && group[6] == 1">
+                                          <td  style="display: flex;">
+                                             <button mat-icon-button>
+                                                   <mat-icon>edit</mat-icon>
+                                             </button>
+                                             <button mat-icon-button style="display: none;">
+                                                <mat-icon>print</mat-icon>
+                                             </button>
+                                             <button mat-icon-button>
+                                                   <mat-icon>delete</mat-icon>
+                                             </button>
+                                          </td>                                   
+                                       </div>
+
+                                    </div>
+                                    <ng-template #dis5>
+                                       <td  style="display: flex;">
+                                          <button mat-icon-button>
+                                                <mat-icon>edit</mat-icon>
+                                          </button>
+                                          <button mat-icon-button style="display: none;">
+                                             <mat-icon>print</mat-icon>
+                                          </button>
+                                          <button mat-icon-button>
+                                                <mat-icon>delete</mat-icon>
+                                          </button>
+                                       </td>
+                                    </ng-template>
+                                </div>
+                                <ng-template #dis4>
+                                 <td  style="display: flex;">
+                                    <button mat-icon-button>
+                                          <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button mat-icon-button style="display: none;">
+                                       <mat-icon>print</mat-icon>
+                                    </button>
+                                    <button mat-icon-button>
+                                          <mat-icon>delete</mat-icon>
+                                    </button>
+                                 </td>
+                                </ng-template>
+                                
+
+                                 <td  style="text-align:center"  *ngFor="let information of group">
+                                     {{ information  }}
+                                 </td>
+                            </tr>
+                         </tbody>
+                      </table>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </section>

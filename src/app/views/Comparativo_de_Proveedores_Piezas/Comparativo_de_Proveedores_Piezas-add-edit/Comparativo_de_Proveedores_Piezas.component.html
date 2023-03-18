@@ -1,0 +1,1624 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Comparativo de Cotizaciones</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Comparativo_de_Proveedores_Piezas/list">Comparativo de Cotizaciones</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Comparativo_de_Proveedores_PiezasForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Comparativo_de_Proveedores_PiezasForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNo__Solicitud" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. Solicitud</mat-label>
+                        <input (change)="No__Solicitud_ExecuteBusinessRules()" matInput formControlName="No__Solicitud"
+                          [type]="Comparativo_de_Proveedores_PiezasForm.get('No__Solicitud').value == 'Auto'  ? 'text':'number' "
+                          maxlength="9" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('No__Solicitud').hasError('required')">
+                          No. Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSolicitante" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Solicitante</mat-label>
+                        <input type="text" matInput formControlName="Solicitante" [matAutocomplete]="autoSolicitante">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoSolicitante="matAutocomplete" [displayWith]="displayFnSolicitante">
+                          <mat-option (onSelectionChange)="Solicitante_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsSolicitante | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingSolicitante" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Solicitante').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Solicitante').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Solicitante de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Solicitud" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Solicitud</mat-label>
+                        <input (dateChange)="Fecha_de_Solicitud_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Solicitud_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Solicitud.open()" [matDatepicker]="datePickerFecha_de_Solicitud"
+                          formControlName="Fecha_de_Solicitud" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Solicitud"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Solicitud></mat-datepicker>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Fecha_de_Solicitud').hasError('required')">
+                          Fecha de Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divRazon_de_la_Compra" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Razón de la Compra</mat-label>
+                        <input (change)="Razon_de_la_Compra_ExecuteBusinessRules()" #Razon_de_la_Compra matInput
+                          formControlName="Razon_de_la_Compra" type="text" maxlength="50" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Razon_de_la_Compra').hasError('required')">
+                          Razón de la Compra es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDepartamento" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Departamento</mat-label>
+                        <mat-select (selectionChange)="Departamento_ExecuteBusinessRules()" placeholder="Departamento"
+                          formControlName="Departamento" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varDepartamento" [value]="item.Folio">
+                            {{ item.Nombre }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Departamento').hasError('required')">
+                          Departamento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNumero_de_Reporte" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Reporte</mat-label>
+                        <input type="text" matInput formControlName="Numero_de_Reporte"
+                          [matAutocomplete]="autoNumero_de_Reporte">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNumero_de_Reporte="matAutocomplete"
+                          [displayWith]="displayFnNumero_de_Reporte">
+                          <mat-option (onSelectionChange)="Numero_de_Reporte_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsNumero_de_Reporte | async" [value]="option">
+                            {{option.No_Reporte}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNumero_de_Reporte" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Numero_de_Reporte').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Numero_de_Reporte').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Número de Reporte de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNumero_de_O_T" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de O/T</mat-label>
+                        <input type="text" matInput formControlName="Numero_de_O_T"
+                          [matAutocomplete]="autoNumero_de_O_T">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNumero_de_O_T="matAutocomplete" [displayWith]="displayFnNumero_de_O_T">
+                          <mat-option (onSelectionChange)="Numero_de_O_T_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsNumero_de_O_T | async" [value]="option">
+                            {{option.numero_de_orden}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNumero_de_O_T" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Numero_de_O_T').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Numero_de_O_T').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Número de O/T de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <input type="text" matInput formControlName="Matricula" [matAutocomplete]="autoMatricula">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMatricula="matAutocomplete" [displayWith]="displayFnMatricula">
+                          <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsMatricula | async" [value]="option">
+                            {{option.Matricula}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Matricula').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <mat-select (selectionChange)="Modelo_ExecuteBusinessRules()" placeholder="Modelo"
+                          formControlName="Modelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varModelos" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Modelo').hasError('required')">
+                          Modelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divComparativo_de_Cotizaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Comparativo de Cotizaciones</h4>
+                          <button mat-mini-fab type="button" color="primary" hidden
+                            (click)="addComparativo_de_CotizacionesToMR(); $event.stopPropagation();"(click)="MRaddComparativo_de_Cotizaciones = true" [hidden]="MRaddComparativo_de_Cotizaciones">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceComparativo_de_Cotizaciones" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Comparativo_de_Proveedores_PiezasForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editComparativo_de_Cotizaciones(element);" [disabled]="!fromSeguimiento">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button' hidden
+                                  (click)="deleteComparativo_de_Cotizaciones(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="FolioDetalle">
+                            <th mat-header-cell *matHeaderCellDef> FolioDetalle</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.FolioDetalle}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="TipoMR">
+                            <th mat-header-cell *matHeaderCellDef> TipoMR</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.TipoMR}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Partes">
+                            <th mat-header-cell *matHeaderCellDef> Partes</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Partes_Partes?.Numero_de_parte_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Servicios">
+                            <th mat-header-cell *matHeaderCellDef> Servicios</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Servicios_Catalogo_servicios?.Codigo_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Materiales">
+                            <th mat-header-cell *matHeaderCellDef> Materiales</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Materiales_Listado_de_Materiales?.Codigo_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Herramientas">
+                            <th mat-header-cell *matHeaderCellDef> Herramientas</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Herramientas_Herramientas?.Codigo_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Horas_del_Componente_a_Remover">
+                            <th mat-header-cell *matHeaderCellDef> Horas del Componente a Remover</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Horas_del_Componente_a_Remover}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Ciclos_Componentes_a_Remover">
+                            <th mat-header-cell *matHeaderCellDef> Ciclos Componentes a Remover</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Ciclos_Componentes_a_Remover}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Condicion_de_la_Pieza_Solicitada">
+                            <th mat-header-cell *matHeaderCellDef> Condición de la Pieza Solicitada</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Condicion_de_la_Pieza_Solicitada}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_estimada_de_Mtto_">
+                            <th mat-header-cell *matHeaderCellDef> Fecha estimada de Mtto. </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_estimada_de_Mtto_ |date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__de_Parte___Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> No. de Parte / Descripción </th>
+                            <td mat-cell *matCellDef="let element"> {{element.No__de_Parte___Descripcion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cantidad">
+                            <th mat-header-cell *matHeaderCellDef> Cantidad</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Proveedor_1">
+                            <th mat-header-cell *matHeaderCellDef> Proveedor</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Proveedor_1_Creacion_de_Proveedores?.Razon_social}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Seleccion_1">
+                            <th mat-header-cell *matHeaderCellDef> Selección</th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="text-center f-w">
+                                <mat-checkbox [disabled]="true" [checked]="element.Seleccion_1"
+                                  [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Costo_Unitario_1">
+                            <th mat-header-cell *matHeaderCellDef>Costo Unitario:</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Costo_Unitario_1 |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Total_1">
+                            <th mat-header-cell *matHeaderCellDef>Total:</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Total_1 |currency}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Proveedor_2">
+                            <th mat-header-cell *matHeaderCellDef> Proveedor</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Proveedor_2_Creacion_de_Proveedores?.Razon_social}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Seleccion_2">
+                            <th mat-header-cell *matHeaderCellDef> Selección</th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="text-center f-w">
+                                <mat-checkbox [disabled]="true" [checked]="element.Seleccion_2"
+                                  [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Costo_Unitario_2">
+                            <th mat-header-cell *matHeaderCellDef>Costo Unitario:</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Costo_Unitario_2
+                              |currency}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Total_2">
+                            <th mat-header-cell *matHeaderCellDef>Total:</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Total_2 |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Proveedor_3">
+                            <th mat-header-cell *matHeaderCellDef> Proveedor</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Proveedor_3_Creacion_de_Proveedores?.Razon_social}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Seleccion_3">
+                            <th mat-header-cell *matHeaderCellDef> Selección</th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="text-center f-w">
+                                <mat-checkbox [disabled]="true" [checked]="element.Seleccion_3"
+                                  [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Costo_Unitario_3">
+                            <th mat-header-cell *matHeaderCellDef>Costo Unitario:</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Costo_Unitario_3 |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Total_3">
+                            <th mat-header-cell *matHeaderCellDef>Total:</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Total_3 |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Proveedor_4">
+                            <th mat-header-cell *matHeaderCellDef> Proveedor </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Proveedor_4_Creacion_de_Proveedores?.Razon_social}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Seleccion_4">
+                            <th mat-header-cell *matHeaderCellDef> Selección</th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="text-center f-w">
+                                <mat-checkbox [disabled]="true" [checked]="element.Seleccion_4"
+                                  [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Costo_Unitario_4">
+                            <th mat-header-cell *matHeaderCellDef>Costo Unitario:</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Costo_Unitario_4 |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Total_4">
+                            <th mat-header-cell *matHeaderCellDef>Total:</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Total_4 |currency}}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex"
+                              [attr.colspan]="getComparativo_de_CotizacionesColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_de_Cuadro_ComparativoItems" class="mt-3">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceComparativo_de_Cotizaciones.data.indexOf(element)">
+
+                                      <!-- <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>FolioDetalle</mat-label>
+                                          <input matInput formControlName="FolioDetalle" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>TipoMR</mat-label>
+                                          <input matInput formControlName="TipoMR" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Partes</mat-label>
+                                          <input type="text" matInput formControlName="Partes" [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectPartes_Detalle_de_Cuadro_Comparativo($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnPartes_Detalle_de_Cuadro_Comparativo.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varPartes" [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionPartes_Detalle_de_Cuadro_Comparativo($event, element)">
+                                              {{option.Numero_de_parte_Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingPartes_Detalle_de_Cuadro_Comparativo"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Servicios</mat-label>
+                                          <input type="text" matInput formControlName="Servicios"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectServicios_Detalle_de_Cuadro_Comparativo($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnServicios_Detalle_de_Cuadro_Comparativo.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCatalogo_servicios"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionServicios_Detalle_de_Cuadro_Comparativo($event, element)">
+                                              {{option.Codigo_Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingServicios_Detalle_de_Cuadro_Comparativo"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Materiales</mat-label>
+                                          <input type="text" matInput formControlName="Materiales"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectMateriales_Detalle_de_Cuadro_Comparativo($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnMateriales_Detalle_de_Cuadro_Comparativo.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varListado_de_Materiales"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionMateriales_Detalle_de_Cuadro_Comparativo($event, element)">
+                                              {{option.Codigo_Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingMateriales_Detalle_de_Cuadro_Comparativo"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Herramientas</mat-label>
+                                          <input type="text" matInput formControlName="Herramientas"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectHerramientas_Detalle_de_Cuadro_Comparativo($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnHerramientas_Detalle_de_Cuadro_Comparativo.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varHerramientas" [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionHerramientas_Detalle_de_Cuadro_Comparativo($event, element)">
+                                              {{option.Codigo_Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingHerramientas_Detalle_de_Cuadro_Comparativo"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Horas del Componente a Remover</mat-label>
+                                          <input matInput formControlName="Horas_del_Componente_a_Remover"
+                                            type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Ciclos Componentes a Remover</mat-label>
+                                          <input matInput formControlName="Ciclos_Componentes_a_Remover"
+                                            type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Condición de la Pieza Solicitada</mat-label>
+                                          <input matInput formControlName="Condicion_de_la_Pieza_Solicitada"
+                                            type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha estimada de Mtto.</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_estimada_de_Mtto_" type="text" />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div> -->
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-6 col-xl-6">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. de Parte / Descripción</mat-label>
+                                          <input matInput formControlName="No__de_Parte___Descripcion" type="text"
+                                            readonly />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-6 col-xl-6">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cantidad</mat-label>
+                                          <input matInput formControlName="Cantidad" type="number" readonly />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Proveedor</mat-label>
+                                          <input type="text" matInput formControlName="Proveedor_1"
+                                            [matAutocomplete]="autoProveedor_1" [readonly]="dataIndex!=0">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectProveedor_1_Detalle_de_Cuadro_Comparativo($event, element)"
+                                            #autoProveedor_1="matAutocomplete"
+                                            [displayWith]="displayFnProveedor_1_Detalle_de_Cuadro_Comparativo.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCreacion_de_Proveedores"
+                                              [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionProveedor_1_Detalle_de_Cuadro_Comparativo($event, element)">
+                                              {{option.Razon_social}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingProveedor_1_Detalle_de_Cuadro_Comparativo"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3" style="top:1rem">
+                                        <mat-checkbox formControlName="Seleccion_1" [value]="element.Seleccion_1"
+                                          class="example-margin" (change)="selectUniqueProveedor(dataIndex)">
+                                          Selección
+                                        </mat-checkbox>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Costo Unitario:</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Unitario_1" mask="separator.2"
+                                            thousandSeparator="," (change)="getTotalFromRow(dataIndex)"
+                                            (keypress)="maxDigits($event.target.value,12)" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Total:</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Total_1" mask="separator.2"
+                                            thousandSeparator="," readonly />
+                                        </mat-form-field>
+                                      </div>
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Proveedor</mat-label>
+                                          <input type="text" matInput formControlName="Proveedor_2"
+                                            [matAutocomplete]="autoProveedor_2" [readonly]="dataIndex!=0">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectProveedor_2_Detalle_de_Cuadro_Comparativo($event, element)"
+                                            #autoProveedor_2="matAutocomplete"
+                                            [displayWith]="displayFnProveedor_2_Detalle_de_Cuadro_Comparativo.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCreacion_de_Proveedores_2"
+                                              [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionProveedor_2_Detalle_de_Cuadro_Comparativo($event, element)">
+                                              {{option.Razon_social}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingProveedor_2_Detalle_de_Cuadro_Comparativo"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3" style="top:1rem">
+                                        <mat-checkbox formControlName="Seleccion_2" [value]="element.Seleccion_2"
+                                          class="example-margin" (change)="selectUniqueProveedor(dataIndex)">
+                                          Selección
+                                        </mat-checkbox>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Costo Unitario:</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Unitario_2" mask="separator.2"
+                                            thousandSeparator="," (change)="getTotalFromRow(dataIndex)"
+                                            (keypress)="maxDigits($event.target.value,12)" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Total:</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Total_2" mask="separator.2"
+                                            thousandSeparator="," readonly />
+                                        </mat-form-field>
+                                      </div>
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Proveedor</mat-label>
+                                          <input type="text" matInput formControlName="Proveedor_3"
+                                            [matAutocomplete]="autoProveedor_3" [readonly]="dataIndex!=0">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectProveedor_3_Detalle_de_Cuadro_Comparativo($event, element)"
+                                            #autoProveedor_3="matAutocomplete"
+                                            [displayWith]="displayFnProveedor_3_Detalle_de_Cuadro_Comparativo.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCreacion_de_Proveedores_3"
+                                              [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionProveedor_3_Detalle_de_Cuadro_Comparativo($event, element)">
+                                              {{option.Razon_social}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingProveedor_3_Detalle_de_Cuadro_Comparativo"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3" style="top:1rem">
+                                        <mat-checkbox formControlName="Seleccion_3" [value]="element.Seleccion_3"
+                                          class="example-margin" (change)="selectUniqueProveedor(dataIndex)">
+                                          Selección
+                                        </mat-checkbox>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Costo Unitario:</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Unitario_3" mask="separator.2"
+                                            thousandSeparator="," (change)="getTotalFromRow(dataIndex)"
+                                            (keypress)="maxDigits($event.target.value,12)" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Total:</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Total_3" mask="separator.2"
+                                            thousandSeparator="," readonly />
+                                        </mat-form-field>
+                                      </div>
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Proveedor </mat-label>
+                                          <input type="text" matInput formControlName="Proveedor_4"
+                                            [matAutocomplete]="autoProveedor_4" [readonly]="dataIndex!=0">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectProveedor_4_Detalle_de_Cuadro_Comparativo($event, element)"
+                                            #autoProveedor_4="matAutocomplete"
+                                            [displayWith]="displayFnProveedor_4_Detalle_de_Cuadro_Comparativo.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCreacion_de_Proveedores_4"
+                                              [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionProveedor_4_Detalle_de_Cuadro_Comparativo($event, element)">
+                                              {{option.Razon_social}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingProveedor_4_Detalle_de_Cuadro_Comparativo"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3" style="top:1rem">
+                                        <mat-checkbox formControlName="Seleccion_4" [value]="element.Seleccion_4"
+                                          class="example-margin" (change)="selectUniqueProveedor(dataIndex)">
+                                          Selección
+                                        </mat-checkbox>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Costo Unitario:</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Unitario_4" mask="separator.2"
+                                            thousandSeparator="," (change)="getTotalFromRow(dataIndex)"
+                                            (keypress)="maxDigits($event.target.value,12)" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Total:</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Total_4" mask="separator.2"
+                                            thousandSeparator="," readonly />
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveComparativo_de_Cotizaciones(element);"(click)="MRaddComparativo_de_Cotizaciones = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="warning"
+                                          (click)="cancelEditComparativo_de_Cotizaciones(element)"(click)="MRaddComparativo_de_Cotizaciones = false"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getComparativo_de_CotizacionesColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getComparativo_de_CotizacionesColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                    <div id="divEstatus" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <input (change)="Estatus_ExecuteBusinessRules()" #Estatus matInput formControlName="Estatus"
+                          type="text" maxlength="50" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="top-action-proveedor">
+                      <h4>Proveedor 1</h4>
+                    </div>
+
+                    <div id="divProveedor1" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor:</mat-label>
+                        <input type="text" matInput formControlName="Proveedor1" [matAutocomplete]="autoProveedor1">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoProveedor1="matAutocomplete" [displayWith]="displayFnProveedor1">
+                          <mat-option (onSelectionChange)="Proveedor1_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsProveedor1 | async" [value]="option">
+                            {{option.Razon_social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingProveedor1" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+
+                        <mat-error *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Proveedor1').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Proveedor1').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Proveedor: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal_Proveedor1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total Proveedor:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_Proveedor1_ExecuteBusinessRules()" matInput
+                          formControlName="Total_Proveedor1" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Total_Proveedor1').hasError('required')">
+                          Total Proveedor: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal_Cotizacion_Proveedor1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total Cotización Proveedor:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_Cotizacion_Proveedor1_ExecuteBusinessRules()" matInput
+                          formControlName="Total_Cotizacion_Proveedor1" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Total_Cotizacion_Proveedor1').hasError('required')">
+                          Total Cotización Proveedor: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Moneda1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Moneda</mat-label>
+                        <input type="text" matInput formControlName="Tipo_de_Moneda1"
+                          [matAutocomplete]="autoTipo_de_Moneda1" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoTipo_de_Moneda1="matAutocomplete"
+                          [displayWith]="displayFnTipo_de_Moneda1">
+                          <mat-option (onSelectionChange)="Tipo_de_Moneda1_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsTipo_de_Moneda1 | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingTipo_de_Moneda1" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsTipo_de_Moneda1 && !isLoadingTipo_de_Moneda1">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda1').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda1').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Tipo de Moneda: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="top-action-proveedor">
+                      <h4>Proveedor 2</h4>
+                    </div>
+
+                    <div id="divProveedor2" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor:</mat-label>
+                        <input type="text" matInput formControlName="Proveedor2" [matAutocomplete]="autoProveedor2">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoProveedor2="matAutocomplete" [displayWith]="displayFnProveedor2">
+                          <mat-option (onSelectionChange)="Proveedor2_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsProveedor2 | async" [value]="option">
+                            {{option.Razon_social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingProveedor2" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+
+                        <mat-error *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Proveedor2').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Proveedor2').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Proveedor: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal_Proveedor2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total Proveedor:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_Proveedor2_ExecuteBusinessRules()" matInput
+                          formControlName="Total_Proveedor2" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Total_Proveedor2').hasError('required')">
+                          Total Proveedor: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal_Cotizacion_Proveedor2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total Cotización Proveedor:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_Cotizacion_Proveedor2_ExecuteBusinessRules()" matInput
+                          formControlName="Total_Cotizacion_Proveedor2" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Total_Cotizacion_Proveedor2').hasError('required')">
+                          Total Cotización Proveedor: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Moneda2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Moneda</mat-label>
+                        <input type="text" matInput formControlName="Tipo_de_Moneda2"
+                          [matAutocomplete]="autoTipo_de_Moneda2" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoTipo_de_Moneda2="matAutocomplete"
+                          [displayWith]="displayFnTipo_de_Moneda2">
+                          <mat-option (onSelectionChange)="Tipo_de_Moneda2_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsTipo_de_Moneda2 | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingTipo_de_Moneda2" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsTipo_de_Moneda2 && !isLoadingTipo_de_Moneda2">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda2').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda2').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Tipo de Moneda: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="top-action-proveedor">
+                      <h4>Proveedor 3</h4>
+                    </div>
+
+                    <div id="divProveedor3" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor:</mat-label>
+                        <input type="text" matInput formControlName="Proveedor3" [matAutocomplete]="autoProveedor3">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoProveedor3="matAutocomplete" [displayWith]="displayFnProveedor3">
+                          <mat-option (onSelectionChange)="Proveedor3_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsProveedor3 | async" [value]="option">
+                            {{option.Razon_social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingProveedor3" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Proveedor3').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Proveedor3').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Proveedor: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal_Proveedor3" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total Proveedor:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_Proveedor3_ExecuteBusinessRules()" matInput
+                          formControlName="Total_Proveedor3" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Total_Proveedor3').hasError('required')">
+                          Total Proveedor: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal_Cotizacion_Proveedor3" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total Cotización Proveedor:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_Cotizacion_Proveedor3_ExecuteBusinessRules()" matInput
+                          formControlName="Total_Cotizacion_Proveedor3" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Total_Cotizacion_Proveedor3').hasError('required')">
+                          Total Cotización Proveedor: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Moneda3" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Moneda:</mat-label>
+                        <input type="text" matInput formControlName="Tipo_de_Moneda3"
+                          [matAutocomplete]="autoTipo_de_Moneda3" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoTipo_de_Moneda3="matAutocomplete"
+                          [displayWith]="displayFnTipo_de_Moneda3">
+                          <mat-option (onSelectionChange)="Tipo_de_Moneda3_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsTipo_de_Moneda3 | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingTipo_de_Moneda3" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsTipo_de_Moneda3 && !isLoadingTipo_de_Moneda3">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda3').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda3').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Tipo de Moneda: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="top-action-proveedor">
+                      <h4>Proveedor 4</h4>
+                    </div>
+
+                    <div id="divProveedor4" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor:</mat-label>
+                        <input type="text" matInput formControlName="Proveedor4" [matAutocomplete]="autoProveedor4">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoProveedor4="matAutocomplete" [displayWith]="displayFnProveedor4">
+                          <mat-option (onSelectionChange)="Proveedor4_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsProveedor4 | async" [value]="option">
+                            {{option.Razon_social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingProveedor4" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Proveedor4').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Proveedor4').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Proveedor: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal_Proveedor4" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total Proveedor:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_Proveedor4_ExecuteBusinessRules()" matInput
+                          formControlName="Total_Proveedor4" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Total_Proveedor4').hasError('required')">
+                          Total Proveedor: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal_Cotizacion_Proveedor4" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total Cotización Proveedor:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_Cotizacion_Proveedor4_ExecuteBusinessRules()" matInput
+                          formControlName="Total_Cotizacion_Proveedor4" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Total_Cotizacion_Proveedor4').hasError('required')">
+                          Total Cotización Proveedor: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Moneda4" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Moneda:</mat-label>
+                        <input type="text" matInput formControlName="Tipo_de_Moneda4"
+                          [matAutocomplete]="autoTipo_de_Moneda4" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoTipo_de_Moneda4="matAutocomplete"
+                          [displayWith]="displayFnTipo_de_Moneda4">
+                          <mat-option (onSelectionChange)="Tipo_de_Moneda4_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsTipo_de_Moneda4 | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingTipo_de_Moneda4" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsTipo_de_Moneda4 && !isLoadingTipo_de_Moneda4">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda4').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda4').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Tipo de Moneda: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="top-action-proveedor">
+                      <h4>Total de la Cotización</h4>
+                    </div>
+                    <div class="col-10"></div>
+
+                    <div id="divTotal_Cotizacion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total Cotización:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_Cotizacion_ExecuteBusinessRules()" matInput
+                          formControlName="Total_Cotizacion" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Total_Cotizacion').hasError('required')">
+                          Total Cotización: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Cambio" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Cambio:</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Tipo_de_Cambio_ExecuteBusinessRules()" matInput
+                          formControlName="Tipo_de_Cambio" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Cambio').hasError('required')">
+                          Tipo de Cambio: es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Moneda" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Moneda</mat-label>
+                        <input type="text" matInput formControlName="Tipo_de_Moneda"
+                          [matAutocomplete]="autoTipo_de_Moneda" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoTipo_de_Moneda="matAutocomplete" [displayWith]="displayFnTipo_de_Moneda">
+                          <mat-option (onSelectionChange)="Tipo_de_Moneda_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsTipo_de_Moneda | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingTipo_de_Moneda" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsTipo_de_Moneda && !isLoadingTipo_de_Moneda">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Tipo_de_Moneda').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Tipo de Moneda: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <textarea (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput
+                          formControlName="Observaciones" type="text" maxlength="1000" required rows="3">
+                          </textarea>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Observaciones').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus_de_Seguimiento" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus de Seguimiento</mat-label>
+                        <mat-select (selectionChange)="Estatus_de_Seguimiento_ExecuteBusinessRules()"
+                          placeholder="Estatus de Seguimiento" formControlName="Estatus_de_Seguimiento" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Seguimiento" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Estatus_de_Seguimiento').hasError('required')">
+                          Estatus de Seguimiento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="dividComprasGenerales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>idComprasGenerales </mat-label>
+                        <input (change)="idComprasGenerales_ExecuteBusinessRules()" matInput
+                          formControlName="idComprasGenerales"
+                          [type]="Comparativo_de_Proveedores_PiezasForm.get('idComprasGenerales').value == 'Auto'  ? 'text':'number' "
+                          maxlength="9" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('idComprasGenerales').hasError('required')">
+                          idComprasGenerales es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="dividGestionAprobacionMantenimiento" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>idGestionAprobacionMantenimiento</mat-label>
+                        <input (change)="idGestionAprobacionMantenimiento_ExecuteBusinessRules()" matInput
+                          formControlName="idGestionAprobacionMantenimiento"
+                          [type]="Comparativo_de_Proveedores_PiezasForm.get('idGestionAprobacionMantenimiento').value == 'Auto'  ? 'text':'number' "
+                          maxlength="9" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('idGestionAprobacionMantenimiento').hasError('required')">
+                          idGestionAprobacionMantenimiento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFolioComparativoProv" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>FolioComparativoProv</mat-label>
+                        <input (change)="FolioComparativoProv_ExecuteBusinessRules()" #FolioComparativoProv matInput
+                          formControlName="FolioComparativoProv" type="text" maxlength="50" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('FolioComparativoProv').hasError('required')">
+                          FolioComparativoProv es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Autorizacion_Compras" label="Autorización Compras"> <br>
+                  <div id="tabAutorizacion_Compras" class="row">
+                    <div id="divFecha_de_Autorizacion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Autorización</mat-label>
+                        <input (dateChange)="Fecha_de_Autorizacion_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Autorizacion_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Autorizacion.open()"
+                          [matDatepicker]="datePickerFecha_de_Autorizacion" formControlName="Fecha_de_Autorizacion"
+                          type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerFecha_de_Autorizacion"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Autorizacion></mat-datepicker>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Fecha_de_Autorizacion').hasError('required')">
+                          Fecha de Autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Autorizacion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Autorización</mat-label>
+                        <input (change)="Hora_de_Autorizacion_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Autorizacion_ExecuteBusinessRules()" formControlName="Hora_de_Autorizacion"
+                          matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Hora_de_Autorizacion').hasError('required')">
+                          Hora de Autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divAutorizado_por" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Autorizado por</mat-label>
+                        <mat-select (selectionChange)="Autorizado_por_ExecuteBusinessRules()"
+                          placeholder="Autorizado por" formControlName="Autorizado_por" required>
+                          <mat-option> </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                    <!--  <div id="divAutorizado_por" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Autorizado por</mat-label>
+                        <input type="text" matInput formControlName="Autorizado_por"
+                          [matAutocomplete]="autoAutorizado_por">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAutorizado_por="matAutocomplete" [displayWith]="displayFnAutorizado_por">
+                          <mat-option (onSelectionChange)="Autorizado_por_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsAutorizado_por | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAutorizado_por" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Autorizado_por').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Autorizado_por').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Autorizado por de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div> -->
+                    <div id="divResultado" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Resultado</mat-label>
+                        <mat-select (selectionChange)="Resultado_ExecuteBusinessRules()" placeholder="Resultado"
+                          formControlName="Resultado" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAutorizacion" [value]="item.Folio">
+                            {{ item.Resultado }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Resultado').hasError('required')">
+                          Resultado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_Rechazo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo</mat-label>
+                        <input (change)="Motivo_de_Rechazo_ExecuteBusinessRules()" #Motivo_de_Rechazo matInput
+                          formControlName="Motivo_de_Rechazo" type="text" maxlength="100" />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Motivo_de_Rechazo').hasError('required')">
+                          Motivo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Autorizacion_Direccion_General" label="Autorización Dirección General"> <br>
+                  <div id="tabAutorizacion_Direccion_General" class="row">
+                    <div id="divFecha_de_Autorizacion_DG" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Autorización</mat-label>
+                        <input (dateChange)="Fecha_de_Autorizacion_DG_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Autorizacion_DG_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Autorizacion_DG.open()"
+                          [matDatepicker]="datePickerFecha_de_Autorizacion_DG"
+                          formControlName="Fecha_de_Autorizacion_DG" type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerFecha_de_Autorizacion_DG"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Autorizacion_DG></mat-datepicker>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Fecha_de_Autorizacion_DG').hasError('required')">
+                          Fecha de Autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Autorizacion_DG" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Autorización</mat-label>
+                        <input (change)="Hora_de_Autorizacion_DG_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Autorizacion_DG_ExecuteBusinessRules()"
+                          formControlName="Hora_de_Autorizacion_DG" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0"
+                          required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Hora_de_Autorizacion_DG').hasError('required')">
+                          Hora de Autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAutorizado_por_DG" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Autorizado por</mat-label>
+                        <input type="text" matInput formControlName="Autorizado_por_DG"
+                          [matAutocomplete]="autoAutorizado_por_DG">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAutorizado_por_DG="matAutocomplete"
+                          [displayWith]="displayFnAutorizado_por_DG">
+                          <mat-option (onSelectionChange)="Autorizado_por_DG_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsAutorizado_por_DG | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAutorizado_por_DG" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Autorizado_por_DG').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Autorizado_por_DG').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Autorizado por de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divResultado_DG" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Resultado</mat-label>
+                        <mat-select (selectionChange)="Resultado_DG_ExecuteBusinessRules()" placeholder="Resultado"
+                          formControlName="Resultado_DG" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAutorizacion" [value]="item.Folio">
+                            {{ item.Resultado }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Resultado_DG').hasError('required')">
+                          Resultado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_Rechazo_DG" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo</mat-label>
+                        <input (change)="Motivo_de_Rechazo_DG_ExecuteBusinessRules()" #Motivo_de_Rechazo_DG matInput
+                          formControlName="Motivo_de_Rechazo_DG" type="text" maxlength="100" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Motivo_de_Rechazo_DG').hasError('required')">
+                          Motivo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Autorizacion_Administracion" label="Autorización Administración"> <br>
+                  <div id="tabAutorizacion_Administracion" class="row">
+                    <div id="divFecha_de_Autorizacion_Adm" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Autorización</mat-label>
+                        <input (dateChange)="Fecha_de_Autorizacion_Adm_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Autorizacion_Adm_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Autorizacion_Adm.open()"
+                          [matDatepicker]="datePickerFecha_de_Autorizacion_Adm"
+                          formControlName="Fecha_de_Autorizacion_Adm" type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerFecha_de_Autorizacion_Adm"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Autorizacion_Adm></mat-datepicker>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Fecha_de_Autorizacion_Adm').hasError('required')">
+                          Fecha de Autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Autorizacion_Adm" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Autorización</mat-label>
+                        <input (change)="Hora_de_Autorizacion_Adm_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Autorizacion_Adm_ExecuteBusinessRules()"
+                          formControlName="Hora_de_Autorizacion_Adm" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0"
+                          required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Hora_de_Autorizacion_Adm').hasError('required')">
+                          Hora de Autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAutorizado_por_Adm" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Autorizado por</mat-label>
+                        <input type="text" matInput formControlName="Autorizado_por_Adm"
+                          [matAutocomplete]="autoAutorizado_por_Adm">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAutorizado_por_Adm="matAutocomplete"
+                          [displayWith]="displayFnAutorizado_por_Adm">
+                          <mat-option (onSelectionChange)="Autorizado_por_Adm_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsAutorizado_por_Adm | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAutorizado_por_Adm" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Autorizado_por_Adm').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Autorizado_por_Adm').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Autorizado por de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divResultado_Adm" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Resultado</mat-label>
+                        <mat-select (selectionChange)="Resultado_Adm_ExecuteBusinessRules()" placeholder="Resultado"
+                          formControlName="Resultado_Adm" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAutorizacion" [value]="item.Folio">
+                            {{ item.Resultado }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Resultado_Adm').hasError('required')">
+                          Resultado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_Rechazo_Adm" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo</mat-label>
+                        <input (change)="Motivo_de_Rechazo_Adm_ExecuteBusinessRules()" #Motivo_de_Rechazo_Adm matInput
+                          formControlName="Motivo_de_Rechazo_Adm" type="text" maxlength="100" required />
+                        <mat-error
+                          *ngIf="Comparativo_de_Proveedores_PiezasForm.get('Motivo_de_Rechazo_Adm').hasError('required')">
+                          Motivo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                  <button type='button' class="mr-3 mb-2" [disabled]="!Comparativo_de_Proveedores_PiezasForm.valid"
+                    mat-raised-button color="primary" (click)="sendToApprove()" *ngIf="fromSeguimiento"
+                    [hidden]="consult">
+                    Enviar a Aprobación
+                  </button>
+
+                  <button type='submit' class="mr-3 mb-2" mat-raised-button color="primary" *ngIf="operation!='New'"
+                    [disabled]="!Comparativo_de_Proveedores_PiezasForm.valid" [hidden]="consult">
+                    Guardar
+                  </button>
+
+                  <button class="mr-3 mb-2" type="button"
+                    [disabled]="!Comparativo_de_Proveedores_PiezasForm.valid || consult" mat-raised-button
+                    color="primary" (click)="sendToPrint()">
+                    PDF
+                  </button>
+
+                  <button type='button' mat-raised-button class="mr-3 mb-2" color="primary" (click)="saveAndNew()"
+                    [disabled]="!Comparativo_de_Proveedores_PiezasForm.valid || consult" hidden>
+                    Guardar y Nuevo
+                  </button>
+                  <button type='button' mat-raised-button class="mr-3 mb-2" color="primary" (click)="saveAndCopy()"
+                    [disabled]="!Comparativo_de_Proveedores_PiezasForm.valid || consult" hidden>
+                    Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Comparativo_de_Proveedores_PiezasForm.valid || consult" mat-raised-button
+                    color="primary">
+                    Configurar
+                  </button>
+                  <button type="button" class="mr-3 mb-2" mat-raised-button color="warning" (click)="cancel()"
+                    style="background-color:#ed5565 !important" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

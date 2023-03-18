@@ -1,0 +1,741 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Generación de Orden de Compras</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Generacion_de_Orden_de_Compras/list">Generación de Orden de Compras</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Generacion_de_Orden_de_ComprasForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+
+                    <div id="divFolio" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Generacion_de_Orden_de_ComprasForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFolioCorreo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input type="text" matInput formControlName="FolioCorreo" [matAutocomplete]="autoFolioCorreo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoFolioCorreo="matAutocomplete" [displayWith]="displayFnFolioCorreo">
+                          <mat-option (onSelectionChange)="FolioCorreo_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsFolioCorreo | async" [value]="option">
+                            {{option.FolioTexto}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingFolioCorreo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('FolioCorreo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('FolioCorreo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Folio de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha_de_Registro" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Registro</mat-label>
+                        <input (dateChange)="Fecha_de_Registro_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Registro.open()" [matDatepicker]="datePickerFecha_de_Registro"
+                          formControlName="Fecha_de_Registro" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Registro"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Registro></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <!-- <div id="divFecha_de_Registro" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Registro</mat-label>
+                        <input (change)="Fecha_de_Registro_ExecuteBusinessRules()" #Fecha_de_Registro matInput
+                          formControlName="Fecha_de_Registro" type="text" maxlength="50" required />
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Fecha_de_Registro').hasError('required')">
+                          Fecha de Registro es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div> -->
+
+                    <div id="divHora_de_Registro" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Registro</mat-label>
+                        <input (change)="Hora_de_Registro_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Registro_ExecuteBusinessRules()" formControlName="Hora_de_Registro" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Hora_de_Registro').hasError('required')">
+                          Hora de Registro es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_Registra" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que Registra</mat-label>
+                        <mat-select (selectionChange)="Usuario_que_Registra_ExecuteBusinessRules()"
+                          placeholder="Usuario que Registra" formControlName="Usuario_que_Registra" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Usuario_que_Registra').hasError('required')">
+                          Usuario que Registra es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divProveedor" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor</mat-label>
+                        <input type="text" matInput formControlName="Proveedor" [matAutocomplete]="autoProveedor">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoProveedor="matAutocomplete" [displayWith]="displayFnProveedor">
+                          <mat-option (onSelectionChange)="Proveedor_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsProveedor | async" [value]="option">
+                            {{option.Razon_social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingProveedor" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Proveedor').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Proveedor').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Proveedor de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divRFC" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>RFC</mat-label>
+                        <input type="text" matInput formControlName="RFC" [matAutocomplete]="autoRFC">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoRFC="matAutocomplete" [displayWith]="displayFnRFC">
+                          <mat-option (onSelectionChange)="RFC_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsRFC | async" [value]="option">
+                            {{option.RFC}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingRFC" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('RFC').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('RFC').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un RFC de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divVendedor" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Vendedor</mat-label>
+                        <input type="text" matInput formControlName="Vendedor" [matAutocomplete]="autoVendedor">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoVendedor="matAutocomplete" [displayWith]="displayFnVendedor">
+                          <mat-option (onSelectionChange)="Vendedor_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsVendedor | async" [value]="option">
+                            {{option.Contacto}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingVendedor" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Vendedor').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Vendedor').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Vendedor de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDireccion" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Dirección</mat-label>
+                        <input type="text" matInput formControlName="Direccion" [matAutocomplete]="autoDireccion">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoDireccion="matAutocomplete" [displayWith]="displayFnDireccion">
+                          <mat-option (onSelectionChange)="Direccion_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsDireccion | async" [value]="option">
+                            {{option.Direccion_postal}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingDireccion" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Direccion').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Direccion').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Dirección de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTelefono_del_Contacto" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Teléfono del Contacto</mat-label>
+                        <input type="text" matInput formControlName="Telefono_del_Contacto"
+                          [matAutocomplete]="autoTelefono_del_Contacto">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoTelefono_del_Contacto="matAutocomplete"
+                          [displayWith]="displayFnTelefono_del_Contacto">
+                          <mat-option (onSelectionChange)="Telefono_del_Contacto_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsTelefono_del_Contacto | async" [value]="option">
+                            {{option.Telefono_de_contacto}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingTelefono_del_Contacto" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Telefono_del_Contacto').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Telefono_del_Contacto').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Teléfono del Contacto de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEmail" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input type="text" matInput formControlName="Email" [matAutocomplete]="autoEmail">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoEmail="matAutocomplete" [displayWith]="displayFnEmail">
+                          <mat-option (onSelectionChange)="Email_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsEmail | async" [value]="option">
+                            {{option.Correo_electronico}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingEmail" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Email').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Email').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Email de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDetalle_de_Generacion_de_Orden_de_Compra"
+                      class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Detalle de Generación de Orden de Compra</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" hidden
+                            (click)="addDetalle_de_Generacion_de_Orden_de_CompraToMR(); $event.stopPropagation();"(click)="MRaddDetalle_de_Generacion_de_Orden_de_Compra = true" [hidden]="MRaddDetalle_de_Generacion_de_Orden_de_Compra">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceDetalle_de_Generacion_de_Orden_de_Compra"
+                          multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Generacion_de_Orden_de_ComprasForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editDetalle_de_Generacion_de_Orden_de_Compra(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteDetalle_de_Generacion_de_Orden_de_Compra(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="No__de_Parte">
+                            <th mat-header-cell *matHeaderCellDef> N° Parte/Descripción</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.No__de_Parte_Partes?.Numero_de_parte_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="N_Servicio_Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> N° Servicio/Descripción</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.N_Servicio_Descripcion_Catalogo_servicios?.Codigo_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Materiales_Codigo_Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> Materiales Código/Descripción</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Materiales_Codigo_Descripcion_Listado_de_Materiales?.Codigo_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Herramientas_Codigo_Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> Herramientas Código/Descripción</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Herramientas_Codigo_Descripcion_Herramientas?.Codigo_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Codigo_Descripcion">
+                            <th mat-header-cell *matHeaderCellDef class="w-40"> Código / Descripción </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Codigo_Descripcion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Modelo">
+                            <th mat-header-cell *matHeaderCellDef class="w-15"> Modelo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Modelo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cantidad">
+                            <th mat-header-cell *matHeaderCellDef class="w-15"> Cantidad</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Unidad">
+                            <th mat-header-cell *matHeaderCellDef class="w-15"> Unidad</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Unidad}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Costo_Unitario">
+                            <th mat-header-cell *matHeaderCellDef class="w-15">Costo Unitario</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Costo_Unitario |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Costo_Total">
+                            <th mat-header-cell *matHeaderCellDef class="w-15">Costo Total</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Costo_Total |currency}}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex "
+                              [attr.colspan]="getDetalle_de_Generacion_de_Orden_de_CompraColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_de_Generacion_de_OCItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceDetalle_de_Generacion_de_Orden_de_Compra.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>N° Parte/Descripción</mat-label>
+                                          <input type="text" matInput formControlName="No__de_Parte"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectNo__de_Parte_Detalle_de_Generacion_de_OC($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnNo__de_Parte_Detalle_de_Generacion_de_OC.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varPartes" [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionNo__de_Parte_Detalle_de_Generacion_de_OC($event, element)">
+                                              {{option.Numero_de_parte_Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingNo__de_Parte_Detalle_de_Generacion_de_OC"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varPartes.length ==0 &&  !isLoadingNo__de_Parte_Detalle_de_Generacion_de_OC && searchNo__de_Parte_Detalle_de_Generacion_de_OCCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>N° Servicio/Descripción</mat-label>
+                                          <input type="text" matInput formControlName="N_Servicio_Descripcion"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectN_Servicio_Descripcion_Detalle_de_Generacion_de_OC($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnN_Servicio_Descripcion_Detalle_de_Generacion_de_OC.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCatalogo_servicios"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionN_Servicio_Descripcion_Detalle_de_Generacion_de_OC($event, element)">
+                                              {{option.Codigo_Descripcion}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingN_Servicio_Descripcion_Detalle_de_Generacion_de_OC"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varCatalogo_servicios.length ==0 &&  !isLoadingN_Servicio_Descripcion_Detalle_de_Generacion_de_OC && searchN_Servicio_Descripcion_Detalle_de_Generacion_de_OCCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Materiales Código/Descripción</mat-label>
+                                          <input type="text" matInput formControlName="Materiales_Codigo_Descripcion"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectMateriales_Codigo_Descripcion_Detalle_de_Generacion_de_OC($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnMateriales_Codigo_Descripcion_Detalle_de_Generacion_de_OC.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varListado_de_Materiales"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionMateriales_Codigo_Descripcion_Detalle_de_Generacion_de_OC($event, element)">
+                                              {{option.Codigo_Descripcion}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingMateriales_Codigo_Descripcion_Detalle_de_Generacion_de_OC"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varListado_de_Materiales.length ==0 &&  !isLoadingMateriales_Codigo_Descripcion_Detalle_de_Generacion_de_OC && searchMateriales_Codigo_Descripcion_Detalle_de_Generacion_de_OCCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Herramientas Código/Descripción</mat-label>
+                                          <input type="text" matInput formControlName="Herramientas_Codigo_Descripcion"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectHerramientas_Codigo_Descripcion_Detalle_de_Generacion_de_OC($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnHerramientas_Codigo_Descripcion_Detalle_de_Generacion_de_OC.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varHerramientas" [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionHerramientas_Codigo_Descripcion_Detalle_de_Generacion_de_OC($event, element)">
+                                              {{option.Codigo_Descripcion}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingHerramientas_Codigo_Descripcion_Detalle_de_Generacion_de_OC"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varHerramientas.length ==0 &&  !isLoadingHerramientas_Codigo_Descripcion_Detalle_de_Generacion_de_OC && searchHerramientas_Codigo_Descripcion_Detalle_de_Generacion_de_OCCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Código / Descripción</mat-label>
+                                          <input matInput formControlName="Codigo_Descripcion" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Modelo</mat-label>
+                                          <input type="text" matInput formControlName="Modelo" [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectModelo_Detalle_de_Generacion_de_OC($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnModelo_Detalle_de_Generacion_de_OC.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varModelos" [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionModelo_Detalle_de_Generacion_de_OC($event, element)">
+                                              {{option.Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingModelo_Detalle_de_Generacion_de_OC"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varModelos.length ==0 &&  !isLoadingModelo_Detalle_de_Generacion_de_OC && searchModelo_Detalle_de_Generacion_de_OCCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cantidad</mat-label>
+                                          <input matInput formControlName="Cantidad" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Unidad</mat-label>
+                                          <mat-select placeholder="Unidad" formControlName="Unidad">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varUnidad" [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Costo Unitario</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Unitario" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Costo Total</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Total" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveDetalle_de_Generacion_de_Orden_de_Compra(element);"(click)="MRaddDetalle_de_Generacion_de_Orden_de_Compra = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditDetalle_de_Generacion_de_Orden_de_Compra(element)"(click)="MRaddDetalle_de_Generacion_de_Orden_de_Compra = false"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getDetalle_de_Generacion_de_Orden_de_CompraColumns()">
+                          </tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getDetalle_de_Generacion_de_Orden_de_CompraColumns();let j = index">
+                          </tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divSubtotal" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Subtotal</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Subtotal_ExecuteBusinessRules()" matInput formControlName="Subtotal"
+                          mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Subtotal').hasError('required')">
+                          Subtotal es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_ExecuteBusinessRules()" matInput formControlName="Total"
+                          mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Total').hasError('required')">
+                          Total es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMoneda" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Moneda</mat-label>
+                        <mat-select (selectionChange)="Moneda_ExecuteBusinessRules()" placeholder="Moneda"
+                          formControlName="Moneda" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varMoneda" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Moneda').hasError('required')">
+                          Moneda es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMensaje_de_correo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Redacción de Correo</mat-label>
+                        <input (change)="Mensaje_de_correo_ExecuteBusinessRules()" #Mensaje_de_correo matInput
+                          formControlName="Mensaje_de_correo" type="text" maxlength="2000" required />
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Mensaje_de_correo').hasError('required')">
+                          Redacción de Correo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divComentarios_Adicionales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Comentarios Adicionales</mat-label>
+                        <input (change)="Comentarios_Adicionales_ExecuteBusinessRules()" #Comentarios_Adicionales
+                          matInput formControlName="Comentarios_Adicionales" type="text" maxlength="200" required />
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Comentarios_Adicionales').hasError('required')">
+                          Comentarios Adicionales es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus_OC" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus OC</mat-label>
+                        <input type="text" matInput formControlName="Estatus_OC" [matAutocomplete]="autoEstatus_OC">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoEstatus_OC="matAutocomplete" [displayWith]="displayFnEstatus_OC">
+                          <mat-option (onSelectionChange)="Estatus_OC_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsEstatus_OC | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingEstatus_OC" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Estatus_OC').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('Estatus_OC').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Estatus OC de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Envio" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Envió</mat-label>
+                        <input (change)="Tipo_de_Envio_ExecuteBusinessRules()" #Tipo_de_Envio matInput
+                          formControlName="Tipo_de_Envio" type="text" maxlength="100" required />
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Tipo_de_Envio').hasError('required')">
+                          Tipo de Envió es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTransporte" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Transporte</mat-label>
+                        <mat-select (selectionChange)="Transporte_ExecuteBusinessRules()" placeholder="Transporte"
+                          formControlName="Transporte" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Transporte" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Generacion_de_Orden_de_ComprasForm.get('Transporte').hasError('required')">
+                          Transporte es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFolioGeneracionOC" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>FolioGeneracionOC</mat-label>
+                        <input (change)="FolioGeneracionOC_ExecuteBusinessRules()" #FolioGeneracionOC matInput
+                          formControlName="FolioGeneracionOC" type="text" maxlength="50" required />
+                        <mat-error
+                          *ngIf="Generacion_de_Orden_de_ComprasForm.get('FolioGeneracionOC').hasError('required')">
+                          FolioGeneracionOC es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                  <button type="submit" class="mr-3 mb-2" mat-raised-button color="primary"
+                    [disabled]="!Generacion_de_Orden_de_ComprasForm.valid || consult" hidden>Guardar
+                  </button>
+
+                  <button type="button" class="mr-3 mb-2" mat-raised-button color="primary" (click)="save()"
+                    [disabled]="!Generacion_de_Orden_de_ComprasForm.valid || consult">
+                    Enviar Correo
+                  </button>
+
+                  <button type="button" class="mr-3 mb-2" mat-raised-button color="warning" (click)="cancel()"
+                    style="background-color:#ed5565 !important" mat-button>
+                    Cancelar
+                  </button>
+
+                  <button type="button" class="mr-3 mb-2" mat-raised-button (click)="sendToPrint()"
+                    [disabled]="!Generacion_de_Orden_de_ComprasForm.valid || consult" color="primary">
+                    PDF
+                  </button>
+
+
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Generacion_de_Orden_de_ComprasForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Generacion_de_Orden_de_ComprasForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Generacion_de_Orden_de_ComprasForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()" hidden
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

@@ -1,0 +1,209 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Productividad del área de mantenimiento</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Productividad_del_area_de_mantenimiento/list">Productividad del área de mantenimiento</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Productividad_del_area_de_mantenimientoForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Productividad_del_area_de_mantenimientoForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <mat-select (selectionChange)="Matricula_ExecuteBusinessRules()" placeholder="Matrícula" formControlName="Matricula" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAeronave" [value]="item.Matricula">
+                            {{ item.Matricula }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Matricula').hasError('required')">
+                          Matrícula es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <input type="text" matInput formControlName="Modelo" [matAutocomplete]="autoModelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoModelo="matAutocomplete" [displayWith]="displayFnModelo">
+                          <mat-option (onSelectionChange)="Modelo_ExecuteBusinessRules()" *ngFor="let option of optionsModelo | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingModelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsModelo && !isLoadingModelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Modelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Modelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Modelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_vencimiento" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de vencimiento</mat-label>
+                        <input (dateChange)="Fecha_de_vencimiento_ExecuteBusinessRules()" (blur)="Fecha_de_vencimiento_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_vencimiento.open()" [matDatepicker]="datePickerFecha_de_vencimiento" formControlName="Fecha_de_vencimiento" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_vencimiento"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_vencimiento></mat-datepicker>
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Fecha_de_vencimiento').hasError('required')">
+                          Fecha de vencimiento  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus" formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Reporte" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divN_Reporte" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>N° Reporte</mat-label>
+                        <input (change)="N_Reporte_ExecuteBusinessRules()" #N_Reporte matInput formControlName="N_Reporte" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('N_Reporte').hasError('required')">
+                          N° Reporte  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAsignado_a" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Asignado a:</mat-label>
+                        <input type="text" matInput formControlName="Asignado_a" [matAutocomplete]="autoAsignado_a">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAsignado_a="matAutocomplete" [displayWith]="displayFnAsignado_a">
+                          <mat-option (onSelectionChange)="Asignado_a_ExecuteBusinessRules()" *ngFor="let option of optionsAsignado_a | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAsignado_a" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsAsignado_a && !isLoadingAsignado_a">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Asignado_a').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Asignado_a').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Asignado a: de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempo_estimado_de_ejecucion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tiempo estimado de ejecución</mat-label>
+                        <input (change)="Tiempo_estimado_de_ejecucion_ExecuteBusinessRules()" #Tiempo_estimado_de_ejecucion matInput formControlName="Tiempo_estimado_de_ejecucion" type="text" maxlength="20" required />
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Tiempo_estimado_de_ejecucion').hasError('required')">
+                          Tiempo estimado de ejecución  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempo_real_de_ejecucion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tiempo real de ejecución</mat-label>
+                        <input (change)="Tiempo_real_de_ejecucion_ExecuteBusinessRules()" #Tiempo_real_de_ejecucion matInput formControlName="Tiempo_real_de_ejecucion" type="text" maxlength="20" required />
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Tiempo_real_de_ejecucion').hasError('required')">
+                          Tiempo real de ejecución  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAsignar_ejecutante" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Asignar ejecutante</mat-label>
+                        <input type="text" matInput formControlName="Asignar_ejecutante" [matAutocomplete]="autoAsignar_ejecutante">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAsignar_ejecutante="matAutocomplete" [displayWith]="displayFnAsignar_ejecutante">
+                          <mat-option (onSelectionChange)="Asignar_ejecutante_ExecuteBusinessRules()" *ngFor="let option of optionsAsignar_ejecutante | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAsignar_ejecutante" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsAsignar_ejecutante && !isLoadingAsignar_ejecutante">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Asignar_ejecutante').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Productividad_del_area_de_mantenimientoForm.get('Asignar_ejecutante').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Asignar ejecutante de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Productividad_del_area_de_mantenimientoForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Productividad_del_area_de_mantenimientoForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Productividad_del_area_de_mantenimientoForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Productividad_del_area_de_mantenimientoForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

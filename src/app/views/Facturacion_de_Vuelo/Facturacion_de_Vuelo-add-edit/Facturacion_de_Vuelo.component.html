@@ -1,0 +1,1343 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Facturación de Vuelo</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Facturacion_de_Vuelo/list">Facturación de Vuelo</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Facturacion_de_VueloForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup (selectedTabChange)="onTabChanged($event)">
+                <mat-tab label="Datos Generales" aria-label="Datos_Generales">
+                  <br>
+
+                  <div id="tabDatos_Generales">
+                    <mat-list>
+                      <div class="row">
+                        <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Folio</mat-label>
+                            <input matInput formControlName="Folio"
+                              [type]="Facturacion_de_VueloForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                              required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Folio').hasError('required')">
+                              Folio es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divFecha" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Fecha</mat-label>
+                            <input matInput (focus)="datePickerFecha.open()" [matDatepicker]="datePickerFecha"
+                              formControlName="Fecha" [max]="today" type="text" required />
+                            <mat-datepicker-toggle matSuffix [for]="datePickerFecha"></mat-datepicker-toggle>
+                            <mat-datepicker #datePickerFecha></mat-datepicker>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Fecha').hasError('required')">
+                              Fecha es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divHora" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Hora</mat-label>
+                            <input formControlName="Hora" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0"
+                              required />
+                            <span matPrefix>
+                              <mat-icon class="mr-2">access_time</mat-icon>
+                            </span>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Hora').hasError('required')">
+                              Hora es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divVuelo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Vuelo</mat-label>
+                            <input type="text" matInput formControlName="Vuelo" [matAutocomplete]="autoVuelo">
+                            <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                            <mat-autocomplete #autoVuelo="matAutocomplete" [displayWith]="displayFnVuelo">
+                              <mat-option *ngFor="let option of optionsVuelo | async" [value]="option">
+                                {{option.Numero_de_Vuelo}}
+                              </mat-option>
+                              <mat-option *ngIf="isLoadingVuelo" class="is-loading">
+                                <mat-spinner diameter="30"></mat-spinner>
+                              </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint *ngIf="!hasOptionsVuelo && !isLoadingVuelo">
+                              No se encontraron registros.
+                            </mat-hint>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Vuelo').hasError('required')">
+                              Campo requerido
+                            </mat-error>
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Vuelo').hasError('invalidAutocompleteValue')">
+                              Valor inválido. Seleccione un Vuelo de la lista de opciones.
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divSeccion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Sección</mat-label>
+                            <input matInput formControlName="Seccion"
+                              [type]="Facturacion_de_VueloForm.get('Seccion').value == 'Auto'  ? 'text':'number' "
+                              maxlength="5" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Seccion').hasError('required')">
+                              Sección es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divTipo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Tipo</mat-label>
+                            <input #Tipo matInput formControlName="Tipo" type="text" maxlength="30" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Tipo').hasError('required')">
+                              Tipo es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 mb-2 mt-3">
+                          <mat-list-item>
+                            <span class="float-left">
+                              <mat-icon class="mb-0">label_important</mat-icon> DATOS DE LA AERONAVE
+                            </span>
+                          </mat-list-item>
+                          <mat-divider></mat-divider>
+                        </div>
+                        <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Matrícula</mat-label>
+                            <input type="text" matInput formControlName="Matricula" [matAutocomplete]="autoMatricula">
+                            <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                            <mat-autocomplete #autoMatricula="matAutocomplete" [displayWith]="displayFnMatricula">
+                              <mat-option *ngFor="let option of optionsMatricula | async" [value]="option">
+                                {{option.Matricula}}
+                              </mat-option>
+                              <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                                <mat-spinner diameter="30"></mat-spinner>
+                              </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                              No se encontraron registros.
+                            </mat-hint>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Matricula').hasError('required')">
+                              Campo requerido
+                            </mat-error>
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                              Valor inválido. Seleccione un Matricula de la lista de opciones.
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divModelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Modelo</mat-label>
+                            <input type="text" matInput formControlName="Modelo" [matAutocomplete]="autoModelo">
+                            <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                            <mat-autocomplete #autoModelo="matAutocomplete" [displayWith]="displayFnModelo">
+                              <mat-option *ngFor="let option of optionsModelo | async" [value]="option">
+                                {{option.Descripcion}}
+                              </mat-option>
+                              <mat-option *ngIf="isLoadingModelo" class="is-loading">
+                                <mat-spinner diameter="30"></mat-spinner>
+                              </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint *ngIf="!hasOptionsModelo && !isLoadingModelo">
+                              No se encontraron registros.
+                            </mat-hint>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Modelo').hasError('required')">
+                              Campo requerido
+                            </mat-error>
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Modelo').hasError('invalidAutocompleteValue')">
+                              Valor inválido. Seleccione un Modelo de la lista de opciones.
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divAno" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Año</mat-label>
+                            <input matInput formControlName="Ano"
+                              [type]="Facturacion_de_VueloForm.get('Ano').value == 'Auto'  ? 'text':'number' "
+                              maxlength="4" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Ano').hasError('required')">
+                              Año es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 mb-2 mt-3">
+                          <mat-list-item>
+                            <span class="float-left">
+                              <mat-icon class="mb-0">label_important</mat-icon> DATOS DEL CLIENTE
+                            </span>
+                          </mat-list-item>
+                          <mat-divider></mat-divider>
+                        </div>
+                        <div id="divCliente" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Cliente</mat-label>
+                            <input type="text" matInput formControlName="Cliente" [matAutocomplete]="autoCliente">
+                            <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                            <mat-autocomplete #autoCliente="matAutocomplete" [displayWith]="displayFnCliente">
+                              <mat-option *ngFor="let option of optionsCliente | async" [value]="option">
+                                {{option.Razon_Social}}
+                              </mat-option>
+                              <mat-option *ngIf="isLoadingCliente" class="is-loading">
+                                <mat-spinner diameter="30"></mat-spinner>
+                              </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint *ngIf="!hasOptionsCliente && !isLoadingCliente">
+                              No se encontraron registros.
+                            </mat-hint>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Cliente').hasError('required')">
+                              Campo requerido
+                            </mat-error>
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Cliente').hasError('invalidAutocompleteValue')">
+                              Valor inválido. Seleccione un Cliente de la lista de opciones.
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divSolicitante_1" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Solicitante</mat-label>
+                            <input type="text" matInput formControlName="Solicitante_1"
+                              [matAutocomplete]="autoSolicitante_1">
+                            <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                            <mat-autocomplete #autoSolicitante_1="matAutocomplete"
+                              [displayWith]="displayFnSolicitante_1">
+                              <mat-option *ngFor="let option of optionsSolicitante_1 | async" [value]="option">
+                                {{option.Name}}
+                              </mat-option>
+                              <mat-option *ngIf="isLoadingSolicitante_1" class="is-loading">
+                                <mat-spinner diameter="30"></mat-spinner>
+                              </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint *ngIf="!hasOptionsSolicitante_1 && !isLoadingSolicitante_1">
+                              No se encontraron registros.
+                            </mat-hint>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Solicitante_1').hasError('required')">
+                              Campo requerido
+                            </mat-error>
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Solicitante_1').hasError('invalidAutocompleteValue')">
+                              Valor inválido. Seleccione un Solicitante de la lista de opciones.
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 mb-2 mt-3">
+                          <mat-list-item>
+                            <span class="float-left">
+                              <mat-icon class="mb-0">label_important</mat-icon> TARIFAS
+                            </span>
+                          </mat-list-item>
+                          <mat-divider></mat-divider>
+                        </div>
+                        <div id="divHoras_de_vuelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Horas de vuelo</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Horas_de_vuelo" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Horas_de_vuelo').hasError('required')">
+                              Horas de vuelo es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divHoras_de_Espera" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Horas de Espera</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Horas_de_Espera" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Horas_de_Espera').hasError('required')">
+                              Horas de Espera es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divPercnota" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Pernocta</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Percnota" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Percnota').hasError('required')">
+                              Pernocta es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <div class="table-responsive">
+                            <div class="top-action-container-table">
+                              <h4>Tramos de vuelo</h4>
+                              <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                                [ngClass]="{'hide': isHidden}" [disabled]="isDisabled"
+                                (click)="addTramos_a_FacturarToMR(); $event.stopPropagation();"(click)="MRaddTramos_a_Facturar = true" [hidden]="MRaddTramos_a_Facturar">
+                                <mat-icon>add</mat-icon>
+                              </button>
+                            </div>
+                            <table mat-table [dataSource]="dataSourceTramos_a_Facturar" multiTemplateDataRows>
+
+                              <ng-container *ngIf="!Facturacion_de_VueloForm.disabled" matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                <mat-cell *matCellDef="let element;">
+                                  <div class="actions">
+                                    <button mat-icon-button class="btn-tbl-edit" type="button" [disabled]="isDisabled"
+                                      (click)="editTramos_a_Facturar(element);">
+                                      <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button mat-icon-button class="btn-tbl-delete" type='button' [disabled]="isDisabled"
+                                      (click)="deleteTramos_a_Facturar(element); $event.stopPropagation();">
+                                      <mat-icon>delete</mat-icon>
+                                    </button>
+                                  </div>
+                                </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="Origen">
+                                <th mat-header-cell *matHeaderCellDef> Origen</th>
+                                <td mat-cell *matCellDef="let element"> {{element.Origen_Aeropuertos?.Nombre}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Destino">
+                                <th mat-header-cell *matHeaderCellDef> Destino</th>
+                                <td mat-cell *matCellDef="let element"> {{element.Destino_Aeropuertos?.Nombre}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Pasajeros">
+                                <th mat-header-cell *matHeaderCellDef> Pasajeros </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Pasajeros}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Salida">
+                                <th mat-header-cell *matHeaderCellDef> Salida </th>
+                                <td mat-cell *matCellDef="let element" style="padding: 0 1em 0 1em;text-align:center"> {{element.Salida | date:
+                                  'dd/MM/yyyy'}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Llegada">
+                                <th mat-header-cell *matHeaderCellDef> Llegada </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Llegada | mask : 'Hh:m0:s0'}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Vuelo">
+                                <th mat-header-cell *matHeaderCellDef> Vuelo </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Vuelo | mask : 'Hh:m0:s0'}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Calzo">
+                                <th mat-header-cell *matHeaderCellDef> Calzo </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Calzo | mask : 'Hh:m0:s0'}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Espera">
+                                <th mat-header-cell *matHeaderCellDef> Espera </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Espera}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Espera_real">
+                                <th mat-header-cell *matHeaderCellDef> Espera real </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Espera_real}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Pernocta">
+                                <th mat-header-cell *matHeaderCellDef> Pernocta</th>
+                                <td class="center" mat-cell *matCellDef="let element"> {{element.Pernocta}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Tramo">
+                                <th mat-header-cell *matHeaderCellDef> Tramo</th>
+                                <td mat-cell *matCellDef="let element">
+                                  {{element.Tramo_Registro_de_vuelo?.Numero_de_Tramo}}
+                                </td>
+                              </ng-container>
+
+
+                              <ng-container matColumnDef="expandedDetail">
+                                <td mat-cell *matCellDef="let element; let i = index;"
+                                  [attr.colspan]="getTramos_a_FacturarColumns().length">
+
+                                  <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                    <div *ngIf="element.edit">
+                                      <form [formArrayName]="Tramos_a_FacturarItems">
+
+                                        <div class="row form-group"
+                                          [formGroup]="Tramos_a_FacturarItemsByElemet(element)">
+
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Origen</mat-label>
+                                              <input type="text" matInput formControlName="Origen"
+                                                [matAutocomplete]="auto">
+                                              <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                              <mat-autocomplete
+                                                (optionSelected)="selectOrigen_Detalle_de_tramos_a_facturar($event, element)"
+                                                #auto="matAutocomplete"
+                                                [displayWith]="displayFnOrigen_Detalle_de_tramos_a_facturar.bind(cthis, element)">
+                                                <mat-option *ngFor="let option of varAeropuertos"
+                                                  [value]="option.Aeropuerto_ID"
+                                                  (onSelectionChange)="updateOptionOrigen_Detalle_de_tramos_a_facturar($event, element)">
+                                                  {{option.Nombre}}
+                                                </mat-option>
+                                                <mat-option *ngIf="isLoadingOrigen_Detalle_de_tramos_a_facturar"
+                                                  class="is-loading">
+                                                  <mat-spinner diameter="50"></mat-spinner>
+                                                </mat-option>
+                                              </mat-autocomplete>
+                                              <mat-hint
+                                                *ngIf="varAeropuertos.length ==0 &&  !isLoadingOrigen_Detalle_de_tramos_a_facturar && searchOrigen_Detalle_de_tramos_a_facturarCompleted">
+                                                No se encontraron registros.</mat-hint>
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Destino</mat-label>
+                                              <input type="text" matInput formControlName="Destino"
+                                                [matAutocomplete]="auto">
+                                              <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                              <mat-autocomplete
+                                                (optionSelected)="selectDestino_Detalle_de_tramos_a_facturar($event, element)"
+                                                #auto="matAutocomplete"
+                                                [displayWith]="displayFnDestino_Detalle_de_tramos_a_facturar.bind(cthis, element)">
+                                                <mat-option *ngFor="let option of varAeropuertos"
+                                                  [value]="option.Aeropuerto_ID"
+                                                  (onSelectionChange)="updateOptionDestino_Detalle_de_tramos_a_facturar($event, element)">
+                                                  {{option.Nombre}}
+                                                </mat-option>
+                                                <mat-option *ngIf="isLoadingDestino_Detalle_de_tramos_a_facturar"
+                                                  class="is-loading">
+                                                  <mat-spinner diameter="50"></mat-spinner>
+                                                </mat-option>
+                                              </mat-autocomplete>
+                                              <mat-hint
+                                                *ngIf="varAeropuertos.length ==0 &&  !isLoadingDestino_Detalle_de_tramos_a_facturar && searchDestino_Detalle_de_tramos_a_facturarCompleted">
+                                                No se encontraron registros.</mat-hint>
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Pasajeros</mat-label>
+                                              <input matInput formControlName="Pasajeros" type="text" />
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3 mb-2">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Salida</mat-label>
+                                              <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                                formControlName="Salida" type="text" />
+                                              <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                              <mat-datepicker #rpicker></mat-datepicker>
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Llegada</mat-label>
+                                              <input formControlName="Llegada" matInput placeholder="EX: 23:05:29 "
+                                                mask="Hh:m0:s0" />
+                                              <span matPrefix>
+                                                <mat-icon class="mr-2">access_time</mat-icon>
+                                              </span>
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Vuelo</mat-label>
+                                              <input formControlName="Vuelo" matInput placeholder="EX: 23:05:29 "
+                                                mask="Hh:m0:s0" />
+                                              <span matPrefix>
+                                                <mat-icon class="mr-2">access_time</mat-icon>
+                                              </span>
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Calzo</mat-label>
+                                              <input formControlName="Calzo" matInput placeholder="EX: 23:05:29 "
+                                                mask="Hh:m0:s0" />
+                                              <span matPrefix>
+                                                <mat-icon class="mr-2">access_time</mat-icon>
+                                              </span>
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Espera</mat-label>
+                                              <input matInput formControlName="Espera" type="text" />
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Espera real</mat-label>
+                                              <input matInput formControlName="Espera_real" type="text" />
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Pernocta</mat-label>
+                                              <input matInput formControlName="Pernocta" type="number" />
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Tramo</mat-label>
+                                              <mat-select placeholder="Tramo" formControlName="Tramo">
+                                                <mat-option>
+                                                </mat-option>
+                                                <mat-option *ngFor="let item of varRegistro_de_vuelo"
+                                                  [value]="item.Folio">
+                                                  {{ item.Numero_de_Tramo }}
+                                                </mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                          </div>
+
+
+                                        </div>
+                                        <!-- inicio seccion botones -->
+                                        <!-- fin seccion botones -->
+                                        <div class="row">
+                                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                            <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                              (click)="element.edit = false; saveTramos_a_Facturar(element);"(click)="MRaddTramos_a_Facturar = false"
+                                              color="primary">Guardar
+                                            </button>
+                                            <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                              (click)="cancelEditTramos_a_Facturar(element)"(click)="MRaddTramos_a_Facturar = false"
+                                              mat-button>Cancelar</button>
+                                          </div>
+                                        </div>
+
+                                      </form>
+                                    </div>
+                                  </div>
+                                </td>
+                              </ng-container>
+                              <tr mat-header-row *matHeaderRowDef="getTramos_a_FacturarColumns()"></tr>
+                              <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                                *matRowDef="let row; columns: getTramos_a_FacturarColumns();let j = index"></tr>
+                              <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                class="example-detail-row">
+                              </tr>
+                            </table>
+                            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                            </mat-paginator>
+
+                          </div>
+                        </div>
+                        <div id="divEstatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Estatus</mat-label>
+                            <input type="text" matInput formControlName="Estatus" [matAutocomplete]="autoEstatus">
+                            <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                            <mat-autocomplete #autoEstatus="matAutocomplete" [displayWith]="displayFnEstatus">
+                              <mat-option *ngFor="let option of optionsEstatus | async" [value]="option">
+                                {{option.Estatus}}
+                              </mat-option>
+                              <mat-option *ngIf="isLoadingEstatus" class="is-loading">
+                                <mat-spinner diameter="30"></mat-spinner>
+                              </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint *ngIf="!hasOptionsEstatus && !isLoadingEstatus">
+                              No se encontraron registros.
+                            </mat-hint>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Estatus').hasError('required')">
+                              Campo requerido
+                            </mat-error>
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Estatus').hasError('invalidAutocompleteValue')">
+                              Valor inválido. Seleccione un Estatus de la lista de opciones.
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </mat-list>
+                  </div>
+                </mat-tab>
+
+                <mat-tab label="Detalle de Factura" aria-label="Detalle_de_Factura">
+                  <br>
+                  <div id="tabDetalle_de_Factura">
+                    <mat-list>
+                      <div class="row">
+                        <div class="col-12 mb-2 mt-3">
+                          <mat-list-item>
+                            <span class="float-left">
+                              <mat-icon class="mb-0">label_important</mat-icon> SERVICIOS EXTRAORDINARIOS
+                            </span>
+                          </mat-list-item>
+                          <mat-divider></mat-divider>
+                        </div>
+                        <div id="divFecha_de_la_factura" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Fecha</mat-label>
+                            <input matInput (focus)="datePickerFecha_de_la_factura.open()"
+                              [matDatepicker]="datePickerFecha_de_la_factura" formControlName="Fecha_de_la_factura"
+                              [max]="today" type="text" required />
+                            <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_la_factura">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #datePickerFecha_de_la_factura></mat-datepicker>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Fecha_de_la_factura').hasError('required')">
+                              Fecha es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divServicios_Terminal_Total" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Servicios Terminal Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Servicios_Terminal_Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Servicios_Terminal_Total').hasError('required')">
+                              Servicios Terminal Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divComisariato_Total" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Comisariato Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Comisariato_Total" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Comisariato_Total').hasError('required')">
+                              Comisariato Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divDespacho" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Despacho</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Despacho" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Despacho').hasError('required')">
+                              Despacho es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divTUA_Nacional" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>TUA Nacional</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="TUA_Nacional" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('TUA_Nacional').hasError('required')">
+                              TUA Nacional es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divTUA_Nacional_Total" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>TUA Nacional Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="TUA_Nacional_Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('TUA_Nacional_Total').hasError('required')">
+                              TUA Nacional Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divTUA_Internacional" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>TUA Internacional</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="TUA_Internacional" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('TUA_Internacional').hasError('required')">
+                              TUA Internacional es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divTUA_Internacional_Total" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>TUA Internacional Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="TUA_Internacional_Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('TUA_Internacional_Total').hasError('required')">
+                              TUA Internacional Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA_Frontera" class="offset-xl-1 col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA Frontera</mat-label>
+                            <input matInput formControlName="IVA_Frontera"
+                              [type]="Facturacion_de_VueloForm.get('IVA_Frontera').value == 'Auto'  ? 'text':'number' "
+                              maxlength="9" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('IVA_Frontera').hasError('required')">
+                              IVA Frontera es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA_Frontera_Total" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA Frontera Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="IVA_Frontera_Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('IVA_Frontera_Total').hasError('required')">
+                              IVA Frontera Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA_Nacional" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA Nacional</mat-label>
+                            <input matInput formControlName="IVA_Nacional"
+                              [type]="Facturacion_de_VueloForm.get('IVA_Nacional').value == 'Auto'  ? 'text':'number' "
+                              maxlength="9" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('IVA_Nacional').hasError('required')">
+                              IVA Nacional es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA_Nacional_Total" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA Nacional Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="IVA_Nacional_Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('IVA_Nacional_Total').hasError('required')">
+                              IVA Nacional Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divSubTotal" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Total Serv. Ext.</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="SubTotal" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('SubTotal').hasError('required')">
+                              Total Serv. Ext. es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 mb-2 mt-3">
+                          <mat-list-item>
+                            <span class="float-left">
+                              <mat-icon class="mb-0">label_important</mat-icon> SERVICIOS DE VUELO
+                            </span>
+                          </mat-list-item>
+                          <mat-divider></mat-divider>
+                        </div>
+                        <div id="divTiempo_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Tiempo de Vuelo</mat-label>
+                            <input formControlName="Tiempo_de_Vuelo" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0"
+                              required />
+                            <span matPrefix>
+                              <mat-icon class="mr-2">access_time</mat-icon>
+                            </span>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Tiempo_de_Vuelo').hasError('required')">
+                              Tiempo de Vuelo es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divTiempo_de_Vuelo_Total" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Tiempo de Vuelo Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Tiempo_de_Vuelo_Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Tiempo_de_Vuelo_Total').hasError('required')">
+                              Tiempo de Vuelo Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divTiempo_de_Espera" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Tiempo de Espera</mat-label>
+                            <input formControlName="Tiempo_de_Espera" matInput placeholder="EX: 23:05:29"
+                              mask="Hh:m0:s0" required />
+                            <span matPrefix>
+                              <mat-icon class="mr-2">access_time</mat-icon>
+                            </span>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Tiempo_de_Espera').hasError('required')">
+                              Tiempo de Espera es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divEspera_sin_Cargo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Espera sin Cargo</mat-label>
+                            <input formControlName="Espera_sin_Cargo" matInput placeholder="EX: 23:05:29"
+                              mask="Hh:m0:s0" required />
+                            <span matPrefix>
+                              <mat-icon class="mr-2">access_time</mat-icon>
+                            </span>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Espera_sin_Cargo').hasError('required')">
+                              Espera sin Cargo es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divEspera_con_Cargo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Espera con Cargo</mat-label>
+                            <input formControlName="Espera_con_Cargo" matInput placeholder="EX: 23:05:29"
+                              mask="Hh:m0:s0" required />
+                            <span matPrefix>
+                              <mat-icon class="mr-2">access_time</mat-icon>
+                            </span>
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Espera_con_Cargo').hasError('required')">
+                              Espera con Cargo es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divEspera_con_Cargo_Total" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Espera con Cargo Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Espera_con_Cargo_Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Espera_con_Cargo_Total').hasError('required')">
+                              Espera con Cargo Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divPernocta" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Pernoctas</mat-label>
+                            <input matInput formControlName="Pernocta"
+                              [type]="Facturacion_de_VueloForm.get('Pernocta').value == 'Auto'  ? 'text':'number' "
+                              maxlength="9" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Pernocta').hasError('required')">
+                              Pernoctas es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divPernoctas_Total" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Pernoctas Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Pernoctas_Total" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Pernoctas_Total').hasError('required')">
+                              Pernoctas Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA_Nacional_Servicios" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA Nacional Servicios</mat-label>
+                            <input matInput formControlName="IVA_Nacional_Servicios" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('IVA_Nacional_Servicios').hasError('required')">
+                              IVA Nacional Servicios es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA_Nacional_Servicios_Total" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA Nacional Servicios Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="IVA_Nacional_Servicios_Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('IVA_Nacional_Servicios_Total').hasError('required')">
+                              IVA Nacional Servicios Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA</mat-label>
+                            <input matInput formControlName="IVA"
+                              [type]="Facturacion_de_VueloForm.get('IVA').value == 'Auto'  ? 'text':'number' "
+                              maxlength="9" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('IVA').hasError('required')">
+                              IVA es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA_Internacional_Total" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA Internacional Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="IVA_Internacional_Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('IVA_Internacional_Total').hasError('required')">
+                              IVA Internacional Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divCargo_vuelo_int_" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Cargo vuelo int.</mat-label>
+                            <input matInput formControlName="Cargo_vuelo_int_"
+                              [type]="Facturacion_de_VueloForm.get('Cargo_vuelo_int_').value == 'Auto'  ? 'text':'number' "
+                              maxlength="9" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Cargo_vuelo_int_').hasError('required')">
+                              Cargo vuelo int. es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divCargo_Vuelo_Int__Total" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Cargo Vuelo Int. Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Cargo_Vuelo_Int__Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Cargo_Vuelo_Int__Total').hasError('required')">
+                              Cargo Vuelo Int. Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA_vuelo_int_" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA vuelo int.</mat-label>
+                            <input matInput formControlName="IVA_vuelo_int_"
+                              [type]="Facturacion_de_VueloForm.get('IVA_vuelo_int_').value == 'Auto'  ? 'text':'number' "
+                              maxlength="9" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('IVA_vuelo_int_').hasError('required')">
+                              IVA vuelo int. es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divIVA_Vuelo_Int__Total" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>IVA Vuelo Int. Total</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="IVA_Vuelo_Int__Total" mask="separator.2"
+                              thousandSeparator="," maxlength="12" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('IVA_Vuelo_Int__Total').hasError('required')">
+                              IVA Vuelo Int. Total es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divSubTotal_1" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Total Serv. Vuelo</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="SubTotal_1" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('SubTotal_1').hasError('required')">
+                              Total Serv. Vuelo es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 mb-2 mt-3">
+                          <mat-list-item>
+                            <span class="float-left">
+                              <mat-icon class="mb-0">label_important</mat-icon> CARGOS ADICIONALES
+                            </span>
+                          </mat-list-item>
+                          <mat-divider></mat-divider>
+                        </div>
+                        <div id="divServicios_de_Terminal" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Servicios de Terminal</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Servicios_de_Terminal" mask="separator.2" (change)="Servicios_de_Terminal_ExecuteBusinessRules()"
+                              thousandSeparator="," maxlength="15" required />
+                            <mat-error
+                              *ngIf="Facturacion_de_VueloForm.get('Servicios_de_Terminal').hasError('required')">
+                              Servicios de Terminal es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divComisariato_1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Comisariato</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Comisariato_1" mask="separator.2" thousandSeparator="," (change)="Comisariato_1_ExecuteBusinessRules()"
+                              maxlength="15" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Comisariato_1').hasError('required')">
+                              Comisariato es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divDespacho_1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Despacho</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Despacho_1" mask="separator.2" thousandSeparator="," (change)="Despacho_1_ExecuteBusinessRules()"
+                              maxlength="15" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Despacho_1').hasError('required')">
+                              Despacho es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divMargen" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Margen</mat-label>
+                            <input matInput formControlName="Margen" type="number" min="0" max="999999999" maxLength="9" (change)="Margen_ExecuteBusinessRules()"
+                              oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                              required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Margen').hasError('required')">
+                              Margen es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divTotal_a_pagar" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>Total a pagar</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="Total_a_pagar" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('Total_a_pagar').hasError('required')">
+                              Total a pagar es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </mat-list>
+                  </div>
+                </mat-tab>
+
+                <mat-tab label="Facturación por tramo" aria-label="Facturacion_por_tramo">
+                  <br>
+                  <div id="tabFacturacion_por_tramo">
+                    <mat-list>
+                      <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
+                          <div class="table-responsive">
+                            <div class="top-action-container-table">
+                              <h4>Facturación de vuelo por tramo</h4>
+                              <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                                (click)="addFacturacion_de_vuelo_por_tramoToMR(); $event.stopPropagation();"(click)="MRaddFacturacion_de_vuelo_por_tramo = true" [hidden]="MRaddFacturacion_de_vuelo_por_tramo">
+                                <mat-icon>add</mat-icon>
+                              </button>
+                            </div>
+                            <table mat-table [dataSource]="dataSourceFacturacion_de_vuelo_por_tramo"
+                              multiTemplateDataRows>
+
+                              <ng-container *ngIf="!Facturacion_de_VueloForm.disabled" matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                <mat-cell *matCellDef="let element;">
+                                  <div class="actions">
+                                    <button mat-icon-button class="btn-tbl-edit" type="button" [disabled]="isDisabled"
+                                      (click)="editFacturacion_de_vuelo_por_tramo(element);">
+                                      <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button mat-icon-button class="btn-tbl-delete" type='button' [disabled]="isDisabled"
+                                      (click)="deleteFacturacion_de_vuelo_por_tramo(element); $event.stopPropagation();">
+                                      <mat-icon>delete</mat-icon>
+                                    </button>
+                                  </div>
+                                </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="Numero_de_Tramo">
+                                <th mat-header-cell *matHeaderCellDef> Número de Tramo</th>
+                                <td class="center" mat-cell *matCellDef="let element"> {{element.Tramo}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Tramo">
+                                <th mat-header-cell *matHeaderCellDef> Tramo</th>
+                                <td class="center" mat-cell *matCellDef="let element"> {{element.Numero_de_Tramo}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Monto_de_Tramo">
+                                <th mat-header-cell *matHeaderCellDef>Monto de Tramo</th>
+                                <td class="center" mat-cell *matCellDef="let element"> {{element.Monto_de_Tramo
+                                  |currency}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Porcentaje">
+                                <th mat-header-cell *matHeaderCellDef> Porcentaje</th>
+                                <td class="center" mat-cell *matCellDef="let element"> {{element.Porcentaje}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Empresa_Sugerida">
+                                <th mat-header-cell *matHeaderCellDef> Empresa Sugerida</th>
+                                <td mat-cell *matCellDef="let element">
+                                  {{element.Empresa_Sugerida_Cliente_Facturacion?.Nombre}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Empresa_Seleccionada">
+                                <th mat-header-cell *matHeaderCellDef> Empresa Seleccionada</th>
+                                <td mat-cell *matCellDef="let element">
+                                  <button mat-icon-button [matMenuTriggerFor]="appMenu" type="button" aria-label=""
+                                    (click)="editFacturacion_de_vuelo_change_company(element)">
+                                    <mat-icon> more_vert </mat-icon>
+                                    {{ element.Empresa_Seleccionada_Cliente_Facturacion?.Nombre }}
+                                  </button>
+                                </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="expandedDetail">
+                                <td mat-cell *matCellDef="let element; let i = index;"
+                                  [attr.colspan]="getFacturacion_de_vuelo_por_tramoColumns().length">
+
+                                  <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                    <div *ngIf="element.edit">
+                                      <form formArrayName="Facturacion_de_vuelos_por_tramoItems">
+
+                                        <div class="row form-group"
+                                          [formGroupName]="dataSourceFacturacion_de_vuelo_por_tramo.data.indexOf(element)">
+
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Numero de Tramo</mat-label>
+                                              <input matInput formControlName="Numero_de_Tramo" type="number"
+                                                (keypress)="maxNumero_de_Tramo(dataSourceFacturacion_de_vuelo_por_tramo.data.indexOf(element),999999999)" />
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Tramo</mat-label>
+                                              <input matInput formControlName="Tramo"
+                                                (keypress)="maxTramo(dataSourceFacturacion_de_vuelo_por_tramo.data.indexOf(element),5)" />
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Monto de Tramo</mat-label>
+                                              <span matPrefix>
+                                                <mat-icon class="mr-2">attach_money</mat-icon>
+                                              </span>
+                                              <input matInput formControlName="Monto_de_Tramo"
+                                                (keypress)="maxMonto_de_Tramo(dataSourceFacturacion_de_vuelo_por_tramo.data.indexOf(element),12)"
+                                                mask="separator.2" thousandSeparator="," />
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Porcentaje</mat-label>
+                                              <input matInput formControlName="Porcentaje"
+                                                (keypress)="maxPorcentaje(dataSourceFacturacion_de_vuelo_por_tramo.data.indexOf(element),18)" />
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Empresa Sugerida</mat-label>
+                                              <mat-select placeholder="Empresa Sugerida"
+                                                formControlName="Empresa_Sugerida">
+                                                <mat-option>
+                                                </mat-option>
+                                                <mat-option *ngFor="let item of varCliente_Facturacion"
+                                                  [value]="item.Clave">
+                                                  {{ item.Nombre }}
+                                                </mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                          </div>
+                                          <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                            <mat-form-field appearance="outline">
+                                              <mat-label>Empresa Seleccionada</mat-label>
+                                              <mat-select placeholder="Empresa Seleccionada"
+                                                formControlName="Empresa_Seleccionada" required>
+                                                <mat-option>
+                                                </mat-option>
+                                                <mat-option *ngFor="let item of varCliente_Facturacion"
+                                                  [value]="item.Clave">
+                                                  {{ item.Nombre }}
+                                                </mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                          </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                            <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                              (click)="element.edit = false; saveFacturacion_de_vuelo_por_tramo(element);"(click)="MRaddFacturacion_de_vuelo_por_tramo = false"
+                                              color="primary">Guardar
+                                            </button>
+                                            <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                              (click)="cancelEditFacturacion_de_vuelo_por_tramo(element)"(click)="MRaddFacturacion_de_vuelo_por_tramo = false"
+                                              mat-button>Cancelar</button>
+                                          </div>
+                                        </div>
+
+                                      </form>
+                                    </div>
+                                  </div>
+                                </td>
+                              </ng-container>
+                              <tr mat-header-row *matHeaderRowDef="getFacturacion_de_vuelo_por_tramoColumns()"></tr>
+                              <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit)}"
+                                *matRowDef="let row; columns: getFacturacion_de_vuelo_por_tramoColumns();let j = index">
+                              </tr>
+                              <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                class="example-detail-row">
+                              </tr>
+                            </table>
+                            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                            </mat-paginator>
+
+                          </div>
+                        </div>
+                        <div id="divSAPSA_Monto" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>SAPSA Monto</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="SAPSA_Monto" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('SAPSA_Monto').hasError('required')">
+                              SAPSA Monto es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divSAPSA_Porcentaje" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>SAPSA %</mat-label>
+                            <input matInput formControlName="SAPSA_Porcentaje"
+                              [value]="Facturacion_de_VueloForm.get('SAPSA_Porcentaje').value | number" type="number"
+                              maxlength="6" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('SAPSA_Porcentaje').hasError('required')">
+                              SAPSA % es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divGNP_Monto" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>GNP Monto</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="GNP_Monto" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('GNP_Monto').hasError('required')">
+                              GNP Monto es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divGNP_Porcentaje" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>GNP %</mat-label>
+                            <input matInput formControlName="GNP_Porcentaje"
+                              [value]="Facturacion_de_VueloForm.get('GNP_Porcentaje').value | number" type="number"
+                              maxlength="6" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('GNP_Porcentaje').hasError('required')">
+                              GNP % es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divPH_Monto" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>PH Monto</mat-label>
+                            <span matPrefix>
+                              <mat-icon class="mr-2">attach_money</mat-icon>
+                            </span>
+                            <input matInput formControlName="PH_Monto" mask="separator.2" thousandSeparator=","
+                              maxlength="12" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('PH_Monto').hasError('required')">
+                              PH Monto es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div id="divPH_Porcentaje" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width no-padding" appearance="outline">
+                            <mat-label>PH %</mat-label>
+                            <input matInput formControlName="PH_Porcentaje"
+                              [value]="Facturacion_de_VueloForm.get('PH_Porcentaje').value | number" type="number"
+                              maxlength="6" required />
+                            <mat-error *ngIf="Facturacion_de_VueloForm.get('PH_Porcentaje').hasError('required')">
+                              PH % es requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </mat-list>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" mat-raised-button [disabled]="!isValidCompany || consult " color="primary">
+                    Guardar
+                  </button>                
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<mat-menu #appMenu="matMenu">
+  <ng-template matMenuContent>
+    <button (click)="save_changeCompany_Facturacion_de_vuelo_por_tramo(null)" mat-menu-item></button>
+    <button (click)="save_changeCompany_Facturacion_de_vuelo_por_tramo(item)" mat-menu-item
+      *ngFor="let item of varCliente_Facturacion">
+      <span>{{ item.Nombre }}</span>
+    </button>
+  </ng-template>
+</mat-menu>

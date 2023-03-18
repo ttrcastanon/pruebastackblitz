@@ -1,0 +1,225 @@
+﻿.f-w {
+    width: 100%;
+}
+
+mat-table {
+    display       : flex;
+    flex-direction: column;
+}
+
+mat-cell:first-of-type,
+mat-header-cell:first-of-type,
+mat-footer-cell:first-of-type {
+    padding-left: 0;
+}
+
+.spinner-container {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+}
+
+mat-form-field.filter {
+    width: 100%;
+}
+
+mat-form-field.filter .mat-form-field-infix {
+    border: 1px solid #9e9e9e;
+}
+
+.filter {
+    font-size: 8px;
+    height   : 38px;
+}
+
+.mat-column-acciones,
+.mat-column-acciones_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Clave,
+.mat-column-Clave_filtro {
+    width: 50px;
+    flex : 0 0 50px !important;
+}
+
+.mat-column-Nombres,
+.mat-column-Nombres_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Apellido_paterno,
+.mat-column-Apellido_paterno_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Apellido_materno,
+.mat-column-Apellido_materno_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Nombre_completo,
+.mat-column-Nombre_completo_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Curp,
+.mat-column-Curp_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Fecha_de_Nacimiento,
+.mat-column-Fecha_de_Nacimiento_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Fecha_de_Ingreso,
+.mat-column-Fecha_de_Ingreso_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Creacion_de_Usuario,
+.mat-column-Creacion_de_Usuario_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Edad,
+.mat-column-Edad_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Tiempo_en_la_Empresa,
+.mat-column-Tiempo_en_la_Empresa_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Cargo_desempenado,
+.mat-column-Cargo_desempenado_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Jefe_inmediato,
+.mat-column-Jefe_inmediato_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Departamento,
+.mat-column-Departamento_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Usuario,
+.mat-column-Usuario_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Contrasena,
+.mat-column-Contrasena_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Estatus,
+.mat-column-Estatus_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Correo_electronico,
+.mat-column-Correo_electronico_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Telefono,
+.mat-column-Telefono_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Celular,
+.mat-column-Celular_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Direccion,
+.mat-column-Direccion_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Horario_de_trabajo,
+.mat-column-Horario_de_trabajo_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Firma_digital,
+.mat-column-Firma_digital_filtro {
+    width          : 120px;
+    flex           : 0 0 120px !important;
+    flex-direction : column;
+    justify-content: center;
+}
+
+.btn-tbl-Firma_digital {
+    color: #3f51b5;
+}
+
+.mat-column-Usuario_Registrado,
+.mat-column-Usuario_Registrado_filtro {
+    width: 80px;
+    flex : 0 0 80px !important;
+}
+
+
+.mat-filtro-row mat-cell {
+    padding: 0 2px;
+}
+
+.mat-filtro-row :host ::ng-deep .mat-form-field-infix {
+    padding: 1px 2px 6px !important;
+}
+
+mat-datepicker-toggle {
+    display: inline-block;
+    width  : 25px;
+}
+
+.mat-header-row,
+.mat-row {
+    display: inline-flex;
+}
+
+.filter-select {
+    font-size: 9.5px;
+    height   : 38px;
+}
+
+.filter-select mat-option {
+    font-size: 12px !important;
+}
+
+:host ::ng-deep .mat-sort-header-container {
+    margin: 0 auto;
+}
+
+.mat-raised-button {
+    line-height: 20px;
+}

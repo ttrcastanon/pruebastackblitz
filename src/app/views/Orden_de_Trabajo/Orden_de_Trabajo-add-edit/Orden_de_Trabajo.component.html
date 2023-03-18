@@ -1,0 +1,1170 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Orden de Trabajo</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Orden_de_Trabajo/list">Orden de Trabajo</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  
+
+    <ng-template #addRepoOT let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Agregar Detalle de Reportes de OT</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('cerrar')"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="TecnicosForm">
+          <div class="mb-6">
+            <mat-form-field class="example-full-width no-padding" appearance="outline">
+              <label><b>Asignado a:</b></label>
+              <mat-select (selectionChange)="UserASign1_ExecuteBusinessRules($event)" formControlName="UsuarioTecnico1Id">
+                <mat-option>
+
+                </mat-option>
+                <mat-option *ngFor="let option of varSpartan_UserASign1" [value]="option.Clave">
+                  {{option.Description}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="Orden_de_TrabajoForm.get('Tipo_de_orden').hasError('required')">
+                Tipo de orden es requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mb-6">
+            <mat-form-field class="example-full-width no-padding" appearance="outline">
+              <label><b>Asignado a:</b></label>
+              <mat-select (selectionChange)="UserASign2_ExecuteBusinessRules($event)" formControlName="UsuarioTecnico2Id">
+                <mat-option>
+
+                </mat-option>
+                <mat-option *ngFor="let option of varSpartan_UserASign2" [value]="option.Clave">
+                  {{option.Description}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="mb-6">
+            <mat-form-field class="example-full-width no-padding" appearance="outline">
+              <label><b>Asignado a:</b></label>
+              <mat-select (selectionChange)="UserASign3_ExecuteBusinessRules($event)" formControlName="UsuarioTecnico3Id">
+                <mat-option>
+
+                </mat-option>
+                <mat-option *ngFor="let option of varSpartan_UserASign3" [value]="option.Clave">
+                  {{option.Description}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="mb-6">
+            <mat-form-field class="example-full-width no-padding" appearance="outline">
+              <label><b>Asignado a:</b></label>
+              <mat-select (selectionChange)="UserASign4_ExecuteBusinessRules($event)" formControlName="UsuarioTecnico4Id">
+                <mat-option>
+
+                </mat-option>
+                <mat-option *ngFor="let option of varSpartan_UserASign4" [value]="option.Clave">
+                  {{option.Description}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="mb-6">
+            <mat-form-field class="example-full-width no-padding" appearance="outline">
+              <label><b>Asignado a:</b></label>
+              <mat-select (selectionChange)="UserASign5_ExecuteBusinessRules($event)" formControlName="UsuarioTecnico5Id">
+                <mat-option>
+
+                </mat-option>
+                <mat-option *ngFor="let option of varSpartan_UserASign5" [value]="option.Clave">
+                  {{option.Description}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="SaveReportOTModal()">Guardar</button>
+        <button type="button" class="btn btn-outline-dark" (click)="CancelReportOTModal()">Cancelar</button>
+      </div>
+    </ng-template>
+  
+
+
+
+    <ng-template #addSeleccionarReportes let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Seleccionar Reportes</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('cerrar')"></button>
+      </div>
+      <div class="modal-body">
+        <mat-checkbox [disabled]="false" (change)="ChangeSelectCheck($event)" [ngClass]="'tbl-checkbox'"> Habilitar/Deshabilitar todos</mat-checkbox>
+        <form>
+
+
+
+
+
+          <div id="divSeleccionar_Reportes_OT" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="table-responsive">
+              <table mat-table [dataSource]="dataSourceSeleccionar_Reportes_OT" class="col-xl-12 col-lg-12 col-md-12 col-sm-12" multiTemplateDataRows>
+
+                <ng-container *ngIf="!Orden_de_TrabajoForm.disabled" matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                  <mat-cell *matCellDef="let element;">
+                    <div class="actions">
+
+                    </div>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Seleccionar">
+                  <th mat-header-cell *matHeaderCellDef> Acción</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="text-center f-w">
+                      <mat-checkbox [disabled]="false" [checked]="element.Seleccionar" (change)="$event ? reportesSeleccionadosOT_Toggle(element, $event) : null"
+                        [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="M_Reporte">
+                  <th mat-header-cell *matHeaderCellDef> Reporte </th>
+                  <td mat-cell *matCellDef="let element"> {{element.MR_FolioReporte}} </td>
+                </ng-container>
+                <ng-container matColumnDef="M_TipoReporte">
+                  <th mat-header-cell *matHeaderCellDef> Tipo de Reporte </th>
+                  <td mat-cell *matCellDef="let element"> {{element.M_TipoReporte}} </td>
+                </ng-container>
+                <ng-container matColumnDef="M_Descripcion">
+                  <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                  <td mat-cell *matCellDef="let element"> {{element.M_Descripcion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="M_CMP">
+                  <th mat-header-cell *matHeaderCellDef> CMP </th>
+                  <td mat-cell *matCellDef="let element"> {{element.M_CMP}} </td>
+                </ng-container>
+                <ng-container matColumnDef="M_ATA">
+                  <th mat-header-cell *matHeaderCellDef> ATA </th>
+                  <td mat-cell *matCellDef="let element"> {{element.M_ATA}} </td>
+                </ng-container>
+                
+                                
+                <ng-container matColumnDef="M_Tecnico">
+                  <th mat-header-cell *matHeaderCellDef> Técnico </th>
+                  <td mat-cell *matCellDef="let element"> 
+                    <mat-select (selectionChange)="TecnicoReporteSeleccionado_ExecuteBusinessRules($event, element)">
+                      <mat-option *ngFor="let option of varSpartan_UserASign1" [value]="option.Clave">
+                        {{ option.Description }}
+                      </mat-option> 
+                    </mat-select>
+                  </td>
+                </ng-container>
+                
+
+
+                <ng-container matColumnDef="M_TecnicoNombre">
+                  <th mat-header-cell *matHeaderCellDef> M_TecnicoNombre </th>
+                  <td mat-cell *matCellDef="let element"> {{element.M_TecnicoNombre}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MR_TipoReporte">
+                  <th mat-header-cell *matHeaderCellDef> MR_TipoReporte </th>
+                  <td mat-cell *matCellDef="let element"> {{element.MR_TipoReporte}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MR_FolioReporte">
+                  <th mat-header-cell *matHeaderCellDef> MR_FolioReporte </th>
+                  <td mat-cell *matCellDef="let element"> {{element.MR_FolioReporte}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MR_DescripcionReporte">
+                  <th mat-header-cell *matHeaderCellDef> MR_DescripcionReporte </th>
+                  <td mat-cell *matCellDef="let element"> {{element.MR_DescripcionReporte}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MR_Matricula">
+                  <th mat-header-cell *matHeaderCellDef> MR_Matricula </th>
+                  <td mat-cell *matCellDef="let element"> {{element.MR_Matricula}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MR_Modelo">
+                  <th mat-header-cell *matHeaderCellDef> MR_Modelo </th>
+                  <td mat-cell *matCellDef="let element"> {{element.MR_Modelo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MR_CodigoComputarizado">
+                  <th mat-header-cell *matHeaderCellDef> MR_CodigoComputarizado </th>
+                  <td mat-cell *matCellDef="let element"> {{element.MR_CodigoComputarizado}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MR_ATA">
+                  <th mat-header-cell *matHeaderCellDef> MR_ATA </th>
+                  <td mat-cell *matCellDef="let element"> {{element.MR_ATA}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MR_OrigenReporte">
+                  <th mat-header-cell *matHeaderCellDef> MR_OrigenReporte </th>
+                  <td mat-cell *matCellDef="let element"> {{element.MR_OrigenReporte}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="expandedDetail">
+                  <td mat-cell *matCellDef="let element; let i = index;"
+                    [attr.colspan]="getSeleccionar_Reportes_OTColumns().length">
+
+                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                      <div *ngIf="element.edit">
+                        <form [formArrayName]="Seleccionar_Reportes_OTItems">
+
+                          <div class="row form-group"
+                            [formGroup]="Seleccionar_Reportes_OTItemsByElemet(element)">
+
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-checkbox formControlName="Seleccionar" [value]="element.Seleccionar"
+                                class="example-margin">
+                                Seleccionar
+                              </mat-checkbox>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_Reporte</mat-label>
+                                <input matInput formControlName="M_Reporte"
+                                  type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_TipoReporte</mat-label>
+                                <input matInput formControlName="M_TipoReporte" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_Descripcion</mat-label>
+                                <input matInput formControlName="M_Descripcion" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_CMP</mat-label>
+                                <input matInput formControlName="M_CMP" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_ATA</mat-label>
+                                <input matInput formControlName="M_ATA" type="text" />
+                              </mat-form-field>
+                            </div>
+                            
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-xl-12">
+                              <mat-form-field appearance="outline">
+
+                                <mat-select (selectionChange)="TecnicoReporteSeleccionado_ExecuteBusinessRules($event)" formControlName="M_Tecnico">
+                                  <mat-option *ngFor="let option of varSpartan_UserASign1" [value]="option.Clave">
+                                    {{ option.Description }}
+                                  </mat-option> 
+                                </mat-select>
+
+                              </mat-form-field>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_TecnicoNombre</mat-label>
+                                <input matInput formControlName="M_TecnicoNombre" type="text" />
+                              </mat-form-field>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>MR_TipoReporte</mat-label>
+                                <input matInput formControlName="MR_TipoReporte" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>MR_FolioReporte</mat-label>
+                                <input matInput formControlName="MR_FolioReporte" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>MR_DescripcionReporte</mat-label>
+                                <input matInput formControlName="MR_DescripcionReporte" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>MR_Matricula</mat-label>
+                                <input matInput formControlName="MR_Matricula" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>MR_Modelo</mat-label>
+                                <input matInput formControlName="MR_Modelo" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>MR_CodigoComputarizado</mat-label>
+                                <input matInput formControlName="MR_CodigoComputarizado" type="text" />
+                              </mat-form-field>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>MR_ATA</mat-label>
+                                <input matInput formControlName="MR_ATA" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>MR_OrigenReporte</mat-label>
+                                <input matInput formControlName="MR_OrigenReporte"  type="text" />
+                              </mat-form-field>
+                            </div>
+
+                          </div>
+
+                        </form>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="getSeleccionar_Reportes_OTColumns()"></tr>
+                <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                  *matRowDef="let row; columns: getSeleccionar_Reportes_OTColumns();let j = index"></tr>
+                <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                  *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                </tr>
+              </table>
+              <br>
+
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="GuardarDatos_Seleccionar_Reportes()">Guardar</button>
+        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('cancelar')">Cancelar</button>
+      </div>
+    </ng-template>
+
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Orden_de_TrabajoForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Orden</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Orden_de_TrabajoForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Folio').hasError('required')">
+                          Número de Orden es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divTipo_de_orden" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de orden</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_orden_ExecuteBusinessRules()" placeholder="Tipo de orden"
+                          formControlName="Tipo_de_orden" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Orden_de_Trabajo" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Tipo_de_orden').hasError('required')">
+                          Tipo de orden es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <input type="text" matInput formControlName="Matricula" [matAutocomplete]="autoMatricula">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMatricula="matAutocomplete">
+                          <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules(option)"
+                            *ngFor="let option of optionsMatricula | async" [value]="option.Matricula">
+                            {{option.Matricula}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Matricula').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <input type="text" matInput formControlName="Modelo" [matAutocomplete]="autoModelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoModelo="matAutocomplete" [displayWith]="displayFnModelo">
+                          <mat-option (onSelectionChange)="Modelo_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsModelo | async" [value]="option.Clave">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingModelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsModelo && !isLoadingModelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Modelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Modelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Modelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPropietario" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Propietario</mat-label>
+                        <input type="text" matInput formControlName="Propietario" [matAutocomplete]="autoPropietario">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPropietario="matAutocomplete" [displayWith]="displayFnPropietario">
+                          <mat-option (onSelectionChange)="Propietario_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsPropietario | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingPropietario" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPropietario && !isLoadingPropietario">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Propietario').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Propietario').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Propietario de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Creacion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Creación</mat-label>
+                        <input (dateChange)="Fecha_de_Creacion_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Creacion_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Creacion.open()" [matDatepicker]="datePickerFecha_de_Creacion"
+                          formControlName="Fecha_de_Creacion" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Creacion"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Creacion></mat-datepicker>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Fecha_de_Creacion').hasError('required')">
+                          Fecha de Creación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_entrega" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de cierre</mat-label>
+                        <input (dateChange)="Fecha_de_entrega_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_entrega_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_entrega.open()" [matDatepicker]="datePickerFecha_de_entrega"
+                          formControlName="Fecha_de_entrega" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_entrega"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_entrega></mat-datepicker>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Fecha_de_entrega').hasError('required')">
+                          Fecha de cierre es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCant_de_reportes_pendientes" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cant. de reportes pendientes</mat-label>
+                        <input (change)="Cant_de_reportes_pendientes_ExecuteBusinessRules()" matInput
+                          formControlName="Cant_de_reportes_pendientes"
+                          [type]="Orden_de_TrabajoForm.get('Cant_de_reportes_pendientes').value == 'Auto'  ? 'text':'number' "
+                          maxlength="5" required />
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Cant_de_reportes_pendientes').hasError('required')">
+                          Cant. de reportes pendientes es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCant_de_reportes_asignados" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cant. de reportes asignados</mat-label>
+                        <input (change)="Cant_de_reportes_asignados_ExecuteBusinessRules()" matInput
+                          formControlName="Cant_de_reportes_asignados"
+                          [type]="Orden_de_TrabajoForm.get('Cant_de_reportes_asignados').value == 'Auto'  ? 'text':'number' "
+                          maxlength="5" required />
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Cant_de_reportes_asignados').hasError('required')">
+                          Cant. de reportes asignados es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCant_de_reportes_cerrados" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cant. de reportes cerrados</mat-label>
+                        <input (change)="Cant_de_reportes_cerrados_ExecuteBusinessRules()" matInput
+                          formControlName="Cant_de_reportes_cerrados"
+                          [type]="Orden_de_TrabajoForm.get('Cant_de_reportes_cerrados').value == 'Auto'  ? 'text':'number' "
+                          maxlength="5" required />
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Cant_de_reportes_cerrados').hasError('required')">
+                          Cant. de reportes cerrados es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCant_de_rpts_mandatorios_abiertos" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cant. de reportes mandatorios abiertos</mat-label>
+                        <input (change)="Cant_de_rpts_mandatorios_abiertos_ExecuteBusinessRules()" matInput
+                          formControlName="Cant_de_rpts_mandatorios_abiertos"
+                          [type]="Orden_de_TrabajoForm.get('Cant_de_rpts_mandatorios_abiertos').value == 'Auto'  ? 'text':'number' "
+                          maxlength="5" required />
+                        <mat-error
+                          *ngIf="Orden_de_TrabajoForm.get('Cant_de_rpts_mandatorios_abiertos').hasError('required')">
+                          Cant. de reportes mandatorios abiertos es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHoras_acumuladas" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Horas acumuladas</mat-label>
+                        <input (change)="Horas_acumuladas_ExecuteBusinessRules()" matInput
+                          formControlName="Horas_acumuladas" type="Text" maxlength="5" required />
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Horas_acumuladas').hasError('required')">
+                          Horas acumuladas es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCiclos_acumulados" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Ciclos acumulados</mat-label>
+                        <input (change)="Ciclos_acumulados_ExecuteBusinessRules()" matInput
+                          formControlName="Ciclos_acumulados" type="Text" maxlength="5" required />
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Ciclos_acumulados').hasError('required')">
+                          Ciclos acumulados es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus"
+                          formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_Reporte" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCausa_de_Cancelacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Causa de Cancelación</mat-label>
+                        <input (change)="Causa_de_Cancelacion_ExecuteBusinessRules()" #Causa_de_Cancelacion matInput
+                          formControlName="Causa_de_Cancelacion" type="text" maxlength="500" required />
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('Causa_de_Cancelacion').hasError('required')">
+                          Causa de Cancelación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divnumero_de_orden" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>numero de orden</mat-label>
+                        <input (change)="numero_de_orden_ExecuteBusinessRules()" #numero_de_orden matInput
+                          formControlName="numero_de_orden" type="text" maxlength="5" required />
+                        <mat-error *ngIf="Orden_de_TrabajoForm.get('numero_de_orden').hasError('required')">
+                          numero de orden es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divReportes_Prestablecidos_OT" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Reportes Preestablecidos OT</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addReportes_Prestablecidos_OTToMR(); $event.stopPropagation();" disabled(click)="MRaddReportes_Prestablecidos_OT = true" [hidden]="MRaddReportes_Prestablecidos_OT">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceReportes_Prestablecidos_OT" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Orden_de_TrabajoForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                
+                                <button *ngIf="showButtonMR" mat-icon-button class="btn-tbl-edit"  type="button" (click)="editReportes_Prestablecidos_OT(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button *ngIf="showButtonMR" mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteReportes_Prestablecidos_OT(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Seleccionar">
+                            <th mat-header-cell *matHeaderCellDef> Seleccionar</th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="text-center f-w">
+                                <mat-checkbox [disabled]="false" [checked]="element.Seleccionar" (change)="$event ? reportesPreestablecidosOT_Toggle(element, $event) : null"
+                                  [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Reporte_de_inspeccion_de_entrada">
+                            <th mat-header-cell *matHeaderCellDef> Reporte de inspección de entrada </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Reporte_de_inspeccion_de_entrada}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_reporte">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de reporte </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Tipo_de_reporte}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Prioridad">
+                            <th mat-header-cell *matHeaderCellDef> Prioridad </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Prioridad}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_Codigo">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de Código </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Tipo_de_Codigo}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Codigo_NP">
+                            <th mat-header-cell *matHeaderCellDef> Código/NP </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Codigo_NP}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getReportes_Prestablecidos_OTColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form [formArrayName]="Reportes_Prestablecidos_OTItems">
+
+                                    <div class="row form-group"
+                                      [formGroup]="Reportes_Prestablecidos_OTItemsByElemet(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-checkbox formControlName="Seleccionar" [value]="element.Seleccionar"
+                                          class="example-margin">
+                                          Seleccionar
+                                        </mat-checkbox>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Reporte de inspección de entrada</mat-label>
+                                          <input matInput formControlName="Reporte_de_inspeccion_de_entrada"
+                                            type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tipo de reporte</mat-label>
+                                          <input matInput formControlName="Tipo_de_reporte" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Prioridad</mat-label>
+                                          <input matInput formControlName="Prioridad" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tipo de Código</mat-label>
+                                          <input matInput formControlName="Tipo_de_Codigo" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Código/NP</mat-label>
+                                          <input matInput formControlName="Codigo_NP" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Descripción</mat-label>
+                                          <input matInput formControlName="Descripcion" type="text" />
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveReportes_Prestablecidos_OT(element);"(click)="MRaddReportes_Prestablecidos_OT = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditReportes_Prestablecidos_OT(element)"(click)="MRaddReportes_Prestablecidos_OT = false"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getReportes_Prestablecidos_OTColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getReportes_Prestablecidos_OTColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <br>
+
+                      </div>
+                    </div>
+                    <div id="divDetalle_de_Reportes_de_OT" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Reportes de OT </h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="OpenModalSeleccionar_Reportes(addSeleccionarReportes); $event.stopPropagation();">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceDetalle_de_Reportes_de_OT" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Orden_de_TrabajoForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="OpenModalReportOT(addRepoOT, element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <!-- <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteDetalle_de_Reportes_de_OT(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button> -->
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Tipo_de_Reporte">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de Reporte </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Tipo_de_Reporte}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Folio_de_Reporte">
+                            <th mat-header-cell *matHeaderCellDef> Reporte</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Folio_de_Reporte_Crear_Reporte?.No_Reporte}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Descripcion_de_Reporte">
+                            <th mat-header-cell *matHeaderCellDef> Descripción de Reporte </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion_de_Reporte}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Matricula">
+                            <th mat-header-cell *matHeaderCellDef> Matricula </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Matricula}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Modelo">
+                            <th mat-header-cell *matHeaderCellDef> Modelo </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Modelo}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Codigo_Computarizado">
+                            <th mat-header-cell *matHeaderCellDef> Código Computarizado </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Codigo_Computarizado}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Codigo_ATA">
+                            <th mat-header-cell *matHeaderCellDef> Código ATA </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Codigo_ATA}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Origen_del_Reporte">
+                            <th mat-header-cell *matHeaderCellDef> Origen del Reporte </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Origen_del_Reporte}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Respuesta_Total">
+                            <th mat-header-cell *matHeaderCellDef> Respuesta Total </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Respuesta_Total}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a">
+                            <th mat-header-cell *matHeaderCellDef> Asignado a </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Asignado_a_Spartan_User?.Name}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_1">
+                            <th mat-header-cell *matHeaderCellDef> Asignado a:</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Asignado_a_1_Spartan_User?.Name}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_2">
+                            <th mat-header-cell *matHeaderCellDef> Asignado a:</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Asignado_a_2_Spartan_User?.Name}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_3">
+                            <th mat-header-cell *matHeaderCellDef> Asignado a:</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Asignado_a_3_Spartan_User?.Name}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_4">
+                            <th mat-header-cell *matHeaderCellDef> Asignado a:</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Asignado_a_4_Spartan_User?.Name}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Estatus">
+                            <th mat-header-cell *matHeaderCellDef> Estatus</th>
+                            <td mat-cell *matCellDef="let element">
+
+                              {{element.Estatus==5? "ABIERTO": element.Estatus_Estatus_de_Reporte?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <!-- <ng-container matColumnDef="Notificado">
+                            <th mat-header-cell *matHeaderCellDef> Notificado</th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="text-center f-w">
+                                <mat-checkbox [disabled]="true" [checked]="element.Notificado"
+                                  [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                              </div>
+                            </td>
+                          </ng-container> -->
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex"
+                              [attr.colspan]="getDetalle_de_Reportes_de_OTColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalles_de_trabajo_de_OTItems">
+
+                                    <div class="row form-group" [formGroupName]="dataIndex">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tipo de Reporte</mat-label>
+                                          <input matInput formControlName="Tipo_de_Reporte" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Reporte</mat-label>
+                                          <input type="text" matInput formControlName="Folio_de_Reporte"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectFolio_de_Reporte_Detalles_de_trabajo_de_OT($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnFolio_de_Reporte_Detalles_de_trabajo_de_OT.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCrear_Reporte" [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionFolio_de_Reporte_Detalles_de_trabajo_de_OT($event, element)">
+                                              {{option.No_Reporte}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingFolio_de_Reporte_Detalles_de_trabajo_de_OT"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varCrear_Reporte.length ==0 &&  !isLoadingFolio_de_Reporte_Detalles_de_trabajo_de_OT 
+                                            && searchFolio_de_Reporte_Detalles_de_trabajo_de_OTCompleted">
+                                            No se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Descripción de Reporte</mat-label>
+                                          <input matInput formControlName="Descripcion_de_Reporte" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Matricula </mat-label>
+                                          <input matInput formControlName="Matricula" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Modelo </mat-label>
+                                          <input matInput formControlName="Modelo" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Código Computarizado </mat-label>
+                                          <input matInput formControlName="Codigo_Computarizado" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Código ATA</mat-label>
+                                          <input matInput formControlName="Codigo_ATA" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Origen del Reporte </mat-label>
+                                          <input matInput formControlName="Origen_del_Reporte" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Respuesta Total </mat-label>
+                                          <input matInput formControlName="Respuesta_Total" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a </mat-label>
+                                          <input type="text" matInput formControlName="Asignado_a"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectAsignado_a_Detalles_de_trabajo_de_OT($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnAsignado_a_Detalles_de_trabajo_de_OT.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varSpartan_User" [value]="option.Id_User"
+                                              (onSelectionChange)="updateOptionAsignado_a_Detalles_de_trabajo_de_OT($event, element)">
+                                              {{option.Name}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingAsignado_a_Detalles_de_trabajo_de_OT"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varSpartan_User.length ==0 &&  !isLoadingAsignado_a_Detalles_de_trabajo_de_OT 
+                                            && searchAsignado_a_Detalles_de_trabajo_de_OTCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input type="text" matInput formControlName="Asignado_a_1"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectAsignado_a_1_Detalles_de_trabajo_de_OT($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnAsignado_a_1_Detalles_de_trabajo_de_OT.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varSpartan_User" [value]="option.Id_User"
+                                              (onSelectionChange)="updateOptionAsignado_a_1_Detalles_de_trabajo_de_OT($event, element)">
+                                              {{option.Name}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingAsignado_a_1_Detalles_de_trabajo_de_OT"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varSpartan_User.length ==0 &&  !isLoadingAsignado_a_1_Detalles_de_trabajo_de_OT && searchAsignado_a_1_Detalles_de_trabajo_de_OTCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input type="text" matInput formControlName="Asignado_a_2"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectAsignado_a_2_Detalles_de_trabajo_de_OT($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnAsignado_a_2_Detalles_de_trabajo_de_OT.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varSpartan_User" [value]="option.Id_User"
+                                              (onSelectionChange)="updateOptionAsignado_a_2_Detalles_de_trabajo_de_OT($event, element)">
+                                              {{option.Name}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingAsignado_a_2_Detalles_de_trabajo_de_OT"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varSpartan_User.length ==0 &&  !isLoadingAsignado_a_2_Detalles_de_trabajo_de_OT 
+                                            && searchAsignado_a_2_Detalles_de_trabajo_de_OTCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input type="text" matInput formControlName="Asignado_a_3"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectAsignado_a_3_Detalles_de_trabajo_de_OT($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnAsignado_a_3_Detalles_de_trabajo_de_OT.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varSpartan_User" [value]="option.Id_User"
+                                              (onSelectionChange)="updateOptionAsignado_a_3_Detalles_de_trabajo_de_OT($event, element)">
+                                              {{option.Name}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingAsignado_a_3_Detalles_de_trabajo_de_OT"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varSpartan_User.length ==0 &&  !isLoadingAsignado_a_3_Detalles_de_trabajo_de_OT && searchAsignado_a_3_Detalles_de_trabajo_de_OTCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input type="text" matInput formControlName="Asignado_a_4"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectAsignado_a_4_Detalles_de_trabajo_de_OT($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnAsignado_a_4_Detalles_de_trabajo_de_OT.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varSpartan_User" [value]="option.Id_User"
+                                              (onSelectionChange)="updateOptionAsignado_a_4_Detalles_de_trabajo_de_OT($event, element)">
+                                              {{option.Name}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingAsignado_a_4_Detalles_de_trabajo_de_OT"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varSpartan_User.length ==0 &&  !isLoadingAsignado_a_4_Detalles_de_trabajo_de_OT 
+                                            && searchAsignado_a_4_Detalles_de_trabajo_de_OTCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Estatus</mat-label>
+                                          <mat-select placeholder="Estatus" formControlName="Estatus">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varEstatus_de_Reporte" [value]="item.Folio">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <!-- <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-checkbox formControlName="Notificado" [value]="element.Notificado"
+                                          class="example-margin">
+                                          Notificado
+                                        </mat-checkbox>
+                                      </div> -->
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveDetalle_de_Reportes_de_OT(element);"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditDetalle_de_Reportes_de_OT(element)"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getDetalle_de_Reportes_de_OTColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getDetalle_de_Reportes_de_OTColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <br>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!Orden_de_TrabajoForm.valid || consult" mat-raised-button
+                    color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Orden_de_TrabajoForm.valid || consult" mat-raised-button color="primary" hidden>Guardar
+                    y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Orden_de_TrabajoForm.valid || consult" mat-raised-button color="primary" hidden>Guardar
+                    y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Orden_de_TrabajoForm.valid || consult" mat-raised-button color="primary">Configurar
+                  </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

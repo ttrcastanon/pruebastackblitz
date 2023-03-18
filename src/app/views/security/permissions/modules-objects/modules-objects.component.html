@@ -1,0 +1,46 @@
+<div style="background-color: white; height: 97%;" >
+
+    <div class="row" style="margin-top: 15px;margin-left: -5px;">
+        <div class="col-xl-6 col-lg-6 col-md-9 col-sm-12 col-xs-12 ml-2">
+            <h2><strong>{{ 'Seguridad.Permisos.modulesObjects.Objetos del módulo' | translate }}</strong></h2>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-2 col-sm-12 col-xs-12" style="margin-top: 15px;"> 
+            {{moduleName}}
+        </div>
+    </div>
+
+    <hr>
+        <div class="row" style="margin: 0 5px;">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-xs-5">
+                    <mat-form-field class="">
+                        <mat-label> {{ 'Seguridad.Permisos.modulesObjects.Objeto' | translate }}</mat-label>
+                        <input matInput id="inputObjModule" placeholder="" [(ngModel)]="inputObjModule">
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <i class="fas fa-filter" (click)="filterModuleObject()" style="margin-top: 15px; cursor: pointer;"></i>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <section class="">
+                        <mat-checkbox [(ngModel)]="viewAllObjects" style="margin-top: 15px;" class="">{{ 'Seguridad.Permisos.modulesObjects.Mostrar objetos' | translate }}</mat-checkbox>
+                    </section>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div *ngIf="lstDataHolder.length > 0" style="width: 100%;height: 450px;overflow: auto;">
+                    <span *ngFor="let item of lstDataHolder">
+                        <div class="divCheckObjMod" *ngIf="item.Checked !== '' && !viewAllObjects" (click)="selectObjectModule(item)">
+                            <mat-checkbox (click)="checkObjectModule(item)" [checked]="item.Checked !== ''" class="">{{item.Data}}</mat-checkbox>
+                        </div>
+                        <div class="divCheckObjMod" *ngIf="viewAllObjects" (click)="selectObjectModule(item)">
+                            <mat-checkbox (click)="checkObjectModule(item)" [checked]="item.Checked !== ''" class="">{{item.Data}}</mat-checkbox>
+                        </div>
+                    </span>
+                </div>
+            </div>
+                
+        </div>
+
+
+</div>

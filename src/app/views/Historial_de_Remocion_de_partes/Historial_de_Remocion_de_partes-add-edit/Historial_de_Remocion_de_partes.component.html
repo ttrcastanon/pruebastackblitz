@@ -1,0 +1,214 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Historial de Remoción de partes</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Historial_de_Remocion_de_partes/list">Historial de Remoción de partes</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Historial_de_Remocion_de_partesForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab  label="Datos Generales">
+                <br>
+                <div id="tabDatos_Generales"  class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Historial_de_Remocion_de_partesForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divDescripcion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción</mat-label>
+                        <input #Descripcion matInput formControlName="Descripcion" type="text" maxlength="80" required />
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Descripcion').hasError('required')">
+                          Descripción  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divN_de_parte" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>N° de parte</mat-label>
+                        <input #N_de_parte matInput formControlName="N_de_parte" type="text" maxlength="30" required />
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('N_de_parte').hasError('required')">
+                          N° de parte  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divN_Serie" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>N° Serie</mat-label>
+                        <input #N_Serie matInput formControlName="N_Serie" type="text" maxlength="20" required />
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('N_Serie').hasError('required')">
+                          N° Serie  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <input #Modelo matInput formControlName="Modelo" type="text" maxlength="20" required />
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Modelo').hasError('required')">
+                          Modelo  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPosicion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Posición</mat-label>
+                        <input #Posicion matInput formControlName="Posicion" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Posicion').hasError('required')">
+                          Posición  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select placeholder="Estatus" formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_remocion" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHoras_actuales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Horas actuales</mat-label>
+                        <input matInput formControlName="Horas_actuales" [type]="Historial_de_Remocion_de_partesForm.get('Horas_actuales').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Horas_actuales').hasError('required')">
+                          Horas actuales  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCiclos_actuales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Ciclos actuales</mat-label>
+                        <input matInput formControlName="Ciclos_actuales" [type]="Historial_de_Remocion_de_partesForm.get('Ciclos_actuales').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Ciclos_actuales').hasError('required')">
+                          Ciclos actuales  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCausa_de_remocion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Causa de remoción</mat-label>
+                        <mat-select placeholder="Causa de remoción" formControlName="Causa_de_remocion" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCausa_de_remocion" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Causa_de_remocion').hasError('required')">
+                          Causa de remoción es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Remocion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de remoción</mat-label>
+                        <input matInput (focus)="datePickerFecha_de_Remocion.open()" [matDatepicker]="datePickerFecha_de_Remocion" formControlName="Fecha_de_Remocion" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Remocion"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Remocion></mat-datepicker>
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Fecha_de_Remocion').hasError('required')">
+                          Fecha de remoción  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_realiza_la_remocion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que realiza la remoción</mat-label>
+                        <input type="text" matInput formControlName="Usuario_que_realiza_la_remocion" [matAutocomplete]="autoUsuario_que_realiza_la_remocion">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoUsuario_que_realiza_la_remocion="matAutocomplete" [displayWith]="displayFnUsuario_que_realiza_la_remocion">
+                          <mat-option *ngFor="let option of optionsUsuario_que_realiza_la_remocion | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingUsuario_que_realiza_la_remocion" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsUsuario_que_realiza_la_remocion && !isLoadingUsuario_que_realiza_la_remocion">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Usuario_que_realiza_la_remocion').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Usuario_que_realiza_la_remocion').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Usuario que realiza la remoción de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempo_de_remocion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tiempo de remoción</mat-label>
+                        <mat-select placeholder="Tiempo de remoción" formControlName="Tiempo_de_remocion" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTiempo_de_remocion" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Historial_de_Remocion_de_partesForm.get('Tiempo_de_remocion').hasError('required')">
+                          Tiempo de remoción es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+					</div>
+				</mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Historial_de_Remocion_de_partesForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Historial_de_Remocion_de_partesForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Historial_de_Remocion_de_partesForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Historial_de_Remocion_de_partesForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

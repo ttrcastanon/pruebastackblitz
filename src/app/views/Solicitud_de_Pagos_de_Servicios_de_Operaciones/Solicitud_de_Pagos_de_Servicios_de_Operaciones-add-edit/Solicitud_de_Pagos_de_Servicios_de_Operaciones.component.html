@@ -1,0 +1,283 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Solicitud de Pagos de Servicios de Operaciones</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Solicitud_de_Pagos_de_Servicios_de_Operaciones/list">Solicitud de Pagos de Servicios de
+                Operaciones</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error
+                          *ngIf="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divProveedor" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor</mat-label>
+                        <input type="text" matInput formControlName="Proveedor" [matAutocomplete]="autoProveedor">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoProveedor="matAutocomplete" [displayWith]="displayFnProveedor">
+                          <mat-option (onSelectionChange)="Proveedor_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsProveedor | async" [value]="option">
+                            {{option.Razon_social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingProveedor" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsProveedor && !isLoadingProveedor">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('Proveedor').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('Proveedor').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Proveedor de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Vuelo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Vuelo</mat-label>
+                        <input type="text" matInput formControlName="No__de_Vuelo" [matAutocomplete]="autoNo__de_Vuelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNo__de_Vuelo="matAutocomplete" [displayWith]="displayFnNo__de_Vuelo">
+                          <mat-option (onSelectionChange)="No__de_Vuelo_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsNo__de_Vuelo | async" [value]="option">
+                            {{option.Numero_de_Vuelo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNo__de_Vuelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsNo__de_Vuelo && !isLoadingNo__de_Vuelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('No__de_Vuelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('No__de_Vuelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un No. de Vuelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAeropuerto" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Aeropuerto</mat-label>
+                        <input type="text" matInput formControlName="Aeropuerto" [matAutocomplete]="autoAeropuerto">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAeropuerto="matAutocomplete" [displayWith]="displayFnAeropuerto">
+                          <mat-option (onSelectionChange)="Aeropuerto_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsAeropuerto | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAeropuerto" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsAeropuerto && !isLoadingAeropuerto">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('Aeropuerto').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('Aeropuerto').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Aeropuerto de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <input type="text" matInput formControlName="Estatus" [matAutocomplete]="autoEstatus">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoEstatus="matAutocomplete" [displayWith]="displayFnEstatus">
+                          <mat-option (onSelectionChange)="Estatus_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsEstatus | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingEstatus" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsEstatus && !isLoadingEstatus">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('Estatus').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.get('Estatus').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Estatus de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4" style="margin:auto">
+                      <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                        (click)="getDataTable()">
+                        Consultar
+                      </button>
+                    </div>
+
+                    <div id="divListado_Pagos_de_Servicios_Operaciones"
+                      class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Listado Pagos de Servicios Operaciones</h4>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceListado_Pagos_de_Servicios_Operaciones"
+                          multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Solicitud_de_Pagos_de_Servicios_de_OperacionesForm.disabled"
+                            matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="No__de_Solicitud">
+                            <th mat-header-cell *matHeaderCellDef> No. de Solicitud</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.No__de_Solicitud}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Proveedor">
+                            <th mat-header-cell *matHeaderCellDef> Proveedor</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.ProveedorRazon_social}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__Vuelo">
+                            <th mat-header-cell *matHeaderCellDef> No. Vuelo</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.No__Vuelo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Aeropuerto">
+                            <th mat-header-cell *matHeaderCellDef> Aeropuerto</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.AeropuertoNombre}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cantidad">
+                            <th mat-header-cell *matHeaderCellDef> Cantidad</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Unidad">
+                            <th mat-header-cell *matHeaderCellDef> Unidad</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.UnidadDescripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Costo_">
+                            <th mat-header-cell *matHeaderCellDef>Costo $</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Costo_ |currency}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__de_Factura">
+                            <th mat-header-cell *matHeaderCellDef> No. de Factura</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.No__de_Factura}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Factura">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Factura </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Factura |date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tiempos_de_Pago">
+                            <th mat-header-cell *matHeaderCellDef> Tiempos de Pago</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Tiempos_de_Pago}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Estatus">
+                            <th mat-header-cell *matHeaderCellDef> Estatus</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.EstatusDescripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="FolioIngresoCostosServicios">
+                            <th mat-header-cell *matHeaderCellDef> FolioIngresoCostosServicios</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.FolioIngresoCostosServicios_Ingreso_de_Costos_de_Servicios?.FolioIngresoCostosServ}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Solicitud_de_Pago">
+                            <th mat-header-cell *matHeaderCellDef> Solicitud de Pago </th>
+                            <td mat-cell *matCellDef="let element">
+
+                              <button type="button" mat-raised-button color="basic" class="mb-2" mat-button
+                                [disabled]="element.Estatus==8">
+                                Solicitar Pago
+                              </button>
+
+                            </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="getListado_Pagos_de_Servicios_OperacionesColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getListado_Pagos_de_Servicios_OperacionesColumns();let j = index">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

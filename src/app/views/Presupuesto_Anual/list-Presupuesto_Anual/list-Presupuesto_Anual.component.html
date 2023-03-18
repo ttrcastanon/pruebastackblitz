@@ -1,0 +1,304 @@
+﻿<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Presupuesto Anual</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/dashboard/main">
+                                <i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Presupuesto Anual
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+
+                        <!-- Exportar -->
+                        <div class="row" style="float: right; padding-right: 20px;">
+                            <div>
+                                <button [hidden]="!hasPermision('Export')"  mat-raised-button title="Copiar" [disabled]="false" (click)="ActionExport(1)">
+                                    Copiar
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Export')"  mat-raised-button title="CSV" [disabled]="false" (click)="ActionExport(3)">
+                                    CSV
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Export')" mat-raised-button title="Excel" [disabled]="false" (click)="ActionExport(2)">
+                                    Excel
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Export')" mat-raised-button title="PDF" [disabled]="false" (click)="ActionExport(4)">
+                                    PDF
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Print')" mat-raised-button title="Imprimir" [disabled]="false" (click)="ActionExport(5)">
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive" style="max-height: 70vh;">           
+
+                            <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+                                <mat-spinner></mat-spinner>
+                            </div>
+
+                            <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" [matSortActive]="listConfig.sortField" [matSortDirection]="listConfig.sortDirecction">
+                               
+                                <ng-container matColumnDef="acciones">
+
+                                    <mat-header-cell *matHeaderCellDef class="pr-0" style="height: 18px; width:18px;">
+                                       
+                                       
+                                        <div matTooltip="Agregar" >
+                                            <button mat-mini-fab color="primary" [hidden]="!hasPermision('New')" [routerLink]="'/Presupuesto_Anual/add'" [state]="{ data: listConfig}">
+                                                <mat-icon class="col-white">add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <div matTooltip="Búsqueda Avanzada" >
+                                            <button mat-mini-fab color="primary" [routerLink]="'/Presupuesto_Anual/showadvancefilter'" [state]="{ data: listConfig}">
+                                                <mat-icon class="col-white">search</mat-icon>
+                                            </button>
+                                        </div>
+                                        <div matTooltip="Limpiar Filtro" >
+                                            
+                                            <button mat-mini-fab color="primary" (click)="clearFilter()">
+                                                <mat-icon class="col-white">refresh</mat-icon>
+                                            </button>
+                                        </div>
+
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+
+                                        <div matTooltip="Modificar" >
+                                            <button mat-icon-button class="btn-tbl-edit" [hidden]="!hasPermision('Edit')" [routerLink]="['/Presupuesto_Anual/edit', row.Folio ]" [state]="{ data: listConfig}">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                        </div>
+                                      
+                                        <div matTooltip="Consultar" >
+                                            <button mat-icon-button class="btn-tbl-show" [hidden]="!hasPermision('Consult')" [routerLink]="['/Presupuesto_Anual/consult', row.Folio ]" [state]="{ data: listConfig}"> 
+                                                <mat-icon>preview</mat-icon>
+                                            </button>
+                                        </div>
+                                      
+                                        <div matTooltip="Borrar" >
+                                            <button mat-icon-button class="btn-tbl-delete"  [hidden]="!hasPermision('Delete')"  (click)="remove(row)" >
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+                                       
+                                        <div matTooltip="Imprimir" >
+                                            <button mat-icon-button class="btn-tbl-print"  [hidden]="!hasPermision('Print')"(click)="ActionPrint(row)">
+                                                <mat-icon>print</mat-icon>
+                                            </button>
+    
+                                        </div>
+                                        
+                                    </mat-cell>
+                                  
+                                </ng-container>                              
+
+                                <ng-container matColumnDef="acciones_filtro">
+                                    <mat-cell *matHeaderCellDef>
+
+                                    </mat-cell>
+                                </ng-container>
+
+                                                                <ng-container matColumnDef="Folio">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Folio'] ? listConfig?.styles['Folio'] : ''">
+                                        Folio
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Folio'] ? listConfig?.styles['Folio'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Folio}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Folio_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Folio'] ? listConfig?.styles['Folio'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline"> 
+                                            <input matInput [(ngModel)]="listConfig.filter.Folio" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Empresa">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Empresa'] ? listConfig?.styles['Empresa'] : ''">Empresa</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Empresa'] ? listConfig?.styles['Empresa'] : ''">{{row.Empresa_Cliente.Razon_Social}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Empresa_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Empresa'] ? listConfig?.styles['Empresa'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Empresa" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Ano_en_curso">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Ano_en_curso'] ? listConfig?.styles['Ano_en_curso'] : ''">
+                                        Año en curso
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Ano_en_curso'] ? listConfig?.styles['Ano_en_curso'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Ano_en_curso}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Ano_en_curso_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Ano_en_curso'] ? listConfig?.styles['Ano_en_curso'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline"> 
+                                            <input matInput [(ngModel)]="listConfig.filter.Ano_en_curso" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Monto_Pres__Inicial_Ano">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Monto_Pres__Inicial_Ano'] ? listConfig?.styles['Monto_Pres__Inicial_Ano'] : ''">Monto Pres. Inicial Año</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Monto_Pres__Inicial_Ano'] ? listConfig?.styles['Monto_Pres__Inicial_Ano'] : ''">{{row.Monto_Pres__Inicial_Ano|currency}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Monto_Pres__Inicial_Ano_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Monto_Pres__Inicial_Ano'] ? listConfig?.styles['Monto_Pres__Inicial_Ano'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline" >
+                                            <input matInput [(ngModel)]="listConfig.filter.Monto_Pres__Inicial_Ano" (change)="refresh()" mask="separator.2" >
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Porcentaje_Pres__Ano">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Pres__Ano'] ? listConfig?.styles['Porcentaje_Pres__Ano'] : ''">
+                                        Porcentaje Pres. Año
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Pres__Ano'] ? listConfig?.styles['Porcentaje_Pres__Ano'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Porcentaje_Pres__Ano}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Porcentaje_Pres__Ano_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Pres__Ano'] ? listConfig?.styles['Porcentaje_Pres__Ano'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline"> 
+                                            <input matInput [(ngModel)]="listConfig.filter.Porcentaje_Pres__Ano" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Gasto_Real_Facturado">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Gasto_Real_Facturado'] ? listConfig?.styles['Gasto_Real_Facturado'] : ''">Gasto Real Facturado</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Gasto_Real_Facturado'] ? listConfig?.styles['Gasto_Real_Facturado'] : ''">{{row.Gasto_Real_Facturado|currency}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Gasto_Real_Facturado_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Gasto_Real_Facturado'] ? listConfig?.styles['Gasto_Real_Facturado'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline" >
+                                            <input matInput [(ngModel)]="listConfig.filter.Gasto_Real_Facturado" (change)="refresh()" mask="separator.2" >
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Pto__Estimado_acumulado">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Pto__Estimado_acumulado'] ? listConfig?.styles['Pto__Estimado_acumulado'] : ''">Pto. Estimado acumulado</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Pto__Estimado_acumulado'] ? listConfig?.styles['Pto__Estimado_acumulado'] : ''">{{row.Pto__Estimado_acumulado|currency}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Pto__Estimado_acumulado_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Pto__Estimado_acumulado'] ? listConfig?.styles['Pto__Estimado_acumulado'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline" >
+                                            <input matInput [(ngModel)]="listConfig.filter.Pto__Estimado_acumulado" (change)="refresh()" mask="separator.2" >
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Porcentaje_Estimado_Acumulado">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Estimado_Acumulado'] ? listConfig?.styles['Porcentaje_Estimado_Acumulado'] : ''">
+                                        Porcentaje Estimado Acumulado
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Estimado_Acumulado'] ? listConfig?.styles['Porcentaje_Estimado_Acumulado'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Porcentaje_Estimado_Acumulado}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Porcentaje_Estimado_Acumulado_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Estimado_Acumulado'] ? listConfig?.styles['Porcentaje_Estimado_Acumulado'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline"> 
+                                            <input matInput [(ngModel)]="listConfig.filter.Porcentaje_Estimado_Acumulado" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Porcentaje_Gasto_Real_Acumulado">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Gasto_Real_Acumulado'] ? listConfig?.styles['Porcentaje_Gasto_Real_Acumulado'] : ''">
+                                        Porcentaje Gasto Real Acumulado
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Gasto_Real_Acumulado'] ? listConfig?.styles['Porcentaje_Gasto_Real_Acumulado'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Porcentaje_Gasto_Real_Acumulado}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Porcentaje_Gasto_Real_Acumulado_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Gasto_Real_Acumulado'] ? listConfig?.styles['Porcentaje_Gasto_Real_Acumulado'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline"> 
+                                            <input matInput [(ngModel)]="listConfig.filter.Porcentaje_Gasto_Real_Acumulado" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Porcentaje_Diferencia">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Diferencia'] ? listConfig?.styles['Porcentaje_Diferencia'] : ''">
+                                        Porcentaje Diferencia
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Diferencia'] ? listConfig?.styles['Porcentaje_Diferencia'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Porcentaje_Diferencia}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Porcentaje_Diferencia_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Porcentaje_Diferencia'] ? listConfig?.styles['Porcentaje_Diferencia'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline"> 
+                                            <input matInput [(ngModel)]="listConfig.filter.Porcentaje_Diferencia" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                              
+                               
+                                <mat-header-row *matHeaderRowDef="listConfig.columns"></mat-header-row>
+
+                                <mat-row class="mat-filtro-row" *matHeaderRowDef="listConfig.columns_filters"></mat-row> 
+
+                                <mat-row *matRowDef="let row; columns: listConfig.columns;" 
+                                    [style.cursor]="'pointer'" matRipple>
+                                </mat-row>
+
+                            </mat-table>
+                        </div>
+                        <mat-paginator [length]="dataSource.total$ | async" [pageSize]="listConfig.size" [pageIndex]="listConfig.page" [pageSizeOptions]="[5, 10, 15, 20]"></mat-paginator>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="snackbar"></div>

@@ -1,0 +1,694 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Políticas de Precios y Descuentos</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Politicas_de_Precios_y_Descuentos/list">Políticas de Precios y Descuentos</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Politicas_de_Precios_y_DescuentosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Politicas_de_Precios_y_DescuentosForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error *ngIf="Politicas_de_Precios_y_DescuentosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divcontrato_tarifa_tecnico" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cliente con Contrato - Tarifa Hora Técnico</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="contrato_tarifa_tecnico_ExecuteBusinessRules()" matInput
+                          formControlName="contrato_tarifa_tecnico" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error
+                          *ngIf="Politicas_de_Precios_y_DescuentosForm.get('contrato_tarifa_tecnico').hasError('required')">
+                          Cliente con Contrato - Tarifa Hora Técnico es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divcontrato_tarifa_rampa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cliente con Contrato - Tarifa Hora de Rampa</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="contrato_tarifa_rampa_ExecuteBusinessRules()" matInput
+                          formControlName="contrato_tarifa_rampa" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error
+                          *ngIf="Politicas_de_Precios_y_DescuentosForm.get('contrato_tarifa_rampa').hasError('required')">
+                          Cliente con Contrato - Tarifa Hora de Rampa es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divsin_contrato_tarifa_tecnico" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cliente SIN Contrato - Tarifa Hora Técnico</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="sin_contrato_tarifa_tecnico_ExecuteBusinessRules()" matInput
+                          formControlName="sin_contrato_tarifa_tecnico" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error
+                          *ngIf="Politicas_de_Precios_y_DescuentosForm.get('sin_contrato_tarifa_tecnico').hasError('required')">
+                          Cliente SIN Contrato - Tarifa Hora Técnico es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divsin_contrato_tarifa_rampa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cliente SIN Contrato - Tarifa Hora de Rampa</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="sin_contrato_tarifa_rampa_ExecuteBusinessRules()" matInput
+                          formControlName="sin_contrato_tarifa_rampa" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error
+                          *ngIf="Politicas_de_Precios_y_DescuentosForm.get('sin_contrato_tarifa_rampa').hasError('required')">
+                          Cliente SIN Contrato - Tarifa Hora de Rampa es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divutilizados_durante_el_servicio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Partes y Materiales utilizados durante el servicio</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addutilizados_durante_el_servicioToMR(); $event.stopPropagation();"(click)="MRaddutilizados_durante_el_servicio = true" [hidden]="MRaddutilizados_durante_el_servicio">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="utilizados_durante_el_servicio" mat-table
+                          [dataSource]="dataSourceutilizados_durante_el_servicio" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Politicas_de_Precios_y_DescuentosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editutilizados_durante_el_servicio(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteutilizados_durante_el_servicio(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Costo_Desde">
+                            <th mat-header-cell *matHeaderCellDef>Costo de la Parte o Material - Desde</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Costo_Desde |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Costo_Hasta">
+                            <th mat-header-cell *matHeaderCellDef>Costo de la Parte o Material - Hasta</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Costo_Hasta |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Porcentaje_de_Utilidad_Minimo">
+                            <th mat-header-cell *matHeaderCellDef> Porcentaje de Utilidad Mínimo</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Porcentaje_de_Utilidad_Minimo_Utilidad?.Descripcion}}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getutilizados_durante_el_servicioColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form [formArrayName]="utilizados_durante_el_servicioItems">
+
+                                    <div class="row form-group"
+                                      [formGroup]="utilizados_durante_el_servicioItemsByElemet(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Costo de la Parte o Material - Desde</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Desde" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Costo de la Parte o Material - Hasta</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Hasta" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Porcentaje de Utilidad Mínimo</mat-label>
+                                          <mat-select placeholder="Porcentaje de Utilidad Mínimo"
+                                            formControlName="Porcentaje_de_Utilidad_Minimo">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varUtilidad" [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveutilizados_durante_el_servicio(element);"(click)="MRaddutilizados_durante_el_servicio = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditutilizados_durante_el_servicio(element)"(click)="MRaddutilizados_durante_el_servicio = false"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getutilizados_durante_el_servicioColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getutilizados_durante_el_servicioColumns();let j = index">
+                          </tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divCuota_de_Consumibles" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Cuota de Consumibles</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addCuota_de_ConsumiblesToMR(); $event.stopPropagation();"(click)="MRaddCuota_de_Consumibles = true" [hidden]="MRaddCuota_de_Consumibles">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceCuota_de_Consumibles" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Politicas_de_Precios_y_DescuentosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editCuota_de_Consumibles(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteCuota_de_Consumibles(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Costo_Desde">
+                            <th mat-header-cell *matHeaderCellDef>Monto M.O. - Desde</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Costo_Desde |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Costo_Hasta">
+                            <th mat-header-cell *matHeaderCellDef>Monto M.O. - Hasta</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Costo_Hasta |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cuota_Monto">
+                            <th mat-header-cell *matHeaderCellDef>Cuota Mínima (Monto)</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Cuota_Monto |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cuota_Minima_Porcentaje">
+                            <th mat-header-cell *matHeaderCellDef> Cuota Mínima (Porcentaje)</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Cuota_Minima_Porcentaje}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tope_Maximo">
+                            <th mat-header-cell *matHeaderCellDef>Tope Máximo</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Tope_Maximo |currency}}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex=dataIndex"
+                              [attr.colspan]="getCuota_de_ConsumiblesColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_Politicas_Cuota_ConsumiblesItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceCuota_de_Consumibles.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Monto M.O. - Desde</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Desde" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Monto M.O. - Hasta</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Costo_Hasta" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cuota Mínima (Monto)</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Cuota_Monto" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cuota Mínima (Porcentaje)</mat-label>
+                                          <input matInput formControlName="Cuota_Minima_Porcentaje" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tope Máximo</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Tope_Maximo" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveCuota_de_Consumibles(element);"(click)="MRaddCuota_de_Consumibles = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+(click)="MRaddCuota_de_Consumibles = false"                                          (click)="cancelEditCuota_de_Consumibles(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getCuota_de_ConsumiblesColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getCuota_de_ConsumiblesColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divadquiridos_cliente_contrato" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Partes o Materiales adquiridos por el cliente (Con Contrato)</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addadquiridos_cliente_contratoToMR(); $event.stopPropagation();"(click)="MRaddadquiridos_cliente_contrato = true" [hidden]="MRaddadquiridos_cliente_contrato">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="adquiridos_cliente_contrato" mat-table
+                          [dataSource]="dataSourceadquiridos_cliente_contrato" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Politicas_de_Precios_y_DescuentosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editadquiridos_cliente_contrato(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteadquiridos_cliente_contrato(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="cargo_minimo">
+                            <th mat-header-cell *matHeaderCellDef> Cargo Mínimo (Porcentaje)</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.cargo_minimo}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tope_Horas_Tecnico">
+                            <th mat-header-cell *matHeaderCellDef> Tope Horas Técnico</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Tope_Horas_Tecnico}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getadquiridos_cliente_contratoColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form [formArrayName]="adquiridos_cliente_contratoItems">
+
+                                    <div class="row form-group"
+                                      [formGroup]="adquiridos_cliente_contratoItemsByElemet(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cargo Mínimo (Porcentaje)</mat-label>
+                                          <input matInput formControlName="cargo_minimo" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tope Horas Técnico</mat-label>
+                                          <input matInput formControlName="Tope_Horas_Tecnico" type="number" />
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveadquiridos_cliente_contrato(element);"(click)="MRaddadquiridos_cliente_contrato = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditadquiridos_cliente_contrato(element)"(click)="MRaddadquiridos_cliente_contrato = false"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getadquiridos_cliente_contratoColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getadquiridos_cliente_contratoColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divadquiridos_cliente_sin_contrato" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Partes o Materiales adquiridos por el cliente (SIN Contrato)</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addadquiridos_cliente_sin_contratoToMR(); $event.stopPropagation();"(click)="MRaddadquiridos_cliente_sin_contrato = true" [hidden]="MRaddadquiridos_cliente_sin_contrato">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="adquiridos_cliente_sin_contrato" mat-table
+                          [dataSource]="dataSourceadquiridos_cliente_sin_contrato" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Politicas_de_Precios_y_DescuentosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editadquiridos_cliente_sin_contrato(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteadquiridos_cliente_sin_contrato(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="cargo_minimo">
+                            <th mat-header-cell *matHeaderCellDef> Cargo Mínimo a cobrar (Horas Técnico)</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.cargo_minimo}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getadquiridos_cliente_sin_contratoColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form [formArrayName]="adquiridos_cliente_sin_contratoItems">
+
+                                    <div class="row form-group"
+                                      [formGroup]="adquiridos_cliente_sin_contratoItemsByElemet(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cargo Mínimo a cobrar (Horas Técnico)</mat-label>
+                                          <input matInput formControlName="cargo_minimo" type="number" />
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveadquiridos_cliente_sin_contrato(element);"(click)="MRaddadquiridos_cliente_sin_contrato = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditadquiridos_cliente_sin_contrato(element)"(click)="MRaddadquiridos_cliente_sin_contrato = false"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getadquiridos_cliente_sin_contratoColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getadquiridos_cliente_sin_contratoColumns();let j = index">
+                          </tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divservicios_terceros" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Servicios realizados por terceros externos</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addservicios_tercerosToMR(); $event.stopPropagation();"(click)="MRaddservicios_terceros = true" [hidden]="MRaddservicios_terceros">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="servicios_terceros" mat-table
+                          [dataSource]="dataSourceservicios_terceros" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Politicas_de_Precios_y_DescuentosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editservicios_terceros(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteservicios_terceros(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="importe_desde">
+                            <th mat-header-cell *matHeaderCellDef>Importe Factura - Desde</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.importe_desde |currency}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="importe_hasta">
+                            <th mat-header-cell *matHeaderCellDef>Importe Factura - Hasta</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.importe_hasta |currency}}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getservicios_tercerosColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form [formArrayName]="servicios_tercerosItems">
+
+                                    <div class="row form-group" [formGroup]="servicios_tercerosItemsByElemet(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Importe Factura - Desde</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="importe_desde" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Importe Factura - Hasta</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="importe_hasta" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveservicios_terceros(element);"(click)="MRaddservicios_terceros = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+(click)="MRaddservicios_terceros = false"                                          (click)="cancelEditservicios_terceros(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getservicios_tercerosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getservicios_tercerosColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divClausulas_de_Cotizacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-label>Clausulas de Cotizacion*</mat-label>
+                      <br>
+                      <ckeditor (change)="Clausulas_de_Cotizacion_ExecuteBusinessRules()"
+                        formControlName="Clausulas_de_Cotizacion" [editor]="Editor" data="" required></ckeditor>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!Politicas_de_Precios_y_DescuentosForm.valid || consult"
+                    mat-raised-button color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Politicas_de_Precios_y_DescuentosForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Politicas_de_Precios_y_DescuentosForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Politicas_de_Precios_y_DescuentosForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

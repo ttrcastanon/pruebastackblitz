@@ -1,0 +1,177 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Tipo de Cambio</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Tipo_de_Cambio/list">Tipo de Cambio</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Tipo_de_CambioForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divClave" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Clave</mat-label>
+                        <input matInput formControlName="Clave" [type]="Tipo_de_CambioForm.get('Clave').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('Clave').hasError('required')">
+                          Clave es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha</mat-label>
+                        <input (dateChange)="Fecha_ExecuteBusinessRules()" (blur)="Fecha_ExecuteBusinessRules()" matInput (focus)="datePickerFecha.open()" [matDatepicker]="datePickerFecha" formControlName="Fecha" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha></mat-datepicker>
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('Fecha').hasError('required')">
+                          Fecha  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divT_C__USD" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>T.C. USD</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="T_C__USD_ExecuteBusinessRules()" matInput formControlName="T_C__USD" mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('T_C__USD').hasError('required')">
+                          T.C. USD  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divT_C__EUR" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>T.C. EUR</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="T_C__EUR_ExecuteBusinessRules()" matInput formControlName="T_C__EUR" mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('T_C__EUR').hasError('required')">
+                          T.C. EUR  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divT_C__LIBRA" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>T.C. LIBRA</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="T_C__LIBRA_ExecuteBusinessRules()" matInput formControlName="T_C__LIBRA" mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('T_C__LIBRA').hasError('required')">
+                          T.C. LIBRA  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divT_C__CAD" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>T.C. CAD</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="T_C__CAD_ExecuteBusinessRules()" matInput formControlName="T_C__CAD" mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('T_C__CAD').hasError('required')">
+                          T.C. CAD  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                </div>
+                </mat-tab>
+
+<mat-tab aria-label="Edicion" label="Edición"> <br> <div id="tabEdicion" class="row">
+                    <div id="divFecha_de_Edicion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Edición</mat-label>
+                        <input (dateChange)="Fecha_de_Edicion_ExecuteBusinessRules()" (blur)="Fecha_de_Edicion_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Edicion.open()" [matDatepicker]="datePickerFecha_de_Edicion" formControlName="Fecha_de_Edicion" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Edicion"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Edicion></mat-datepicker>
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('Fecha_de_Edicion').hasError('required')">
+                          Fecha de Edición  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Edicion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Edición</mat-label>
+                        <input (change)="Hora_de_Edicion_ExecuteBusinessRules()" (blur)="Hora_de_Edicion_ExecuteBusinessRules()" formControlName="Hora_de_Edicion" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('Hora_de_Edicion').hasError('required')">
+                          Hora de Edición  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_Edita" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que Edita</mat-label>
+                        <input type="text" matInput formControlName="Usuario_que_Edita" [matAutocomplete]="autoUsuario_que_Edita">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoUsuario_que_Edita="matAutocomplete" [displayWith]="displayFnUsuario_que_Edita">
+                          <mat-option (onSelectionChange)="Usuario_que_Edita_ExecuteBusinessRules()" *ngFor="let option of optionsUsuario_que_Edita | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingUsuario_que_Edita" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsUsuario_que_Edita && !isLoadingUsuario_que_Edita">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('Usuario_que_Edita').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Tipo_de_CambioForm.get('Usuario_que_Edita').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Usuario que Edita de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Tipo_de_CambioForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Tipo_de_CambioForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Tipo_de_CambioForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Tipo_de_CambioForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

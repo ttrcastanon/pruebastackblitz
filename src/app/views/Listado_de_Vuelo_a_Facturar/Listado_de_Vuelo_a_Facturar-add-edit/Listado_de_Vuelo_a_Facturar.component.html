@@ -1,0 +1,131 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Listado de Vuelo a Facturar</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Listado_de_Vuelo_a_Facturar/list">Listado de Vuelo a Facturar</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Listado_de_Vuelo_a_FacturarForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Listado_de_Vuelo_a_FacturarForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Listado_de_Vuelo_a_FacturarForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divVuelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Vuelo</mat-label>
+                        <mat-select (selectionChange)="Vuelo_ExecuteBusinessRules()" placeholder="Vuelo" formControlName="Vuelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSolicitud_de_Vuelo" [value]="item.Folio">
+                            {{ item.Numero_de_Vuelo }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Listado_de_Vuelo_a_FacturarForm.get('Vuelo').hasError('required')">
+                          Vuelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matricula</mat-label>
+                        <mat-select (selectionChange)="Matricula_ExecuteBusinessRules()" placeholder="Matricula" formControlName="Matricula" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAeronave" [value]="item.Matricula">
+                            {{ item.Matricula }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Listado_de_Vuelo_a_FacturarForm.get('Matricula').hasError('required')">
+                          Matricula es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo</mat-label>
+                        <mat-select (selectionChange)="Tipo_ExecuteBusinessRules()" placeholder="Tipo" formControlName="Tipo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_vuelo" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Listado_de_Vuelo_a_FacturarForm.get('Tipo').hasError('required')">
+                          Tipo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPasajeros" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Solicitante</mat-label>
+                        <mat-select (selectionChange)="Pasajeros_ExecuteBusinessRules()" placeholder="Solicitante" formControlName="Pasajeros" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varPasajeros" [value]="item.Clave">
+                            {{ item.Nombre_completo }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Listado_de_Vuelo_a_FacturarForm.get('Pasajeros').hasError('required')">
+                          Solicitante es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Listado_de_Vuelo_a_FacturarForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Listado_de_Vuelo_a_FacturarForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Listado_de_Vuelo_a_FacturarForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Listado_de_Vuelo_a_FacturarForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

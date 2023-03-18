@@ -1,0 +1,293 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Configuración de Políticas de Viáticos</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Configuracion_de_Politicas_de_Viaticos/list">Configuración de Políticas de Viáticos</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Configuracion_de_Politicas_de_ViaticosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Configuracion_de_Politicas_de_ViaticosForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error *ngIf="Configuracion_de_Politicas_de_ViaticosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha_de_Ultima_Modificacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Última Modificación</mat-label>
+                        <input (dateChange)="Fecha_de_Ultima_Modificacion_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Ultima_Modificacion_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Ultima_Modificacion.open()"
+                          [matDatepicker]="datePickerFecha_de_Ultima_Modificacion"
+                          formControlName="Fecha_de_Ultima_Modificacion" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerFecha_de_Ultima_Modificacion"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Ultima_Modificacion></mat-datepicker>
+                        <mat-error
+                          *ngIf="Configuracion_de_Politicas_de_ViaticosForm.get('Fecha_de_Ultima_Modificacion').hasError('required')">
+                          Fecha de Última Modificación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Ultima_Modificacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Última Modificación</mat-label>
+                        <input (change)="Hora_de_Ultima_Modificacion_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Ultima_Modificacion_ExecuteBusinessRules()"
+                          formControlName="Hora_de_Ultima_Modificacion" matInput placeholder="EX: 23:05:29"
+                          mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Configuracion_de_Politicas_de_ViaticosForm.get('Hora_de_Ultima_Modificacion').hasError('required')">
+                          Hora de Última Modificación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_Modifica" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que Modifica</mat-label>
+                        <input type="text" matInput formControlName="Usuario_que_Modifica"
+                          [matAutocomplete]="autoUsuario_que_Modifica">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoUsuario_que_Modifica="matAutocomplete"
+                          [displayWith]="displayFnUsuario_que_Modifica">
+                          <mat-option (onSelectionChange)="Usuario_que_Modifica_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsUsuario_que_Modifica | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingUsuario_que_Modifica" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Configuracion_de_Politicas_de_ViaticosForm.get('Usuario_que_Modifica').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Configuracion_de_Politicas_de_ViaticosForm.get('Usuario_que_Modifica').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Usuario que Modifica de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de vuelo</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_vuelo_ExecuteBusinessRules()" placeholder="Tipo de vuelo"
+                          formControlName="Tipo_de_vuelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_vuelo" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Configuracion_de_Politicas_de_ViaticosForm.get('Tipo_de_vuelo').hasError('required')">
+                          Tipo de vuelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divConcepto" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Concepto</mat-label>
+                        <mat-select (selectionChange)="Concepto_ExecuteBusinessRules()" placeholder="Concepto"
+                          formControlName="Concepto" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varConcepto_de_Gasto_de_Empleado" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Configuracion_de_Politicas_de_ViaticosForm.get('Concepto').hasError('required')">
+                          Concepto es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDetalle" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Detalle</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addDetalleToMR(); $event.stopPropagation();"(click)="MRaddDetalle = true" [hidden]="MRaddDetalle">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceDetalle" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Configuracion_de_Politicas_de_ViaticosForm.disabled"
+                            matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editDetalle(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteDetalle(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Tipo_de_Destino">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de Destino</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Tipo_de_Destino_Tipo_de_Destino?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Monto_Diario_Autorizado">
+                            <th mat-header-cell *matHeaderCellDef>Monto Diario Autorizado</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Monto_Diario_Autorizado
+                              |currency}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_Moneda">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de Moneda</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Tipo_de_Moneda_Moneda?.Descripcion}}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getDetalleColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_Configuracion_de_Politicas_de_ViaticosItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceDetalle.data.indexOf(element)">
+
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tipo de Destino</mat-label>
+                                          <mat-select placeholder="Tipo de Destino" formControlName="Tipo_de_Destino">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varTipo_de_Destino" [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Monto Diario Autorizado</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput
+                                            (keypress)="maxNumberMonto_Diario_Autorizado(dataSourceDetalle.data.indexOf(element),12)"
+                                            formControlName="Monto_Diario_Autorizado" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tipo de Moneda</mat-label>
+                                          <mat-select placeholder="Tipo de Moneda" formControlName="Tipo_de_Moneda">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varMoneda" [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveDetalle(element);" color="primary">Guardar(click)="MRaddDetalle = false"
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+(click)="MRaddDetalle = false"                                          (click)="cancelEditDetalle(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getDetalleColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Clave ==0 )}"
+                            *matRowDef="let row; columns: getDetalleColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!Configuracion_de_Politicas_de_ViaticosForm.valid || consult"
+                    mat-raised-button color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Configuracion_de_Politicas_de_ViaticosForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Configuracion_de_Politicas_de_ViaticosForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Configuracion_de_Politicas_de_ViaticosForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

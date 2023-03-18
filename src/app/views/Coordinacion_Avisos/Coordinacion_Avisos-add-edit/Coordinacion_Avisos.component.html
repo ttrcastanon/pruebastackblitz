@@ -1,0 +1,312 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Coord de Vuelo  Avisos</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Coordinacion_Avisos/list">Coord de Vuelo  Avisos</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Coordinacion_AvisosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Coordinacion_AvisosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Coordinacion_AvisosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNumero_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Vuelo</mat-label>
+                        <input type="text" matInput formControlName="Numero_de_Vuelo" [matAutocomplete]="autoNumero_de_Vuelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNumero_de_Vuelo="matAutocomplete" [displayWith]="displayFnNumero_de_Vuelo">
+                          <mat-option (onSelectionChange)="Numero_de_Vuelo_ExecuteBusinessRules()" *ngFor="let option of optionsNumero_de_Vuelo | async" [value]="option">
+                            {{option.Numero_de_Vuelo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNumero_de_Vuelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsNumero_de_Vuelo && !isLoadingNumero_de_Vuelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Coordinacion_AvisosForm.get('Numero_de_Vuelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Coordinacion_AvisosForm.get('Numero_de_Vuelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Número de Vuelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <input type="text" matInput formControlName="Matricula" [matAutocomplete]="autoMatricula">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMatricula="matAutocomplete" [displayWith]="displayFnMatricula">
+                          <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules()" *ngFor="let option of optionsMatricula | async" [value]="option">
+                            {{option.Matricula}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Coordinacion_AvisosForm.get('Matricula').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Coordinacion_AvisosForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divRuta_de_Vuelo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Ruta de Vuelo</mat-label>
+                        <input (change)="Ruta_de_Vuelo_ExecuteBusinessRules()" #Ruta_de_Vuelo matInput formControlName="Ruta_de_Vuelo" type="text" maxlength="2000" required />
+                        <mat-error *ngIf="Coordinacion_AvisosForm.get('Ruta_de_Vuelo').hasError('required')">
+                          Ruta de Vuelo  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_y_Hora_de_Salida" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha y Hora de Salida</mat-label>
+                        <input (change)="Fecha_y_Hora_de_Salida_ExecuteBusinessRules()" #Fecha_y_Hora_de_Salida matInput formControlName="Fecha_y_Hora_de_Salida" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Coordinacion_AvisosForm.get('Fecha_y_Hora_de_Salida').hasError('required')">
+                          Fecha y Hora de Salida  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCalificacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Calificación</mat-label>
+                        <input (change)="Calificacion_ExecuteBusinessRules()" matInput formControlName="Calificacion" [type]="Coordinacion_AvisosForm.get('Calificacion').value == 'Auto'  ? 'text':'number' " maxlength="3" required />
+                        <mat-error *ngIf="Coordinacion_AvisosForm.get('Calificacion').hasError('required')">
+                          Calificación  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <textarea (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput formControlName="Observaciones" type="text" maxlength="500" required >
+                          </textarea>
+                        <mat-error *ngIf="Coordinacion_AvisosForm.get('Observaciones').hasError('required')">
+                          Observaciones  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAvisos" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Avisos</h4>    
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" 
+                            [disabled]="!isServiciosAdd" 
+                            (click)="addAvisosToMR(); $event.stopPropagation();"(click)="MRaddAvisos = true" [hidden]="MRaddAvisos">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="Avisos" mat-table [dataSource]="dataSourceAvisos"  multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Coordinacion_AvisosForm.disabled"  matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit"  type="button" 
+                                [disabled]="!isServiciosAdd" 
+                                  (click)="editAvisos(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  [disabled]="!isServiciosAdd" 
+                                  (click)="deleteAvisos(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Aviso">
+                            <th mat-header-cell *matHeaderCellDef> Aviso</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Aviso_Tipo_de_Aviso?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha">
+                            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha |date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Confirmado_por_Correo">
+                            <th mat-header-cell *matHeaderCellDef> Confirmado por Correo</th>
+                            <td mat-cell *matCellDef="let element"> 
+                              <div class="text-center f-w">
+                                <mat-checkbox  [disabled]="true" [checked]="element.Confirmado_por_Correo" [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                            </div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Confirmado_por_Telefono">
+                            <th mat-header-cell *matHeaderCellDef> Confirmado por Teléfono</th>
+                            <td mat-cell *matCellDef="let element"> 
+                              <div class="text-center f-w">
+                                <mat-checkbox  [disabled]="true" [checked]="element.Confirmado_por_Telefono" [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                            </div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Comentarios">
+                            <th mat-header-cell *matHeaderCellDef> Comentarios </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Comentarios}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Confirmado">
+                            <th mat-header-cell *matHeaderCellDef> Confirmado</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Confirmado_Estatus_de_Confirmacion?.Descripcion}}
+                            </td>
+                          </ng-container>
+
+                 
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;" [attr.colspan]="getAvisosColumns().length">
+                        
+                              <div  [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">                       
+                                <div *ngIf="element.edit">                              
+                                    <form  formArrayName="Detalle_Coordinacion_AvisosItems"  >                               
+                                      
+                                      <div class="row form-group" [formGroupName]="dataSourceAvisos.data.indexOf(element)">
+
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Aviso</mat-label>
+                                                <mat-select placeholder="Aviso" required
+                                                  formControlName="Aviso" (selectionChange)="VerificarAvisos(element)" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varTipo_de_Aviso" [value]="item.Clave">
+                                                    {{ item.Descripcion }}
+                                                  </mat-option>
+                                                </mat-select>                                                
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Fecha</mat-label>
+                                                <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker" (dateChange)="Fecha_ExecuteBusinessRules(element)"
+                                                  (blur)="Fecha_ExecuteBusinessRules(element)"
+                                                  (change)="VerificarAvisos(element)"
+                                                  formControlName="Fecha" type="text" (keypress)="soloFecha($event)" />
+                                                <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                                <mat-datepicker #rpicker></mat-datepicker>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-checkbox formControlName="Confirmado_por_Correo" [value]="element.Confirmado_por_Correo" (change)="VerificarAvisos(element)"
+                                              class="example-margin">
+                                              Confirmado por Correo
+                                            </mat-checkbox>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-checkbox formControlName="Confirmado_por_Telefono" [value]="element.Confirmado_por_Telefono" (change)="VerificarAvisos(element)"
+                                              class="example-margin">
+                                              Confirmado por Teléfono
+                                            </mat-checkbox>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Comentarios</mat-label>
+                                                <textarea matInput formControlName="Comentarios" maxlength="500" type="text" (change)="VerificarAvisos(element)" ></textarea>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Confirmado</mat-label>
+                                                <mat-select placeholder="Confirmado" required
+                                                  formControlName="Confirmado" (selectionChange)="VerificarAvisos(element)">
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varEstatus_de_Confirmacion" [value]="item.Clave">
+                                                    {{ item.Descripcion }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+    
+											
+                                      </div>
+                                      <!-- inicio seccion botones -->
+                                      <!-- fin seccion botones -->
+                                      <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                            (click)="element.edit = false; saveAvisos(element);" [disabled]="ButtonSaveAvisos" color="primary">Guardar(click)="MRaddAvisos = false"
+                                          </button>
+                                          <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                            (click)="cancelEditAvisos(element)"(click)="MRaddAvisos = false"
+                                            mat-button>Cancelar</button>
+                                        </div>
+                                      </div>
+                              
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getAvisosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}" *matRowDef="let row; columns: getAvisosColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}" *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" [length]="getCountAvisos()" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Coordinacion_AvisosForm.valid || consult" mat-raised-button
+                    color="primary" (click)="closeWindowSave()">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Coordinacion_AvisosForm.valid || consult"
+                    mat-raised-button color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Coordinacion_AvisosForm.valid || consult"
+                    mat-raised-button color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Coordinacion_AvisosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" (click)="closeWindowCancel()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

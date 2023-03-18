@@ -1,0 +1,763 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Gestión de aprobación</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Gestion_de_aprobacion/list">Gestión de aprobación</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Gestion_de_aprobacionForm">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Gestion_de_aprobacionForm.get('Folio').value == 'Auto' ? 'text':'number'"  />
+                        <mat-error *ngIf="Gestion_de_aprobacionForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2 bottom-select">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Matrícula</mat-label>
+                        <ng-select ngSelectMat formControlName="Matricula" dropdownPosition="bottom"
+                          (search)="searchMatricula($event.term)" (clear)="searchMatricula()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingMatricula">
+                          <ng-option *ngFor="let option of listaMatricula | async"
+                            [value]="option.Matricula">{{option.Matricula}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+                    <div id="divModelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Modelo</mat-label>
+                        <ng-select ngSelectMat formControlName="Modelo" dropdownPosition="bottom"
+                          (search)="searchModelo($event.term)" (clear)="searchModelo()" [loading]="isLoadingModelo"
+                          [loadingText]="loadingText" [notFoundText]="notFound">
+                          <ng-option *ngFor="let option of listaModelo | async"
+                            [value]="option.Clave">{{option.Descripcion}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+                    <div id="divNo__Reporte" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>No. Reporte</mat-label>
+                        <ng-select ngSelectMat formControlName="No__Reporte" dropdownPosition="bottom"
+                          (search)="searchNo__Reporte($event.term)" (clear)="searchNo__Reporte()"
+                          [loading]="isLoadingNo__Reporte" [loadingText]="loadingText" [notFoundText]="notFound">
+                          <ng-option *ngFor="let option of listaNo__Reporte | async"
+                            [value]="option.Folio">{{option.Folio}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+                    <div id="divNo__Parte" class="col-xl-4 col-lg-12 col-md-12 col-sm-12" style="padding-top:1rem">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>N° Parte/Descripción</mat-label>
+                        <input (change)="No__Parte_ExecuteBusinessRules()" #No__Parte matInput
+                          formControlName="No__Parte" type="text" maxlength="100" />
+                      </mat-form-field>
+                    </div>
+                    <div id="divDepartamento" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Departamento</mat-label>
+                        <ng-select ngSelectMat formControlName="Departamento" dropdownPosition="bottom"
+                          (search)="searchDepartamento($event.term)" (clear)="searchDepartamento()"
+                          [loading]="isLoadingDepartamento" [loadingText]="loadingText" [notFoundText]="notFound">
+                          <ng-option *ngFor="let option of listaDepartamento | async"
+                            [value]="option.Folio">{{option.Nombre}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+                    <div id="divSolicitante" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Solicitante</mat-label>
+                        <ng-select ngSelectMat formControlName="Solicitante" dropdownPosition="bottom"
+                          (search)="searchSolicitante($event.term)" (clear)="searchSolicitante()"
+                          [loading]="isLoadingSolicitante" [loadingText]="loadingText" [notFoundText]="notFound">
+                          <ng-option *ngFor="let option of listaSolicitante | async"
+                            [value]="option.Id_User">{{option.Name}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+
+                    <div class="col-md-1 mb-2">
+                      <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                        (click)="fnConsultar()">
+                        Consultar
+                      </button>
+                    </div>
+
+                    <div class="col-md-1 mb-2">
+                      <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                        (click)="fnClearFilter()">
+                        Limpiar
+                      </button>
+                    </div>
+
+
+                    <div id="divItems_Aprobados" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Items Aprobados</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" hidden
+                            (click)="addItems_AprobadosToMR(); $event.stopPropagation();"(click)="MRaddItems_Aprobados = true" [hidden]="MRaddItems_Aprobados">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceItems_Aprobados" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Gestion_de_aprobacionForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editItems_Aprobados(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteItems_Aprobados(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> N° Parte/Descripción </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cantidad">
+                            <th mat-header-cell *matHeaderCellDef> Cantidad</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Unidad">
+                            <th mat-header-cell *matHeaderCellDef> Unidad</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Unidad_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Proveedor">
+                            <th mat-header-cell *matHeaderCellDef> Proveedor</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.ProveedorRazon_social}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Urgencia">
+                            <th mat-header-cell *matHeaderCellDef> Urgencia</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Urgencia_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Entrega">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Entrega </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Entrega}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Departamento">
+                            <th mat-header-cell *matHeaderCellDef> Departamento</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Departamento_Nombre}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Razon_de_la_Solicitud">
+                            <th mat-header-cell *matHeaderCellDef> Razón de la Solicitud </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Razon_de_la_Solicitud}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Propietario">
+                            <th mat-header-cell *matHeaderCellDef> Propietario</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Propietario}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Estatus">
+                            <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Estatus}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Matricula">
+                            <th mat-header-cell *matHeaderCellDef> Matrícula</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Matricula}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Modelo">
+                            <th mat-header-cell *matHeaderCellDef> Modelo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.ModeloDescripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__de_Reporte">
+                            <th mat-header-cell *matHeaderCellDef> No. de Reporte</th>
+                            <td mat-cell *matCellDef="let element"> {{element.No__de_ReporteNo_Reporte}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__O_T">
+                            <th mat-header-cell *matHeaderCellDef> No. O/T</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.No__O_Tnumero_de_orden}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Solicitante">
+                            <th mat-header-cell *matHeaderCellDef> Solicitante</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Solicitante_Name}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__Solicitud">
+                            <th mat-header-cell *matHeaderCellDef> No. Solicitud</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.No__Solicitud}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Estatus_de_Flujo">
+                            <th mat-header-cell *matHeaderCellDef> Estatus de Flujo</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Estatus_de_Flujo_Estatus_de_Seguimiento?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="IdComparativoProveedores">
+                            <th mat-header-cell *matHeaderCellDef class="text-center"> Comparativo Proveedores</th>
+                            <td mat-cell *matCellDef="let element" class="text-center">
+                              <!-- {{element.IdComparativoProveedores_Comparativo_de_Proveedores_Piezas?.FolioComparativoProv}} -->
+                              <button type="button" mat-raised-button color="basic" class="mb-2" mat-button
+                                (click)="openWindowComparativo(element)">
+                                Ver Comparativo
+                              </button>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="IdImportacion">
+                            <th mat-header-cell *matHeaderCellDef class="text-center"> Importación</th>
+                            <td mat-cell *matCellDef="let element" class="text-center" style="padding-left: 1.5rem;">
+                              <!-- {{element.IdImportacion_Gestion_de_Importacion?.FolioGestiondeImportacion}} -->
+                              <button type="button" mat-raised-button color="basic" class="mb-2 mr-3" mat-button
+                                (click)="openWindowImportacion(element)" [disabled]="element.IdGeneracionOC==null">
+                                Importación
+                              </button>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="IdExportacion">
+                            <th mat-header-cell *matHeaderCellDef class="text-center"> Exportación</th>
+                            <td mat-cell *matCellDef="let element" class="text-center">
+                              <!-- {{element.IdExportacion_Gestion_de_Exportacion?.FolioExportacion}} -->
+                              <button type="button" mat-raised-button color="basic" class="mb-2 mr-3" mat-button
+                                (click)="openWindowExportacion(element)" [disabled]="element.IdGeneracionOC==null">
+                                Exportación
+                              </button>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="IdGeneracionOC">
+                            <th mat-header-cell *matHeaderCellDef> IdGeneracionOC</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.IdGeneracionOC_Generacion_de_Orden_de_Compras?.FolioGeneracionOC}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="IdFolioDetalle">
+                            <th mat-header-cell *matHeaderCellDef> IdFolioDetalle</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.IdFolioDetalle}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="TipoMR">
+                            <th mat-header-cell *matHeaderCellDef> TipoMR</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.TipoMR}} </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Generar_OC">
+                            <th mat-header-cell *matHeaderCellDef class="text-center" style="padding-right: 0px;">
+                              Generar OC
+                            </th>
+                            <td mat-cell *matCellDef="let element; let index = index; let dataIndex = dataIndex"
+                              class="text-center">
+                              <div class="row">
+                                <div class="col-8">
+                                  <button type="button" mat-raised-button color="basic" class="mb-2 mr-1" mat-button
+                                    (click)="fnOpenModalGeneracionOC(element)"
+                                    [disabled]="element.IdGeneracionOC!=null">
+                                    OC
+                                  </button>
+                                </div>
+                                <div class="col-4" style="top:0.5rem">
+                                  <mat-checkbox [ngClass]="'tbl-checkbox'" class="ml-2" [checked]="element.Generar_OC"
+                                    (change)="onChangeGenerar_OCChecked($event, element)"
+                                    [disabled]="element.IdGeneracionOC!=null">
+                                  </mat-checkbox>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex"
+                              [attr.colspan]="getItems_AprobadosColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_de_Gestion_de_aprobacionItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceItems_Aprobados.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>N° Parte/Descripción</mat-label>
+                                          <input matInput formControlName="Descripcion" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cantidad</mat-label>
+                                          <input matInput formControlName="Cantidad" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Unidad</mat-label>
+                                          <mat-select placeholder="Unidad" formControlName="Unidad">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varUnidad" [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Proveedor</mat-label>
+                                          <input type="text" matInput formControlName="Proveedor"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectProveedor_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnProveedor_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCreacion_de_Proveedores"
+                                              [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionProveedor_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.Razon_social}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingProveedor_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Urgencia</mat-label>
+                                          <mat-select placeholder="Urgencia" formControlName="Urgencia">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varUrgencia" [value]="item.Folio">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha de Entrega</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_de_Entrega" type="text" />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Departamento</mat-label>
+                                          <mat-select placeholder="Departamento" formControlName="Departamento">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varDepartamento" [value]="item.Folio">
+                                              {{ item.Nombre }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Razón de la Solicitud</mat-label>
+                                          <input matInput formControlName="Razon_de_la_Solicitud" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Propietario</mat-label>
+                                          <input type="text" matInput formControlName="Propietario"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectPropietario_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnPropietario_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varPropietarios" [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionPropietario_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.Nombre}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingPropietario_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varPropietarios.length ==0 &&  !isLoadingPropietario_Detalle_de_Gestion_de_aprobacion 
+                                            && searchPropietario_Detalle_de_Gestion_de_aprobacionCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Estatus</mat-label>
+                                          <input matInput formControlName="Estatus" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Matrícula</mat-label>
+                                          <input type="text" matInput formControlName="Matricula"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectMatricula_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnMatricula_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varAeronave" [value]="option.Matricula"
+                                              (onSelectionChange)="updateOptionMatricula_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.Matricula}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingMatricula_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varAeronave.length ==0 &&  !isLoadingMatricula_Detalle_de_Gestion_de_aprobacion 
+                                            && searchMatricula_Detalle_de_Gestion_de_aprobacionCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Modelo</mat-label>
+                                          <input type="text" matInput formControlName="Modelo" [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectModelo_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnModelo_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varModelos" [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionModelo_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingModelo_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varModelos.length ==0 &&  !isLoadingModelo_Detalle_de_Gestion_de_aprobacion 
+                                            && searchModelo_Detalle_de_Gestion_de_aprobacionCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. de Reporte</mat-label>
+                                          <input type="text" matInput formControlName="No__de_Reporte"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectNo__de_Reporte_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnNo__de_Reporte_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCrear_Reporte" [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionNo__de_Reporte_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.No_Reporte}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingNo__de_Reporte_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varCrear_Reporte.length ==0 &&  !isLoadingNo__de_Reporte_Detalle_de_Gestion_de_aprobacion 
+                                            && searchNo__de_Reporte_Detalle_de_Gestion_de_aprobacionCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. O/T</mat-label>
+                                          <input type="text" matInput formControlName="No__O_T"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectNo__O_T_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnNo__O_T_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varOrden_de_Trabajo"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionNo__O_T_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.numero_de_orden}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingNo__O_T_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varOrden_de_Trabajo.length ==0 &&  !isLoadingNo__O_T_Detalle_de_Gestion_de_aprobacion 
+                                            && searchNo__O_T_Detalle_de_Gestion_de_aprobacionCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Solicitante</mat-label>
+                                          <mat-select placeholder="Solicitante" formControlName="Solicitante">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                                              {{ item.Name }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. Solicitud</mat-label>
+                                          <input matInput formControlName="No__Solicitud" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Estatus de Flujo</mat-label>
+                                          <mat-select placeholder="Estatus de Flujo" formControlName="Estatus_de_Flujo">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varEstatus_de_Seguimiento"
+                                              [value]="item.Folio">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>IdComparativoProveedores</mat-label>
+                                          <input type="text" matInput formControlName="IdComparativoProveedores"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectIdComparativoProveedores_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnIdComparativoProveedores_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varComparativo_de_Proveedores_Piezas"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionIdComparativoProveedores_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.FolioComparativoProv}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingIdComparativoProveedores_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varComparativo_de_Proveedores_Piezas.length ==0 &&  !isLoadingIdComparativoProveedores_Detalle_de_Gestion_de_aprobacion 
+                                            && searchIdComparativoProveedores_Detalle_de_Gestion_de_aprobacionCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>IdImportacion</mat-label>
+                                          <input type="text" matInput formControlName="IdImportacion"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectIdImportacion_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnIdImportacion_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varGestion_de_Importacion"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionIdImportacion_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.FolioGestiondeImportacion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingIdImportacion_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varGestion_de_Importacion.length ==0 &&  !isLoadingIdImportacion_Detalle_de_Gestion_de_aprobacion 
+                                            && searchIdImportacion_Detalle_de_Gestion_de_aprobacionCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>IdExportacion</mat-label>
+                                          <input type="text" matInput formControlName="IdExportacion"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectIdExportacion_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnIdExportacion_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varGestion_de_Exportacion"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionIdExportacion_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.FolioExportacion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingIdExportacion_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varGestion_de_Exportacion.length ==0 &&  !isLoadingIdExportacion_Detalle_de_Gestion_de_aprobacion 
+                                            && searchIdExportacion_Detalle_de_Gestion_de_aprobacionCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>IdGeneracionOC</mat-label>
+                                          <input type="text" matInput formControlName="IdGeneracionOC"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectIdGeneracionOC_Detalle_de_Gestion_de_aprobacion($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnIdGeneracionOC_Detalle_de_Gestion_de_aprobacion.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varGeneracion_de_Orden_de_Compras"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionIdGeneracionOC_Detalle_de_Gestion_de_aprobacion($event, element)">
+                                              {{option.FolioGeneracionOC}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingIdGeneracionOC_Detalle_de_Gestion_de_aprobacion"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varGeneracion_de_Orden_de_Compras.length ==0 &&  !isLoadingIdGeneracionOC_Detalle_de_Gestion_de_aprobacion 
+                                            && searchIdGeneracionOC_Detalle_de_Gestion_de_aprobacionCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>IdFolioDetalle</mat-label>
+                                          <input matInput formControlName="IdFolioDetalle" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>TipoMR</mat-label>
+                                          <input matInput formControlName="TipoMR" type="number" />
+                                        </mat-form-field>
+                                      </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button hidden
+                                          (click)="element.edit = false; saveItems_Aprobados(element);"(click)="MRaddItems_Aprobados = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic" hidden
+(click)="MRaddItems_Aprobados = false"                                          (click)="cancelEditItems_Aprobados(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getItems_AprobadosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getItems_AprobadosColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+
+                          <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell text-center" colspan="20">No hay registros disponibles
+                            </td>
+                          </tr>
+
+                        </table>
+
+                        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                  <button type="submit" class="mr-3 mb-2" [disabled]="!Gestion_de_aprobacionForm.valid || consult"
+                    mat-raised-button hidden color="primary">
+                    Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Gestion_de_aprobacionForm.valid || consult" mat-raised-button color="primary" hidden>
+                    Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Gestion_de_aprobacionForm.valid || consult" mat-raised-button color="primary" hidden>
+                    Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Gestion_de_aprobacionForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()" hidden
+                    mat-button>
+                    Cancelar
+                  </button>
+
+                  <button class="mr-3 mb-2" type="button" mat-raised-button color="primary"
+                    (click)="fnOpenModalGeneracionOCMultiple()">
+                    Generar OC Múltiple
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

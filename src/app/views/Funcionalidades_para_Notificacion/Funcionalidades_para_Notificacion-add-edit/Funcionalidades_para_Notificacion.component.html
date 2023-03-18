@@ -1,0 +1,194 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Funcionalidades para Notificación</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Funcionalidades_para_Notificacion/list">Funcionalidades para Notificación</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Funcionalidades_para_NotificacionForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Funcionalidades_para_NotificacionForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Funcionalidades_para_NotificacionForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFuncionalidad" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Funcionalidad</mat-label>
+                        <input (change)="Funcionalidad_ExecuteBusinessRules()" #Funcionalidad matInput formControlName="Funcionalidad" type="text" maxlength="100" required />
+                        <mat-error *ngIf="Funcionalidades_para_NotificacionForm.get('Funcionalidad').hasError('required')">
+                          Funcionalidad  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNombre_de_la_Tabla" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nombre de la Tabla</mat-label>
+                        <input (change)="Nombre_de_la_Tabla_ExecuteBusinessRules()" #Nombre_de_la_Tabla matInput formControlName="Nombre_de_la_Tabla" type="text" maxlength="100" required />
+                        <mat-error *ngIf="Funcionalidades_para_NotificacionForm.get('Nombre_de_la_Tabla').hasError('required')">
+                          Nombre de la Tabla  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCampos_para_Vigencia" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Campos para Vigencia</h4>    
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" (click)="addCampos_para_VigenciaToMR(); $event.stopPropagation();"(click)="MRaddCampos_para_Vigencia = true" [hidden]="MRaddCampos_para_Vigencia">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="Campos_para_Vigencia" mat-table [dataSource]="dataSourceCampos_para_Vigencia"  multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Funcionalidades_para_NotificacionForm.disabled"  matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit"  type="button" (click)="editCampos_para_Vigencia(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteCampos_para_Vigencia(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Campo">
+                            <th mat-header-cell *matHeaderCellDef> Campo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Campo_Nombre_del_Campo_en_MS?.Descripcion}}
+                            </td>
+                          </ng-container>
+
+                 
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;" [attr.colspan]="getCampos_para_VigenciaColumns().length">
+                        
+                              <div  [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">                       
+                                <div *ngIf="element.edit">                              
+                                    <form  [formArrayName]="Campos_para_VigenciaItems"  >                               
+                                      
+                                      <div class="row form-group" [formGroup]="Campos_para_VigenciaItemsByElemet(element)">
+
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Campo</mat-label>
+                                                <mat-select placeholder="Campo"
+                                                  formControlName="Campo" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varNombre_del_Campo_en_MS" [value]="item.Clave">
+                                                    {{ item.Descripcion }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+    
+											
+                                      </div>
+                                      <!-- inicio seccion botones -->
+                                      <!-- fin seccion botones -->
+                                      <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                            (click)="element.edit = false; saveCampos_para_Vigencia(element);" color="primary">Guardar(click)="MRaddCampos_para_Vigencia = false"
+                                          </button>
+                                          <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                            (click)="cancelEditCampos_para_Vigencia(element)"(click)="MRaddCampos_para_Vigencia = false"
+                                            mat-button>Cancelar</button>
+                                        </div>
+                                      </div>
+                              
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getCampos_para_VigenciaColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}" *matRowDef="let row; columns: getCampos_para_VigenciaColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}" *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divCampos_de_Estatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Campos de Estatus</mat-label>
+                        <mat-select (selectionChange)="Campos_de_Estatus_ExecuteBusinessRules()" placeholder="Campos de Estatus" formControlName="Campos_de_Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Funcionalidad_para_Notificacion" [value]="item.Folio">
+                            {{ item.Campo_para_Estatus }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Funcionalidades_para_NotificacionForm.get('Campos_de_Estatus').hasError('required')">
+                          Campos de Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divValidacion_Obligatoria" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Validación Obligatoria</mat-label>
+                        <input (change)="Validacion_Obligatoria_ExecuteBusinessRules()" #Validacion_Obligatoria matInput formControlName="Validacion_Obligatoria" type="text" maxlength="200" required />
+                        <mat-error *ngIf="Funcionalidades_para_NotificacionForm.get('Validacion_Obligatoria').hasError('required')">
+                          Validación Obligatoria  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Funcionalidades_para_NotificacionForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Funcionalidades_para_NotificacionForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Funcionalidades_para_NotificacionForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Funcionalidades_para_NotificacionForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

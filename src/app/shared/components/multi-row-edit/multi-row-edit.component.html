@@ -1,0 +1,138 @@
+<div class="flex-col">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-0">
+    <div class="table-responsive">
+      <form [formGroup]="form" autocomplete="off">
+        <div class="top-action-container-table">
+          <h5>{{ title }}</h5>
+          <button
+            *ngIf="_editMode === EnumMode.View"
+            (click)="onAddRowClick($event)"
+            color="primary"
+            mat-mini-fab
+            type="button"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <mat-table #table [dataSource]="dataSource">
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          <ng-container
+            *ngFor="let column of columns"
+            matColumnDef="{{ column.def }}"
+          >
+            <mat-header-cell *matHeaderCellDef>{{
+              column.header
+            }}</mat-header-cell>
+            <mat-cell *matCellDef="let element; let index = index">
+              <div *ngIf="column.viewType === EnumType.Actions">
+                <!-- <button
+                  *ngIf="_editMode === EnumMode.View"
+                  (click)="onEditRowClick($event, row)"
+                  class="btn-tbl"
+                  color="primary"
+                  mat-mini-fab
+                  mat-raised-button
+                  type="button"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button> -->
+                <button
+                  *ngIf="_editMode === EnumMode.View"
+                  (click)="onDeleteRowClick($event, element)"
+                  class="btn-tbl"
+                  color="primary"
+                  mat-mini-fab
+                  mat-raised-button
+                  type="button"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <button
+                  *ngIf="_editMode === EnumMode.Add && index === 0"
+                  (click)="onSaveRowClick($event)"
+                  class="btn-tbl"
+                  color="primary"
+                  mat-mini-fab
+                  mat-raised-button
+                  type="button"
+                >
+                  <mat-icon>save</mat-icon>
+                </button>
+                <button
+                  *ngIf="_editMode === EnumMode.Add && index === 0"
+                  (click)="onCancelRowClick($event)"
+                  class="btn-tbl"
+                  color="primary"
+                  mat-mini-fab
+                  mat-raised-button
+                  type="button"
+                >
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+              <div
+                *ngIf="
+                  (_editMode === EnumMode.View &&
+                    column.viewType !== EnumType.Actions) ||
+                  (_editMode === EnumMode.Add &&
+                    column.viewType !== EnumType.Actions &&
+                    index !== 0)
+                "
+              >
+                {{ getCellValue(element, column) }}
+              </div>
+              <div
+                *ngIf="
+                  _editMode === EnumMode.Add &&
+                  column.editType === EnumType.Select &&
+                  index === 0
+                "
+                class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-0 pl-0"
+              >
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ column.label }}</mat-label>
+                  <mat-select
+                    [formControl]="element.get(column.def)"
+                    placeholder="{{ column.placeholder }}"
+                  >
+                    <mat-option></mat-option>
+                    <mat-option
+                      *ngFor="let option of column.options"
+                      [value]="option"
+                    >
+                      {{ option[column.captionOption] }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </mat-cell>
+          </ng-container>
+        </mat-table>
+        <mat-paginator
+          #paginator
+          [length]="dataSource.filteredData.length"
+          [pageIndex]="0"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+        >
+        </mat-paginator>
+      </form>
+    </div>
+  </div>
+</div>
+<div *ngIf="debug">
+  Modo: {{ _editMode }}
+  <br />
+  form.value:
+  <br />
+  <def>
+    {{ form.value | json }}
+  </def>
+  <br />
+  data:
+  <br />
+  <def>
+    {{ data | json }}
+  </def>
+</div>

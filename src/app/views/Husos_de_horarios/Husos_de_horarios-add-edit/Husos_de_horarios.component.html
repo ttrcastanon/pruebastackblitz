@@ -1,0 +1,138 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Husos de horarios</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Husos_de_horarios/list">Husos de horarios</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Husos_de_horariosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Husos_de_horariosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Husos_de_horariosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divAno" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Año</mat-label>
+                        <input (change)="Ano_ExecuteBusinessRules()" matInput formControlName="Ano" [type]="Husos_de_horariosForm.get('Ano').value == 'Auto'  ? 'text':'number' " maxlength="4" required />
+                        <mat-error *ngIf="Husos_de_horariosForm.get('Ano').hasError('required')">
+                          Año  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_inicio_horario_verano" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha inicio horario verano</mat-label>
+                        <input (dateChange)="Fecha_inicio_horario_verano_ExecuteBusinessRules()" (blur)="Fecha_inicio_horario_verano_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_inicio_horario_verano.open()" [matDatepicker]="datePickerFecha_inicio_horario_verano" formControlName="Fecha_inicio_horario_verano" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_inicio_horario_verano"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_inicio_horario_verano></mat-datepicker>
+                        <mat-error *ngIf="Husos_de_horariosForm.get('Fecha_inicio_horario_verano').hasError('required')">
+                          Fecha inicio horario verano  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_fin_horario_verano" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha fin horario verano</mat-label>
+                        <input (dateChange)="Fecha_fin_horario_verano_ExecuteBusinessRules()" (blur)="Fecha_fin_horario_verano_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_fin_horario_verano.open()" [matDatepicker]="datePickerFecha_fin_horario_verano" formControlName="Fecha_fin_horario_verano" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_fin_horario_verano"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_fin_horario_verano></mat-datepicker>
+                        <mat-error *ngIf="Husos_de_horariosForm.get('Fecha_fin_horario_verano').hasError('required')">
+                          Fecha fin horario verano  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDiferencia_hora_verano" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Diferencia hora verano</mat-label>
+                        <input (change)="Diferencia_hora_verano_ExecuteBusinessRules()" matInput formControlName="Diferencia_hora_verano" [type]="Husos_de_horariosForm.get('Diferencia_hora_verano').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Husos_de_horariosForm.get('Diferencia_hora_verano').hasError('required')">
+                          Diferencia hora verano  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_inicio_horario_invierno" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha inicio horario invierno</mat-label>
+                        <input (dateChange)="Fecha_inicio_horario_invierno_ExecuteBusinessRules()" (blur)="Fecha_inicio_horario_invierno_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_inicio_horario_invierno.open()" [matDatepicker]="datePickerFecha_inicio_horario_invierno" formControlName="Fecha_inicio_horario_invierno" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_inicio_horario_invierno"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_inicio_horario_invierno></mat-datepicker>
+                        <mat-error *ngIf="Husos_de_horariosForm.get('Fecha_inicio_horario_invierno').hasError('required')">
+                          Fecha inicio horario invierno  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_fin_horario_invierno" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha fin horario invierno</mat-label>
+                        <input (dateChange)="Fecha_fin_horario_invierno_ExecuteBusinessRules()" (blur)="Fecha_fin_horario_invierno_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_fin_horario_invierno.open()" [matDatepicker]="datePickerFecha_fin_horario_invierno" formControlName="Fecha_fin_horario_invierno" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_fin_horario_invierno"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_fin_horario_invierno></mat-datepicker>
+                        <mat-error *ngIf="Husos_de_horariosForm.get('Fecha_fin_horario_invierno').hasError('required')">
+                          Fecha fin horario invierno  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDiferencia_hora_invierno" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Diferencia hora invierno</mat-label>
+                        <input (change)="Diferencia_hora_invierno_ExecuteBusinessRules()" matInput formControlName="Diferencia_hora_invierno" [type]="Husos_de_horariosForm.get('Diferencia_hora_invierno').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Husos_de_horariosForm.get('Diferencia_hora_invierno').hasError('required')">
+                          Diferencia hora invierno  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Husos_de_horariosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Husos_de_horariosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Husos_de_horariosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Husos_de_horariosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

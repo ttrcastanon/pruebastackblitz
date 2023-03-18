@@ -1,0 +1,374 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Comparativo de Proveedores Materiales</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Comparativo_de_Proveedores_Materiales/list">Comparativo de Proveedores Materiales</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Comparativo_de_Proveedores_MaterialesForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Comparativo_de_Proveedores_MaterialesForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFolio_MR_Materiales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio MR Materiales</mat-label>
+                        <mat-select (selectionChange)="Folio_MR_Materiales_ExecuteBusinessRules()" placeholder="Folio MR Materiales" formControlName="Folio_MR_Materiales" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varDetalle_de_Materiales" [value]="item.Folio">
+                            {{ item.Folio_MR_Materiales }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Folio_MR_Materiales').hasError('required')">
+                          Folio MR Materiales es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFolio_MR_Fila_Materiales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio MR Fila Materiales</mat-label>
+                        <mat-select (selectionChange)="Folio_MR_Fila_Materiales_ExecuteBusinessRules()" placeholder="Folio MR Fila Materiales" formControlName="Folio_MR_Fila_Materiales" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varDetalle_de_Materiales" [value]="item.Folio">
+                            {{ item.Folio_MR_fila_Materiales }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Folio_MR_Fila_Materiales').hasError('required')">
+                          Folio MR Fila Materiales es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__Solicitud" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>No. Solicitud</mat-label>
+                        <input (change)="No__Solicitud_ExecuteBusinessRules()" matInput formControlName="No__Solicitud" [type]="Comparativo_de_Proveedores_MaterialesForm.get('No__Solicitud').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('No__Solicitud').hasError('required')">
+                          No. Solicitud  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción</mat-label>
+                        <input (change)="Descripcion_ExecuteBusinessRules()" #Descripcion matInput formControlName="Descripcion" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Descripcion').hasError('required')">
+                          Descripción  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCantidad" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Cantidad</mat-label>
+                        <input (change)="Cantidad_ExecuteBusinessRules()" matInput formControlName="Cantidad" [type]="Comparativo_de_Proveedores_MaterialesForm.get('Cantidad').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Cantidad').hasError('required')">
+                          Cantidad  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <mat-select (selectionChange)="Matricula_ExecuteBusinessRules()" placeholder="Matrícula" formControlName="Matricula" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAeronave" [value]="item.Matricula">
+                            {{ item.Matricula }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Matricula').hasError('required')">
+                          Matrícula es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <mat-select (selectionChange)="Modelo_ExecuteBusinessRules()" placeholder="Modelo" formControlName="Modelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varModelos" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Modelo').hasError('required')">
+                          Modelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo_Reporte" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>No Reporte</mat-label>
+                        <input (change)="No_Reporte_ExecuteBusinessRules()" matInput formControlName="No_Reporte" [type]="Comparativo_de_Proveedores_MaterialesForm.get('No_Reporte').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('No_Reporte').hasError('required')">
+                          No Reporte  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCondicion_de_la_parte" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Condición de la parte</mat-label>
+                        <input (change)="Condicion_de_la_parte_ExecuteBusinessRules()" matInput formControlName="Condicion_de_la_parte" [type]="Comparativo_de_Proveedores_MaterialesForm.get('Condicion_de_la_parte').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Condicion_de_la_parte').hasError('required')">
+                          Condición de la parte  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divRazon_de_la_Solicitud" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Razón de la Solicitud</mat-label>
+                        <input (change)="Razon_de_la_Solicitud_ExecuteBusinessRules()" #Razon_de_la_Solicitud matInput formControlName="Razon_de_la_Solicitud" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Razon_de_la_Solicitud').hasError('required')">
+                          Razón de la Solicitud  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <input (change)="Estatus_ExecuteBusinessRules()" #Estatus matInput formControlName="Estatus" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Estatus').hasError('required')">
+                          Estatus  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAgregar_Proveedor" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Agregar Proveedor</h4>    
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" (click)="addAgregar_ProveedorToMR(); $event.stopPropagation();"(click)="MRaddAgregar_Proveedor = true" [hidden]="MRaddAgregar_Proveedor">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="Agregar_Proveedor" mat-table [dataSource]="dataSourceAgregar_Proveedor"  multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Comparativo_de_Proveedores_MaterialesForm.disabled"  matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit"  type="button" (click)="editAgregar_Proveedor(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteAgregar_Proveedor(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Proveedor">
+                            <th mat-header-cell *matHeaderCellDef> Proveedor</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Proveedor_Creacion_de_Proveedores?.Razon_social}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Precio">
+                            <th  mat-header-cell *matHeaderCellDef>$Precio</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Precio |currency}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_Cambio">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de Cambio</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Tipo_de_Cambio}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Departamento">
+                            <th mat-header-cell *matHeaderCellDef> Departamento</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Departamento_Departamento?.Nombre}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_Envio">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de Envió</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Tipo_de_Envio}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Entrega">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Entrega </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Entrega |date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Seleccion_de_Proveedor">
+                            <th mat-header-cell *matHeaderCellDef> Selección de Proveedor</th>
+                            <td mat-cell *matCellDef="let element"> 
+                              <div class="text-center f-w">
+                                <mat-checkbox  [disabled]="true" [checked]="element.Seleccion_de_Proveedor" [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                            </div>
+                            </td>
+                          </ng-container>
+
+                 
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;" [attr.colspan]="getAgregar_ProveedorColumns().length">
+                        
+                              <div  [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">                       
+                                <div *ngIf="element.edit">                              
+                                    <form  [formArrayName]="Agregar_ProveedorItems"  >                               
+                                      
+                                      <div class="row form-group" [formGroup]="Agregar_ProveedorItemsByElemet(element)">
+
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Proveedor</mat-label>
+                                                <mat-select placeholder="Proveedor"
+                                                  formControlName="Proveedor" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varCreacion_de_Proveedores" [value]="item.Clave">
+                                                    {{ item.Razon_social }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>$Precio</mat-label>
+                                                <span matPrefix>
+                                                  <mat-icon class="mr-2">attach_money</mat-icon>
+                                                </span>
+                                                <input matInput formControlName="Precio" mask="separator.2" thousandSeparator="," />
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Tipo de Cambio</mat-label>
+                                                <input matInput formControlName="Tipo_de_Cambio" type="number" />
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Departamento</mat-label>
+                                                <mat-select placeholder="Departamento"
+                                                  formControlName="Departamento" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varDepartamento" [value]="item.Folio">
+                                                    {{ item.Nombre }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Tipo de Envió</mat-label>
+                                                <input matInput formControlName="Tipo_de_Envio" type="number" />
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Fecha de Entrega</mat-label>
+                                                <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                                  formControlName="Fecha_de_Entrega" type="text" />
+                                                <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                                <mat-datepicker #rpicker></mat-datepicker>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-checkbox formControlName="Seleccion_de_Proveedor" [value]="element.Seleccion_de_Proveedor"
+                                              class="example-margin">
+                                              Selección de Proveedor
+                                            </mat-checkbox>
+                                            </div>
+    
+											
+                                      </div>
+                                      <!-- inicio seccion botones -->
+                                      <!-- fin seccion botones -->
+                                      <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                            (click)="element.edit = false; saveAgregar_Proveedor(element);" color="primary">Guardar(click)="MRaddAgregar_Proveedor = false"
+                                          </button>
+                                          <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                            (click)="cancelEditAgregar_Proveedor(element)"(click)="MRaddAgregar_Proveedor = false"
+                                            mat-button>Cancelar</button>
+                                        </div>
+                                      </div>
+                              
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getAgregar_ProveedorColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}" *matRowDef="let row; columns: getAgregar_ProveedorColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}" *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput formControlName="Observaciones" type="text" maxlength="200" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Observaciones').hasError('required')">
+                          Observaciones  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus2" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <input (change)="Estatus2_ExecuteBusinessRules()" #Estatus2 matInput formControlName="Estatus2" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_MaterialesForm.get('Estatus2').hasError('required')">
+                          Estatus  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Comparativo_de_Proveedores_MaterialesForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Comparativo_de_Proveedores_MaterialesForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Comparativo_de_Proveedores_MaterialesForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Comparativo_de_Proveedores_MaterialesForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

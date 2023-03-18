@@ -1,0 +1,140 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Código Computarizado</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Codigo_Computarizado/list">Código Computarizado</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Codigo_ComputarizadoForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab label="Datos Generales">
+                  <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divModelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <input type="text" matInput formControlName="Modelo" [matAutocomplete]="autoModelo" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoModelo="matAutocomplete" [displayWith]="displayFnModelo">
+                          <mat-option *ngFor="let option of optionsModelo | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingModelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsModelo && !isLoadingModelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Codigo_ComputarizadoForm.get('Modelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Codigo_ComputarizadoForm.get('Modelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Modelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divCodigo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Código</mat-label>
+                        <input #Codigo matInput formControlName="Codigo" type="text" maxlength="20" required />
+                        <mat-error *ngIf="Codigo_ComputarizadoForm.get('Codigo').hasError('required')">
+                          Código es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción</mat-label>
+                        <input #Descripcion matInput formControlName="Descripcion" type="text" maxlength="250"
+                          required />
+                        <mat-error *ngIf="Codigo_ComputarizadoForm.get('Descripcion').hasError('required')">
+                          Descripción es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempo_Estandar" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tiempo Estándar</mat-label>
+                        <input formControlName="Tiempo_Estandar" matInput placeholder="EX: 23:05" mask="Hh:m0"
+                          required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Codigo_ComputarizadoForm.get('Tiempo_Estandar').hasError('required')">
+                          Tiempo Estándar es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <!-- <div id="divDescripcion_Busqueda" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción Búsqueda</mat-label>
+                        <input #Descripcion_Busqueda matInput formControlName="Descripcion_Busqueda" type="text"
+                          maxlength="500" required />
+                        <mat-error *ngIf="Codigo_ComputarizadoForm.get('Descripcion_Busqueda').hasError('required')">
+                          Descripción Búsqueda es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div> -->
+
+                    <div id="divPor_Defecto_en_Cotizacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox formControlName="Por_Defecto_en_Cotizacion" class="example-margin">
+                        Por Defecto en Cotización
+                      </mat-checkbox>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button type="submit" mat-raised-button class="mr-3 mb-2" color="primary"
+                    [disabled]="!Codigo_ComputarizadoForm.valid || consult">
+                    Guardar
+                  </button>
+                  <!-- <button type="button" mat-raised-button class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Codigo_ComputarizadoForm.valid || consult" color="primary">
+                    Guardar y Nuevo
+                  </button>
+                  <button type="button" mat-raised-button class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Codigo_ComputarizadoForm.valid || consult" color="primary">
+                    Guardar y Copia
+                  </button> -->
+                  <button type="button" class="mr-3 mb-2" mat-raised-button [hidden]="!hasPermision('Configure')"
+                    [disabled]="!Codigo_ComputarizadoForm.valid || consult" color="primary">
+                    Configurar
+                  </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()" mat-button>
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

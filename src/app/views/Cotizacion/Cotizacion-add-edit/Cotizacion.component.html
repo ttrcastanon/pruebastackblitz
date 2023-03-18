@@ -1,0 +1,870 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Cotización</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Cotizacion/list">Cotización</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="CotizacionForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="CotizacionForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="CotizacionForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha_de_Registro" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Registro</mat-label>
+                        <input (dateChange)="Fecha_de_Registro_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Registro_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Registro.open()" [matDatepicker]="datePickerFecha_de_Registro"
+                          formControlName="Fecha_de_Registro" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Registro"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Registro></mat-datepicker>
+                        <mat-error *ngIf="CotizacionForm.get('Fecha_de_Registro').hasError('required')">
+                          Fecha de Registro es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Registro" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Registro</mat-label>
+                        <input (change)="Hora_de_Registro_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Registro_ExecuteBusinessRules()" formControlName="Hora_de_Registro" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="CotizacionForm.get('Hora_de_Registro').hasError('required')">
+                          Hora de Registro es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_Registra" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que Registra</mat-label>
+                        <mat-select (selectionChange)="Usuario_que_Registra_ExecuteBusinessRules()"
+                          placeholder="Usuario que Registra" formControlName="Usuario_que_Registra" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="CotizacionForm.get('Usuario_que_Registra').hasError('required')">
+                          Usuario que Registra es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNumero_de_Cotizacion" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Numero de Cotización</mat-label>
+                        <input (change)="Numero_de_Cotizacion_ExecuteBusinessRules()" #Numero_de_Cotizacion matInput
+                          formControlName="Numero_de_Cotizacion" type="text" maxlength="20" required />
+                        <mat-error *ngIf="CotizacionForm.get('Numero_de_Cotizacion').hasError('required')">
+                          Numero de Cotización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divOrden_de_Trabajo_Origen" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Orden de Trabajo Origen</mat-label>
+                        <input type="text" matInput formControlName="Orden_de_Trabajo_Origen"
+                          [matAutocomplete]="autoOrden_de_Trabajo_Origen">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoOrden_de_Trabajo_Origen="matAutocomplete"
+                          [displayWith]="displayFnOrden_de_Trabajo_Origen">
+                          <mat-option (onSelectionChange)="Orden_de_Trabajo_Origen_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsOrden_de_Trabajo_Origen | async" [value]="option">
+                            {{option.numero_de_orden}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingOrden_de_Trabajo_Origen" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsOrden_de_Trabajo_Origen && !isLoadingOrden_de_Trabajo_Origen">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="CotizacionForm.get('Orden_de_Trabajo_Origen').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="CotizacionForm.get('Orden_de_Trabajo_Origen').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Orden de Trabajo Origen de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divOrden_de_Trabajo_Generada" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Orden de Trabajo Generada</mat-label>
+                        <input type="text" matInput formControlName="Orden_de_Trabajo_Generada"
+                          [matAutocomplete]="autoOrden_de_Trabajo_Generada">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoOrden_de_Trabajo_Generada="matAutocomplete"
+                          [displayWith]="displayFnOrden_de_Trabajo_Generada">
+                          <mat-option (onSelectionChange)="Orden_de_Trabajo_Generada_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsOrden_de_Trabajo_Generada | async" [value]="option">
+                            {{option.numero_de_orden}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingOrden_de_Trabajo_Generada" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsOrden_de_Trabajo_Generada && !isLoadingOrden_de_Trabajo_Generada">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="CotizacionForm.get('Orden_de_Trabajo_Generada').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="CotizacionForm.get('Orden_de_Trabajo_Generada').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Orden de Trabajo Generada de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Reporte" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Reporte</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_Reporte_ExecuteBusinessRules()"
+                          placeholder="Tipo de Reporte" formControlName="Tipo_de_Reporte" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Reporte" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="CotizacionForm.get('Tipo_de_Reporte').hasError('required')">
+                          Tipo de Reporte es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_ingreso" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de ingreso</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_ingreso_ExecuteBusinessRules()"
+                          placeholder="Tipo de ingreso" formControlName="Tipo_de_ingreso" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Ingreso_a_Cotizacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="CotizacionForm.get('Tipo_de_ingreso').hasError('required')">
+                          Tipo de ingreso es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCliente" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cliente</mat-label>
+                        <input type="text" matInput formControlName="Cliente" [matAutocomplete]="autoCliente">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoCliente="matAutocomplete" [displayWith]="displayFnCliente">
+                          <mat-option (onSelectionChange)="Cliente_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsCliente | async" [value]="option">
+                            {{option.Razon_Social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingCliente" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsCliente && !isLoadingCliente">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="CotizacionForm.get('Cliente').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="CotizacionForm.get('Cliente').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Cliente de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <input type="text" matInput formControlName="Matricula" [matAutocomplete]="autoMatricula">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMatricula="matAutocomplete" [displayWith]="displayFnMatricula">
+                          <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsMatricula | async" [value]="option">
+                            {{option.Matricula}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="CotizacionForm.get('Matricula').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="CotizacionForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <input type="text" matInput formControlName="Modelo" [matAutocomplete]="autoModelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoModelo="matAutocomplete" [displayWith]="displayFnModelo">
+                          <mat-option (onSelectionChange)="Modelo_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsModelo | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingModelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsModelo && !isLoadingModelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="CotizacionForm.get('Modelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="CotizacionForm.get('Modelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Modelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divContacto" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Contacto</mat-label>
+                        <input (change)="Contacto_ExecuteBusinessRules()" #Contacto matInput formControlName="Contacto"
+                          type="text" maxlength="80" required />
+                        <mat-error *ngIf="CotizacionForm.get('Contacto').hasError('required')">
+                          Contacto es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempo_de_Ejecucion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tiempo de Ejecución (días)</mat-label>
+                        <input (change)="Tiempo_de_Ejecucion_ExecuteBusinessRules()" matInput
+                          formControlName="Tiempo_de_Ejecucion"
+                          [type]="CotizacionForm.get('Tiempo_de_Ejecucion').value == 'Auto'  ? 'text':'number' "
+                          maxlength="3" oninput="this.value =
+                        !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value.slice(0,3)) : null" required />
+                        <mat-error *ngIf="CotizacionForm.get('Tiempo_de_Ejecucion').hasError('required')">
+                          Tiempo de Ejecución (días) es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEnviar_Cotizacion_a_Cliente" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Enviar_Cotizacion_a_Cliente_ExecuteBusinessRules()"
+                        formControlName="Enviar_Cotizacion_a_Cliente" class="example-margin">
+                        Enviar Cotización a Cliente
+                      </mat-checkbox>
+                    </div>
+                    <div id="divRedaccion_Correo_para_Cliente" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Redacción Correo para Cliente</mat-label>
+                        <input (change)="Redaccion_Correo_para_Cliente_ExecuteBusinessRules()"
+                          #Redaccion_Correo_para_Cliente matInput formControlName="Redaccion_Correo_para_Cliente"
+                          type="text" maxlength="2000" required />
+                        <mat-error *ngIf="CotizacionForm.get('Redaccion_Correo_para_Cliente').hasError('required')">
+                          Redacción Correo para Cliente es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divClausulas_Especificas" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-label>Claúsulas Específicas</mat-label>
+                      <br>
+                      <ckeditor (change)="Clausulas_Especificas_ExecuteBusinessRules()"
+                        formControlName="Clausulas_Especificas" (keypress)="maxClausulas_Especificas(2000)"  [editor]="Editor" data="" required></ckeditor>
+                        <mat-error *ngIf="!maxClausulas_Especificas(2000)">
+                          El maximo de caracteres son 2000
+                        </mat-error>
+                    </div>
+                    <div id="divClausulas_Generales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-label>Claúsulas Generales</mat-label>
+                      <br>
+                      <ckeditor (change)="Clausulas_Generales_ExecuteBusinessRules()"
+                        formControlName="Clausulas_Generales"  (keypress)="maxClausulas_Generales(2000)"[editor]="Editor" data="" required></ckeditor>
+                        <mat-error *ngIf="!maxClausulas_Generales(2000)">
+                          El maximo de caracteres son 2000
+                        </mat-error>
+                    </div>
+                    
+                    <div id="divEstatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus"
+                          formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Cotizacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="CotizacionForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Detalle_de_Cotizacion" label="Detalle de Cotización"> <br>
+                  <div id="tabDetalle_de_Cotizacion" class="row">
+                    <div id="divMano_de_Obra" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Mano de Obra</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Mano_de_Obra_ExecuteBusinessRules()" matInput formControlName="Mano_de_Obra"
+                          mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="CotizacionForm.get('Mano_de_Obra').hasError('required')">
+                          Mano de Obra es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPartes" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Partes</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Partes_ExecuteBusinessRules()" matInput formControlName="Partes"
+                          mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="CotizacionForm.get('Partes').hasError('required')">
+                          Partes es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divConsumibles" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Consumibles</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Consumibles_ExecuteBusinessRules()" matInput formControlName="Consumibles"
+                          mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="CotizacionForm.get('Consumibles').hasError('required')">
+                          Consumibles es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_ExecuteBusinessRules()" matInput formControlName="Total"
+                          mask="separator.2" thousandSeparator="," maxlength="12" required />
+                        <mat-error *ngIf="CotizacionForm.get('Total').hasError('required')">
+                          Total es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPorcentaje_de_Consumibles" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Porcentaje de Consumibles</mat-label>
+                        <input (change)="Porcentaje_de_Consumibles_ExecuteBusinessRules()" matInput
+                          formControlName="Porcentaje_de_Consumibles"
+                          [type]="CotizacionForm.get('Porcentaje_de_Consumibles').value == 'Auto'  ? 'text':'number' "
+                          maxlength="3" oninput="this.value =
+                        !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value.slice(0,3)) : null" required />
+                        <mat-error *ngIf="CotizacionForm.get('Porcentaje_de_Consumibles').hasError('required')">
+                          Porcentaje de Consumibles es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPorcentaje_de_Anticipo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Porcentaje de Anticipo</mat-label>
+                        <input (change)="Porcentaje_de_Anticipo_ExecuteBusinessRules()" matInput
+                          formControlName="Porcentaje_de_Anticipo"
+                          [type]="CotizacionForm.get('Porcentaje_de_Anticipo').value == 'Auto'  ? 'text':'number' "
+                          maxlength="3" oninput="this.value =
+                        !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value.slice(0,3)) : null" required />
+                        <mat-error *ngIf="CotizacionForm.get('Porcentaje_de_Anticipo').hasError('required')">
+                          Porcentaje de Anticipo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divComentarios_Mantenimiento" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline" hidden>
+                        <mat-label>Comentarios Mantenimiento</mat-label>
+                        <input (change)="Comentarios_Mantenimiento_ExecuteBusinessRules()" #Comentarios_Mantenimiento
+                          matInput formControlName="Comentarios_Mantenimiento" type="text" maxlength="4000" required />
+                        <mat-error *ngIf="CotizacionForm.get('Comentarios_Mantenimiento').hasError('required')">
+                          Comentarios Mantenimiento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divReporte" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline" hidden>
+                        <mat-label>Reporte</mat-label>
+                        <input type="text" matInput formControlName="Reporte" [matAutocomplete]="autoReporte">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoReporte="matAutocomplete" [displayWith]="displayFnReporte">
+                          <mat-option (onSelectionChange)="Reporte_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsReporte | async" [value]="option">
+                            {{option.No_Reporte}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingReporte" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsReporte && !isLoadingReporte">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="CotizacionForm.get('Reporte').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="CotizacionForm.get('Reporte').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Reporte de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divItem_de_Inspeccion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline" hidden>
+                        <mat-label>Item de Inspección</mat-label>
+                        <input (change)="Item_de_Inspeccion_ExecuteBusinessRules()" matInput
+                          formControlName="Item_de_Inspeccion"
+                          [type]="CotizacionForm.get('Item_de_Inspeccion').value == 'Auto'  ? 'text':'number' "
+                          maxlength="9" required />
+                        <mat-error *ngIf="CotizacionForm.get('Item_de_Inspeccion').hasError('required')">
+                          Item de Inspección es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCodigo_Computarizado" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" *ngIf="operation !== 'Consult'">
+                      <button type="button" mat-raised-button color="primary"
+                        (click)="openCodigoComputarizado()">Agregar codigo computarizado</button>
+                    </div>
+                    <div id="divCodigo_ComputarizadoMR" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Codigos computarizado</h4>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceCodigos_Computarizado" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!CotizacionForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-consult" type='button'
+                                  (click)="consultCodigo_Computarizado(element);">
+                                  <mat-icon>consult</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editCodigo_Computarizado(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteCodigo_Computarizado(element);">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="No.">
+                            <th mat-header-cell *matHeaderCellDef> No.</th>
+                            <td mat-cell *matCellDef="let element">{{element.No}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Codigo_Computarizado">
+                            <th mat-header-cell *matHeaderCellDef> Codigo Computarizado </th>
+                            <td mat-cell *matCellDef="let element">{{element.Codigo_Computarizado}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Monto_Partes">
+                            <th mat-header-cell *matHeaderCellDef> Monto Partes </th>
+                            <td mat-cell *matCellDef="let element">{{element.Monto_Partes}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Monto_Servicios">
+                            <th mat-header-cell *matHeaderCellDef> Monto Servicios </th>
+                            <td mat-cell *matCellDef="let element">{{element.Monto_Servicios}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tiempo_Hr_Tecnico">
+                            <th mat-header-cell *matHeaderCellDef> Tiempo Hr Tecnico</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Tiempo_Hr_Tecnico}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tiempo_Hr_Rampa">
+                            <th mat-header-cell *matHeaderCellDef> Tiempo Hr Rampa</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Tiempo_Hr_Rampa}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Monto_Mtto">
+                            <th mat-header-cell *matHeaderCellDef> Monto Mtto</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Monto_Mtto}} </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getCodigos_ComputarizadoColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form [formArrayName]="Codigos_ComputarizadosItems">
+
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getCodigos_ComputarizadoColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getCodigos_ComputarizadoColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Motivos_de_Edicion" label="Motivos de Edición"> <br>
+                  <div id="tabMotivos_de_Edicion" class="row">
+                    <div id="divMotivo_de_Edicion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo de Edición</mat-label>
+                        <mat-select (selectionChange)="Motivo_de_Edicion_ExecuteBusinessRules()"
+                          placeholder="Motivo de Edición" formControlName="Motivo_de_Edicion" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varMotivo_de_Edicion_de_Cotizacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="CotizacionForm.get('Motivo_de_Edicion').hasError('required')">
+                          Motivo de Edición es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput
+                          formControlName="Observaciones" type="text" maxlength="500" required />
+                        <mat-error *ngIf="CotizacionForm.get('Observaciones').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHistorial" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Historial</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addHistorialToMR(); $event.stopPropagation();"(click)="MRaddHistorial = true" [hidden]="MRaddHistorial">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceHistorial" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!CotizacionForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editHistorial(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteHistorial(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Motivo_de_Edicion">
+                            <th mat-header-cell *matHeaderCellDef> Motivo de Edición</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Motivo_de_Edicion_Motivo_de_Edicion_de_Cotizacion?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Observaciones">
+                            <th mat-header-cell *matHeaderCellDef> Observaciones </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Observaciones}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha">
+                            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha |date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Hora">
+                            <th mat-header-cell *matHeaderCellDef> Hora </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Hora | mask : 'Hh:m0:s0'}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Usuario">
+                            <th mat-header-cell *matHeaderCellDef> Usuario</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Usuario_Spartan_User?.Name}}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getHistorialColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form [formArrayName]="HistorialItems">
+
+                                    <div class="row form-group" [formGroup]="HistorialItemsByElemet(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Motivo de Edición</mat-label>
+                                          <mat-select placeholder="Motivo de Edición"
+                                            formControlName="Motivo_de_Edicion">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varMotivo_de_Edicion_de_Cotizacion"
+                                              [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Observaciones</mat-label>
+                                          <input matInput formControlName="Observaciones" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha" type="text" />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Hora</mat-label>
+                                          <input formControlName="Hora" matInput placeholder="EX: 23:05:29 "
+                                            mask="Hh:m0:s0" />
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">access_time</mat-icon>
+                                          </span>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Usuario</mat-label>
+                                          <mat-select placeholder="Usuario" formControlName="Usuario">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                                              {{ item.Name }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveHistorial(element);"(click)="MRaddHistorial = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+(click)="MRaddHistorial = false"                                          (click)="cancelEditHistorial(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getHistorialColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getHistorialColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Respuesta_del_Cliente" label="Respuesta del Cliente"> <br>
+                  <div id="tabRespuesta_del_Cliente" class="row">
+                    <div id="divFecha_de_Respuesta" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Respuesta</mat-label>
+                        <input (dateChange)="Fecha_de_Respuesta_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Respuesta_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Respuesta.open()" [matDatepicker]="datePickerFecha_de_Respuesta"
+                          formControlName="Fecha_de_Respuesta" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Respuesta"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Respuesta></mat-datepicker>
+                        <mat-error *ngIf="CotizacionForm.get('Fecha_de_Respuesta').hasError('required')">
+                          Fecha de Respuesta es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Respuesta" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Respuesta</mat-label>
+                        <input (change)="Hora_de_Respuesta_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Respuesta_ExecuteBusinessRules()" formControlName="Hora_de_Respuesta" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="CotizacionForm.get('Hora_de_Respuesta').hasError('required')">
+                          Hora de Respuesta es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_Registra_Respuesta" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que Registra</mat-label>
+                        <mat-select (selectionChange)="Usuario_que_Registra_Respuesta_ExecuteBusinessRules()"
+                          placeholder="Usuario que Registra" formControlName="Usuario_que_Registra_Respuesta" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="CotizacionForm.get('Usuario_que_Registra_Respuesta').hasError('required')">
+                          Usuario que Registra es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divRespuesta" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Respuesta</mat-label>
+                        <mat-select (selectionChange)="Respuesta_ExecuteBusinessRules()" placeholder="Respuesta"
+                          formControlName="Respuesta" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varRespuesta_del_Cliente_a_Cotizacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="CotizacionForm.get('Respuesta').hasError('required')">
+                          Respuesta es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones_Respeusta" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_Respeusta_ExecuteBusinessRules()" #Observaciones_Respeusta
+                          matInput formControlName="Observaciones_Respeusta" type="text" maxlength="500" required />
+                        <mat-error *ngIf="CotizacionForm.get('Observaciones_Respeusta').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDia_de_Llegada_del_Avion" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Día de Llegada del Avión</mat-label>
+                        <input (dateChange)="Dia_de_Llegada_del_Avion_ExecuteBusinessRules()"
+                          (blur)="Dia_de_Llegada_del_Avion_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerDia_de_Llegada_del_Avion.open()"
+                          [matDatepicker]="datePickerDia_de_Llegada_del_Avion"
+                          formControlName="Dia_de_Llegada_del_Avion" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerDia_de_Llegada_del_Avion"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerDia_de_Llegada_del_Avion></mat-datepicker>
+                        <mat-error *ngIf="CotizacionForm.get('Dia_de_Llegada_del_Avion').hasError('required')">
+                          Día de Llegada del Avión es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Llegada_del_Avion" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Llegada del Avión</mat-label>
+                        <input (change)="Hora_de_Llegada_del_Avion_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Llegada_del_Avion_ExecuteBusinessRules()"
+                          formControlName="Hora_de_Llegada_del_Avion" matInput placeholder="EX: 23:05:29"
+                          mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="CotizacionForm.get('Hora_de_Llegada_del_Avion').hasError('required')">
+                          Hora de Llegada del Avión es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" mat-raised-button  [disabled]="!maxClausulas_Generales(2000)|| !maxClausulas_Especificas(2000) || consult" color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!CotizacionForm.valid || consult" mat-raised-button color="primary" hidden>Guardar y
+                    Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!CotizacionForm.valid || consult" mat-raised-button color="primary"
+                    [hidden]="localStorageHelper.getLoggedUserInfo().RoleId != 39">Guardar y Copia
+                  </button>
+                  <button [hidden]="true" class="mr-3 mb-2" [disabled]="!CotizacionForm.valid || consult"
+                    mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

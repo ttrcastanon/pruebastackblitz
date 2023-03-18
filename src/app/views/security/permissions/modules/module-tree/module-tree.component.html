@@ -1,0 +1,26 @@
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding aria-expanded="true" (click)="selectModule(node)" class="nodeTree" >
+    <mat-checkbox class="checklist-leaf-node"
+        [checked]="node.checked"
+        (change)="todoLeafItemSelectionToggle(node)"></mat-checkbox>
+        <label style='margin-left: 5px;'>{{node.item}}</label>
+  </mat-tree-node>
+
+
+
+<!-- Modules root item node -->
+  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+    <button id="btnCheckAll" #btnCheckAll class="btnCheckAll"  mat-icon-button matTreeNodeToggle style="margin: 0;padding: 0 3px;margin-top: -5px;display:none"
+            [attr.aria-label]="'Toggle ' + node.item">
+
+      <div class="icon-preview" style="cursor: pointer;">
+        <i  style="font-size: 10px;" [ngClass]="treeControl.isExpanded(node) ? 'fas fa-minus': 'fas fa-chevron-right'"></i>
+      </div>
+    </button>
+    <!-- <mat-checkbox 
+                  [checked]="descendantsAllSelected(node)"
+                  [indeterminate]="descendantsPartiallySelected(node)"
+                  >{{node.item}}</mat-checkbox> -->
+                  <mat-label>{{node.item}}</mat-label>
+  </mat-tree-node>
+</mat-tree>

@@ -1,0 +1,650 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Solicitud de Vuelo</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Solicitud_de_Vuelo/list">Solicitud de Vuelo</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Solicitud_de_VueloForm" (ngSubmit)="save()">
+              <mdb-tabs [fill]="true" #tabGroup (activeTabChange)="onTabChanged($event)">
+                <mdb-tab aria-label="Datos_Generales" title="Datos Generales">
+                  <div id="tabDatos_Generales" class="row">
+
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Solicitud_de_VueloForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha_de_Solicitud" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Solicitud</mat-label>
+
+                        <input (dateChange)="Fecha_de_Solicitud_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Solicitud_ExecuteBusinessRules()"
+                          (focus)="datePickerFecha_de_Solicitud.open()" [matDatepicker]="datePickerFecha_de_Solicitud"
+                          formControlName="Fecha_de_Solicitud" matInput [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Solicitud"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Solicitud></mat-datepicker>
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Fecha_de_Solicitud').hasError('required')">
+                          Fecha de Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Solicitud" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Solicitud</mat-label>
+
+                        <input (change)="Hora_de_Solicitud_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Solicitud_ExecuteBusinessRules()" formControlName="Hora_de_Solicitud" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Hora_de_Solicitud').hasError('required')">
+                          Hora de Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSolicitante" class="col-xl-8 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Solicitante</mat-label>
+                        <mat-select (selectionChange)="Solicitante_ExecuteBusinessRules()" placeholder="Solicitante"
+                          formControlName="Solicitante" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Solicitante').hasError('required')">
+                          Solicitante es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEmpresa_Solicitante" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Empresa Solicitante</mat-label>
+                        <input type="text" matInput formControlName="Empresa_Solicitante"
+                          [matAutocomplete]="autoEmpresa_Solicitante" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+
+                        <mat-autocomplete #autoEmpresa_Solicitante="matAutocomplete"
+                          [displayWith]="displayFnEmpresa_Solicitante">
+                          <mat-option (onSelectionChange)="Empresa_Solicitante_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsEmpresa_Solicitante | async" [value]="option">
+                            {{option.Razon_Social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingEmpresa_Solicitante" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsEmpresa_Solicitante && !isLoadingEmpresa_Solicitante">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Empresa_Solicitante').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Empresa_Solicitante').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Empresa Solicitante de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_viaje" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo de viaje</mat-label>
+
+                        <input (change)="Motivo_de_viaje_ExecuteBusinessRules()" #Motivo_de_viaje matInput
+                          formControlName="Motivo_de_viaje" type="text" maxlength="100" required />
+
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Motivo_de_viaje').hasError('required')">
+                          Motivo de viaje es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Salida" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Salida</mat-label>
+
+                        <input (dateChange)="Fecha_de_Salida_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Salida_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Salida.open()" [matDatepicker]="datePickerFecha_de_Salida"
+                          formControlName="Fecha_de_Salida" type="text" [min]="todayFechaSalida" (keypress)="soloFecha($event)" required />
+
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Salida"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Salida></mat-datepicker>
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Fecha_de_Salida').hasError('required')">
+                          Fecha de Salida es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Salida" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Salida</mat-label>
+
+                        <input (change)="Hora_de_Salida_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Salida_ExecuteBusinessRules()" formControlName="Hora_de_Salida" matInput
+                          placeholder="EX: 23:05" mask="Hh:m0" required />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Hora_de_Salida').hasError('required')">
+                          Hora de Salida es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Regreso" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Regreso </mat-label>
+
+                        <input (dateChange)="Fecha_de_Regreso_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Regreso_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Regreso.open()" [matDatepicker]="datePickerFecha_de_Regreso"
+                          formControlName="Fecha_de_Regreso"
+                          [min]="this.Solicitud_de_VueloForm.get('Fecha_de_Salida').value || today " type="text"
+                          (keypress)="soloFecha($event)" required />
+
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Regreso"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Regreso></mat-datepicker>
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Fecha_de_Regreso').hasError('required')">
+                          Fecha de Regreso es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Regreso" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Regreso</mat-label>
+
+                        <input (change)="Hora_de_Regreso_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Regreso_ExecuteBusinessRules()" formControlName="Hora_de_Regreso" matInput
+                          placeholder="EX: 23:05" mask="Hh:m0" required />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Hora_de_Regreso').hasError('required')">
+                          Hora de Regreso es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPasajero_Solicitante" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Pasajero Solicitante</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addPasajero_SolicitanteToMR(); $event.stopPropagation();"(click)="MRaddPasajero_Solicitante = true" [disabled]="MRaddPasajero_Solicitante"
+                            (click)="pasajeroButton = true" [disabled]="pasajeroButton">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+
+                        <table mat-table [dataSource]="dataSourcePasajero_Solicitante" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Solicitud_de_VueloForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editPasajero_Solicitante(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deletePasajero_Solicitante(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Pasajero">
+                            <th mat-header-cell *matHeaderCellDef> Pasajero </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Pasajero_Pasajeros?.Identificador_Alias}}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getPasajero_SolicitanteColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_Pasajeros_Solicitud_de_VueloItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourcePasajero_Solicitante.data.indexOf(element)">
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Pasajero </mat-label>
+                                          <input type="text" matInput formControlName="Pasajero"
+                                            [matAutocomplete]="auto" required>
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectPasajero_Detalle_Pasajeros_Solicitud_de_Vuelo($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnPasajero_Detalle_Pasajeros_Solicitud_de_Vuelo.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varPasajeros" [value]="option"
+                                              (onSelectionChange)="updateOptionPasajero_Detalle_Pasajeros_Solicitud_de_Vuelo($event, element)"
+                                              (onSelectionChange)="checkPasajeroIsUsed($event)">
+                                              {{option.Identificador_Alias}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingPasajero_Detalle_Pasajeros_Solicitud_de_Vuelo"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varPasajeros.length ==0 &&  !isLoadingPasajero_Detalle_Pasajeros_Solicitud_de_Vuelo && searchPasajero_Detalle_Pasajeros_Solicitud_de_VueloCompleted">
+                                            No se encontraron registros.
+                                          </mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; savePasajero_Solicitante(element);"(click)="MRaddPasajero_Solicitante = false"
+                                          (click)="pasajeroButton = false" color="primary"
+                                          [disabled]="pasajeroIsUsed || 
+                                          !Pasajero_SolicitanteItems.controls[dataSourcePasajero_Solicitante.data.indexOf(element)].valid">
+                                          Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="pasajeroButton = false"
+(click)="MRaddPasajero_Solicitante = false"                                          (click)="cancelEditPasajero_Solicitante(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getPasajero_SolicitanteColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getPasajero_SolicitanteColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divNumero_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Vuelo</mat-label>
+
+                        <input (change)="Numero_de_Vuelo_ExecuteBusinessRules()" #Numero_de_Vuelo matInput
+                          formControlName="Numero_de_Vuelo" type="text" maxlength="20" />
+
+                      </mat-form-field>
+                    </div>
+                    <div id="divRuta_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Ruta de Vuelo</mat-label>
+
+                        <input (change)="Ruta_de_Vuelo_ExecuteBusinessRules()" #Ruta_de_Vuelo matInput
+                          formControlName="Ruta_de_Vuelo" type="text" maxlength="2000" required />
+
+                        <mat-error *ngIf="Solicitud_de_VueloForm.get('Ruta_de_Vuelo').hasError('required')">
+                          Ruta de Vuelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+
+                        <input (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput
+                          formControlName="Observaciones" type="text" maxlength="2000" />
+
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus"
+                          formControlName="Estatus">
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Solicitud_de_Vuelo" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempo_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tiempo de Vuelo</mat-label>
+
+                        <input (change)="Tiempo_de_Vuelo_ExecuteBusinessRules()"
+                          (blur)="Tiempo_de_Vuelo_ExecuteBusinessRules()" formControlName="Tiempo_de_Vuelo" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempo_de_Espera" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tiempo de Espera</mat-label>
+
+                        <input (change)="Tiempo_de_Espera_ExecuteBusinessRules()"
+                          (blur)="Tiempo_de_Espera_ExecuteBusinessRules()" formControlName="Tiempo_de_Espera" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEspera_SIN_Cargo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Espera SIN Cargo</mat-label>
+
+                        <input (change)="Espera_SIN_Cargo_ExecuteBusinessRules()"
+                          (blur)="Espera_SIN_Cargo_ExecuteBusinessRules()" formControlName="Espera_SIN_Cargo" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEspera_CON_Cargo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Espera CON Cargo</mat-label>
+
+                        <input (change)="Espera_CON_Cargo_ExecuteBusinessRules()"
+                          (blur)="Espera_CON_Cargo_ExecuteBusinessRules()" formControlName="Espera_CON_Cargo" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPernoctas" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Pernoctas</mat-label>
+
+                        <input (change)="Pernoctas_ExecuteBusinessRules()" matInput formControlName="Pernoctas"
+                          [type]="Solicitud_de_VueloForm.get('Pernoctas').value == 'Auto'  ? 'text':'number' "
+                          maxlength="5" />
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempo_de_Calzo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" hidden>
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tiempo de Calzo</mat-label>
+
+                        <input (change)="Tiempo_de_Calzo_ExecuteBusinessRules()"
+                          (blur)="Tiempo_de_Calzo_ExecuteBusinessRules()" formControlName="Tiempo_de_Calzo" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                      </mat-form-field>
+                    </div>
+                    <div id="divInternacional" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" hidden>
+                      <mat-checkbox (change)="Internacional_ExecuteBusinessRules()" formControlName="Internacional"
+                        class="example-margin">
+                        Internacional
+                      </mat-checkbox>
+                    </div>
+                  </div>
+                </mdb-tab>
+                <mdb-tab aria-label="Autorizacion_Direccion_General" title="Autorización Dirección General">
+                  <div id="tabAutorizacion_Direccion_General" class="row">
+                    <div id="divDireccion_fecha_autorizacion" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de autorización</mat-label>
+                        <input (dateChange)="Direccion_fecha_autorizacion_ExecuteBusinessRules()"
+                          (blur)="Direccion_fecha_autorizacion_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerDireccion_fecha_autorizacion.open()"
+                          [matDatepicker]="datePickerDireccion_fecha_autorizacion"
+                          formControlName="Direccion_fecha_autorizacion" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerDireccion_fecha_autorizacion">
+                        </mat-datepicker-toggle>
+
+                        <mat-datepicker #datePickerDireccion_fecha_autorizacion></mat-datepicker>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Direccion_fecha_autorizacion').hasError('required')">
+                          Fecha de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDireccion_Hora_Autorizacion" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de autorización</mat-label>
+
+                        <input (change)="Direccion_Hora_Autorizacion_ExecuteBusinessRules()"
+                          (blur)="Direccion_Hora_Autorizacion_ExecuteBusinessRules()"
+                          formControlName="Direccion_Hora_Autorizacion" matInput placeholder="EX: 23:05:29"
+                          mask="Hh:m0:s0" required />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Direccion_Hora_Autorizacion').hasError('required')">
+                          Hora de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDireccion_Usuario_Autorizacion" class="col-xl-8 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que autoriza</mat-label>
+
+                        <mat-select (selectionChange)="Direccion_Usuario_Autorizacion_ExecuteBusinessRules()"
+                          placeholder="Usuario que autoriza" formControlName="Direccion_Usuario_Autorizacion" required>
+
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Direccion_Usuario_Autorizacion').hasError('required')">
+                          Usuario que autoriza es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divDireccion_Resultado_Autorizacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Resultado</mat-label>
+                        <mat-select (selectionChange)="Direccion_Resultado_Autorizacion_ExecuteBusinessRules()"
+                          placeholder="Resultado" formControlName="Direccion_Resultado_Autorizacion" required>
+                          <mat-option>
+                          </mat-option>
+                          <mat-option *ngFor="let item of varResultado_de_Autorizacion_de_Vuelo" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Direccion_Resultado_Autorizacion').hasError('required')">
+                          Resultado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divDireccion_Motivo_Rechazo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <textarea (change)="Direccion_Motivo_Rechazo_ExecuteBusinessRules()" #Direccion_Motivo_Rechazo
+                          matInput formControlName="Direccion_Motivo_Rechazo" type="textarea" maxlength="500" multiple
+                          style="height: 100%;"
+                          [required]="Solicitud_de_VueloForm.controls['Direccion_Resultado_Autorizacion'].value == 2"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mdb-tab>
+                <mdb-tab aria-label="Autorizacion_Presidencia" title="Autorización Presidencia" *ngIf="showTab.Autorizacion_Presidencia">
+                  <div id="tabAutorizacion_Presidencia" class="row">
+                    <div id="divPresidencia_Fecha_Autorizacion" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de autorización</mat-label>
+                        <input (dateChange)="Presidencia_Fecha_Autorizacion_ExecuteBusinessRules()"
+                          (blur)="Presidencia_Fecha_Autorizacion_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerPresidencia_Fecha_Autorizacion.open()"
+                          [matDatepicker]="datePickerPresidencia_Fecha_Autorizacion"
+                          formControlName="Presidencia_Fecha_Autorizacion" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerPresidencia_Fecha_Autorizacion">
+                        </mat-datepicker-toggle>
+
+                        <mat-datepicker #datePickerPresidencia_Fecha_Autorizacion></mat-datepicker>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Presidencia_Fecha_Autorizacion').hasError('required')">
+                          Fecha de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPresidencia_Hora_Autorizacion" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de autorización</mat-label>
+
+                        <input (change)="Presidencia_Hora_Autorizacion_ExecuteBusinessRules()"
+                          (blur)="Presidencia_Hora_Autorizacion_ExecuteBusinessRules()"
+                          formControlName="Presidencia_Hora_Autorizacion" matInput placeholder="EX: 23:05:29"
+                          mask="Hh:m0:s0" required />
+
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Presidencia_Hora_Autorizacion').hasError('required')">
+                          Hora de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+
+                    <div id="divPresidencia_Usuario_Autorizacion" class="col-xl-8 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que autoriza</mat-label>
+                        <mat-select (selectionChange)="Presidencia_Usuario_Autorizacion_ExecuteBusinessRules()"
+                          placeholder="Usuario que autoriza" formControlName="Presidencia_Usuario_Autorizacion"
+                          required>
+
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Presidencia_Usuario_Autorizacion').hasError('required')">
+                          Usuario que autoriza es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divPresidencia_Resultado_Autorizacion"
+                      class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Resultado</mat-label>
+                        <mat-select (selectionChange)="Presidencia_Resultado_Autorizacion_ExecuteBusinessRules()"
+                          placeholder="Resultado" formControlName="Presidencia_Resultado_Autorizacion" required>
+
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varResultado_de_Autorizacion_de_Vuelo" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Presidencia_Resultado_Autorizacion').hasError('required')">
+                          Resultado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divPresidencia_motivo_rechazo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+
+                        <textarea (change)="Presidencia_motivo_rechazo_ExecuteBusinessRules()"
+                          #Presidencia_motivo_rechazo matInput formControlName="Presidencia_motivo_rechazo" type="text"
+                          maxlength="500" required></textarea>
+                        <mat-error
+                          *ngIf="Solicitud_de_VueloForm.get('Presidencia_motivo_rechazo').hasError('required')">
+                          Observaciones es requerido
+
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+
+
+                  </div>
+                </mdb-tab>
+              </mdb-tabs>
+              
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!Solicitud_de_VueloForm.valid || consult" mat-raised-button
+                    color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Solicitud_de_VueloForm.valid || consult" mat-raised-button color="primary" hidden>
+                    Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Solicitud_de_VueloForm.valid || consult" mat-raised-button color="primary" hidden>
+                    Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Solicitud_de_VueloForm.valid || consult" mat-raised-button color="primary">Configurar
+                  </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="cancel()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<div id="snackbar"></div>

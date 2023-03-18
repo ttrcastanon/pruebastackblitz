@@ -1,0 +1,264 @@
+﻿<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Detalle Cursos Pasajeros</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/dashboard/main">
+                                <i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Detalle Cursos Pasajeros
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+
+                        <!-- Exportar -->
+                        <div class="row" style="float: right; padding-right: 20px;">
+                            <div>
+                                <button [hidden]="!hasPermision('Export')"  mat-raised-button title="Copiar" [disabled]="false" (click)="ActionExport(1)">
+                                    Copiar
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Export')"  mat-raised-button title="CSV" [disabled]="false" (click)="ActionExport(3)">
+                                    CSV
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Export')" mat-raised-button title="Excel" [disabled]="false" (click)="ActionExport(2)">
+                                    Excel
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Export')" mat-raised-button title="PDF" [disabled]="false" (click)="ActionExport(4)">
+                                    PDF
+                                </button>
+                            </div>
+                            &nbsp;
+                            <div>
+                                <button [hidden]="!hasPermision('Print')" mat-raised-button title="Imprimir" [disabled]="false" (click)="ActionExport(5)">
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive" style="max-height: 70vh;">           
+
+                            <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+                                <mat-spinner></mat-spinner>
+                            </div>
+
+                            <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" [matSortActive]="listConfig.sortField" [matSortDirection]="listConfig.sortDirecction">
+                               
+                                <ng-container matColumnDef="acciones">
+
+                                    <mat-header-cell *matHeaderCellDef class="pr-0" style="height: 18px; width:18px;">
+                                       
+                                       
+                                        <div matTooltip="Agregar" >
+                                            <button mat-mini-fab color="primary" [hidden]="!hasPermision('New')" [routerLink]="'/Detalle_Cursos_Pasajeros/add'" [state]="{ data: listConfig}">
+                                                <mat-icon class="col-white">add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <div matTooltip="Búsqueda Avanzada" >
+                                            <button mat-mini-fab color="primary" [routerLink]="'/Detalle_Cursos_Pasajeros/showadvancefilter'" [state]="{ data: listConfig}">
+                                                <mat-icon class="col-white">search</mat-icon>
+                                            </button>
+                                        </div>
+                                        <div matTooltip="Limpiar Filtro" >
+                                            
+                                            <button mat-mini-fab color="primary" (click)="clearFilter()">
+                                                <mat-icon class="col-white">refresh</mat-icon>
+                                            </button>
+                                        </div>
+
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+
+                                        <div matTooltip="Modificar" >
+                                            <button mat-icon-button class="btn-tbl-edit" [hidden]="!hasPermision('Edit')" [routerLink]="['/Detalle_Cursos_Pasajeros/edit', row.Folio ]" [state]="{ data: listConfig}">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                        </div>
+                                      
+                                        <div matTooltip="Consultar" >
+                                            <button mat-icon-button class="btn-tbl-show" [hidden]="!hasPermision('Consult')" [routerLink]="['/Detalle_Cursos_Pasajeros/consult', row.Folio ]" [state]="{ data: listConfig}"> 
+                                                <mat-icon>preview</mat-icon>
+                                            </button>
+                                        </div>
+                                      
+                                        <div matTooltip="Borrar" >
+                                            <button mat-icon-button class="btn-tbl-delete"  [hidden]="!hasPermision('Delete')"  (click)="remove(row)" >
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+                                       
+                                        <div matTooltip="Imprimir" >
+                                            <button mat-icon-button class="btn-tbl-print"  [hidden]="!hasPermision('Print')"(click)="ActionPrint(row)">
+                                                <mat-icon>print</mat-icon>
+                                            </button>
+    
+                                        </div>
+                                        
+                                    </mat-cell>
+                                  
+                                </ng-container>                              
+
+                                <ng-container matColumnDef="acciones_filtro">
+                                    <mat-cell *matHeaderCellDef>
+
+                                    </mat-cell>
+                                </ng-container>
+
+                                                                <ng-container matColumnDef="Folio">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Folio'] ? listConfig?.styles['Folio'] : ''">
+                                        Folio
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Folio'] ? listConfig?.styles['Folio'] : ''">
+                                        <div class="text-center f-w">
+                                            {{row.Folio}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Folio_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Folio'] ? listConfig?.styles['Folio'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline"> 
+                                            <input matInput [(ngModel)]="listConfig.filter.Folio" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Curso">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Curso'] ? listConfig?.styles['Curso'] : ''">Curso</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Curso'] ? listConfig?.styles['Curso'] : ''">{{row.Curso}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Curso_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Curso'] ? listConfig?.styles['Curso'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Curso" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Descripcion_del_Curso">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Descripcion_del_Curso'] ? listConfig?.styles['Descripcion_del_Curso'] : ''">Descripción del Curso</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Descripcion_del_Curso'] ? listConfig?.styles['Descripcion_del_Curso'] : ''">{{row.Descripcion_del_Curso}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Descripcion_del_Curso_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Descripcion_del_Curso'] ? listConfig?.styles['Descripcion_del_Curso'] : ''">
+                                        <mat-form-field class="filter" appearance="outline">
+                                            <input matInput [(ngModel)]="listConfig.filter.Descripcion_del_Curso" (change)="refresh()">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Fecha_del_Curso">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_del_Curso'] ? listConfig?.styles['Fecha_del_Curso'] : ''">Fecha del Curso</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_del_Curso'] ? listConfig?.styles['Fecha_del_Curso'] : ''">{{row.Fecha_del_Curso | date: 'dd-MM-yyyy'}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Fecha_del_Curso_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_del_Curso'] ? listConfig?.styles['Fecha_del_Curso'] : ''">
+                                        <mat-form-field class="filter"  appearance="outline">
+                                            <input matInput type="text" [matDatepicker]="picker" disabled="true" [(ngModel)]="listConfig.filter.Fecha_del_Curso" (dateChange)="refresh()">
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker-toggle matSuffix (click)="listConfig.filter.Fecha_del_Curso = '';refresh()" *ngIf="listConfig.filter.Fecha_del_Curso" >
+                                                <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker disabled="false"  ></mat-datepicker>
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Vencimiento">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Vencimiento'] ? listConfig?.styles['Vencimiento'] : ''">Vencimiento</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Vencimiento'] ? listConfig?.styles['Vencimiento'] : ''">
+                                        <div class="text-center f-w">
+                                            <mat-checkbox  [disabled]="true" [checked]="row.Vencimiento" [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Vencimiento_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Vencimiento'] ? listConfig?.styles['Vencimiento'] : ''">
+                                        <mat-form-field class="filter filter-select"  appearance="outline">
+                                            <mat-select  [(value)]="listConfig.filter.Vencimiento" (selectionChange)="refresh()">
+                                                <mat-option value="2">Todos</mat-option>
+                                                <mat-option value="1">Activos</mat-option>
+                                                <mat-option value="0">Inactivos</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Fecha_de_Vencimiento">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_de_Vencimiento'] ? listConfig?.styles['Fecha_de_Vencimiento'] : ''">Fecha de Vencimiento</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_de_Vencimiento'] ? listConfig?.styles['Fecha_de_Vencimiento'] : ''">
+                                        <div class="text-center f-w">
+                                            <mat-checkbox  [disabled]="true" [checked]="row.Fecha_de_Vencimiento" [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Fecha_de_Vencimiento_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Fecha_de_Vencimiento'] ? listConfig?.styles['Fecha_de_Vencimiento'] : ''">
+                                        <mat-form-field class="filter filter-select"  appearance="outline">
+                                            <mat-select  [(value)]="listConfig.filter.Fecha_de_Vencimiento" (selectionChange)="refresh()">
+                                                <mat-option value="2">Todos</mat-option>
+                                                <mat-option value="1">Activos</mat-option>
+                                                <mat-option value="0">Inactivos</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Cargar_documento">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header [attr.style]="listConfig?.styles && listConfig?.styles['Cargar_documento'] ? listConfig?.styles['Cargar_documento'] : ''">Cargar documento</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;" [attr.style]="listConfig?.styles && listConfig?.styles['Cargar_documento'] ? listConfig?.styles['Cargar_documento'] : ''">
+                                        <div class="text-center f-w">
+                                            <a  mat-button class="btn-tbl-foto"  [disabled]="!row.Cargar_documento" [href]="_file.url(row.Cargar_documento_Spartane_File?.File_Id,row.Cargar_documento_Spartane_File?.Description)" target="_blank" matTooltip="Ver Archivo Adjunto" >
+											
+                                                <mat-icon>image_search</mat-icon>
+                                            </a>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Cargar_documento_filtro">
+                                    <mat-cell *matHeaderCellDef [attr.style]="listConfig?.styles && listConfig?.styles['Cargar_documento'] ? listConfig?.styles['Cargar_documento'] : ''">
+                                       
+                                    </mat-cell>
+                                </ng-container>
+                              
+                               
+                                <mat-header-row *matHeaderRowDef="listConfig.columns"></mat-header-row>
+
+                                <mat-row class="mat-filtro-row" *matHeaderRowDef="listConfig.columns_filters"></mat-row> 
+
+                                <mat-row *matRowDef="let row; columns: listConfig.columns;" 
+                                    [style.cursor]="'pointer'" matRipple>
+                                </mat-row>
+
+                            </mat-table>
+                        </div>
+                        <mat-paginator [length]="dataSource.total$ | async" [pageSize]="listConfig.size" [pageIndex]="listConfig.page" [pageSizeOptions]="[5, 10, 15, 20]"></mat-paginator>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="snackbar"></div>

@@ -1,0 +1,107 @@
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">{{title}}</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/dashboard/main">
+                                <i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            {{title}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="row justify-content-center align-items-center" style="height: 70vh"
+                        *ngIf="isLoading | async; else formTemplate">
+                        <mat-spinner></mat-spinner>
+                    </div>
+                    <ng-template #formTemplate>
+                        <div class="body">
+                            <div class="row clsBtnFilter">
+                                <button class="mx-1" mat-raised-button (click)="clearFilter()">
+                                    Limpiar filtro
+                                </button>
+                            </div>
+                            <div class="table-responsive p-1 mt-4" style="max-height: 70vh">
+                                <form [formGroup]="filtrosForm">
+
+                                    <div class="row">
+
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 bottom-select">
+                                            <mat-form-field class="lbl-ng-select">
+                                                <mat-label>Empleado</mat-label>
+                                                <ng-select ngSelectMat formControlName="Empleado"
+                                                    dropdownPosition="bottom" (search)="searchEmpleados($event.term)"
+                                                    (clear)="searchEmpleados('')" [loadingText]="loadingText"
+                                                    [notFoundText]="notFound" [loading]="isLoadingEmpleados">
+                                                    <ng-option *ngFor="let option of listaEmpleados | async"
+                                                        [value]="option.Id_User">{{option.Name}}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </mat-form-field>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 bottom-select">
+                                            <mat-form-field class="lbl-ng-select">
+                                                <mat-label>Matrícula</mat-label>
+                                                <ng-select ngSelectMat formControlName="Matricula" appendTo="body"
+                                                    dropdownPosition="bottom" (search)="searchAeronaves($event.term)"
+                                                    (clear)="searchAeronaves('')" [loadingText]="loadingText"
+                                                    [notFoundText]="notFound" [loading]="isLoadingAeronaves">
+                                                    <ng-option *ngFor="let option of listaAeronaves | async"
+                                                        [value]="option.Matricula">{{option.Matricula}}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </mat-form-field>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 bottom-select">
+                                            <mat-form-field class="lbl-ng-select">
+                                                <mat-label>Número de Vuelo</mat-label>
+                                                <ng-select ngSelectMat formControlName="Numero_de_Vuelo"
+                                                    dropdownPosition="bottom" appendTo="body"
+                                                    (search)="searchNumero_de_Vuelo($event.term)"
+                                                    (clear)="searchNumero_de_Vuelo('')" [loadingText]="loadingText"
+                                                    [notFoundText]="notFound" [loading]="isLoadingNumero_de_Vuelo">
+                                                    <ng-option *ngFor="let option of listaNumero_de_Vuelo | async"
+                                                        [value]="option.Numero_de_Vuelo">{{option.Numero_de_Vuelo}}</ng-option>
+                                                </ng-select>
+                                            </mat-form-field>
+                                        </div>
+
+                                    </div>
+
+                                </form>
+                            </div>
+
+                            <div class="row justify-content-end">
+                                <button class="mx-1" mat-raised-button title="Excel" (click)="getReportExcel()">
+                                    Filtrar
+                                </button>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

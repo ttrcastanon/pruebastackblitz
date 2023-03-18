@@ -1,0 +1,1278 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Búsqueda Avanzada de Crear Reporte</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Crear Reporte</a>
+            </li>
+            <li class="breadcrumb-item active">Búsqueda Avanzada</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="header">
+            <h2>
+              Búsqueda Avanzada
+            </h2>
+            <ul class="header-dropdown m-r--5">
+              <li class="dropdown">
+                <a href="#" onClick="return false;" data-toggle="dropdown" role="button" aria-haspopup="true"
+                  aria-expanded="false">
+                  <i class="material-icons">more_vert</i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                  <li>
+                    <a href="#" onClick="return false;">Action</a>
+                  </li>
+                  <li>
+                    <a href="#" onClick="return false;">Another action</a>
+                  </li>
+                  <li>
+                    <a href="#" onClick="return false;">Something else here</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="body">
+            <form class="advancefilter-form m-4" [formGroup]="advancefilter" (ngSubmit)="onadvancefilter()">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Folio De</mat-label>
+                    <input matInput formControlName="fromFolio">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Folio A</mat-label>
+                    <input matInput formControlName="toFolio">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="No. Reporte" formControlName="No_ReporteFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>No. Reporte</mat-label>
+                    <input matInput formControlName="No_Reporte" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="N_Orden_de_TrabajoFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.numero_de_orden }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>N° Orden de Trabajo</mat-label>
+                    <input matInput formControlName="N_Orden_de_Trabajo" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar N° Orden de Trabajo</mat-label>
+                    <mat-select placeholder="N° Orden de Trabajo" formControlName="N_Orden_de_TrabajoMultiple" multiple>
+                      <mat-option *ngFor="let item of orden_de_trabajos" [value]="item.Folio">
+                        {{ item.numero_de_orden }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="No__de_Orden_de_ServicioFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Folio_OS }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>No. de Orden de Servicio</mat-label>
+                    <input matInput formControlName="No__de_Orden_de_Servicio" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar No. de Orden de Servicio</mat-label>
+                    <mat-select placeholder="No. de Orden de Servicio"
+                      formControlName="No__de_Orden_de_ServicioMultiple" multiple>
+                      <mat-option *ngFor="let item of orden_de_servicios" [value]="item.Folio">
+                        {{ item.Folio_OS }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Descripción breve  " formControlName="Descripcion_breveFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Descripción breve </mat-label>
+                    <input matInput formControlName="Descripcion_breve" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Tipo_de_reporte_OSFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Tipo de reporte OS</mat-label>
+                    <input matInput formControlName="Tipo_de_reporte_OS" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Tipo de reporte OS</mat-label>
+                    <mat-select placeholder="Tipo de reporte OS" formControlName="Tipo_de_reporte_OSMultiple" multiple>
+                      <mat-option *ngFor="let item of tipo_orden_de_servicios" [value]="item.Folio">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Descripción del componente"
+                      formControlName="Descripcion_del_componenteFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Descripción del componente</mat-label>
+                    <input matInput formControlName="Descripcion_del_componente" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Numero de parte" formControlName="Numero_de_parteFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Numero de parte</mat-label>
+                    <input matInput formControlName="Numero_de_parte" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Número de serie" formControlName="Numero_de_serieFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Número de serie</mat-label>
+                    <input matInput formControlName="Numero_de_serie" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Tiempo límite ejecución" formControlName="Fecha_requeridaFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Tiempo límite ejecución</mat-label>
+                    <input matInput formControlName="Fecha_requerida" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Promedio de ejecución de</mat-label>
+                    <input matInput formControlName="fromPromedio_de_ejecucion">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Promedio de ejecución a</mat-label>
+                    <input matInput formControlName="toPromedio_de_ejecucion">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Prioridad_del_reporteFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Prioridad del reporte</mat-label>
+                    <input matInput formControlName="Prioridad_del_reporte" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Prioridad del reporte</mat-label>
+                    <mat-select placeholder="Prioridad del reporte" formControlName="Prioridad_del_reporteMultiple"
+                      multiple>
+                      <mat-option *ngFor="let item of prioridad_del_reportes" [value]="item.Folio">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Tipo_de_orden_de_trabajoFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Tipo de orden de trabajo</mat-label>
+                    <input matInput formControlName="Tipo_de_orden_de_trabajo" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Tipo de orden de trabajo</mat-label>
+                    <mat-select placeholder="Tipo de orden de trabajo"
+                      formControlName="Tipo_de_orden_de_trabajoMultiple" multiple>
+                      <mat-option *ngFor="let item of tipo_de_orden_de_trabajos" [value]="item.Folio">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="EstatusFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Estatus</mat-label>
+                    <input matInput formControlName="Estatus" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Estatus</mat-label>
+                    <mat-select placeholder="Estatus" formControlName="EstatusMultiple" multiple>
+                      <mat-option *ngFor="let item of estatus_de_reportes" [value]="item.Folio">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="MatriculaFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Matricula">
+                        {{ item.Matricula }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Matrícula</mat-label>
+                    <input matInput formControlName="Matricula" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Matrícula</mat-label>
+                    <mat-select placeholder="Matrícula" formControlName="MatriculaMultiple" multiple>
+                      <mat-option *ngFor="let item of aeronaves" [value]="item.Matricula">
+                        {{ item.Matricula }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Origen_del_reporteFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Origen del reporte</mat-label>
+                    <input matInput formControlName="Origen_del_reporte" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Origen del reporte</mat-label>
+                    <mat-select placeholder="Origen del reporte" formControlName="Origen_del_reporteMultiple" multiple>
+                      <mat-option *ngFor="let item of tipo_de_origen_del_reportes" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Codigo_computarizado_DescripcionFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Codigo">
+                        {{ item.Descripcion_Busqueda }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Código computarizado/Descripción</mat-label>
+                    <input matInput formControlName="Codigo_computarizado_Descripcion" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Código computarizado/Descripción</mat-label>
+                    <mat-select placeholder="Código computarizado/Descripción"
+                      formControlName="Codigo_computarizado_DescripcionMultiple" multiple>
+                      <mat-option *ngFor="let item of codigo_computarizados" [value]="item.Codigo">
+                        {{ item.Descripcion_Busqueda }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Ciclos restantes De</mat-label>
+                    <input matInput formControlName="fromCiclos_restantes">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Ciclos restantes A</mat-label>
+                    <input matInput formControlName="toCiclos_restantes">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Horas restantes De</mat-label>
+                    <input matInput formControlName="fromHoras_restantes">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Horas restantes A</mat-label>
+                    <input matInput formControlName="toHoras_restantes">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="N° boletín/directiva" formControlName="N_boletin_directivaFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>N° boletín/directiva</mat-label>
+                    <input matInput formControlName="N_boletin_directiva" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Título boletín/directiva" formControlName="Titulo_boletin_directivaFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Título boletín/directiva</mat-label>
+                    <input matInput formControlName="Titulo_boletin_directiva" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Tipo_de_reporteFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Tipo de reporte</mat-label>
+                    <input matInput formControlName="Tipo_de_reporte" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Tipo de reporte</mat-label>
+                    <mat-select placeholder="Tipo de reporte" formControlName="Tipo_de_reporteMultiple" multiple>
+                      <mat-option *ngFor="let item of tipo_de_reportes" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Reporte de aeronave" formControlName="Reporte_de_aeronaveFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Reporte de aeronave</mat-label>
+                    <input matInput formControlName="Reporte_de_aeronave" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="N° de bitácora" formControlName="N_de_bitacoraFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>N° de bitácora</mat-label>
+                    <input matInput formControlName="N_de_bitacora" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Codigo_ATAFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Codigo_ATA_Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Código ATA</mat-label>
+                    <input matInput formControlName="Codigo_ATA" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Código ATA</mat-label>
+                    <mat-select placeholder="Código ATA" formControlName="Codigo_ATAMultiple" multiple>
+                      <mat-option *ngFor="let item of catalogo_codigo_atas" [value]="item.Folio">
+                        {{ item.Codigo_ATA_Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> IdDiscrepancia De</mat-label>
+                    <input matInput formControlName="fromIdDiscrepancia">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> IdDiscrepancia A</mat-label>
+                    <input matInput formControlName="toIdDiscrepancia">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Inspección de Entrada De</mat-label>
+                    <input matInput formControlName="fromId_Inspeccion_de_Entrada">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Inspección de Entrada A</mat-label>
+                    <input matInput formControlName="toId_Inspeccion_de_Entrada">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> IdCotización De</mat-label>
+                    <input matInput formControlName="fromIdCotizacion">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> IdCotización A</mat-label>
+                    <input matInput formControlName="toIdCotizacion">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha de Creación del Reporte De</mat-label>
+                    <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                      formControlName="fromFecha_de_Creacion_del_Reporte" type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickerde></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha de Creación del Reporte A</mat-label>
+                    <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                      formControlName="toFecha_de_Creacion_del_Reporte" type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickera></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora de Creación del Reporte De</mat-label>
+                    <input formControlName="fromHora_de_Creacion_del_Reporte" matInput placeholder="EX: 23:05:29 "
+                      mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora de Creación del Reporte A</mat-label>
+                    <input formControlName="toHora_de_Creacion_del_Reporte" matInput placeholder="EX: 23:05:29 "
+                      mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha de Asignación De</mat-label>
+                    <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                      formControlName="fromFecha_de_Asignacion" type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickerde></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha de Asignación A</mat-label>
+                    <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                      formControlName="toFecha_de_Asignacion" type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickera></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora de Asignación De</mat-label>
+                    <input formControlName="fromHora_de_Asignacion" matInput placeholder="EX: 23:05:29 "
+                      mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora de Asignación A</mat-label>
+                    <input formControlName="toHora_de_Asignacion" matInput placeholder="EX: 23:05:29 "
+                      mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Notas" formControlName="NotasFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Notas</mat-label>
+                    <input matInput formControlName="Notas" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Tiempo total de ejecución de</mat-label>
+                    <input matInput formControlName="fromTiempo_total_de_ejecucion">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Tiempo total de ejecución a</mat-label>
+                    <input matInput formControlName="toTiempo_total_de_ejecucion">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha De</mat-label>
+                    <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                      formControlName="fromFecha_resp" type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickerde></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha A</mat-label>
+                    <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera" formControlName="toFecha_resp"
+                      type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickera></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora De</mat-label>
+                    <input formControlName="fromHora_resp" matInput placeholder="EX: 23:05:29 " mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora A</mat-label>
+                    <input formControlName="toHora_resp" matInput placeholder="EX: 23:05:29 " mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Respondiente_respFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Id_User">
+                        {{ item.Name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Responsable</mat-label>
+                    <input matInput formControlName="Respondiente_resp" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Responsable</mat-label>
+                    <mat-select placeholder="Responsable" formControlName="Respondiente_respMultiple" multiple>
+                      <mat-option *ngFor="let item of spartan_users" [value]="item.Id_User">
+                        {{ item.Name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Ayuda_de_respuesta_respFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Respuesta_de_ayuda }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Ayuda de respuesta</mat-label>
+                    <input matInput formControlName="Ayuda_de_respuesta_resp" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Ayuda de respuesta</mat-label>
+                    <mat-select placeholder="Ayuda de respuesta" formControlName="Ayuda_de_respuesta_respMultiple"
+                      multiple>
+                      <mat-option *ngFor="let item of ayuda_de_respuesta_crear_reportes" [value]="item.Folio">
+                        {{ item.Respuesta_de_ayuda }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Respuesta" formControlName="Respuesta_respFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Respuesta</mat-label>
+                    <input matInput formControlName="Respuesta_resp" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha De</mat-label>
+                    <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                      formControlName="fromFecha_sup" type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickerde></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha A</mat-label>
+                    <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera" formControlName="toFecha_sup"
+                      type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickera></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora De</mat-label>
+                    <input formControlName="fromHora_sup" matInput placeholder="EX: 23:05:29 " mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora A</mat-label>
+                    <input formControlName="toHora_sup" matInput placeholder="EX: 23:05:29 " mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="SupervisorFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Id_User">
+                        {{ item.Name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Supervisor</mat-label>
+                    <input matInput formControlName="Supervisor" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Supervisor</mat-label>
+                    <mat-select placeholder="Supervisor" formControlName="SupervisorMultiple" multiple>
+                      <mat-option *ngFor="let item of spartan_users" [value]="item.Id_User">
+                        {{ item.Name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Resultado_supFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Autorizacion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Resultado</mat-label>
+                    <input matInput formControlName="Resultado_sup" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Resultado</mat-label>
+                    <mat-select placeholder="Resultado" formControlName="Resultado_supMultiple" multiple>
+                      <mat-option *ngFor="let item of resultado_aprobacion_crear_reportes" [value]="item.Folio">
+                        {{ item.Autorizacion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Tiempo de ejecución en Hrs De</mat-label>
+                    <input matInput formControlName="fromTiempo_ejecucion_Hrs_sup">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Tiempo de ejecución en Hrs A</mat-label>
+                    <input matInput formControlName="toTiempo_ejecucion_Hrs_sup">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Observaciones" formControlName="Observaciones_supFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Observaciones</mat-label>
+                    <input matInput formControlName="Observaciones_sup" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha De</mat-label>
+                    <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                      formControlName="fromFecha_ins" type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickerde></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha A</mat-label>
+                    <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera" formControlName="toFecha_ins"
+                      type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickera></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora De</mat-label>
+                    <input formControlName="fromHora_ins" matInput placeholder="EX: 23:05:29 " mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora A</mat-label>
+                    <input formControlName="toHora_ins" matInput placeholder="EX: 23:05:29 " mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="InspectorFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Id_User">
+                        {{ item.Name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Inspector</mat-label>
+                    <input matInput formControlName="Inspector" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Inspector</mat-label>
+                    <mat-select placeholder="Inspector" formControlName="InspectorMultiple" multiple>
+                      <mat-option *ngFor="let item of spartan_users" [value]="item.Id_User">
+                        {{ item.Name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Resultado_insFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Autorizacion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Resultado</mat-label>
+                    <input matInput formControlName="Resultado_ins" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Resultado</mat-label>
+                    <mat-select placeholder="Resultado" formControlName="Resultado_insMultiple" multiple>
+                      <mat-option *ngFor="let item of resultado_aprobacion_crear_reportes" [value]="item.Folio">
+                        {{ item.Autorizacion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Tiempo de ejecución en Hrs De</mat-label>
+                    <input matInput formControlName="fromTiempo_ejecucion_Hrs_ins">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Tiempo de ejecución en Hrs A</mat-label>
+                    <input matInput formControlName="toTiempo_ejecucion_Hrs_ins">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Observaciones" formControlName="Observaciones_insFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Observaciones</mat-label>
+                    <input matInput formControlName="Observaciones_ins" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha De</mat-label>
+                    <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                      formControlName="fromFecha_pro" type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickerde></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Fecha A</mat-label>
+                    <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera" formControlName="toFecha_pro"
+                      type="text" />
+                    <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                    <mat-datepicker #rpickera></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora De</mat-label>
+                    <input formControlName="fromHora_pro" matInput placeholder="EX: 23:05:29 " mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Hora A</mat-label>
+                    <input formControlName="toHora_pro" matInput placeholder="EX: 23:05:29 " mask="Hh:m0:s0" />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Programador_de_mantenimientoFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Id_User">
+                        {{ item.Name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Programador de mantenimiento</mat-label>
+                    <input matInput formControlName="Programador_de_mantenimiento" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Programador de mantenimiento</mat-label>
+                    <mat-select placeholder="Programador de mantenimiento"
+                      formControlName="Programador_de_mantenimientoMultiple" multiple>
+                      <mat-option *ngFor="let item of spartan_users" [value]="item.Id_User">
+                        {{ item.Name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Filtrar" formControlName="Resultado_proFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                        {{ item.Autorizacion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Resultado</mat-label>
+                    <input matInput formControlName="Resultado_pro" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label> Seleccionar Resultado</mat-label>
+                    <mat-select placeholder="Resultado" formControlName="Resultado_proMultiple" multiple>
+                      <mat-option *ngFor="let item of resultado_aprobacion_crear_reportes" [value]="item.Folio">
+                        {{ item.Autorizacion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Tiempo de ejecución en Hrs De</mat-label>
+                    <input matInput formControlName="fromTiempo_ejecucion_Hrs_pro">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Tiempo de ejecución en Hrs A</mat-label>
+                    <input matInput formControlName="toTiempo_ejecucion_Hrs_pro">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Filtrar</mat-label>
+                    <mat-select placeholder="Observaciones" formControlName="Observaciones_proFilter">
+                      <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                        {{ item.Descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Observaciones</mat-label>
+                    <input matInput formControlName="Observaciones_pro" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" mat-raised-button color="primary" (click)="buscar()"> Buscar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #END# Basic Validation -->
+  </div>
+</section>
+<div id="snackbar"></div>

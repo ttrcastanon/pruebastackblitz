@@ -1,0 +1,109 @@
+﻿tr.example-detail-row {
+  height: 0;
+}
+
+.row-container {
+  visibility     : visible;
+  display        : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  flex-wrap      : wrap;
+  margin-top     : 10px;
+}
+
+.row-container>.mat-form-field {
+  width: 19%;
+}
+
+.row-container>.mat-checkbox {
+  padding-top: 15px;
+}
+
+.hide {
+  display: none;
+}
+
+.center {
+  text-align     : center;
+  justify-content: center;
+}
+
+:host ::ng-deep .no-padding div.mat-form-field-wrapper {
+  padding-bottom: 0
+}
+
+.mat-table .mat-header-cell {
+  padding-right: 20px;
+}
+
+.top-action-container-table {
+  display        : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  padding-top    : 15px;
+}
+
+.clsAcciones {
+  width: 10% !important
+}
+
+.clsCargo {
+  width: 12% !important;
+}
+
+.clsTripulante {
+  width: 16% !important;
+}
+
+.clsPasaporte {
+  width: 16% !important;
+}
+
+.clsLicencia {
+  width: 16% !important;
+}
+
+.clsCertificado {
+  width: 16% !important;
+}
+
+:host ::ng-deep .mat-header-cell {
+  padding-left: 1rem;
+}
+
+:host ::ng-deep .td.mat-cell {
+  padding-left: 0;
+}
+
+:host ::ng-deep .mat-form-field {
+  width: 95%;
+}
+
+.clsCargoForm {
+  width: 10rem;
+  flex : 0 0 17%;
+}
+
+.clsTripulanteForm {
+  width: 12rem;
+  flex : 0 0 18%;
+}
+
+.clsPasaporteForm {
+  width: 13rem;
+  flex : 0 0 20%;
+}
+
+.clsLicenciaForm {
+  width: 12rem;
+  flex : 0 0 20%;
+}
+
+.clsCertificadoForm {
+  width: 12rem;
+  flex : 0 0 20%;
+}
+
+.btnGuardarTramo {
+  background-color: #21b9bb !important
+}

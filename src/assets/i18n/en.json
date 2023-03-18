@@ -1,0 +1,3542 @@
+﻿{
+ "main": {
+ "title": "Dashboard en Ingles"
+ },
+ "general": {
+ "home": "Home",
+ "add": "Add",
+ "print": "Print",
+ "edit": "Edit",
+ "view": "Consult",
+ "remove":"Delete",
+ "remove_confirmation":"Confirm delete",
+ "cancel":"Cancel",
+ "save": "Save",
+ "save_and_new": "Save and New",
+ "save_and_copy": "Save and Copy",
+ "items_per_page":"Registros por página",
+ "next_page":"Página siguiente",
+ "previus_page":"Página anterior",
+ "first_page":"Primera página",
+ "last_page":"Ultima página",
+ "general":"Auto",
+ "procesing":"Processing...",
+ "close":"Close"
+ },
+ "registro_de_empleado": {
+ "Title": "Employee",
+ "Datos_Generales": "General Data",
+ "Section_2": "Folder 2",
+ "Section_3": "Folder 3",
+ "Folio": "Folio",
+ "Fecha_de_Registro": "Register Date",
+ "Hora_de_Registro": "Hora de Registro",
+ "Nombre_Completo": "Full Name",
+ "Sueldo": "Salary",
+ "Estatura": "height",
+ "Activo": "Active",
+ "Observaciones": "Observations",
+ "Fotografia": "Picture",
+ "Departamento": "Department",
+ "Area": "Area",
+ "Cargo": "Position",
+ "Curriculum": "Curriculum Vitae",
+ "Herramientas": "Tools",
+ "titulo":"Employee Registration",
+ "eliminar_titulo":"Seguro que desea eliminar el empleado",
+ "eliminar_subtitulo":"El empleado eliminado no se puede recuperar",
+ "eliminar_completado":"El empleado se ha eliminado correctamente",
+ "Inactivo":"Inactivo",
+ "Todos": "Todos",
+ "Curriculum_Short":"Curriculum",
+ "Familiares": "Familiares"
+ },
+ "Departamento": {
+ "Folio": "Folio",
+ "Descripcion": "Descripcion del dep"
+ },
+ "Area": {
+ "Title": "Area",
+ "Folio": "Folio",
+ "Descripcion": "Descripcion del area"
+ },
+ "menu":{
+ "module":{
+ "1":"Catalogs",
+ "23":"Security admin",
+ "34": "Formats",
+ "38": "Reports",
+ "45": "Spartane Language",
+ "46": "Spartane Workflow"
+ },
+ "object":{
+ "44871":"Area",
+ "44872":"Position",
+ "44870":"Department",
+ "44873":"Tools",
+ "44876":"Employement register",
+ "47162":"Prueba",
+ "47162":"Pruebas",
+ "47472":"Pantalla_Sencilla",
+ "47471":"Tabla_Relacion_Autocompletable",
+ "47470":"Tabla_Relacion_Sencilla",
+ "47627":"Coberturas_Autos_de_Empleado",
+ "47621":"Empleado",
+ "47622":"Beneficiarios_de_Empleado",
+ "47596":"Calificacion",
+ "47632":"Carga_de_siniestralidad",
+ "47634":"Carga_de_Tarifas_de_GMM",
+ "47603":"Circulo_Medico",
+ "47629":"Cobertura_de_Seguro_de_Vida",
+ "47623":"Coberturas_GMM_de_Empleado",
+ "47630":"Coberturas_Vida_de_Empleado",
+ "47637":"Configuracion_de_Workflow",
+ "47642":"Configuracion_del_Sistema",
+ "47633":"Detalle_siniestralidad",
+ "47601":"Documento_Requerido_de_Subtramite",
+ "47610":"Domicilio_de_Medico",
+ "47602":"Empresa",
+ "47611":"Especialidad",
+ "47606":"Estado",
+ "47615":"Estatus_de_empleado",
+ "47597":"Estatus_de_tramite",
+ "47614":"Estatus_de_usuario",
+ "47594":"Forma_de_Pago",
+ "47616":"Genero",
+ "47640":"Grupo_de_Prestacion",
+ "47608":"Hospital",
+ "47638":"Informacion_por_SubTramite",
+ "47625":"Marca_de_Auto",
+ "47609":"Medico",
+ "47631":"Mes",
+ "47607":"Municipio",
+ "47604":"Nivel_hospitalario",
+ "47624":"Paquete_de_Poliza_de_Auto",
+ "47617":"Parentesco",
+ "47592":"Periodicidad_de_Pago",
+ "47641":"Poliza_de_GMM",
+ "47598":"Ramo",
+ "47619":"Ramos_y_Empresas_de_Usuario",
+ "47613":"Rol_de_Usuario",
+ "47612":"Subespecialidad",
+ "47600":"Subtramite",
+ "47636":"Tarifas_de_GMM",
+ "47620":"Tipo_de_Asegurado",
+ "47593":"Tipo_de_Contestacion_de_Tramite",
+ "47595":"Tipo_de_documento",
+ "47628":"Tipo_de_Plan_de_Seguro_de_Vida",
+ "47605":"Tipo_de_proveedor",
+ "47635":"Tipo_de_Tarifa_de_GMM",
+ "47626":"Tipo_de_Vehiculo",
+ "47599":"Tramite",
+ "47618":"Usuario_del_Sistema",
+ "47653":"Historial_de_cambios_de_tramite",
+ "47650":"Solicitud_de_Tramite",
+ "47645":"Aceptacion_de_Permisos_ARCO",
+ "47666":"Etapa_de_reporte_hospitalario",
+ "47676":"Integrante_de_Sala_de_Chat",
+ "47677":"Mensaje_de_Chat",
+ "47660":"Respuesta",
+ "47675":"Sala_de_Chat",
+ "47649":"Tarifas_de_Autos",
+ "47647":"Tarifas_de_Vida",
+ "47658":"Tipo_de_Cotizacion",
+ "47656":"Tipo_de_Modificacion",
+ "47661":"Tipo_de_Siniestro",
+ "47654":"Atencion_de_Tramite",
+ "47672":"Autos_Alta",
+ "47673":"Autos_Baja",
+ "47674":"Autos_Modificacion",
+ "47648":"Carga_de_Tarifas_de_Autos",
+ "47646":"Carga_de_Tarifas_de_Vida",
+ "47651":"Documentacion_requerida_de_tramite",
+ "47665":"GMM_2da_Opinion",
+ "47663":"GMM_Ampliacion_de_programacion",
+ "47655":"GMM_Baja",
+ "47659":"GMM_Cotizacion",
+ "47657":"GMM_Modificacion",
+ "47662":"GMM_Programacion",
+ "47664":"GMM_Reembolso",
+ "47667":"GMM_Reporte_Hospitalario",
+ "47652":"Observacion_de_tramite",
+ "47668":"Vida_Baja",
+ "47670":"Vida_Cotizacion",
+ "47669":"Vida_Modificacion",
+ "47671":"Vida_Siniestro",
+ "46769":"Catalogo_codigo_ATA",
+ "46058":"Ciudad",
+ "46057":"Estado",
+ "45938":"Modelos",
+ "46036":"Pais",
+ "46047":"Tipo_de_Cambio",
+ "46703":"Actividades_de_los_Colaboradores",
+ "46953":"Agrupacion_Concepto_Balance_General",
+ "46832":"Agrupacion_de_Reportes",
+ "46944":"Ano",
+ "47012":"Aplicacion__de_Prestamo",
+ "46748":"Salida_en_Almacen_de_partes",
+ "46578":"Autorizacion",
+ "46777":"Autorizacion_de_Prefactura_Aerovics",
+ "46781":"Ayuda_de_respuesta_crear_reporte",
+ "46251":"Bitacora",
+ "46083":"Boletines_Directivas_aeronavegatibilidad",
+ "46306":"Calendario_Configuracion",
+ "46308":"Calendario_Configuracion_Rol",
+ "46942":"Carga_Manual",
+ "46121":"Cargo_de_Tripulante",
+ "45960":"Cargos",
+ "46655":"Cat__reportes_prestablecidos",
+ "47011":"Catalago_Manual_de_Usuario",
+ "46705":"Catalogo_Actividades_de_Colaboradores",
+ "46056":"Aeropuertos",
+ "45942":"Aeronave",
+ "45967":"Creacion_de_Proveedores",
+ "46665":"Herramientas",
+ "46019":"Listado_de_Materiales",
+ "46663":"Partes",
+ "46835":"Catalogo_Reportes",
+ "46673":"Catalogo_servicios",
+ "46728":"Catalogo_Tipo_de_Vencimiento",
+ "46741":"Categoria_de_Partes",
+ "47018":"Categorias_y_Documentos_Requeridos",
+ "46735":"Categorias_y_Documentos_Requeridos_de_Partes",
+ "46929":"Causa_de_remocion",
+ "46158":"Cierre_de_Vuelo",
+ "45979":"Clasificacion_de_aeronavegabilidad",
+ "45970":"Clasificacion_de_proveedores",
+ "45941":"Cliente",
+ "46938":"Cliente_Facturacion",
+ "45937":"CMP_a_Cotizar",
+ "45940":"Codigo_Computarizado",
+ "46061":"Colores",
+ "46851":"Comisariato_y_notas_de_vuelo",
+ "46629":"Comparativo_de_Proveedores_Piezas",
+ "46633":"Comparativo_de_Proveedores_Materiales",
+ "46631":"Comparativo_de_Proveedores_Servicios",
+ "46950":"Concepto",
+ "46954":"Concepto_Balance_General",
+ "46123":"Concepto_de_Comisariato_Normal",
+ "46148":"Concepto_de_Gasto_de_Aeronave",
+ "46147":"Concepto_de_Gasto_de_Empleado",
+ "46958":"Concepto_Estado_de_Resultado",
+ "46543":"Condicion_del_item",
+ "45950":"Configuracion_de_Codigo_Computarizado",
+ "46774":"Impuestos",
+ "46222":"Configuracion_de_Notificacion",
+ "46034":"Pasajeros",
+ "46412":"Configuracion_de_Politicas_de_Viaticos",
+ "45971":"Configuracion_de_tecnicos_e_inspectores",
+ "45959":"Creacion_de_Usuarios",
+ "46254":"Consecutivo_Numero_de_vuelo",
+ "47016":"Control_de_Calibracion_de_Equipo_y_Herramienta",
+ "45976":"Control_de_Componentes",
+ "46095":"Control_Componentes_de_la_Aeronave",
+ "47014":"Control_de_Herramientas__Materiales_y_Equipo_prestado",
+ "46115":"Coordinacion_Avisos",
+ "46142":"Coord__de_Vuelo__Documentacion",
+ "46117":"Coordinacion_Handling",
+ "46130":"Coordinacion_Pasajeros",
+ "46136":"Coord__de_Vuelo__Tripulacion",
+ "46738":"Costos_de_Importacion",
+ "45945":"Cotizacion",
+ "45963":"Creacion_de_Clientes",
+ "46488":"Crear_Reporte",
+ "46577":"Departamento",
+ "46834":"Detalle_Agrupacion_de_Reportes",
+ "46907":"Detalle_Anticipo_de_Viaticos",
+ "46751":"Detalle_Cargar_inspecciones_de_calidad",
+ "46966":"Detalle_cargar_instrucciones",
+ "46160":"Detalle_Cierre_Pasajeros",
+ "46159":"Detalle_Cierre_Tripulacion",
+ "46177":"Detalle_Codigos_Computarizados_Cotizacion",
+ "46291":"Detalle_Comisariatos",
+ "46311":"Detalle_Componentes_Tipo_Bitacora_Aeronave",
+ "45951":"Detalle_Config_Partes_Asociadas",
+ "45952":"Detalle_Config_Servicios_Asociados",
+ "46413":"Detalle_Configuracion_de_Politicas_de_Viaticos",
+ "46143":"Detalle_Coord_Documentacion_Aeronave",
+ "46144":"Detalle_Coord_Documentacion_PAXs",
+ "46133":"Detalle_Coord_Paxs_Comisariato_Instalaciones",
+ "46132":"Detalle_Coord_Paxs_Comisariato_Normal",
+ "46131":"Detalle_Coord_Paxs_Comisariato_Periodico_y_Revistas",
+ "46134":"Detalle_Coord_Paxs_Reservaciones",
+ "46135":"Detalle_Coord_Paxs_Transportacion",
+ "46137":"Detalle_Coord_Tripulacion",
+ "46138":"Detalle_Coord_Tripulacion_Reservaciones",
+ "46139":"Detalle_Coord_Tripulacion_Transportacion",
+ "46116":"Detalle_Coordinacion_Avisos",
+ "46118":"Detalle_Coordinacion_Handling",
+ "46128":"Detalle_Coordinacion_Paxs_Servicios",
+ "46257":"Detalle_Cursos_de_Tripulacion",
+ "46250":"Detalle_Cursos_Pasajeros",
+ "46704":"Detalle_de_Actividades_de_Colaboradores",
+ "46630":"Detalle_de_Agregar_Proveedor_Piezas",
+ "46634":"Detalle_de_Agregar_Proveedor_Materiales",
+ "46632":"Detalle_de_Agregar_Proveedor_Servicios",
+ "47017":"Detalle_de_Calibracion_por_Herramienta",
+ "46737":"Detalle_de_Compras_de_Importacion",
+ "46740":"Detalle_de_Compras_en_exportacion",
+ "46696":"detalle_de_configuracion_de_proveedores",
+ "46852":"Detalle_de_Cuadro_Comparativo",
+ "45973":"Detalle_de_Documentos_Cursos",
+ "45972":"Detalle_de_Documentos_Tecnicos",
+ "46677":"Detalle_de_Generacion_de_OC",
+ "46675":"Detalle_de_Gestion_de_aprobacion",
+ "47015":"Detalle_de_Herramientas_y_Equipo_Prestado",
+ "46529":"detalle_de_imagenes_de_aeronave",
+ "46768":"Detalle_Inspeccion_Salida",
+ "46686":"Detalle_de_Instalacion_de_piezas",
+ "46559":"Detalle_de_Item_Compras_Generales",
+ "46554":"Detalle_de_Item_Servicios",
+ "46555":"Detalle_de_Lista_Predeterminada",
+ "46509":"Detalle_de_Listado_de_Ordenes_de_Trabajo",
+ "46731":"Detalle_de_Listado_de_Pago_de_Proveedores",
+ "46619":"Detalle_de_Materiales",
+ "46685":"Detalle_de_Remocion_de_piezas",
+ "46612":"Detalles_de_trabajo_de_OT",
+ "46721":"Detalle_de_reportes_por_aeronave",
+ "46720":"Detalle_de_reportes_por_componentes",
+ "46654":"Detalle_de_Reportes_Prestablecidos",
+ "46664":"Detalle_de_Seguimiento_de_Solicitud_de_Compras",
+ "46636":"Detalle_de_Seguros_Asociados",
+ "46747":"Detalle_de_Solicitud_de_partes_materiales_y_herramientas",
+ "46611":"Detalle_de_Solicitud_de_Piezas",
+ "46614":"Detalle_de_Solicitud_de_Servicios_Herramientas_Materiales",
+ "46162":"Detalle_Ejecucion_de_vuelo_pasajeros",
+ "46424":"Detalle_Ejecucion_de_vuelo_pasajeros_adicionales",
+ "46167":"Detalle_Ejecucion_Vuelo_Altimetros",
+ "46166":"Detalle_Ejecucion_Vuelo_Componentes",
+ "46165":"Detalle_Ejecucion_Vuelo_Parametros",
+ "46247":"Detalle_Empresas_Conf_Usuario",
+ "46289":"Detalle_FBO",
+ "46215":"Detalle_Frecuencia_Notificaciones",
+ "46153":"Detalle_Gastos_Aeronave",
+ "46415":"Detalle_Gastos_Anticipo_Viaticos",
+ "46152":"Detalle_Gastos_Empleado",
+ "46154":"Detalle_Gastos_Resumen",
+ "45949":"Detalle_Historial_Motivo_Edicion",
+ "46290":"Detalle_Hoteles",
+ "46542":"Detalle_Inspeccion_Entrada_Aeronave",
+ "46312":"Detalle_Lectura_Altimetros_Tipo_Bitacora_Aeronave",
+ "46743":"Detalle_Listado_de_compras_en_proceso",
+ "46725":"Detalle_Listado_de_Pagos_de_Servicios_de_Operaciones",
+ "46230":"Detalle_Listado_Inspeccion_Inical",
+ "46287":"Detalle_Motores_de_Aeronave",
+ "46668":"Detalle_multiselect_proveedores",
+ "46310":"Detalle_Parametros_Tipo_Bitacora_Aeronave",
+ "46084":"Detalle_Parte_Asociada_al_Componente_Aeronave",
+ "45978":"Detalle_Parte_Asociada_Componentes",
+ "45947":"Detalle_Partes_CMP_Cotizar",
+ "46178":"Detalle_Partes_Cotizacion",
+ "46110":"Detalle_Pasajeros_Solicitud_de_Vuelo",
+ "46111":"Detalle_pasajeros_tramo_de_vuelo",
+ "46288":"Detalle_Pista_de_Aeropuerto",
+ "45955":"Detalle_Politicas_Cuota_Consumibles",
+ "45956":"Detalle_Politicas_Partes_Cliente_Contrato",
+ "45957":"Detalle_Politicas_Partes_Cliente_No_Contrato",
+ "45954":"Detalle_Politicas_Mano_de_Obra",
+ "45958":"Detalle_Politicas_Terceros",
+ "46114":"Detalle_Registro_Vuelo_Pasajeros",
+ "46113":"Detalle_Registro_Vuelo_Tripulacion",
+ "46252":"Detalle_Seguros_Asociados_a",
+ "45980":"Detalle_Servicios_Asociados_Componentes",
+ "46088":"Detalle_Servicios_Asociados_Control_Componentes",
+ "45948":"Detalle_Servicios_Externos_CMP_Cotizar",
+ "46179":"Detalle_Servicios_Externos_Cotizacion",
+ "46667":"Detalle_Solicitud_de_Cotizacion",
+ "46695":"Detalle_Solicitud_de_Herramientas_Crear_reporte",
+ "46681":"Detalle_Solicitud_de_Herramientas_Gestion_de_aprobacion",
+ "46694":"Detalle_Solicitud_de_Materiales_Crear_reporte",
+ "46623":"Detalle_Solicitud_de_Materiales_Gestion_de_aprobacion",
+ "46691":"Detalle_Solicitud_de_Partes_Crear_reporte",
+ "46621":"Detalle_Solicitud_de_Piezas",
+ "46693":"Detalle_Solicitud_de_Servicios_Crear_reporte",
+ "46622":"Detalle_Solicitud_de_Servicios_Gestion_de_aprobacion",
+ "46475":"Detalle_Tabla_de_Control_de_Componentes",
+ "46779":"Detalle_tiempo_ejecutantes_crear_reporte",
+ "46169":"Detalle_Toma_de_Tiempos_Componentes",
+ "46112":"Detalle_Tramo_de_vuelo",
+ "46292":"Detalle_Transportes",
+ "46687":"Discrepancias_Pendientes_Salida",
+ "46140":"Documentacion_de_Aeronave",
+ "46141":"Documentacion_de_Pasajero",
+ "46848":"Documentos_Requeridos",
+ "46180":"Spartan_Record_Detail_Management",
+ "46161":"Ejecucion_de_Vuelo",
+ "46239":"Equipo_de_Navegacion",
+ "46098":"Estatus_Aeronave",
+ "46776":"Estatus_autorizacion_de_prefactura",
+ "47013":"Estatus_de_Calibracion",
+ "46157":"Estatus_de_Cierre_de_Vuelo",
+ "45964":"Estatus_de_Cliente",
+ "45935":"Estatus_de_CMP_a_Cotizar",
+ "45977":"Estatus_de_componente",
+ "46119":"Estatus_de_Confirmacion",
+ "45931":"Estatus_de_Cotizacion",
+ "46857":"Estatus_de_facturacion_de_vuelo",
+ "46217":"Estatus_de_Funcionalidad_para_Notificacion",
+ "46146":"Estatus_de_Gastos_de_Vuelo",
+ "46510":"Estatus_de_Orden_de_Trabajo",
+ "46030":"Estatus_Reporte",
+ "45968":"Estatus_de_Proveedor",
+ "46931":"Estatus_de_remocion",
+ "46527":"Estatus_de_Reporte",
+ "46734":"Estatus_de_Requerido",
+ "45932":"Estatus_de_Revision_en_Cotizacion",
+ "46609":"Estatus_de_Seguimiento",
+ "46733":"Estatus_de_Seguimiento_de_Materiales",
+ "46549":"Estatus_de_Solicitud_de_Compras",
+ "46579":"Estatus_de_Solicitud_de_Compras_Generales",
+ "46107":"Estatus_de_Solicitud_de_Vuelo",
+ "45961":"Estatus_de_Usuario",
+ "46556":"Estatus_Detalle_Servicios_Asociados_Control_Componentes",
+ "46881":"Estatus_Gestion_Aprobacion",
+ "46207":"Estatus_Modulo_de_Mantenimiento",
+ "46213":"Estatus_Notificacion",
+ "46089":"Estatus_Parte_Asociada_al_Componente",
+ "46238":"Estatus_Tripulacion",
+ "46692":"Existencia_solicitud_crear_reporte",
+ "46097":"Fabricante",
+ "46772":"Facturacion_de_Vuelo",
+ "46775":"Facturacion_de_vuelos_por_tramo",
+ "46855":"Filtros_de_reportes",
+ "46765":"Folios_Generacion_OC",
+ "46150":"Forma_de_Pago",
+ "46219":"Funcionalidades_para_Notificacion",
+ "46151":"Gastos_de_Vuelo",
+ "46676":"Generacion_de_Orden_de_Compras",
+ "46038":"Genero",
+ "46674":"Gestion_de_aprobacion",
+ "46155":"Historial_de_Cambios",
+ "46924":"Historial_de_Instalacion_de_partes",
+ "46920":"Historial_de_Remocion_de_partes",
+ "45962":"Horarios_de_Trabajo",
+ "47121":"Husos_de_horarios",
+ "46458":"Impresion_de_Bitacora_de_Vuelo",
+ "46678":"Gestion_de_Exportacion",
+ "46679":"Gestion_de_Importacion",
+ "46744":"Ingreso_a_almacen",
+ "46398":"Ingreso_de_Componente",
+ "46726":"Ingreso_de_Costos_de_Servicios",
+ "46684":"Formato_de_salida_de_aeronave",
+ "46196":"Inspeccion_Entrada_Aeronave",
+ "46124":"Instalacion",
+ "46198":"Items",
+ "46955":"Layout_Balance_General",
+ "46963":"Layout_Cuentas_por_pagar",
+ "46959":"Layout_Estado_de_Resultado",
+ "46948":"Layout_Gastos",
+ "46962":"Layout_Incidencia_Vuelos",
+ "46949":"Layout_Presupuestos",
+ "46956":"Layout_Presupuestos_Ventas",
+ "46951":"Layout_Proveedores",
+ "46553":"Lista_Predeterminada",
+ "46742":"Listado_de_compras_en_proceso",
+ "46739":"Listado_de_compras_en_proceso_de_Exportacion",
+ "46736":"Listado_de_compras_en_proceso_de_Importacion",
+ "46483":"Listado_de_Directivas_de_aeronavegabilidad",
+ "46506":"Listado_de_Ordenes_de_Trabajo",
+ "46727":"Listado_de_Pago_de_Proveedores",
+ "46770":"Listado_de_Vuelo_a_Facturar",
+ "46229":"Listado_Inspeccion_Inical",
+ "46122":"Medio_de_Comunicacion",
+ "46945":"Mes",
+ "46202":"Modulo_de_Mantenimiento",
+ "46833":"Modulos_reportes",
+ "46149":"Moneda",
+ "45933":"Motivo_de_Edicion_de_Cotizacion",
+ "46106":"Motivo_de_Viaje",
+ "46286":"Motores",
+ "46307":"MS_Calendario_Configuracion",
+ "46221":"MS_Campos_por_Funcionalidad",
+ "46023":"MS_Equipo_de_Emergencia",
+ "46025":"MS_Equipo_de_Supervivencia",
+ "46035":"Nacionalidad",
+ "46241":"Nivel_de_Ruido",
+ "46218":"Nombre_del_Campo_en_MS",
+ "46745":"Notificacion_de_rechazo_al_ingreso_de_almacen",
+ "46718":"Notificaciones_de_mantenimiento",
+ "46908":"Notificaciones_Push",
+ "46708":"Orden_de_servicio",
+ "46533":"Orden_de_Trabajo",
+ "46243":"Origen_de_Aeronave",
+ "46836":"Pago_a_proveedores",
+ "46837":"Pago_de_servicios_de_operaciones",
+ "45943":"Piezas",
+ "46511":"Piezas_Requeridas",
+ "46060":"Pistas",
+ "46722":"Politica_de_Proveedores",
+ "45953":"Politicas_de_Precios_y_Descuentos",
+ "46706":"Pre_Solicitud_de_Cotizacion",
+ "46771":"Presupuesto_Anual",
+ "46485":"Prioridad_del_Reporte",
+ "46400":"Procedencia",
+ "46605":"Productividad_del_area_de_mantenimiento",
+ "46096":"Propietarios",
+ "46669":"proveedor_multi",
+ "46026":"Proveedores_de_Seguros",
+ "46670":"Proveedores_para_MS",
+ "46551":"Razon_de_la_Compra",
+ "46830":"Razon_de_Rechazo_a_Almacen",
+ "46928":"Reabrir_vuelo",
+ "46894":"Registro_de_Distancia_SENEAM",
+ "46732":"Ingreso_de_Costos",
+ "46127":"Registro_de_vuelo",
+ "46661":"Remocion_e_instalacion_de_piezas",
+ "46719":"Reportes_para_OS",
+ "46961":"Responsable_Incidencia_Vuelo",
+ "45965":"Respuesta",
+ "45934":"Respuesta_del_Cliente_a_Cotizacion",
+ "46780":"Resultado_aprobacion_crear_reporte",
+ "46108":"Resultado_de_Autorizacion_de_Vuelo",
+ "46224":"Roles_para_Notificar",
+ "46749":"Salida_en_almacen",
+ "46610":"Seguimiento_de_Solicitud_de_Compras",
+ "46635":"Seguros_Asociados_a_la_Aeronave",
+ "45944":"Servicios",
+ "46512":"Servicios_Herramientas_Adicionales_A_Solicitar",
+ "46682":"Servicios_Aduanales",
+ "46037":"Sexo",
+ "46558":"Solicitud_de_Compras_Generales",
+ "46666":"Solicitud_de_cotizacion",
+ "46724":"Solicitud_de_Pagos_de_Servicios_de_Operaciones",
+ "46746":"Solicitud_de_partes_materiales_y_herramientas",
+ "46620":"Gestion_de_aprobacion_de_mantenimiento",
+ "46552":"Solicitud_de_Servicios_para_Operaciones",
+ "46109":"Solicitud_de_Vuelo",
+ "46711":"Solicitudes_de_mantenimientos_externos",
+ "46182":"Spartan_Attribute_Bypass",
+ "46181":"Spartan_Object_ByPass",
+ "46183":"Spartan_RDM_Filters_Detail",
+ "46184":"Spartan_RDM_Operations_Detail",
+ "46773":"Tarifas_de_Vuelo_de_Aeronave",
+ "46246":"Tecnico_Aeronave",
+ "46930":"Tiempo_de_remocion",
+ "46946":"Tipo_Concepto",
+ "46957":"Tipo_Concepto_Estado_Resultado",
+ "46211":"Tipo_de_Accion_Notificacion",
+ "46059":"Tipo_de_Aeropuerto",
+ "46293":"Tipo_de_Ala",
+ "46358":"Tipo_de_Aviso",
+ "46309":"Tipo_de_Bitacora_de_Aeronave",
+ "46085":"Tipo_de_Boletin",
+ "46943":"Tipo_de_carga",
+ "45966":"Tipo_de_Cliente",
+ "46952":"Tipo_de_Concepto_Balance_General",
+ "46199":"Tipo_de_Condicion_Aeronave",
+ "46228":"Tipo_de_Condicion_Parte",
+ "46414":"Tipo_de_Destino",
+ "47021":"Tipo_de_Documentacion_Aeronave",
+ "47022":"Tipo_de_Documentacion_PAXs",
+ "46022":"Tipo_de_Equipo_de_Emergencia",
+ "46024":"Tipo_de_Equipo_de_Supervivencia",
+ "46947":"Tipo_de_Gasto",
+ "46914":"Tipo_de_Grupo",
+ "46125":"Tipo_de_Hospedaje",
+ "45936":"Tipo_de_Ingreso_a_Cotizacion",
+ "46145":"Tipo_de_Ingreso_de_Gasto",
+ "46359":"Tipo_de_Instalacion",
+ "46120":"Tipo_de_Medio_de_Comunicacion",
+ "46606":"Tipo_de_Miscelaneas",
+ "46210":"Tipo_de_Notificacion",
+ "46927":"Tipo_de_Notificacion_Push",
+ "46652":"Tipo_de_origen_del_reporte",
+ "46104":"Tipo_de_Piloto",
+ "46031":"Tipo_de_Posicion_de_Piezas",
+ "46020":"Tipo_de_producto",
+ "46212":"Tipo_de_Recordatorio_Notificacion",
+ "45939":"Tipo_de_Reporte",
+ "46027":"Tipo_de_Seguro",
+ "46608":"Tipo_de_Servicios_Aduanales",
+ "46548":"Tipo_de_Solicitud_de_Compras",
+ "46126":"Tipo_de_Transportacion",
+ "46607":"Tipo_de_Transporte",
+ "46100":"Tipo_de_Tripulante",
+ "46585":"Tipo_de_urgencia",
+ "46105":"Tipo_de_vuelo",
+ "46216":"Tipo_Dia_Notificacion",
+ "46214":"Tipo_Frecuencia_Notificacion",
+ "46960":"Tipo_Incidencia_Vuelos",
+ "46707":"Tipo_orden_de_servicio",
+ "46220":"Tipo_Persona_Notificar",
+ "45974":"Tipos_de_Curso",
+ "45975":"Tipos_de_Modelo_Curso",
+ "46087":"Tipos_de_Origen_del_Componente",
+ "45969":"Tipos_de_proveedor",
+ "46168":"Toma_de_Tiempos_a_aeronaves",
+ "46809":"Detalle_de_tramos_a_facturar",
+ "46039":"Tripulacion",
+ "46244":"Tripulacion_Aeronave",
+ "46240":"Turbulencia_de_Estela",
+ "46021":"Unidad",
+ "46550":"Urgencia",
+ "45930":"Utilidad",
+ "46523":"Tipo_de_Orden_de_Trabajo",
+ "1":"Security admin",
+ "135":"Spartan Change Password Autorization",
+ "136":"Spartan Settings",
+ "137":"Spartan User Historical Password",
+ "100":"Spartan_User",
+ "101":"Spartan_User_Role",
+ "103":"Spartan_User_Role_Status",
+ "102":"Spartan_User_Status",
+ "31754":"Spartan Format",
+ "10":"Spartan Format Permissions",
+ "31953":"Report Configuration",
+ "11":"Spartan Report Permissions",
+ "110":"Spartane Language",
+ "120":"Spartan WorkFlow",
+ "52": "Opción Charolas",
+ "99991": "Opción Dummy 1",
+ "99992": "Opción Dummy 2",
+ "99993": "Opción Dummy 3"
+ }
+ },"Seguridad": {
+ "Permisos":{
+ "modules": {
+ "Módulos": "Modules",
+ "Configuración": "Configuration",
+ "Rol del usuario": "User role",
+ "dialogs": {
+ "Agregar módulo": "Add module",
+ "Editar módulo": "Edit module",
+ "Nombre": "Name",
+ "Estado del módulo": "Module state",
+ "Guardar":"Save",
+ "Cancelar":"Cancel",
+ "Roles de usuario":"User roles",
+ "Agregar rol": "Add rol",
+ "Editar rol": "Edit rol",
+ "Descripción": "Description",
+ "Estado del rol": "Role status"
+ }
+ },
+ "modulesObjects": {
+ "Objetos del módulo": "Module objects",
+ "Objeto":"Object",
+ "Mostrar objetos":"Show objects unchecked"
+ },
+ "modulesPermissions": {
+ "Permisos para el módulo":"Module permissions",
+ "Objeto": "Object",
+ "Permitir todo": "Allow all",
+ "Consultar": "Consult",
+ "Nuevo": "New",
+ "Editar": "Edit",
+ "Borrar": "Delete",
+ "Exportar": "Export",
+ "Imprimir": "Print",
+ "Configurar": "Configure"
+
+ }
+ }
+ }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

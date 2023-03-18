@@ -1,0 +1,194 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Registro de Factura</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Ingreso_de_Costos/list">Registro de Factura</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Ingreso_de_CostosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Ingreso_de_CostosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Ingreso_de_CostosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNo__de_OC" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de OC</mat-label>
+                        <input type="text" matInput formControlName="No__de_OC" [matAutocomplete]="autoNo__de_OC">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNo__de_OC="matAutocomplete" [displayWith]="displayFnNo__de_OC">
+                          <mat-option (onSelectionChange)="No__de_OC_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsNo__de_OC | async" [value]="option">
+                            {{option.FolioGeneracionOC}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNo__de_OC" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="Ingreso_de_CostosForm.get('No__de_OC').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Ingreso_de_CostosForm.get('No__de_OC').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un No. de OC de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divProveedor" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor</mat-label>
+                        <input type="text" matInput formControlName="Proveedor" [matAutocomplete]="autoProveedor">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoProveedor="matAutocomplete" [displayWith]="displayFnProveedor">
+                          <mat-option (onSelectionChange)="Proveedor_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsProveedor | async" [value]="option">
+                            {{option.Razon_social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingProveedor" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+
+                        <mat-error *ngIf="Ingreso_de_CostosForm.get('Proveedor').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Ingreso_de_CostosForm.get('Proveedor').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Proveedor de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Factura" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Factura</mat-label>
+                        <input (change)="No__de_Factura_ExecuteBusinessRules()" #No__de_Factura matInput
+                          formControlName="No__de_Factura" type="text" maxlength="11" required />
+                        <mat-error *ngIf="Ingreso_de_CostosForm.get('No__de_Factura').hasError('required')">
+                          No. de Factura es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Factura" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Factura</mat-label>
+                        <input (dateChange)="Fecha_de_Factura_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Factura_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Factura.open()" [matDatepicker]="datePickerFecha_de_Factura"
+                          formControlName="Fecha_de_Factura"  type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Factura"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Factura></mat-datepicker>
+                        <mat-error *ngIf="Ingreso_de_CostosForm.get('Fecha_de_Factura').hasError('required')">
+                          Fecha de Factura es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Pago" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Pago</mat-label>
+                        <input (dateChange)="Fecha_de_Pago_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Pago_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Pago.open()" [matDatepicker]="datePickerFecha_de_Pago"
+                          formControlName="Fecha_de_Pago" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Pago"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Pago></mat-datepicker>
+                        <mat-error *ngIf="Ingreso_de_CostosForm.get('Fecha_de_Pago').hasError('required')">
+                          Fecha de Pago es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNota_de_Credito" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nota de Crédito</mat-label>
+                        <input formControlName="Nota_de_Credito" matInput
+                          (change)="Nota_de_Credito_ExecuteBusinessRules()" type="text" maxlength="11" />
+                      </mat-form-field>
+                    </div>
+                    <div id="divTotal_de_Factura_" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Total de Factura $</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Total_de_Factura__ExecuteBusinessRules()" matInput
+                          formControlName="Total_de_Factura_" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error *ngIf="Ingreso_de_CostosForm.get('Total_de_Factura_').hasError('required')">
+                          Total de Factura $ es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input formControlName="Observaciones" (change)="Observaciones_ExecuteBusinessRules()"
+                          #Observaciones matInput type="text" maxlength="100" />
+                      </mat-form-field>
+                    </div>
+                    <div id="divIdSolicitudPago" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>IdSolicitudPago</mat-label>
+                        <input formControlName="IdSolicitudPago" (change)="IdSolicitudPago_ExecuteBusinessRules()"
+                          matInput type="text" maxlength="50" />
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button type='submit' class="mr-3 mb-2" [disabled]="!Ingreso_de_CostosForm.valid || consult"
+                    mat-raised-button color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Ingreso_de_CostosForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Ingreso_de_CostosForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Ingreso_de_CostosForm.valid || consult" mat-raised-button color="primary">Configurar
+                  </button>
+                  <button type="button" class="mr-3 mb-2" mat-raised-button color="warning" (click)="cancel()"
+                    style="background-color:#ed5565 !important" mat-button>
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

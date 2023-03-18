@@ -1,0 +1,361 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Detalle de Actividades de Colaboradores</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Detalle_de_Actividades_de_Colaboradores/list">Detalle de Actividades de Colaboradores</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Detalle_de_Actividades_de_ColaboradoresForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+
+                    <div id="divFolio" style ="display: none;" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Detalle_de_Actividades_de_ColaboradoresForm.get('Folio').value == 'Auto' ? 'text':'number'"  />
+                      </mat-form-field>
+                    </div>
+
+                   
+                    <div id="divFecha_de_Reporte" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Reporte</mat-label>
+                        <input (dateChange)="Fecha_de_Reporte_ExecuteBusinessRules()" (blur)="Fecha_de_Reporte_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Reporte.open()" [matDatepicker]="datePickerFecha_de_Reporte" formControlName="Fecha_de_Reporte" type="text" />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Reporte"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Reporte></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    
+
+                    <div id="divColaborador" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Seleccione un colaborador</mat-label>
+                        <input type="text" matInput formControlName="Colaborador" [matAutocomplete]="autoColaborador">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoColaborador="matAutocomplete" [displayWith]="displayFnColaborador">
+                          <mat-option (onSelectionChange)="Colaborador_ExecuteBusinessRules()" *ngFor="let option of optionsColaborador | async" [value]="option">
+                            {{option.Nombre_completo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingColaborador" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsColaborador && !isLoadingColaborador">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Detalle_de_Actividades_de_ColaboradoresForm.get('Colaborador').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Detalle_de_Actividades_de_ColaboradoresForm.get('Colaborador').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Colaborador de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    
+                    <div id="divPuesto" style ="display: none;" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Puesto</mat-label>
+                        <input type="text" matInput formControlName="Puesto" [matAutocomplete]="autoPuesto">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPuesto="matAutocomplete" [displayWith]="displayFnPuesto">
+                          <mat-option (onSelectionChange)="Puesto_ExecuteBusinessRules()" *ngFor="let option of optionsPuesto | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingPuesto" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPuesto && !isLoadingPuesto">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Detalle_de_Actividades_de_ColaboradoresForm.get('Puesto').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Detalle_de_Actividades_de_ColaboradoresForm.get('Puesto').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Puesto de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divEmpresa" style ="display: none;" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Empresa</mat-label>
+                        <input type="text" matInput formControlName="Empresa" [matAutocomplete]="autoEmpresa">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoEmpresa="matAutocomplete" [displayWith]="displayFnEmpresa">
+                          <mat-option (onSelectionChange)="Empresa_ExecuteBusinessRules()" *ngFor="let option of optionsEmpresa | async" [value]="option">
+                            {{option.Razon_Social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingEmpresa" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsEmpresa && !isLoadingEmpresa">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Detalle_de_Actividades_de_ColaboradoresForm.get('Empresa').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Detalle_de_Actividades_de_ColaboradoresForm.get('Empresa').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Empresa de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    
+                    <div id="divInicio_Horario_Laboral" style ="display: none;" class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Inicio Horario Laboral</mat-label>
+                        <input (change)="Inicio_Horario_Laboral_ExecuteBusinessRules()" (blur)="Inicio_Horario_Laboral_ExecuteBusinessRules()" formControlName="Inicio_Horario_Laboral" matInput placeholder="EX: 23:05" mask="Hh:m0" />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFin_Horario_Laboral" style ="visibility: hidden;" class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fin Horario Laboral</mat-label>
+                        <input (change)="Fin_Horario_Laboral_ExecuteBusinessRules()" (blur)="Fin_Horario_Laboral_ExecuteBusinessRules()" formControlName="Fin_Horario_Laboral" matInput placeholder="EX: 23:05" mask="Hh:m0" />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                      </mat-form-field>
+                    </div>  
+
+                    <div id="divHoras_Registradas" class="col-xl-2 col-lg-2 col-md-2 col-sm-2 mb-2">
+                      <mat-chip-list aria-label="Fish selection">
+                        <mat-chip formControlName="Horas_Registradas"  maxlength="6" >Horas registradas: {{horasRegistradas}} </mat-chip>
+                      </mat-chip-list>
+                    </div>
+                    <div id="divHoras_Faltantes" class="col-xl-2 col-lg-2 col-md-2 col-sm-2 mb-2">
+                      <mat-chip-list aria-label="Fish selection">
+                        <mat-chip formControlName="Horas_Faltantes"  maxlength="6" >Horas faltantes: {{horasFaltantes}} </mat-chip>
+                      </mat-chip-list>
+                    </div>
+                    <div id="divHoras_Extras" class="col-xl-2 col-lg-2 col-md-2 col-sm-2 mb-2">
+                      <mat-chip-list aria-label="Fish selection">
+                        <mat-chip formControlName="Horas_Extras"  maxlength="6" >Horas extras: {{horasExtras}} </mat-chip>
+                      </mat-chip-list>
+                    </div>
+
+                    <div id="divDia_Inhabil" class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                      <mat-slide-toggle
+                        formControlName="Dia_Inhabil"
+                        (change)="Dia_Inhabil_ExecuteBusinessRules($event)"
+                        class="example-margin"
+                        [checked]="checkedDiaInhabil">
+                        ¿Día inhábil?
+                      </mat-slide-toggle>
+                    </div> 
+
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                      <button type="button" class="mb-2" mattooltip="Mostrar formulario para agregar una actividad" 
+                        mat-raised-button color="primary" style="float: right;"  (click)="drawer.toggle()">
+                      <mat-icon>checklist</mat-icon>
+                      Nueva actividad
+                      </button>
+                    </div>
+
+                    <br>
+                    <br>
+
+                    <form [formGroup]="ActividadForm" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div id="divActividades" style="padding-right:0%; padding-left:0%; border-bottom: 1px solid #ccc;" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-drawer-container class="example-container" style="height: 400px; background-color: whitesmoke;">
+                          <mat-drawer #drawer class="example-sidenav" mode="side" position="end" style="width: 500px;">
+                            <h2>Nueva Actividad 
+                                                            
+                              <button (click)="drawer.toggle(); resetActividadForm()" mat-icon-button color="primary" style="float: right;" >
+                                <mat-icon>close</mat-icon>
+                              </button>
+                              <button (click)="resetActividadForm()" mat-icon-button color="primary" style="float: right;" >
+                                <mat-icon>restore</mat-icon>
+                              </button>
+        
+                            </h2>
+
+                            <div id="divFolioDetalle" style ="display: none;" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                <mat-label>Folio Detalle</mat-label>
+                                <input matInput formControlName="FolioDetalle" type="text"  />                                
+                              </mat-form-field>
+                            </div>
+
+                            <div id="divInicio_Horario_Tarea" class="col-xl col-lg-12 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                <mat-label>Hora Inicio</mat-label>
+                                <input (change)="Inicio_Horario_Tarea_ExecuteBusinessRules()" (blur)="Inicio_Horario_Tarea_ExecuteBusinessRules()" formControlName="Inicio_Horario_Tarea" matInput placeholder="EX: 23:05" mask="Hh:m0" required />
+                                <span matPrefix>
+                                  <mat-icon class="mr-2">access_time</mat-icon>
+                                </span>
+                                <mat-error *ngIf="ActividadForm.get('Inicio_Horario_Tarea').hasError('required')">
+                                  Hora inicio es requerido
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div id="divFinal_Horario_Tarea" class="col-xl col-lg-12 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                <mat-label>Hora Final</mat-label>
+                                <input (change)="Final_Horario_Tarea_ExecuteBusinessRules()" (blur)="Final_Horario_Tarea_ExecuteBusinessRules()" formControlName="Final_Horario_Tarea" matInput placeholder="EX: 23:05" mask="Hh:m0" required />
+                                <span matPrefix>
+                                  <mat-icon class="mr-2">access_time</mat-icon>
+                                </span>
+                                <mat-error *ngIf="ActividadForm.get('Final_Horario_Tarea').hasError('required')">
+                                  Hora final es requerido
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div id="divConcepto" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                <mat-label>Concepto</mat-label>
+                                <input type="text" matInput formControlName="Concepto" [matAutocomplete]="autoConcepto" required>
+                                <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                <mat-autocomplete #autoConcepto="matAutocomplete" [displayWith]="displayFnConcepto">
+                                  <mat-option (onSelectionChange)="Concepto_ExecuteBusinessRules()" *ngFor="let option of optionsConcepto | async" [value]="option">
+                                    {{option.Descripcion}}
+                                  </mat-option>
+                                  <mat-option *ngIf="isLoadingConcepto" class="is-loading">
+                                    <mat-spinner diameter="30"></mat-spinner>
+                                  </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="ActividadForm.get('Concepto').hasError('required')">
+                                  Campo requerido
+                                </mat-error>
+                                <mat-error *ngIf="ActividadForm.get('Concepto').hasError('invalidAutocompleteValue')">
+                                  Valor inválido. Seleccione un Concepto de la lista de opciones.
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                <mat-label>Observaciones</mat-label>
+                                <textarea (change)="Observaciones_ExecuteBusinessRules()" 
+                                  #Observaciones 
+                                  matInput 
+                                  formControlName="Observaciones"
+                                  cdkTextareaAutosize
+                                  #autosize="cdkTextareaAutosize"
+                                  cdkAutosizeMinRows="1"
+                                  cdkAutosizeMaxRows="5" 
+                                  maxlength="200"
+                                  required>                                   
+                                </textarea>
+                                <mat-error *ngIf="ActividadForm.get('Observaciones').hasError('required')">
+                                  Observaciones es requerido
+                                </mat-error>
+                              </mat-form-field> 
+                            </div>
+                            <div class="row">
+                              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                <button (click)="addTask(); drawer.toggle()"  [disabled]="!ActividadForm.valid"  mat-raised-button>
+                                  <mat-icon>post_add</mat-icon>
+                                  Guardar
+                                </button>
+                              </div>
+                            </div>
+                          </mat-drawer>
+        
+                          <div *ngIf="taskList.length > 0" class="task-list height-form ps" style="position: relative; ">
+                            <div class="task-box activity ng-star-inserted" style="border-left: 3px solid #16a085; display: flow-root;">
+                                <div >
+                                    <div *ngFor= "let value of taskList; index as i" style="border-bottom: 1px solid #ccc;">    
+                                                  
+                                      <div class="task-line" style="color: #007bff!important">
+                                        <mat-icon style="color: #28a745!important">task_alt</mat-icon> 
+
+                                        [ {{value.Clave}} - {{value.Descripcion}} ]
+
+                                        <label *ngIf="value.Orden_Trabajo != null" style="color: #28a745!important">
+                                          [Orden de Trabajo]: {{value.Orden_Trabajo}}
+                                        </label>
+
+                                        <label *ngIf="value.Orden_Servicio != null" style="color: #17a2b8!important">
+                                          &nbsp; [Orden de Servicio]: {{value.Orden_Servicio}}
+                                        </label>
+
+                                        <label *ngIf="value.Reporte != null" style="color: black">
+                                          &nbsp; [Nro de Reporte]: {{value.Reporte}}
+                                        </label>
+
+                                        <label *ngIf="value.Matricula != null" style="color: #007bff!important">
+                                          &nbsp; [Nro de Matricula]: {{value.Matricula}}
+                                        </label>
+
+                                        <label *ngIf="value.Hora_Normal != null && value.Hora_Normal != 0" style="color: #28a745!important">
+                                          &nbsp; Hora Normal: {{value.Hora_Normal}}
+                                        </label>
+
+                                        <label *ngIf="value.Hora_Extra != null && value.Hora_Extra != 0" style="color: #dc3545!important">
+                                          &nbsp; Hora Extra: {{value.Hora_Extra}}
+                                        </label>
+        
+                                        <button (click)="editTask(i); drawer.toggle()" mat-icon-button color="primary" style="float: right; color:#007bff!important;" >
+                                          <mat-icon>edit</mat-icon>
+                                        </button> 
+        
+                                        <button (click)="removeTask(i);" mat-icon-button color="primary" style="float: right; color: #dc3545!important;" >
+                                          <mat-icon>delete</mat-icon>
+                                        </button>
+        
+                                      </div>
+                                      <div class="task-line" style="color: black">
+                                        {{value.Inicio}} - {{value.Fin}}
+                                      </div>
+                                      <div class="task-line" style="color: black">
+                                        {{value.Observaciones}} 
+                                      </div>
+                                      <br>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          
+                        </mat-drawer-container>
+                      </div>
+                      </form>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <!-- <button  class="mr-3 mb-2" [disabled]="!Detalle_de_Actividades_de_ColaboradoresForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Detalle_de_Actividades_de_ColaboradoresForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Detalle_de_Actividades_de_ColaboradoresForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Detalle_de_Actividades_de_ColaboradoresForm.valid || consult" mat-raised-button color="primary">Configurar </button> -->
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

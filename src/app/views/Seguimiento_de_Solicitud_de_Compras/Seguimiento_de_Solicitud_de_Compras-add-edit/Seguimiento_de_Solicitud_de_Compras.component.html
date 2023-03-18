@@ -1,0 +1,562 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{titlePage}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Seguimiento_de_Solicitud_de_Compras/list">{{titlePage}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Seguimiento_de_Solicitud_de_ComprasForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Seguimiento_de_Solicitud_de_ComprasForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error *ngIf="Seguimiento_de_Solicitud_de_ComprasForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Matricula</mat-label>
+                        <ng-select ngSelectMat formControlName="Matricula" dropdownPosition="bottom"
+                          (search)="searchMatricula($event.term)" (clear)="searchMatricula()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingMatricula">
+                          <ng-option *ngFor="let option of optionsMatricula | async"
+                            [value]="option.Matricula">{{option.Matricula}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+                    <div id="divModelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Modelo</mat-label>
+                        <ng-select ngSelectMat formControlName="Modelo" dropdownPosition="bottom"
+                          (search)="searchModelo($event.term)" (clear)="searchModelo()" [loadingText]="loadingText"
+                          [notFoundText]="notFound" [loading]="isLoadingModelo">
+                          <ng-option *ngFor="let option of optionsModelo | async"
+                            [value]="option.Clave">{{option.Descripcion}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+                    <div id="divNumero_de_Reporte" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Número de Reporte</mat-label>
+                        <ng-select ngSelectMat formControlName="Numero_de_Reporte" dropdownPosition="bottom"
+                          (search)="searchNumero_de_Reporte($event.term)" (clear)="searchNumero_de_Reporte()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingNumero_de_Reporte">
+                          <ng-option *ngFor="let option of optionsNumero_de_Reporte | async"
+                            [value]="option.Folio">{{option.Folio}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+                    <div id="divNumero_de_Parte" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Número de Parte</mat-label>
+                        <ng-select ngSelectMat formControlName="Numero_de_Parte" dropdownPosition="bottom"
+                          (search)="searchNumero_de_Parte($event.term)" (clear)="searchNumero_de_Parte()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingNumero_de_Parte">
+                          <ng-option *ngFor="let option of optionsNumero_de_Parte | async"
+                            [value]="option.Folio">{{option.Numero_de_parte_Descripcion}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+
+                    <div id="divDepartamento" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Departamento</mat-label>
+                        <ng-select ngSelectMat formControlName="Departamento" dropdownPosition="bottom"
+                          (search)="searchDepartamento($event.term)" (clear)="searchDepartamento()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingDepartamento">
+                          <ng-option *ngFor="let option of optionsDepartamento | async"
+                            [value]="option.Folio">{{option.Nombre}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+
+                    </div>
+                    <div id="divSolicitante" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Solicitante</mat-label>
+                        <ng-select ngSelectMat formControlName="Solicitante" dropdownPosition="bottom"
+                          (search)="searchSolicitante($event.term)" (clear)="searchSolicitante()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingSolicitante">
+                          <ng-option *ngFor="let option of optionsSolicitante | async"
+                            [value]="option.Id_User">{{option.Name}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+                    <div id="divUrgencia" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Urgencia</mat-label>
+                        <ng-select ngSelectMat formControlName="Urgencia" dropdownPosition="bottom"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingUrgencia">
+                          <ng-option *ngFor="let option of varUrgencia"
+                            [value]="option.Folio">{{option.Descripcion}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+
+                    <ng-template #modalCancelar let-modal>
+                      <div class="modal-header">
+                        <h4 class="modal-title" id="modal-basic-title">
+                          Motivo de Cancelación
+                        </h4>
+                        <button type="button" class="btn-close" aria-label="Close"
+                          (click)="modal.dismiss('cerrar')">x</button>
+                      </div>
+                      <div class="modal-body" style="padding-bottom: 0px;">
+                        <form>
+                          <div class="mt-2 mb-2">
+
+                            <div id="divMotivoRechazo">
+                              <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                <mat-label>Motivo</mat-label>
+                                <textarea matInput #motivoRechazo rows="4" style="width: 100%;"
+                                  [formControl]="motivoCancelar" (keyup)="setMotivo_de_Cancelacion(motivoRechazo.value)"
+                                  maxlength="100" required>
+                                </textarea>
+
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+
+                        <div>
+                          <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                            (click)="modal.close(true)">
+                            Guardar
+                          </button>
+                          <button type='button' class="mr-3 btn-sm" mat-raised-button color="warning"
+                            style="background-color:#ed5565 !important" (click)="modal.dismiss('cerrar')">
+                            Cerrar
+                          </button>
+                        </div>
+                      </div>
+                    </ng-template>
+
+
+                    <div class="col-md-1" style="padding-top: 2rem;">
+                      <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                        (click)="getDataTable()">
+                        Consultar
+                      </button>
+                    </div>
+
+                    <div class="col-md-1 mb-2" style="padding-top: 2rem;">
+                      <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                        (click)="fnClearFilter()">
+                        Limpiar
+                      </button>
+                    </div>
+
+                    <div id="divListado_de_Solicitud_de_Compras" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <div class="top-action-container-table mb-5">
+                        <h4>Listado de Solicitud de Compras</h4>
+                        <div>
+                          <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                            (click)="fnOpenWindowComparativo()">
+                            Comparativo
+                          </button>
+                          <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                            (click)="fnOpenWindowCotizacion()" style="background-color:#20c9a9 !important">
+                            Agregar a Cotización
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="example-container2 table-responsive">
+
+                        <table mat-table [dataSource]="dataSourceListado_de_Solicitud_de_Compras" multiTemplateDataRows
+                          class="mat-elevation-z8">
+
+                          <ng-container matColumnDef="Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> N° Parte/Descripción </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cantidad">
+                            <th mat-header-cell *matHeaderCellDef> Cantidad</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Condicion">
+                            <th mat-header-cell *matHeaderCellDef> Condición </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Condicion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Unidad">
+                            <th mat-header-cell *matHeaderCellDef> Unidad</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Unidad_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Departamento">
+                            <th mat-header-cell *matHeaderCellDef> Departamento</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Departamento_Nombre}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Razon_de_la_Compra">
+                            <th mat-header-cell *matHeaderCellDef> Razon de la Compra </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Razon_de_la_Compra}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Urgencia">
+                            <th mat-header-cell *matHeaderCellDef> Urgencia</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Urgencia_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Entrega">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Entrega </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Entrega }} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Matricula">
+                            <th mat-header-cell *matHeaderCellDef> Matrícula </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Matricula}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Modelo">
+                            <th mat-header-cell *matHeaderCellDef> Modelo </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Modelo}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__de_Reporte">
+                            <th mat-header-cell *matHeaderCellDef> No. de Reporte </th>
+                            <td mat-cell *matCellDef="let element"> {{element.No__de_Reporte}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No_O_T">
+                            <th mat-header-cell *matHeaderCellDef> No.O/T </th>
+                            <td mat-cell *matCellDef="let element"> {{element.No_O_T}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_estimada_de_Mtto_">
+                            <th mat-header-cell *matHeaderCellDef> Fecha estimada de Mtto. </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_estimada_de_Mtto_ }} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Estatus">
+                            <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Estatus}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Solicitante">
+                            <th mat-header-cell *matHeaderCellDef> Solicitante </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Solicitante}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__de_Solicitud">
+                            <th mat-header-cell *matHeaderCellDef> No. de Solicitud </th>
+                            <td mat-cell *matCellDef="let element"> {{element.No__de_Solicitud}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Estatus_de_Seguimiento">
+                            <th mat-header-cell *matHeaderCellDef> Estatus de Seguimiento</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Estatus_de_Seguimiento_Estatus_de_Seguimiento?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Folio_de_detalle">
+                            <th mat-header-cell *matHeaderCellDef> Folio de detalle</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Folio_de_detalle}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Folio_de_solicitud">
+                            <th mat-header-cell *matHeaderCellDef> Folio de solicitud</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Folio_de_solicitud}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_MR">
+                            <th mat-header-cell *matHeaderCellDef> Tipo_MR</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Tipo_MR}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Motivo_de_Rechazo">
+                            <th mat-header-cell *matHeaderCellDef> Motivo de Cancelación </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Motivo_de_Rechazo}} </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Gestion_de_compras">
+                            <th mat-header-cell *matHeaderCellDef> Gestión de compras </th>
+                            <td mat-cell *matCellDef="let element; let index = index; let dataIndex = dataIndex"
+                              style="padding-right: 1rem">
+
+                              <div class="row" style="display:table !important">
+                                <div class="col-md-3 childVerticalCenter">
+                                  <mat-checkbox [ngClass]="'tbl-checkbox'"
+                                    (change)="onChangeGestion_de_comprasChecked($event, element)"></mat-checkbox>
+                                </div>
+
+                                <div class="childVerticalCenter">
+                                  <button *ngIf="element.Tipo_MR == 2" type="button" mat-raised-button color="basic"
+                                    class="mb-2" mat-button (click)="openWindowInfoPoliza(element)">
+                                    Inf Póliza
+                                  </button>
+                                </div>
+
+                              </div>
+
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Cotizar">
+                            <th mat-header-cell *matHeaderCellDef class="text-center"> Cotizar </th>
+                            <td mat-cell *matCellDef="let element; let index = index; let dataIndex = dataIndex"
+                              style="padding-left: 1rem;">
+                              <mat-checkbox (change)="onChangeCotizarChecked($event, element)"
+                                [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Cancelar">
+                            <th mat-header-cell *matHeaderCellDef> Cancelar </th>
+                            <td mat-cell *matCellDef="let element; let index = index; let dataIndex = dataIndex">
+                              <button type="button" mat-raised-button color="basic"
+                                style="background-color:#ed5565 !important"
+                                (click)="openModalCancel(modalCancelar,element)" mat-button>
+                                Cancelar
+                              </button>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex"
+                              [attr.colspan]="getListado_de_Solicitud_de_ComprasColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_de_Seguimiento_de_Solicitud_de_ComprasItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceListado_de_Solicitud_de_Compras.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>N° Parte/Descripción</mat-label>
+                                          <input matInput formControlName="Descripcion" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cantidad</mat-label>
+                                          <input matInput formControlName="Cantidad" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Condición</mat-label>
+                                          <input matInput formControlName="Condicion" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Unidad</mat-label>
+                                          <mat-select placeholder="Unidad" formControlName="Unidad">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varUnidad" [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Departamento</mat-label>
+                                          <mat-select placeholder="Departamento" formControlName="Departamento">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varDepartamento" [value]="item.Folio">
+                                              {{ item.Nombre }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Razon de la Compra</mat-label>
+                                          <input matInput formControlName="Razon_de_la_Compra" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Urgencia</mat-label>
+                                          <mat-select placeholder="Urgencia" formControlName="Urgencia">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varUrgencia" [value]="item.Folio">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha de Entrega</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_de_Entrega" type="text" />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Matrícula</mat-label>
+                                          <input matInput formControlName="Matricula" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Modelo</mat-label>
+                                          <input matInput formControlName="Modelo" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. de Reporte </mat-label>
+                                          <input matInput formControlName="No__de_Reporte" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No.O/T</mat-label>
+                                          <input matInput formControlName="No_O_T" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha estimada de Mtto.</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_estimada_de_Mtto_" type="text" />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Estatus</mat-label>
+                                          <input matInput formControlName="Estatus" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Solicitante</mat-label>
+                                          <input matInput formControlName="Solicitante" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. de Solicitud</mat-label>
+                                          <input matInput formControlName="No__de_Solicitud" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Estatus de Seguimiento</mat-label>
+                                          <mat-select placeholder="Estatus de Seguimiento"
+                                            formControlName="Estatus_de_Seguimiento">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varEstatus_de_Seguimiento"
+                                              [value]="item.Folio">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Folio de detalle</mat-label>
+                                          <input matInput formControlName="Folio_de_detalle" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Folio de solicitud</mat-label>
+                                          <input matInput formControlName="Folio_de_solicitud" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tipo_MR</mat-label>
+                                          <input matInput formControlName="Tipo_MR" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Motivo de Rechazo</mat-label>
+                                          <input matInput formControlName="Motivo_de_Rechazo" type="text" />
+                                        </mat-form-field>
+                                      </div>
+
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveListado_de_Solicitud_de_Compras(element);"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditListado_de_Solicitud_de_Compras(element)"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row
+                            *matHeaderRowDef="getListado_de_Solicitud_de_ComprasColumns();  sticky: true"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getListado_de_Solicitud_de_ComprasColumns();let j = index">
+                          </tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+
+                          <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell text-center" colspan="20">No hay registros disponibles
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

@@ -1,0 +1,446 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Solicitud de Servicios para Operaciones</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Solicitud_de_Servicios_para_Operaciones/list">Solicitud de Servicios para Operaciones</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Solicitud_de_Servicios_para_OperacionesForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divNo_de_Solicitud" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No de Solicitud</mat-label>
+                        <input matInput formControlName="No_de_Solicitud"
+                          [type]="Solicitud_de_Servicios_para_OperacionesForm.get('No_de_Solicitud').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('No_de_Solicitud').hasError('required')">
+                          No de Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Registro" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Registro</mat-label>
+                        <input (dateChange)="Fecha_de_Registro_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Registro_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Registro.open()" [matDatepicker]="datePickerFecha_de_Registro"
+                          formControlName="Fecha_de_Registro" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Registro"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Registro></mat-datepicker>
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('Fecha_de_Registro').hasError('required')">
+                          Fecha de Registro es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Registro" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Registro</mat-label>
+                        <input (change)="Hora_de_Registro_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Registro_ExecuteBusinessRules()" formControlName="Hora_de_Registro" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('Hora_de_Registro').hasError('required')">
+                          Hora de Registro es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_Registra" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que Registra</mat-label>
+                        <mat-select (selectionChange)="Usuario_que_Registra_ExecuteBusinessRules()"
+                          placeholder="Usuario que Registra" formControlName="Usuario_que_Registra" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('Usuario_que_Registra').hasError('required')">
+                          Usuario que Registra es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divProveedor" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor </mat-label>
+                        <input type="text" matInput formControlName="Proveedor" [matAutocomplete]="autoProveedor"
+                          required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoProveedor="matAutocomplete" [displayWith]="displayFnProveedor">
+                          <mat-option (onSelectionChange)="Proveedor_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsProveedor | async" [value]="option">
+                            {{option.Razon_social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingProveedor" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsProveedor && !isLoadingProveedor">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('Proveedor').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('Proveedor').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Proveedor de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Vuelo" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Vuelo</mat-label>
+                        <input type="text" matInput formControlName="No__de_Vuelo" [matAutocomplete]="autoNo__de_Vuelo"
+                          required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNo__de_Vuelo="matAutocomplete" [displayWith]="displayFnNo__de_Vuelo"
+                          (optionSelected)="filterTramos()">
+                          <mat-option (onSelectionChange)="No__de_Vuelo_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsNo__de_Vuelo | async" [value]="option">
+                            {{option.Numero_de_Vuelo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNo__de_Vuelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsNo__de_Vuelo && !isLoadingNo__de_Vuelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('No__de_Vuelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('No__de_Vuelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un No. de Vuelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTramo" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tramo</mat-label>
+                        <input type="text" matInput formControlName="Tramo" [matAutocomplete]="autoTramo" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoTramo="matAutocomplete" [displayWith]="displayFnTramo">
+                          <mat-option *ngFor="let option of optionsTramo_de_Vuelo" [value]="option">
+                            {{option.Description}}
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('Tramo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput
+                          formControlName="Observaciones" type="text" maxlength="200" required />
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('Observaciones').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus"
+                          formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Solicitud_de_Compras"
+                            [value]="item.Estatus_de_Solicitud">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo</mat-label>
+                        <mat-select (selectionChange)="Tipo_ExecuteBusinessRules()" placeholder="Tipo"
+                          formControlName="Tipo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Solicitud_de_Compras"
+                            [value]="item.Tipo_de_Solicitud">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('Tipo').hasError('required')">
+                          Tipo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divItem_Servicios" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Item Servicios</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addItem_ServiciosToMR(); $event.stopPropagation();"(click)="MRaddItem_Servicios = true" [hidden]="MRaddItem_Servicios">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceItem_Servicios" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Solicitud_de_Servicios_para_OperacionesForm.disabled"
+                            matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editItem_Servicios(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteItem_Servicios(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cantidad">
+                            <th mat-header-cell *matHeaderCellDef> Cantidad</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Unidad_de_Medida">
+                            <th mat-header-cell *matHeaderCellDef> Unidad de Medida</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Unidad_de_Medida_Unidad?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Precio">
+                            <th mat-header-cell *matHeaderCellDef>Costo</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Precio |currency}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Urgencia">
+                            <th mat-header-cell *matHeaderCellDef> Urgencia</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Urgencia_Urgencia?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_requerida">
+                            <th mat-header-cell *matHeaderCellDef> Fecha requerida </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_requerida |date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="VoBo">
+                            <th mat-header-cell *matHeaderCellDef> VoBo</th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="text-center f-w">
+                                <mat-checkbox disabled="true" [checked]="element.VoBo"
+                                  [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Observaciones">
+                            <th mat-header-cell *matHeaderCellDef> Observaciones </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Observaciones}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getItem_ServiciosColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_de_Item_ServiciosItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceItem_Servicios.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Descripción</mat-label>
+                                          <input matInput formControlName="Descripcion" type="text" maxlength="100"
+                                            required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cantidad</mat-label>
+                                          <input matInput formControlName="Cantidad" type="number" max="999999999"
+                                            required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Unidad de Medida</mat-label>
+                                          <mat-select placeholder="Unidad de Medida" formControlName="Unidad_de_Medida">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varUnidad" [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Costo</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Precio" mask="separator.2"
+                                            thousandSeparator="," maxlength="14" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Urgencia</mat-label>
+                                          <input type="text" matInput formControlName="Urgencia"
+                                            [matAutocomplete]="auto" required>
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectUrgencia_Detalle_de_Item_Servicios($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnUrgencia_Detalle_de_Item_Servicios.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varUrgencia" [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionUrgencia_Detalle_de_Item_Servicios($event, element)">
+                                              {{option.Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingUrgencia_Detalle_de_Item_Servicios"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha requerida</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_requerida" type="text" required />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-checkbox formControlName="VoBo" [value]="element.VoBo"
+                                          class="example-margin">
+                                          VoBo
+                                        </mat-checkbox>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Observaciones</mat-label>
+                                          <input matInput formControlName="Observaciones" type="text" maxlength="100" />
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveItem_Servicios(element);"(click)="MRaddItem_Servicios = false"
+                                          [disabled]="!Item_ServiciosItems.controls[dataSourceItem_Servicios.data.indexOf(element)].valid"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+(click)="MRaddItem_Servicios = false"                                          (click)="cancelEditItem_Servicios(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getItem_ServiciosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getItem_ServiciosColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divNo_Solicitud" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No Solicitud</mat-label>
+                        <input (change)="No_Solicitud_ExecuteBusinessRules()" #No_Solicitud matInput
+                          formControlName="No_Solicitud" type="text" maxlength="10" required />
+                        <mat-error
+                          *ngIf="Solicitud_de_Servicios_para_OperacionesForm.get('No_Solicitud').hasError('required')">
+                          No Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button type="submit" class="mr-3 mb-2"
+                    [disabled]="!Solicitud_de_Servicios_para_OperacionesForm.valid || consult" mat-raised-button
+                    color="primary">
+                    Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Solicitud_de_Servicios_para_OperacionesForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Solicitud_de_Servicios_para_OperacionesForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Solicitud_de_Servicios_para_OperacionesForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

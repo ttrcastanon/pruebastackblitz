@@ -1,0 +1,121 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Cat reportes prestablecidos</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Cat__reportes_prestablecidos/list">Cat reportes prestablecidos</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Cat__reportes_prestablecidosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Cat__reportes_prestablecidosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Cat__reportes_prestablecidosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divReporte_de_inspeccion_de_entrada" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Reporte de inspección de entrada</mat-label>
+                        <input (change)="Reporte_de_inspeccion_de_entrada_ExecuteBusinessRules()" #Reporte_de_inspeccion_de_entrada matInput formControlName="Reporte_de_inspeccion_de_entrada" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Cat__reportes_prestablecidosForm.get('Reporte_de_inspeccion_de_entrada').hasError('required')">
+                          Reporte de inspección de entrada  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_reporte" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de reporte</mat-label>
+                        <input (change)="Tipo_de_reporte_ExecuteBusinessRules()" #Tipo_de_reporte matInput formControlName="Tipo_de_reporte" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Cat__reportes_prestablecidosForm.get('Tipo_de_reporte').hasError('required')">
+                          Tipo de reporte  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPrioridad" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Prioridad</mat-label>
+                        <input (change)="Prioridad_ExecuteBusinessRules()" #Prioridad matInput formControlName="Prioridad" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Cat__reportes_prestablecidosForm.get('Prioridad').hasError('required')">
+                          Prioridad  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Codigo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Código</mat-label>
+                        <input (change)="Tipo_de_Codigo_ExecuteBusinessRules()" #Tipo_de_Codigo matInput formControlName="Tipo_de_Codigo" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Cat__reportes_prestablecidosForm.get('Tipo_de_Codigo').hasError('required')">
+                          Tipo de Código  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCodigo_NP" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Código/NP</mat-label>
+                        <input (change)="Codigo_NP_ExecuteBusinessRules()" #Codigo_NP matInput formControlName="Codigo_NP" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Cat__reportes_prestablecidosForm.get('Codigo_NP').hasError('required')">
+                          Código/NP  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción</mat-label>
+                        <input (change)="Descripcion_ExecuteBusinessRules()" #Descripcion matInput formControlName="Descripcion" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Cat__reportes_prestablecidosForm.get('Descripcion').hasError('required')">
+                          Descripción  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Cat__reportes_prestablecidosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Cat__reportes_prestablecidosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Cat__reportes_prestablecidosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Cat__reportes_prestablecidosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

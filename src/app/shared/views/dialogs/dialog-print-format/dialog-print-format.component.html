@@ -1,0 +1,18 @@
+<h3 mat-dialog-title class="titles">
+    <mat-icon>print</mat-icon>
+    <span class="title-textss">&nbsp;Imprimir Formato</span>
+</h3>
+
+<div mat-dialog-content>
+    <!-- <p>{{empleado}}</p> -->
+    <mat-radio-group class="er-group" [(ngModel)]="optionSelected">
+        <mat-radio-button class="er-button" *ngFor="let option of FormatList" [value]="option.FormatId">
+            {{ option.Format_Name }}
+        </mat-radio-button>
+    </mat-radio-group>
+</div>
+
+<div mat-dialog-actions style="padding-top: 16px; text-align: right;" class="mb-1">
+    <button mat-button (click)="ConfirmPrint()" cdkFocusInitial>Imprimir PDF</button>
+    <button mat-button (click)="CancelPrint()">Cancelar</button>
+</div>

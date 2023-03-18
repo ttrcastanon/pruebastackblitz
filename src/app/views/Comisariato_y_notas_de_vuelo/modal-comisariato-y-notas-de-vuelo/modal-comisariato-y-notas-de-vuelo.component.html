@@ -1,0 +1,108 @@
+<h1 mat-dialog-title class="ml-4">Comisariato y notas de vuelo</h1>
+
+
+<div mat-dialog-content class="flex-row clearfix">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="body">
+                <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                    <p style="color: white">Procesando</p>
+                </ngx-spinner>
+                <form class="m-4" [formGroup]="Comisariato_y_notas_de_vueloForm">
+
+                    <mat-tab-group #tabGroup>
+                        <mat-tab aria-label="Notas" label="Notas"> <br>
+                            <div id="tabNotas" class="row">
+                                <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" hidden>
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Folio</mat-label>
+                                        <input matInput formControlName="Folio"
+                                            [type]="Comisariato_y_notas_de_vueloForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                                            required />
+                                        <mat-error
+                                            *ngIf="Comisariato_y_notas_de_vueloForm.get('Folio').hasError('required')">
+                                            Folio es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div id="divNumero_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Número de Vuelo</mat-label>
+                                        <input type="text" matInput formControlName="Numero_de_Vuelo"
+                                            [matAutocomplete]="autoNumero_de_Vuelo">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoNumero_de_Vuelo="matAutocomplete"
+                                            [displayWith]="displayFnNumero_de_Vuelo">
+                                            <mat-option (onSelectionChange)="Numero_de_Vuelo_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsNumero_de_Vuelo | async" [value]="option">
+                                                {{option.Numero_de_Vuelo}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingNumero_de_Vuelo" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsNumero_de_Vuelo && !isLoadingNumero_de_Vuelo">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error
+                                            *ngIf="Comisariato_y_notas_de_vueloForm.get('Numero_de_Vuelo').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Comisariato_y_notas_de_vueloForm.get('Numero_de_Vuelo').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Número de Vuelo de la lista de
+                                            opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divComisariato" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Comisariato</mat-label>
+                                        <textarea (change)="Comisariato_ExecuteBusinessRules()" #Comisariato matInput
+                                            formControlName="Comisariato" type="text" maxlength="4000">
+                            </textarea>
+                                        <mat-error
+                                            *ngIf="Comisariato_y_notas_de_vueloForm.get('Comisariato').hasError('required')">
+                                            Comisariato es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divNotas_de_vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Notas de vuelo</mat-label>
+                                        <textarea (change)="Notas_de_vuelo_ExecuteBusinessRules()" #Notas_de_vuelo
+                                            matInput formControlName="Notas_de_vuelo" type="text" maxlength="4000">
+                          </textarea>
+                                        <mat-error
+                                            *ngIf="Comisariato_y_notas_de_vueloForm.get('Notas_de_vuelo').hasError('required')">
+                                            Notas de vuelo es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div mat-dialog-actions class="ml-4">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <button type="submit" class="mr-3 mb-2" [disabled]="!Comisariato_y_notas_de_vueloForm.valid || consult"
+            mat-raised-button color="primary" (click)="save()">
+            Guardar
+        </button>
+        <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+            [disabled]="!Comisariato_y_notas_de_vueloForm.valid || consult" mat-raised-button color="primary">
+            Configurar
+        </button>
+        <button type="button" mat-button class="mb-2" mat-raised-button color="warning" mat-dialog-close
+            style="background-color:#ed5565 !important">Cancelar</button>
+    </div>
+</div>
+<div id="snackbar"></div>

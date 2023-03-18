@@ -1,0 +1,940 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Configuración de técnicos e inspectores</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Configuracion_de_tecnicos_e_inspectores/list">Configuración de técnicos e inspectores</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Configuracion_de_tecnicos_e_inspectoresForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Técnico ID</mat-label>
+                        <input matInput formControlName="Folio" [type]="Configuracion_de_tecnicos_e_inspectoresForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Folio').hasError('required')">
+                          Técnico ID es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNombres" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nombre(s)</mat-label>
+                        <input (change)="Nombres_ExecuteBusinessRules()" #Nombres matInput formControlName="Nombres" type="text" maxlength="75" required />
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Nombres').hasError('required')">
+                          Nombre(s)  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divApellido_paterno" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Apellido paterno</mat-label>
+                        <input (change)="Apellido_paterno_ExecuteBusinessRules()" #Apellido_paterno matInput formControlName="Apellido_paterno" type="text" maxlength="75" required />
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Apellido_paterno').hasError('required')">
+                          Apellido paterno  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divApellido_materno" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Apellido materno</mat-label>
+                        <input (change)="Apellido_materno_ExecuteBusinessRules()" #Apellido_materno matInput formControlName="Apellido_materno" type="text" maxlength="75" required />
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Apellido_materno').hasError('required')">
+                          Apellido materno  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNombre_completo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nombre completo</mat-label>
+                        <input (change)="Nombre_completo_ExecuteBusinessRules()" #Nombre_completo matInput formControlName="Nombre_completo" type="text" maxlength="75" required />
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Nombre_completo').hasError('required')">
+                          Nombre completo  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCargo_desempenado" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Rol en el Sistema</mat-label>
+                        <mat-select (selectionChange)="Cargo_desempenado_ExecuteBusinessRules()" placeholder="Rol en el Sistema" formControlName="Cargo_desempenado" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCargos" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Cargo_desempenado').hasError('required')">
+                          Rol en el Sistema es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCorreo_electronico" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Correo electrónico</mat-label>
+                        <input (change)="Correo_electronico_ExecuteBusinessRules()" #Correo_electronico matInput formControlName="Correo_electronico" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Correo_electronico').hasError('required')">
+                          Correo electrónico  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCelular" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Celular</mat-label>
+                        <input (change)="Celular_ExecuteBusinessRules()" #Celular matInput formControlName="Celular" type="text" maxlength="20" required placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000"/>
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Celular').hasError('required')">
+                          Celular  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTelefono" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Teléfono</mat-label>
+                        <input (change)="Telefono_ExecuteBusinessRules()" #Telefono matInput formControlName="Telefono" type="text" maxlength="20" required placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000"/>
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Telefono').hasError('required')">
+                          Teléfono  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDireccion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Dirección</mat-label>
+                        <input (change)="Direccion_ExecuteBusinessRules()" #Direccion matInput formControlName="Direccion" type="text" maxlength="250" required />
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Direccion').hasError('required')">
+                          Dirección  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_Registrado" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario Registrado</mat-label>
+                        <mat-select (selectionChange)="Usuario_Registrado_ExecuteBusinessRules()" placeholder="Usuario Registrado" formControlName="Usuario_Registrado" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Usuario_Registrado').hasError('required')">
+                          Usuario Registrado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAeronaves" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Aeronaves</h4>    
+                          <button *ngIf="showButtonMR" color="primary" mat-mini-fab type="button" (click)="addAeronavesToMR(); $event.stopPropagation();"(click)="MRaddAeronaves = true" [hidden]="MRaddAeronaves">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="Aeronaves" mat-table [dataSource]="dataSourceAeronaves"  multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Configuracion_de_tecnicos_e_inspectoresForm.disabled"  matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit"  type="button" (click)="editAeronaves(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteAeronaves(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Aeronave">
+                            <th mat-header-cell *matHeaderCellDef> Aeronave</th>
+                            <td mat-cell *matCellDef="let element"> {{element?.Aeronave}}
+                            </td>
+                          </ng-container>
+
+                 
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;" [attr.colspan]="getAeronavesColumns().length">
+                        
+                              <div  [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">                       
+                                <div *ngIf="element.edit">                              
+                                    <form  [formArrayName]="AeronavesItems"  >                               
+                                      
+                                      <div class="row form-group" [formGroup]="AeronavesItemsByElemet(element)">
+
+                                            <div class="col-xs-24 col-sm-24 col-lg-24 col-xl-24">
+                                              <mat-form-field  appearance="outline">
+                                                <mat-label>Aeronave</mat-label>
+                                                <input type="text"  matInput formControlName="Aeronave" [matAutocomplete]="auto">
+                                                  <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>                         
+                                                <mat-autocomplete (optionSelected)="selectAeronave_Tecnico_Aeronave($event, element)" #auto="matAutocomplete"
+                                                  [displayWith]="displayFnAeronave_Tecnico_Aeronave.bind(cthis, element)">
+                                                  <mat-option *ngFor="let option of varAeronave" [value]="option.Matricula" (onSelectionChange)="updateOptionAeronave_Tecnico_Aeronave($event, element)">
+                                                    {{option.Matricula}}
+                                                  </mat-option>
+                                                  <mat-option *ngIf="isLoadingAeronave_Tecnico_Aeronave" class="is-loading">
+                                                    <mat-spinner diameter="50"></mat-spinner>
+                                                  </mat-option>
+                                                </mat-autocomplete>
+												<mat-hint *ngIf="varAeronave.length ==0 &&  !isLoadingAeronave_Tecnico_Aeronave && searchAeronave_Tecnico_AeronaveCompleted">No se encontraron registros.</mat-hint>
+                                              </mat-form-field>
+                                            </div>
+    
+											
+                                      </div>
+                                      <!-- inicio seccion botones -->
+                                      <!-- fin seccion botones -->
+                                      <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                            (click)="element.edit = false; saveAeronaves(element);" color="primary">Guardar(click)="MRaddAeronaves = false"
+                                          </button>
+                                          <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                            (click)="cancelEditAeronaves(element)"(click)="MRaddAeronaves = false"
+                                            mat-button>Cancelar</button>
+                                        </div>
+                                      </div>
+                              
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getAeronavesColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}" *matRowDef="let row; columns: getAeronavesColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}" *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator #PaginadorAeronaves [length]="getCountAeronaves()"  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divUsuario_Relacionado" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario Relacionado</mat-label>
+                        <input type="text" matInput formControlName="Usuario_Relacionado" [matAutocomplete]="autoUsuario_Relacionado">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoUsuario_Relacionado="matAutocomplete" [displayWith]="displayFnUsuario_Relacionado">
+                          <mat-option (onSelectionChange)="Usuario_Relacionado_ExecuteBusinessRules()" *ngFor="let option of optionsUsuario_Relacionado | async" [value]="option">
+                            {{option.Nombre_completo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingUsuario_Relacionado" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsUsuario_Relacionado && !isLoadingUsuario_Relacionado">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Usuario_Relacionado').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Usuario_Relacionado').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Usuario Relacionado de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                </div>
+                </mat-tab>
+
+<mat-tab aria-label="Documentos" label="Documentos"> <br> <div id="tabDocumentos" class="row">
+                    <div class="col-12 mb-2 mt-3">
+                      <mat-icon class="mb-0">label_important</mat-icon> NÚMERO DE LICENCIA
+                      <mat-divider></mat-divider>
+                    </div>
+                    <div id="divNumero_de_Licencia" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Licencia</mat-label>
+                        <input (change)="Numero_de_Licencia_ExecuteBusinessRules()" #Numero_de_Licencia matInput formControlName="Numero_de_Licencia" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Numero_de_Licencia').hasError('required')">
+                          Número de Licencia  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Emision_Licencia" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Emisión Licencia</mat-label>
+                        <input (dateChange)="Fecha_de_Emision_Licencia_ExecuteBusinessRules()" (blur)="Fecha_de_Emision_Licencia_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Emision_Licencia.open()" [matDatepicker]="datePickerFecha_de_Emision_Licencia" formControlName="Fecha_de_Emision_Licencia" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Emision_Licencia"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Emision_Licencia></mat-datepicker>
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_Emision_Licencia').hasError('required')">
+                          Fecha de Emisión Licencia  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_vencimiento" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de vencimiento</mat-label>
+                        <input (dateChange)="Fecha_de_vencimiento_ExecuteBusinessRules()" (blur)="Fecha_de_vencimiento_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_vencimiento.open()" [matDatepicker]="datePickerFecha_de_vencimiento" formControlName="Fecha_de_vencimiento" [max]="maxDate" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_vencimiento"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_vencimiento></mat-datepicker>
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_vencimiento').hasError('required')">
+                          Fecha de vencimiento  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAlerta_de_vencimiento" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Alerta_de_vencimiento_ExecuteBusinessRules()" formControlName="Alerta_de_vencimiento" class="example-margin">
+                        Alerta de vencimiento
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divCargar_Licencia" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="Cargar_LicenciaName == '' && !Configuracion_de_tecnicos_e_inspectoresForm.disabled" class="example-full-width no-padding" appearance="outline" >
+                        <mat-label>Cargar Licencia</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="Cargar_LicenciaFile" required>
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+						<mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Cargar_LicenciaFile').hasError('required')">
+                          Cargar Licencia es requerido
+                        </mat-error>
+                      </mat-form-field>
+                      <div *ngIf="Cargar_LicenciaName != '' ">
+                        <mat-label>Cargar Licencia</mat-label>
+                        <a href="{{Cargar_LicenciaUrl()}}"  target="_blank">
+                          {{Cargar_LicenciaName }} 
+                        </a>
+                        <button mat-icon-button (click)="removeCargar_Licencia()" *ngIf="!Configuracion_de_tecnicos_e_inspectoresForm.disabled" >
+                          <mat-icon aria-label="eliminar">close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mb-2 mt-3">
+                      <mat-icon class="mb-0">label_important</mat-icon> CERTIFICADO MÉDICO
+                      <mat-divider></mat-divider>
+                    </div>
+
+                    <div id="divCertificado_Medico" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Certificado Médico</mat-label>
+                        <input (change)="Certificado_Medico_ExecuteBusinessRules()" #Certificado_Medico matInput formControlName="Certificado_Medico" type="text" maxlength="50"  />
+                       
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Emision_Certificado" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Emisión Certificado</mat-label>
+                        <input (dateChange)="Fecha_de_Emision_Certificado_ExecuteBusinessRules()" (blur)="Fecha_de_Emision_Certificado_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Emision_Certificado.open()" [matDatepicker]="datePickerFecha_de_Emision_Certificado" formControlName="Fecha_de_Emision_Certificado" [max]="today" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Emision_Certificado"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Emision_Certificado></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_Emision_Certificado').hasError('required')">
+                          Fecha de Emisión Certificado  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_vencimiento_cert" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de vencimiento</mat-label>
+                        <input (dateChange)="Fecha_de_vencimiento_cert_ExecuteBusinessRules()" (blur)="Fecha_de_vencimiento_cert_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_vencimiento_cert.open()" [matDatepicker]="datePickerFecha_de_vencimiento_cert" formControlName="Fecha_de_vencimiento_cert" [max]="maxDate" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_vencimiento_cert"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_vencimiento_cert></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_vencimiento_cert').hasError('required')">
+                          Fecha de vencimiento  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divAlerta_de_vencimiento_cert" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Alerta_de_vencimiento_cert_ExecuteBusinessRules()" formControlName="Alerta_de_vencimiento_cert" class="example-margin">
+                        Alerta de vencimiento
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divCargar_Certificado_Medico" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="Cargar_Certificado_MedicoName == '' && !Configuracion_de_tecnicos_e_inspectoresForm.disabled" class="example-full-width no-padding" appearance="outline" >
+                        <mat-label>Cargar Certificado Médico</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="Cargar_Certificado_MedicoFile" >
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+						<!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Cargar_Certificado_MedicoFile').hasError('required')">
+                          Cargar Certificado Médico es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                      <div *ngIf="Cargar_Certificado_MedicoName != '' ">
+                        <mat-label>Cargar Certificado Médico</mat-label>
+                        <a href="{{Cargar_Certificado_MedicoUrl()}}"  target="_blank">
+                          {{Cargar_Certificado_MedicoName }} 
+                        </a>
+                        <button mat-icon-button (click)="removeCargar_Certificado_Medico()" *ngIf="!Configuracion_de_tecnicos_e_inspectoresForm.disabled" >
+                          <mat-icon aria-label="eliminar">close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mb-2 mt-3">
+                      <mat-icon class="mb-0">label_important</mat-icon> NÚMERO DE PASAPORTE 1
+                      <mat-divider></mat-divider>
+                    </div>
+
+                    <div id="divNumero_de_Pasaporte_1" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Pasaporte (1)</mat-label>
+                        <input (change)="Numero_de_Pasaporte_1_ExecuteBusinessRules()" #Numero_de_Pasaporte_1 matInput formControlName="Numero_de_Pasaporte_1" type="text" maxlength="50" />
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Numero_de_Pasaporte_1').hasError('required')">
+                          Número de Pasaporte (1)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Emision_Pasaporte_1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Emisión Pasaporte (1)</mat-label>
+                        <input (dateChange)="Fecha_de_Emision_Pasaporte_1_ExecuteBusinessRules()" (blur)="Fecha_de_Emision_Pasaporte_1_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Emision_Pasaporte_1.open()" [matDatepicker]="datePickerFecha_de_Emision_Pasaporte_1" formControlName="Fecha_de_Emision_Pasaporte_1" [max]="today" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Emision_Pasaporte_1"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Emision_Pasaporte_1></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_Emision_Pasaporte_1').hasError('required')">
+                          Fecha de Emisión Pasaporte (1)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_vencimiento_Pasaporte_1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de vencimiento Pasaporte (1)</mat-label>
+                        <input (dateChange)="Fecha_de_vencimiento_Pasaporte_1_ExecuteBusinessRules()" (blur)="Fecha_de_vencimiento_Pasaporte_1_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_vencimiento_Pasaporte_1.open()" [matDatepicker]="datePickerFecha_de_vencimiento_Pasaporte_1" formControlName="Fecha_de_vencimiento_Pasaporte_1" [max]="maxDate" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_vencimiento_Pasaporte_1"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_vencimiento_Pasaporte_1></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_vencimiento_Pasaporte_1').hasError('required')">
+                          Fecha de vencimiento Pasaporte (1)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divAlerta_de_vencimiento_Pasaporte_1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Alerta_de_vencimiento_Pasaporte_1_ExecuteBusinessRules()" formControlName="Alerta_de_vencimiento_Pasaporte_1" class="example-margin">
+                        Alerta de vencimiento Pasaporte (1)
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divPais_1" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>País</mat-label>
+                        <input type="text" matInput formControlName="Pais_1" [matAutocomplete]="autoPais_1">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPais_1="matAutocomplete" [displayWith]="displayFnPais_1">
+                          <mat-option (onSelectionChange)="Pais_1_ExecuteBusinessRules()" *ngFor="let option of optionsPais_1 | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingPais_1" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPais_1 && !isLoadingPais_1">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Pais_1').hasError('required')">
+                          Campo requerido
+                        </mat-error> -->
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Pais_1').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un País de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCargar_Pasaporte_1" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="Cargar_Pasaporte_1Name == '' && !Configuracion_de_tecnicos_e_inspectoresForm.disabled" class="example-full-width no-padding" appearance="outline" >
+                        <mat-label>Cargar Pasaporte (1)</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="Cargar_Pasaporte_1File" [required]="requiredPasaporte1" >
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+						<mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Cargar_Pasaporte_1File').hasError('required')">
+                          Cargar Pasaporte (1) es requerido
+                        </mat-error>
+                      </mat-form-field>
+                      <div *ngIf="Cargar_Pasaporte_1Name != '' ">
+                        <mat-label>Cargar Pasaporte (1)</mat-label>
+                        <a href="{{Cargar_Pasaporte_1Url()}}"  target="_blank">
+                          {{Cargar_Pasaporte_1Name }} 
+                        </a>
+                        <button mat-icon-button (click)="removeCargar_Pasaporte_1()" *ngIf="!Configuracion_de_tecnicos_e_inspectoresForm.disabled" >
+                          <mat-icon aria-label="eliminar">close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mb-2 mt-3">
+                      <mat-icon class="mb-0">label_important</mat-icon> NÚMERO DE PASAPORTE 2
+                      <mat-divider></mat-divider>
+                    </div>
+
+                    <div id="divNumero_de_Pasaporte_2" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Pasaporte (2)</mat-label>
+                        <input (change)="Numero_de_Pasaporte_2_ExecuteBusinessRules()" #Numero_de_Pasaporte_2 matInput formControlName="Numero_de_Pasaporte_2" type="text" maxlength="50"  />
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Numero_de_Pasaporte_2').hasError('required')">
+                          Número de Pasaporte (2)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Emision_Pasaporte_2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Emisión Pasaporte (2)</mat-label>
+                        <input (dateChange)="Fecha_de_Emision_Pasaporte_2_ExecuteBusinessRules()" (blur)="Fecha_de_Emision_Pasaporte_2_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Emision_Pasaporte_2.open()" [matDatepicker]="datePickerFecha_de_Emision_Pasaporte_2" formControlName="Fecha_de_Emision_Pasaporte_2" [max]="today" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Emision_Pasaporte_2"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Emision_Pasaporte_2></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_Emision_Pasaporte_2').hasError('required')">
+                          Fecha de Emisión Pasaporte (2)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_vencimiento_Pasaporte_2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de vencimiento Pasaporte (2)</mat-label>
+                        <input (dateChange)="Fecha_de_vencimiento_Pasaporte_2_ExecuteBusinessRules()" (blur)="Fecha_de_vencimiento_Pasaporte_2_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_vencimiento_Pasaporte_2.open()" [matDatepicker]="datePickerFecha_de_vencimiento_Pasaporte_2" formControlName="Fecha_de_vencimiento_Pasaporte_2" [max]="maxDate" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_vencimiento_Pasaporte_2"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_vencimiento_Pasaporte_2></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_vencimiento_Pasaporte_2').hasError('required')">
+                          Fecha de vencimiento Pasaporte (2)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divAlerta_de_vencimiento_Pasaporte_2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Alerta_de_vencimiento_Pasaporte_2_ExecuteBusinessRules()" formControlName="Alerta_de_vencimiento_Pasaporte_2" class="example-margin">
+                        Alerta de vencimiento Pasaporte (2)
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divPais_2" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>País</mat-label>
+                        <input type="text" matInput formControlName="Pais_2" [matAutocomplete]="autoPais_2">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPais_2="matAutocomplete" [displayWith]="displayFnPais_2">
+                          <mat-option (onSelectionChange)="Pais_2_ExecuteBusinessRules()" *ngFor="let option of optionsPais_2 | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingPais_2" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPais_2 && !isLoadingPais_2">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Pais_2').hasError('required')">
+                          Campo requerido
+                        </mat-error> -->
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Pais_2').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un País de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCargar_Pasaporte_2" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="Cargar_Pasaporte_2Name == '' && !Configuracion_de_tecnicos_e_inspectoresForm.disabled" class="example-full-width no-padding" appearance="outline" >
+                        <mat-label>Cargar Pasaporte (2)</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="Cargar_Pasaporte_2File" [required]="requiredPasaporte2" >
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+						<mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Cargar_Pasaporte_2File').hasError('required')">
+                          Cargar Pasaporte (2) es requerido
+                        </mat-error>
+                      </mat-form-field>
+                      <div *ngIf="Cargar_Pasaporte_2Name != '' ">
+                        <mat-label>Cargar Pasaporte (2)</mat-label>
+                        <a href="{{Cargar_Pasaporte_2Url()}}"  target="_blank">
+                          {{Cargar_Pasaporte_2Name }} 
+                        </a>
+                        <button mat-icon-button (click)="removeCargar_Pasaporte_2()" *ngIf="!Configuracion_de_tecnicos_e_inspectoresForm.disabled" >
+                          <mat-icon aria-label="eliminar">close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mb-2 mt-3">
+                      <mat-icon class="mb-0">label_important</mat-icon> NÚMERO DE VISA 1
+                      <mat-divider></mat-divider>
+                    </div>
+
+                    <div id="divNumero_de_Visa_1" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Visa (1)</mat-label>
+                        <input (change)="Numero_de_Visa_1_ExecuteBusinessRules()" #Numero_de_Visa_1 matInput formControlName="Numero_de_Visa_1" type="text" maxlength="50"  />
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Numero_de_Visa_1').hasError('required')">
+                          Número de Visa (1)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Emision_Visa_1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Emisión Visa (1)</mat-label>
+                        <input (dateChange)="Fecha_de_Emision_Visa_1_ExecuteBusinessRules()" (blur)="Fecha_de_Emision_Visa_1_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Emision_Visa_1.open()" [matDatepicker]="datePickerFecha_de_Emision_Visa_1" formControlName="Fecha_de_Emision_Visa_1" [max]="today" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Emision_Visa_1"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Emision_Visa_1></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_Emision_Visa_1').hasError('required')">
+                          Fecha de Emisión Visa (1)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_vencimiento_Visa_1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de vencimiento Visa (1)</mat-label>
+                        <input (dateChange)="Fecha_de_vencimiento_Visa_1_ExecuteBusinessRules()" (blur)="Fecha_de_vencimiento_Visa_1_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_vencimiento_Visa_1.open()" [matDatepicker]="datePickerFecha_de_vencimiento_Visa_1" formControlName="Fecha_de_vencimiento_Visa_1" [max]="maxDate" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_vencimiento_Visa_1"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_vencimiento_Visa_1></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_vencimiento_Visa_1').hasError('required')">
+                          Fecha de vencimiento Visa (1)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divAlerta_de_vencimiento_Visa_1" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Alerta_de_vencimiento_Visa_1_ExecuteBusinessRules()" formControlName="Alerta_de_vencimiento_Visa_1" class="example-margin">
+                        Alerta de vencimiento Visa (1)
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divPais_3" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>País</mat-label>
+                        <input type="text" matInput formControlName="Pais_3" [matAutocomplete]="autoPais_3">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPais_3="matAutocomplete" [displayWith]="displayFnPais_3">
+                          <mat-option (onSelectionChange)="Pais_3_ExecuteBusinessRules()" *ngFor="let option of optionsPais_3 | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingPais_3" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPais_3 && !isLoadingPais_3">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Pais_3').hasError('required')">
+                          Campo requerido
+                        </mat-error> -->
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Pais_3').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un País de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCargar_Visa_1" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="Cargar_Visa_1Name == '' && !Configuracion_de_tecnicos_e_inspectoresForm.disabled" class="example-full-width no-padding" appearance="outline" >
+                        <mat-label>Cargar Visa (1)</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="Cargar_Visa_1File" [required]="requiredVisa1" >
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+						<mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Cargar_Visa_1File').hasError('required')">
+                          Cargar Visa (1) es requerido
+                        </mat-error>
+                      </mat-form-field>
+                      <div *ngIf="Cargar_Visa_1Name != '' ">
+                        <mat-label>Cargar Visa (1)</mat-label>
+                        <a href="{{Cargar_Visa_1Url()}}"  target="_blank">
+                          {{Cargar_Visa_1Name }} 
+                        </a>
+                        <button mat-icon-button (click)="removeCargar_Visa_1()" *ngIf="!Configuracion_de_tecnicos_e_inspectoresForm.disabled" >
+                          <mat-icon aria-label="eliminar">close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="col-12 mb-2 mt-3">
+                      <mat-icon class="mb-0">label_important</mat-icon> NÚMERO DE VISA 2
+                      <mat-divider></mat-divider>
+                    </div>
+                    
+                    <div id="divNumero_de_Visa_2" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Visa (2)</mat-label>
+                        <input (change)="Numero_de_Visa_2_ExecuteBusinessRules()" #Numero_de_Visa_2 matInput formControlName="Numero_de_Visa_2" type="text" maxlength="50"  />
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Numero_de_Visa_2').hasError('required')">
+                          Número de Visa (2)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Emision_Visa_2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Emisión Visa (2)</mat-label>
+                        <input (dateChange)="Fecha_de_Emision_Visa_2_ExecuteBusinessRules()" (blur)="Fecha_de_Emision_Visa_2_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Emision_Visa_2.open()" [matDatepicker]="datePickerFecha_de_Emision_Visa_2" formControlName="Fecha_de_Emision_Visa_2" [max]="today" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Emision_Visa_2"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Emision_Visa_2></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_Emision_Visa_2').hasError('required')">
+                          Fecha de Emisión Visa (2)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_vencimiento_Visa_2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de vencimiento Visa (2)</mat-label>
+                        <input (dateChange)="Fecha_de_vencimiento_Visa_2_ExecuteBusinessRules()" (blur)="Fecha_de_vencimiento_Visa_2_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_vencimiento_Visa_2.open()" [matDatepicker]="datePickerFecha_de_vencimiento_Visa_2" formControlName="Fecha_de_vencimiento_Visa_2" [max]="maxDate" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_vencimiento_Visa_2"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_vencimiento_Visa_2></mat-datepicker>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Fecha_de_vencimiento_Visa_2').hasError('required')">
+                          Fecha de vencimiento Visa (2)  es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divAlerta_de_vencimiento_Visa_2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Alerta_de_vencimiento_Visa_2_ExecuteBusinessRules()" formControlName="Alerta_de_vencimiento_Visa_2" class="example-margin">
+                        Alerta de vencimiento Visa (2)
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divPais_4" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>País</mat-label>
+                        <input type="text" matInput formControlName="Pais_4" [matAutocomplete]="autoPais_4">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPais_4="matAutocomplete" [displayWith]="displayFnPais_4">
+                          <mat-option (onSelectionChange)="Pais_4_ExecuteBusinessRules()" *ngFor="let option of optionsPais_4 | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingPais_4" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPais_4 && !isLoadingPais_4">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <!-- <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Pais_4').hasError('required')">
+                          Campo requerido
+                        </mat-error> -->
+                        <mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Pais_4').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un País de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCargar_Visa_2" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="Cargar_Visa_2Name == '' && !Configuracion_de_tecnicos_e_inspectoresForm.disabled" class="example-full-width no-padding" appearance="outline" >
+                        <mat-label>Cargar Visa (2)</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="Cargar_Visa_2File" [required]="requiredVisa2">
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+						<mat-error *ngIf="Configuracion_de_tecnicos_e_inspectoresForm.get('Cargar_Visa_2File').hasError('required')">
+                          Cargar Visa (2) es requerido
+                        </mat-error>
+                      </mat-form-field>
+                      <div *ngIf="Cargar_Visa_2Name != '' ">
+                        <mat-label>Cargar Visa (2)</mat-label>
+                        <a href="{{Cargar_Visa_2Url()}}"  target="_blank">
+                          {{Cargar_Visa_2Name }} 
+                        </a>
+                        <button mat-icon-button (click)="removeCargar_Visa_2()" *ngIf="!Configuracion_de_tecnicos_e_inspectoresForm.disabled" >
+                          <mat-icon aria-label="eliminar">close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                </div>
+                </mat-tab>
+
+<mat-tab aria-label="Cursos" label="Cursos"> <br> <div id="tabCursos" class="row">
+                    <div id="divCursos" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Cursos</h4>    
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" (click)="addCursosToMR(); $event.stopPropagation();"(click)="MRaddCursos = true" [hidden]="MRaddCursos">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table  mat-table [dataSource]="dataSourceCursos"  multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Configuracion_de_tecnicos_e_inspectoresForm.disabled"  matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit"  type="button" (click)="editCursos(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteCursos(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Modelo">
+                            <th mat-header-cell *matHeaderCellDef> Modelo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Modelo_Modelos?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_curso">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de curso</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Tipo_de_curso_Tipos_de_Curso?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Vencimiento">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Vencimiento </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Vencimiento |date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Documento">
+                            <th mat-header-cell *matHeaderCellDef >Documento</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="text-center f-w" *ngIf="element.Documento_Spartane_File">
+                                    <a *ngIf="element.Folio > 0" mat-button class="btn-tbl-foto"  [disabled]="!element.Documento" [href]="spartanFileService.url(element.Documento_Spartane_File.File_Id,element.Documento_Spartane_File.Description)" target="_blank" matTooltip="Documento" >
+                                        <mat-icon>image_search</mat-icon>
+                                        <span>Documento</span>
+                                    </a>                                  
+                                </div>
+                                <a *ngIf="getDocumento_Detalle_de_Documentos_Cursos(element) != ''"  mat-button class="btn-tbl-foto" href="#" (click)="getDocumento_Detalle_de_Documentos_CursosClick(element); $event.stopPropagation();$event.preventDefault();">
+                                  {{getDocumento_Detalle_de_Documentos_Cursos(element)}}
+                              </a>
+                              </td>
+                        </ng-container>
+
+                 
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;" [attr.colspan]="getCursosColumns().length">
+                        
+                              <div  [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">                       
+                                <div *ngIf="element.edit">                              
+                                    <form  [formArrayName]="CursosItems"  >                               
+                                      
+                                      <div class="row form-group" [formGroup]="CursosItemsByElemet(element)">
+
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field  appearance="outline">
+                                                <mat-label>Modelo</mat-label>
+                                                <input type="text"  matInput formControlName="Modelo" [matAutocomplete]="auto">
+                                                  <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>                         
+                                                <mat-autocomplete (optionSelected)="selectModelo_Detalle_de_Documentos_Cursos($event, element)" #auto="matAutocomplete"
+                                                  [displayWith]="displayFnModelo_Detalle_de_Documentos_Cursos.bind(cthis, element)">
+                                                  <mat-option *ngFor="let option of varModelos" [value]="option.Clave" (onSelectionChange)="updateOptionModelo_Detalle_de_Documentos_Cursos($event, element)">
+                                                    {{option.Descripcion}}
+                                                  </mat-option>
+                                                  <mat-option *ngIf="isLoadingModelo_Detalle_de_Documentos_Cursos" class="is-loading">
+                                                    <mat-spinner diameter="50"></mat-spinner>
+                                                  </mat-option>
+                                                </mat-autocomplete>
+												<mat-hint *ngIf="varModelos.length ==0 &&  !isLoadingModelo_Detalle_de_Documentos_Cursos && searchModelo_Detalle_de_Documentos_CursosCompleted">No se encontraron registros.</mat-hint>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Tipo de curso</mat-label>
+                                                <mat-select placeholder="Tipo de curso"
+                                                  formControlName="Tipo_de_curso" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varTipos_de_Curso" [value]="item.Clave">
+                                                    {{ item.Descripcion }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Descripción</mat-label>
+                                                <input matInput formControlName="Descripcion" type="text" maxlength="150" />
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Fecha de Vencimiento</mat-label>
+                                                <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                                  formControlName="Fecha_de_Vencimiento" type="text" />
+                                                <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                                <mat-datepicker #rpicker></mat-datepicker>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field *ngIf="!hasDocumento_Detalle_de_Documentos_Cursos(element)" class="example-full-width no-padding" appearance="outline" >
+                                                <mat-label>Documento</mat-label>
+                                                <ngx-mat-file-input #removableInputFamiliar formControlName="DocumentoFile">
+                                                </ngx-mat-file-input>
+                                                <button mat-icon-button matSuffix *ngIf="!removableInputFamiliar.empty"
+                                                  (click)="removableInputFamiliar.clear($event)">
+                                                  <mat-icon>clear</mat-icon>
+                                                </button>
+                                              </mat-form-field>
+                                              <div style="padding-left: 5px;" *ngIf="hasDocumento_Detalle_de_Documentos_Cursos(element)">
+                                                <mat-label>Documento</mat-label><br>
+                                                <div *ngIf="element.Documento_Spartane_File">
+                                                <a  [href]="spartanFileService.url(element.Documento_Spartane_File.File_Id,element.Documento_Spartane_File.Description)" role="button"  target="_blank">
+                                                  {{ element.Documento_Spartane_File.Description }} 
+                                                </a></div>
+                                                <a *ngIf="getDocumento_Detalle_de_Documentos_Cursos(element) != ''"  mat-button class="btn-tbl-foto" href="#" (click)="getDocumento_Detalle_de_Documentos_CursosClick(element); $event.stopPropagation(); $event.preventDefault();">
+                                                  {{getDocumento_Detalle_de_Documentos_Cursos(element)}}
+                                              </a>
+                                                <button mat-icon-button (click)="removeDocumento_Detalle_de_Documentos_Cursos(element)" *ngIf="!Configuracion_de_tecnicos_e_inspectoresForm.disabled" >
+                                                  <mat-icon aria-label="eliminar">close</mat-icon>
+                                                </button>
+                                              </div>
+                                            </div>
+    
+											
+                                      </div>
+                                      <!-- inicio seccion botones -->
+                                      <!-- fin seccion botones -->
+                                      <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                            (click)="element.edit = false; saveCursos(element);" color="primary">Guardar(click)="MRaddCursos = false"
+                                          </button>
+                                          <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                            (click)="cancelEditCursos(element)"(click)="MRaddCursos = false"
+                                            mat-button>Cancelar</button>
+                                        </div>
+                                      </div>
+                              
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getCursosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}" *matRowDef="let row; columns: getCursosColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}" *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator #PaginadorCursos [length]="getCountCursos()" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Configuracion_de_tecnicos_e_inspectoresForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Configuracion_de_tecnicos_e_inspectoresForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Configuracion_de_tecnicos_e_inspectoresForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Configuracion_de_tecnicos_e_inspectoresForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

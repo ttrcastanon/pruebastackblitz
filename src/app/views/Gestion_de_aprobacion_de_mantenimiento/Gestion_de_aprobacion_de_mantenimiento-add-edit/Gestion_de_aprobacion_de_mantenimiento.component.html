@@ -1,0 +1,751 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Solicitud de Servicios Herramientas Materiales y Partes</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Gestion_de_aprobacion_de_mantenimiento/list">Solicitud de Servicios Herramientas
+                Materiales y Partes</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Gestion_de_aprobacion_de_mantenimientoForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Gestion_de_aprobacion_de_mantenimientoForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula </mat-label>
+                        <input type="text" matInput formControlName="Matricula" [matAutocomplete]="autoMatricula">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMatricula="matAutocomplete" [displayWith]="displayFnMatricula">
+                          <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsMatricula | async" [value]="option">
+                            {{option.Matricula}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Matricula').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <input type="text" matInput formControlName="Modelo" [matAutocomplete]="autoModelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoModelo="matAutocomplete" [displayWith]="displayFnModelo">
+                          <mat-option (onSelectionChange)="Modelo_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsModelo | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingModelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsModelo && !isLoadingModelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Modelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Modelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Modelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divN_Reporte" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>N° Reporte</mat-label>
+                        <input type="text" matInput formControlName="N_Reporte" [matAutocomplete]="autoN_Reporte">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoN_Reporte="matAutocomplete" [displayWith]="displayFnN_Reporte">
+                          <mat-option (onSelectionChange)="N_Reporte_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsN_Reporte | async" [value]="option">
+                            {{option.No_Reporte}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingN_Reporte" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsN_Reporte && !isLoadingN_Reporte">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('N_Reporte').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('N_Reporte').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un N° Reporte de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSolicitante" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Solicitante</mat-label>
+                        <input type="text" matInput formControlName="Solicitante" [matAutocomplete]="autoSolicitante">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoSolicitante="matAutocomplete" [displayWith]="displayFnSolicitante">
+                          <mat-option (onSelectionChange)="Solicitante_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsSolicitante | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingSolicitante" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsSolicitante && !isLoadingSolicitante">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Solicitante').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Solicitante').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Solicitante de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDepartamento" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Departamento</mat-label>
+                        <input type="text" matInput formControlName="Departamento" [matAutocomplete]="autoDepartamento">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoDepartamento="matAutocomplete" [displayWith]="displayFnDepartamento">
+                          <mat-option (onSelectionChange)="Departamento_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsDepartamento | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingDepartamento" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsDepartamento && !isLoadingDepartamento">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Departamento').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Departamento').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Departamento de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_solicitud" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de solicitud</mat-label>
+                        <input (dateChange)="Fecha_de_solicitud_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_solicitud_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_solicitud.open()" [matDatepicker]="datePickerFecha_de_solicitud"
+                          formControlName="Fecha_de_solicitud" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_solicitud"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_solicitud></mat-datepicker>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Fecha_de_solicitud').hasError('required')">
+                          Fecha de solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_Cancelacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo de Cancelación</mat-label>
+                        <input (change)="Motivo_de_Cancelacion_ExecuteBusinessRules()" #Motivo_de_Cancelacion matInput
+                          formControlName="Motivo_de_Cancelacion" type="text" maxlength="200" required />
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Motivo_de_Cancelacion').hasError('required')">
+                          Motivo de Cancelación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSolicitud_de_Piezas" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Solicitud de Partes</h4>
+
+                        </div>
+                        <table mat-table [dataSource]="dataSourceSolicitud_de_Piezas" multiTemplateDataRows>
+
+                          <form formArrayName="Detalle_Solicitud_de_PiezasItems">
+
+                            <ng-container matColumnDef="N_Parte_Descripcion">
+                              <th mat-header-cell *matHeaderCellDef> N° Parte/Descripción</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.N_Parte_Descripcion_Partes?.Numero_de_parte_Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="N_de_OT">
+                              <th mat-header-cell *matHeaderCellDef> N° de OT</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.N_de_OT_Orden_de_Trabajo?.numero_de_orden}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Matricula">
+                              <th mat-header-cell *matHeaderCellDef> Matrícula</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Matricula_Aeronave?.Matricula}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Modelo">
+                              <th mat-header-cell *matHeaderCellDef> Modelo</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Modelo_Modelos?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Horas_del_Componente_a_Remover">
+                              <th mat-header-cell *matHeaderCellDef> Horas del Componente a Remover </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Horas_del_Componente_a_Remover}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Ciclos_del_componente_a_Remover">
+                              <th mat-header-cell *matHeaderCellDef> Ciclos del componente a Remover </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Ciclos_del_componente_a_Remover}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Cantidad">
+                              <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Unidad">
+                              <th mat-header-cell *matHeaderCellDef> Unidad</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Unidad_Unidad?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Urgencia">
+                              <th mat-header-cell *matHeaderCellDef> Urgencia</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Urgencia_Urgencia?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Razon_de_Solicitud">
+                              <th mat-header-cell *matHeaderCellDef> Razón de Solicitud </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Razon_de_Solicitud}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Condicion_de_la_Parte">
+                              <th mat-header-cell *matHeaderCellDef> Condición de la Parte </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Condicion_de_la_Parte}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="N_Reporte">
+                              <th mat-header-cell *matHeaderCellDef> N° Reporte</th>
+                              <td mat-cell *matCellDef="let element"> {{element.N_Reporte_Crear_Reporte?.No_Reporte}}
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Existencia_Almacen" *ngIf="RoleId!=26 || phase!=1">
+                              <th mat-header-cell *matHeaderCellDef> Existencia Almacén</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Existencia_Almacen_Existencia_solicitud_crear_reporte?.Existencia}}
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Existencia_Almacen" *ngIf="RoleId==26 && phase==1">
+                              <th mat-header-cell *matHeaderCellDef> Existencia Almacén</th>
+                              <td mat-cell *matCellDef="let element; let i = dataIndex;"
+                                [formGroupName]="dataSourceSolicitud_de_Piezas.data.indexOf(element)">
+
+                                <mat-form-field appearance="outline" style="width:82% !important">
+                                  <mat-label>Existencia Almacén</mat-label>
+                                  <mat-select placeholder="Existencia Almacén" formControlName="Existencia_Almacen">
+                                    <mat-option>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of varExistencia_solicitud_crear_reporte"
+                                      [value]="item.Folio">
+                                      {{ item.Existencia }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Aprobacion_de_mantenimiento" *ngIf="RoleId!=19 || phase!=2">
+                              <th mat-header-cell *matHeaderCellDef> Aprobación de mantenimiento</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Aprobacion_de_mantenimiento_Estatus_de_Seguimiento?.Descripcion}}
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Aprobacion_de_mantenimiento" *ngIf="RoleId==19 && phase==2">
+                              <th mat-header-cell *matHeaderCellDef> Aprobación de mantenimiento </th>
+                              <td mat-cell *matCellDef="let element; let i = dataIndex;"
+                                [formGroupName]="dataSourceSolicitud_de_Piezas.data.indexOf(element)">
+
+                                <mat-form-field appearance="outline" style="width:82% !important">
+                                  <mat-label>Aprobación de mantenimiento</mat-label>
+                                  <mat-select placeholder="Aprobación de mantenimiento"
+                                    formControlName="Aprobacion_de_mantenimiento">
+                                    <mat-option>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of varEstatus_de_Seguimiento" [value]="item.Folio">
+                                      {{ item.Descripcion }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+
+                              </td>
+                            </ng-container>
+
+                          </form>
+
+                          <tr mat-header-row *matHeaderRowDef="getSolicitud_de_PiezasColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit)}"
+                            *matRowDef="let row; columns: getSolicitud_de_PiezasColumns();let j = index"></tr>
+
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                    <div id="divSolicitud_de_Servicios" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Solicitud de Servicios</h4>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceSolicitud_de_Servicios" multiTemplateDataRows>
+
+                          <form formArrayName="Detalle_Solicitud_de_Servicios_Gestion_de_aprobacionItems">
+             
+                            <ng-container matColumnDef="N_Servicio_Descripcion">
+                              <th mat-header-cell *matHeaderCellDef> N° Servicio/Descripción</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.N_Servicio_Descripcion_Catalogo_servicios?.Codigo_Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="N_de_OT">
+                              <th mat-header-cell *matHeaderCellDef> N° de OT</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.N_de_OT_Orden_de_Trabajo?.numero_de_orden}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Matricula">
+                              <th mat-header-cell *matHeaderCellDef> Matrícula</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Matricula_Aeronave?.Matricula}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Modelo">
+                              <th mat-header-cell *matHeaderCellDef> Modelo</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Modelo_Modelos?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Fecha_Estimada_del_Mtto_">
+                              <th mat-header-cell *matHeaderCellDef> Fecha Estimada del Mtto. </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Fecha_Estimada_del_Mtto_ |date}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Cantidad">
+                              <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Unidad">
+                              <th mat-header-cell *matHeaderCellDef> Unidad</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Unidad_Unidad?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Urgencia">
+                              <th mat-header-cell *matHeaderCellDef> Urgencia</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Urgencia_Urgencia?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="N_Reporte">
+                              <th mat-header-cell *matHeaderCellDef> N° Reporte</th>
+                              <td mat-cell *matCellDef="let element"> {{element.N_Reporte_Crear_Reporte?.No_Reporte}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Razon_de_Solicitud">
+                              <th mat-header-cell *matHeaderCellDef> Razón de Solicitud </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Razon_de_Solicitud}} </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="Existencia_Almacen" *ngIf="RoleId!=26 || phase!=1">
+                              <th mat-header-cell *matHeaderCellDef> Existencia Almacén</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Existencia_Almacen_Existencia_solicitud_crear_reporte?.Existencia}}
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Existencia_Almacen" *ngIf="RoleId==26 && phase==1">
+                              <th mat-header-cell *matHeaderCellDef> Existencia Almacén</th>
+                              <td mat-cell *matCellDef="let element; let i = dataIndex;"
+                                [formGroupName]="dataSourceSolicitud_de_Servicios.data.indexOf(element)">
+
+                                <mat-form-field appearance="outline" style="width:82% !important">
+                                  <mat-label>Existencia Almacén</mat-label>
+                                  <mat-select placeholder="Existencia Almacén" formControlName="Existencia_Almacen">
+                                    <mat-option>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of varExistencia_solicitud_crear_reporte"
+                                      [value]="item.Folio">
+                                      {{ item.Existencia }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Aprobacion_de_mantenimiento" *ngIf="RoleId!=19 || phase!=2">
+                              <th mat-header-cell *matHeaderCellDef> Aprobación de mantenimiento</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Aprobacion_de_mantenimiento_Estatus_de_Seguimiento?.Descripcion}}
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Aprobacion_de_mantenimiento" *ngIf="RoleId==19 && phase==2">
+                              <th mat-header-cell *matHeaderCellDef> Aprobación de mantenimiento </th>
+                              <td mat-cell *matCellDef="let element; let i = dataIndex;"
+                                [formGroupName]="dataSourceSolicitud_de_Servicios.data.indexOf(element)">
+
+                                <mat-form-field appearance="outline" style="width:82% !important">
+                                  <mat-label>Aprobación de mantenimiento</mat-label>
+                                  <mat-select placeholder="Aprobación de mantenimiento"
+                                    formControlName="Aprobacion_de_mantenimiento">
+                                    <mat-option>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of varEstatus_de_Seguimiento" [value]="item.Folio">
+                                      {{ item.Descripcion }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+
+                              </td>
+                            </ng-container>
+
+                          </form>
+
+                          <tr mat-header-row *matHeaderRowDef="getSolicitud_de_ServiciosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit) }"
+                            *matRowDef="let row; columns: getSolicitud_de_ServiciosColumns();let j = index"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divSolicitud_de_Materiales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Solicitud de Materiales</h4>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceSolicitud_de_Materiales" multiTemplateDataRows>
+
+                          <form formArrayName="Detalle_Solicitud_de_Materiales_Gestion_de_aprobacionItems">
+
+                            <ng-container matColumnDef="Codigo_Descripcion">
+                              <th mat-header-cell *matHeaderCellDef> Código/Descripción</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Codigo_Descripcion_Listado_de_Materiales?.Codigo_Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="N_de_Reporte">
+                              <th mat-header-cell *matHeaderCellDef> N° de Reporte</th>
+                              <td mat-cell *matCellDef="let element"> {{element.N_de_Reporte_Crear_Reporte?.No_Reporte}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="N_de_OT">
+                              <th mat-header-cell *matHeaderCellDef> N° de OT</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.N_de_OT_Orden_de_Trabajo?.numero_de_orden}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Matricula">
+                              <th mat-header-cell *matHeaderCellDef> Matrícula</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Matricula_Aeronave?.Matricula}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Modelo">
+                              <th mat-header-cell *matHeaderCellDef> Modelo</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Modelo_Modelos?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Cantidad">
+                              <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Unidad">
+                              <th mat-header-cell *matHeaderCellDef> Unidad</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Unidad_Unidad?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Urgencia">
+                              <th mat-header-cell *matHeaderCellDef> Urgencia</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Urgencia_Urgencia?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Razon_de_Solicitud">
+                              <th mat-header-cell *matHeaderCellDef> Razón de Solicitud </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Razon_de_Solicitud}} </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="Existencia_Almacen" *ngIf="RoleId!=26 || phase!=1">
+                              <th mat-header-cell *matHeaderCellDef> Existencia Almacén</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Existencia_Almacen_Existencia_solicitud_crear_reporte?.Existencia}}
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Existencia_Almacen" *ngIf="RoleId==26 && phase==1">
+                              <th mat-header-cell *matHeaderCellDef> Existencia Almacén</th>
+                              <td mat-cell *matCellDef="let element; let i = dataIndex;"
+                                [formGroupName]="dataSourceSolicitud_de_Materiales.data.indexOf(element)">
+                                <mat-form-field appearance="outline" style="width:82% !important">
+                                  <mat-label>Existencia Almacén</mat-label>
+                                  <mat-select placeholder="Existencia Almacén" formControlName="Existencia_Almacen">
+                                    <mat-option>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of varExistencia_solicitud_crear_reporte"
+                                      [value]="item.Folio">
+                                      {{ item.Existencia }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Aprobacion_de_mantenimiento" *ngIf="RoleId!=19 || phase!=2">
+                              <th mat-header-cell *matHeaderCellDef> Aprobación de mantenimiento</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Aprobacion_de_mantenimiento_Estatus_de_Seguimiento?.Descripcion}}
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Aprobacion_de_mantenimiento" *ngIf="RoleId==19 && phase==2">
+                              <th mat-header-cell *matHeaderCellDef> Aprobación de mantenimiento </th>
+                              <td mat-cell *matCellDef="let element; let i = dataIndex;"
+                                [formGroupName]="dataSourceSolicitud_de_Materiales.data.indexOf(element)">
+                                <mat-form-field appearance="outline" style="width:82% !important">
+                                  <mat-label>Aprobación de mantenimiento</mat-label>
+                                  <mat-select placeholder="Aprobación de mantenimiento"
+                                    formControlName="Aprobacion_de_mantenimiento">
+                                    <mat-option>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of varEstatus_de_Seguimiento" [value]="item.Folio">
+                                      {{ item.Descripcion }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </td>
+                            </ng-container>
+
+                          </form>
+
+                          <tr mat-header-row *matHeaderRowDef="getSolicitud_de_MaterialesColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit)}"
+                            *matRowDef="let row; columns: getSolicitud_de_MaterialesColumns();let j = index">
+                          </tr>
+
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divSolicitud_de_Herramientas" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Solicitud de Herramientas</h4>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceSolicitud_de_Herramientas" multiTemplateDataRows>
+
+                          <form formArrayName="Detalle_Solicitud_de_Herramientas_Gestion_de_aprobacionItems">
+
+                            <ng-container matColumnDef="Codigo_Descripcion">
+                              <th mat-header-cell *matHeaderCellDef> Código/Descripción</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Codigo_Descripcion_Herramientas?.Codigo_Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="N_de_Reporte">
+                              <th mat-header-cell *matHeaderCellDef> N° de Reporte</th>
+                              <td mat-cell *matCellDef="let element"> {{element.N_Reporte_Crear_Reporte?.No_Reporte}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="N_de_OT">
+                              <th mat-header-cell *matHeaderCellDef> N° de OT</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.N_de_OT_Orden_de_Trabajo?.numero_de_orden}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Matricula">
+                              <th mat-header-cell *matHeaderCellDef> Matrícula</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Matricula_Aeronave?.Matricula}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Modelo">
+                              <th mat-header-cell *matHeaderCellDef> Modelo</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Modelo_Modelos?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Cantidad">
+                              <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Cantidad}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Unidad">
+                              <th mat-header-cell *matHeaderCellDef> Unidad</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Unidad_Unidad?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Urgencia">
+                              <th mat-header-cell *matHeaderCellDef> Urgencia</th>
+                              <td mat-cell *matCellDef="let element"> {{element.Urgencia_Urgencia?.Descripcion}}
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Razon_de_Solicitud">
+                              <th mat-header-cell *matHeaderCellDef> Razón de Solicitud </th>
+                              <td mat-cell *matCellDef="let element"> {{element.Razon_de_Solicitud}} </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="Existencia_Almacen" *ngIf="RoleId!=26 || phase!=1">
+                              <th mat-header-cell *matHeaderCellDef> Existencia Almacén</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Existencia_Almacen_Existencia_solicitud_crear_reporte?.Existencia}}
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Existencia_Almacen" *ngIf="RoleId==26 && phase==1">
+                              <th mat-header-cell *matHeaderCellDef> Existencia Almacén</th>
+                              <td mat-cell *matCellDef="let element; let i = dataIndex;"
+                                [formGroupName]="dataSourceSolicitud_de_Herramientas.data.indexOf(element)">
+                                <mat-form-field appearance="outline" style="width:82% !important">
+                                  <mat-label>Existencia Almacén</mat-label>
+                                  <mat-select placeholder="Existencia Almacén" formControlName="Existencia_Almacen">
+                                    <mat-option>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of varExistencia_solicitud_crear_reporte"
+                                      [value]="item.Folio">
+                                      {{ item.Existencia }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Aprobacion_de_mantenimiento" *ngIf="RoleId!=19 || phase!=2">
+                              <th mat-header-cell *matHeaderCellDef> Aprobación de mantenimiento</th>
+                              <td mat-cell *matCellDef="let element">
+                                {{element.Aprobacion_de_mantenimiento_Estatus_de_Seguimiento?.Descripcion}}
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Aprobacion_de_mantenimiento" *ngIf="RoleId==19 && phase==2">
+                              <th mat-header-cell *matHeaderCellDef> Aprobación de mantenimiento </th>
+                              <td mat-cell *matCellDef="let element; let i = dataIndex;"
+                                [formGroupName]="dataSourceSolicitud_de_Herramientas.data.indexOf(element)">
+                                <mat-form-field appearance="outline" style="width:82% !important">
+                                  <mat-label>Aprobación de mantenimiento</mat-label>
+                                  <mat-select placeholder="Aprobación de mantenimiento"
+                                    formControlName="Aprobacion_de_mantenimiento">
+                                    <mat-option>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of varEstatus_de_Seguimiento" [value]="item.Folio">
+                                      {{ item.Descripcion }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </td>
+                            </ng-container>
+
+                          </form>
+
+                          <tr mat-header-row *matHeaderRowDef="getSolicitud_de_HerramientasColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit)}"
+                            *matRowDef="let row; columns: getSolicitud_de_HerramientasColumns();let j = index"></tr>                    
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                    <div id="divEstatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus"
+                          formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_Gestion_Aprobacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Gestion_de_aprobacion_de_mantenimientoForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!Gestion_de_aprobacion_de_mantenimientoForm.valid || consult"
+                    mat-raised-button color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Gestion_de_aprobacion_de_mantenimientoForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Gestion_de_aprobacion_de_mantenimientoForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Gestion_de_aprobacion_de_mantenimientoForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

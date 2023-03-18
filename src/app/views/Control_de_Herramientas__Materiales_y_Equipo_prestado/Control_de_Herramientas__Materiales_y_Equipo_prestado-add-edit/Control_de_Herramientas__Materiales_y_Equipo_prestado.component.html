@@ -1,0 +1,487 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Control de Herramientas Materiales y Equipo Prestado</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Control_de_Herramientas__Materiales_y_Equipo_prestado/list">Control de Herramientas
+                Materiales y Equipo Prestado</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm"
+              (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divAplicacion" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Aplicación</mat-label>
+                        <input type="text" matInput formControlName="Aplicacion" [matAutocomplete]="autoAplicacion">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAplicacion="matAutocomplete" [displayWith]="displayFnAplicacion">
+                          <mat-option (onSelectionChange)="Aplicacion_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsAplicacion | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAplicacion" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsAplicacion && !isLoadingAplicacion">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Aplicacion').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Aplicacion').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Aplicación de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <input type="text" matInput formControlName="Matricula" [matAutocomplete]="autoMatricula">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete (optionSelected)="Matricula_ExecuteBusinessRules()"
+                          #autoMatricula="matAutocomplete" [displayWith]="displayFnMatricula">
+                          <mat-option *ngFor="let option of optionsMatricula | async" [value]="option">
+                            {{option.Matricula}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Matricula').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo_O_T" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No.O/T</mat-label>
+                        <input type="text" matInput formControlName="No_O_T" [matAutocomplete]="autoNo_O_T">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNo_O_T="matAutocomplete" [displayWith]="displayFnNo_O_T"
+                          (optionSelected)="No_O_T_ExecuteBusinessRules($event.option.value)">
+                          <mat-option value="">
+                          </mat-option>
+                          <mat-option *ngFor="let option of optionsNo_O_T" [value]="option">
+                            {{option.numero_de_orden}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNo_O_T" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('No_O_T').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('No_O_T').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un No.O/T de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo_O_S" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No.O/S</mat-label>
+                        <input type="text" matInput formControlName="No_O_S" [matAutocomplete]="autoNo_O_S">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNo_O_S="matAutocomplete" [displayWith]="displayFnNo_O_S"
+                          (optionSelected)="No_O_S_ExecuteBusinessRules($event.option.value)">
+                          <mat-option value="">
+                          </mat-option>
+                          <mat-option *ngFor="let option of optionsNo_O_S" [value]="option">
+                            {{option.Folio_OS}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNo_O_S" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('No_O_S').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('No_O_S').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un No.O/S de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__Reporte" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. Reporte</mat-label>
+                        <input type="text" matInput formControlName="No__Reporte" [matAutocomplete]="autoNo__Reporte">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNo__Reporte="matAutocomplete" [displayWith]="displayFnNo__Reporte">
+                          <mat-option>
+                          </mat-option>
+                          <mat-option (onSelectionChange)="No__Reporte_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsNo__Reporte" [value]="option">
+                            {{option.No_Reporte}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNo__Reporte" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('No__Reporte').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('No__Reporte').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un No. Reporte de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__Vuelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. Vuelo</mat-label>
+                        <input type="text" matInput formControlName="No__Vuelo" [matAutocomplete]="autoNo__Vuelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoNo__Vuelo="matAutocomplete" [displayWith]="displayFnNo__Vuelo">
+                          <mat-option (onSelectionChange)="No__Vuelo_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsNo__Vuelo " [value]="option">
+                            {{option.Numero_de_Vuelo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingNo__Vuelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('No__Vuelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('No__Vuelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un No. Vuelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_Salida" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Solicitud</mat-label>
+                        <input (dateChange)="Fecha_Salida_ExecuteBusinessRules()"
+                          (blur)="Fecha_Salida_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_Salida.open()"
+                          [matDatepicker]="datePickerFecha_Salida" formControlName="Fecha_Salida" type="text"
+                          required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_Salida"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_Salida></mat-datepicker>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Fecha_Salida').hasError('required')">
+                          Fecha de Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSolicitante" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Solicitante</mat-label>
+                        <input type="text" matInput formControlName="Solicitante" [matAutocomplete]="autoSolicitante">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoSolicitante="matAutocomplete" [displayWith]="displayFnSolicitante">
+                          <mat-option (onSelectionChange)="Solicitante_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsSolicitante | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingSolicitante" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsSolicitante && !isLoadingSolicitante">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Solicitante').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Solicitante').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Solicitante de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divContrasena_del_Solicitante" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Contraseña del Solicitante</mat-label>
+                        <input (change)="Contrasena_del_Solicitante_ExecuteBusinessRules()" #Contrasena_del_Solicitante
+                          matInput formControlName="Contrasena_del_Solicitante" type="password" maxlength="100"
+                          autocomplete="new-password" required />
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Contrasena_del_Solicitante').hasError('required')">
+                          Contraseña del Solicitante es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput
+                          formControlName="Observaciones" type="text" maxlength="500" />
+                        <mat-error
+                          *ngIf="Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.get('Observaciones').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHerramientas_y_Equipo_Prestado" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Herramientas y Equipo Prestado</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            [disabled]="!isHerramientas_y_Equipo_PrestadoAdd"
+                            (click)="addHerramientas_y_Equipo_PrestadoToMR(); $event.stopPropagation(); "(click)="MRaddHerramientas_y_Equipo_Prestado = true" [hidden]="MRaddHerramientas_y_Equipo_Prestado">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceHerramientas_y_Equipo_Prestado" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.disabled"
+                            matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  [disabled]="!isHerramientas_y_Equipo_PrestadoAdd"
+                                  (click)="editHerramientas_y_Equipo_Prestado(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  [disabled]="!isHerramientas_y_Equipo_PrestadoAdd"
+                                  (click)="deleteHerramientas_y_Equipo_Prestado(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="No__de_Parte___Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> No. de Parte / Descripción</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.No__de_Parte___Descripcion_Herramientas?.Codigo_Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__de_Serie">
+                            <th mat-header-cell *matHeaderCellDef> No. de Serie </th>
+                            <td mat-cell *matCellDef="let element"> {{element.No__de_Serie}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Solicitud">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Salida </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Solicitud | date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Entrega">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Entrega </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Entrega | date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Observaciones">
+                            <th mat-header-cell *matHeaderCellDef> Observaciones </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Observaciones}} </td>
+                          </ng-container>
+                          <!-- <ng-container matColumnDef="Recibio">
+                            <th mat-header-cell *matHeaderCellDef> Recibió</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Recibio_Spartan_User?.Name}}
+                            </td>
+                          </ng-container> -->
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex"
+                              [attr.colspan]="getHerramientas_y_Equipo_PrestadoColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_de_Herramientas_y_Equipo_PrestadoItems">
+
+                                    <div class="row form-group" [formGroupName]="dataIndex">
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. de Parte / Descripción</mat-label>
+                                          <input type="text" matInput formControlName="No__de_Parte___Descripcion"
+                                            [matAutocomplete]="auto" required>
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectNo__de_Parte___Descripcion_Detalle_de_Herramientas_y_Equipo_Prestado($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnNo__de_Parte___Descripcion_Detalle_de_Herramientas_y_Equipo_Prestado.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varHerramientas" [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionNo__de_Parte___Descripcion_Detalle_de_Herramientas_y_Equipo_Prestado($event, element)">
+                                              {{option.Codigo_Descripcion}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingNo__de_Parte___Descripcion_Detalle_de_Herramientas_y_Equipo_Prestado"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varHerramientas.length == 0 && !isLoadingNo__de_Parte___Descripcion_Detalle_de_Herramientas_y_Equipo_Prestado 
+                                            && searchNo__de_Parte___Descripcion_Detalle_de_Herramientas_y_Equipo_PrestadoCompleted
+                                            && !isNo__de_Parte___DescripcionSelected ">
+                                            No se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. de Serie</mat-label>
+                                          <input matInput formControlName="No__de_Serie" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha de Salida</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_de_Solicitud" type="text"
+                                            (dateChange)="setMinFecha_de_Entrega(dataIndex)" required />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha de Entrega</mat-label>
+                                          <input matInput (focus)="rpicker2.open()" [matDatepicker]="rpicker2"
+                                            formControlName="Fecha_de_Entrega" type="text" [min]="minFecha_de_Entrega"
+                                            required />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker2"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker2></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Observaciones</mat-label>
+                                          <input matInput formControlName="Observaciones" type="text" maxlength="200" />
+                                        </mat-form-field>
+                                      </div>
+                                      <!-- <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Recibió</mat-label>
+                                          <input type="text" matInput formControlName="Recibio"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectRecibio_Detalle_de_Herramientas_y_Equipo_Prestado($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnRecibio_Detalle_de_Herramientas_y_Equipo_Prestado.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varSpartan_User" [value]="option.Id_User"
+                                              (onSelectionChange)="updateOptionRecibio_Detalle_de_Herramientas_y_Equipo_Prestado($event, element)">
+                                              {{option.Name}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingRecibio_Detalle_de_Herramientas_y_Equipo_Prestado"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint *ngIf="varSpartan_User.length ==0 &&  !isLoadingRecibio_Detalle_de_Herramientas_y_Equipo_Prestado 
+                                            && searchRecibio_Detalle_de_Herramientas_y_Equipo_PrestadoCompleted">
+                                            No se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div> -->
+
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="saveHerramientas_y_Equipo_Prestado(element);" color="primary"(click)="MRaddHerramientas_y_Equipo_Prestado = false"
+                                          [disabled]="!Herramientas_y_Equipo_PrestadoItems.controls[dataIndex].valid">
+                                          Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditHerramientas_y_Equipo_Prestado(element)"(click)="MRaddHerramientas_y_Equipo_Prestado = false"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getHerramientas_y_Equipo_PrestadoColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getHerramientas_y_Equipo_PrestadoColumns();let index = index">
+                          </tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let index = index"
+                            class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator #paginator="matPaginator" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2"
+                    [disabled]="!Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.valid || consult"
+                    mat-raised-button color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.valid || consult"
+                    mat-raised-button color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.valid || consult"
+                    mat-raised-button color="primary" hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Control_de_Herramientas__Materiales_y_Equipo_prestadoForm.valid || consult"
+                    mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

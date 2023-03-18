@@ -1,0 +1,343 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Filtros de reportes</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Filtros_de_reportes/list">Filtros de reportes</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Filtros_de_reportesForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Filtros_de_reportesForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha</mat-label>
+                        <input (dateChange)="Fecha_ExecuteBusinessRules()" (blur)="Fecha_ExecuteBusinessRules()" matInput (focus)="datePickerFecha.open()" [matDatepicker]="datePickerFecha" formControlName="Fecha" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha></mat-datepicker>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Fecha').hasError('required')">
+                          Fecha  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAeronaves" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Aeronaves</mat-label>
+                        <input type="text" matInput formControlName="Aeronaves" [matAutocomplete]="autoAeronaves">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAeronaves="matAutocomplete" [displayWith]="displayFnAeronaves">
+                          <mat-option (onSelectionChange)="Aeronaves_ExecuteBusinessRules()" *ngFor="let option of optionsAeronaves | async" [value]="option">
+                            {{option.Matricula}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAeronaves" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsAeronaves && !isLoadingAeronaves">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Aeronaves').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Aeronaves').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Aeronaves de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divImprimir_solo_aeronaves_activas" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Imprimir_solo_aeronaves_activas_ExecuteBusinessRules()" formControlName="Imprimir_solo_aeronaves_activas" class="example-margin">
+                        Imprimir sólo aeronaves activas
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divMostrar_Aeronave" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Mostrar</mat-label>
+                        <input type="text" matInput formControlName="Mostrar_Aeronave" [matAutocomplete]="autoMostrar_Aeronave">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMostrar_Aeronave="matAutocomplete" [displayWith]="displayFnMostrar_Aeronave">
+                          <mat-option (onSelectionChange)="Mostrar_Aeronave_ExecuteBusinessRules()" *ngFor="let option of optionsMostrar_Aeronave | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMostrar_Aeronave" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMostrar_Aeronave && !isLoadingMostrar_Aeronave">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Mostrar_Aeronave').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Mostrar_Aeronave').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Mostrar de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divClientes" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Clientes</mat-label>
+                        <input type="text" matInput formControlName="Clientes" [matAutocomplete]="autoClientes">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoClientes="matAutocomplete" [displayWith]="displayFnClientes">
+                          <mat-option (onSelectionChange)="Clientes_ExecuteBusinessRules()" *ngFor="let option of optionsClientes | async" [value]="option">
+                            {{option.Razon_Social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingClientes" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsClientes && !isLoadingClientes">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Clientes').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Clientes').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Clientes de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divImprimir_solo_clientes_activos" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Imprimir_solo_clientes_activos_ExecuteBusinessRules()" formControlName="Imprimir_solo_clientes_activos" class="example-margin">
+                        Imprimir solo clientes activos
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divMostrar_Cliente" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Mostrar</mat-label>
+                        <input type="text" matInput formControlName="Mostrar_Cliente" [matAutocomplete]="autoMostrar_Cliente">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMostrar_Cliente="matAutocomplete" [displayWith]="displayFnMostrar_Cliente">
+                          <mat-option (onSelectionChange)="Mostrar_Cliente_ExecuteBusinessRules()" *ngFor="let option of optionsMostrar_Cliente | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMostrar_Cliente" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMostrar_Cliente && !isLoadingMostrar_Cliente">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Mostrar_Cliente').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Mostrar_Cliente').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Mostrar de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPasajeros" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Pasajeros</mat-label>
+                        <input type="text" matInput formControlName="Pasajeros" [matAutocomplete]="autoPasajeros">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPasajeros="matAutocomplete" [displayWith]="displayFnPasajeros">
+                          <mat-option (onSelectionChange)="Pasajeros_ExecuteBusinessRules()" *ngFor="let option of optionsPasajeros | async" [value]="option">
+                            {{option.Nombre_completo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingPasajeros" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPasajeros && !isLoadingPasajeros">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Pasajeros').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Pasajeros').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Pasajeros de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divImprimir_solo_pasajeros_activos" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Imprimir_solo_pasajeros_activos_ExecuteBusinessRules()" formControlName="Imprimir_solo_pasajeros_activos" class="example-margin">
+                        Imprimir solo pasajeros activos
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divMostrar_Pasajero" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Mostrar</mat-label>
+                        <input type="text" matInput formControlName="Mostrar_Pasajero" [matAutocomplete]="autoMostrar_Pasajero">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMostrar_Pasajero="matAutocomplete" [displayWith]="displayFnMostrar_Pasajero">
+                          <mat-option (onSelectionChange)="Mostrar_Pasajero_ExecuteBusinessRules()" *ngFor="let option of optionsMostrar_Pasajero | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMostrar_Pasajero" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMostrar_Pasajero && !isLoadingMostrar_Pasajero">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Mostrar_Pasajero').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Mostrar_Pasajero').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Mostrar de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPilotos" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Pilotos</mat-label>
+                        <input type="text" matInput formControlName="Pilotos" [matAutocomplete]="autoPilotos">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPilotos="matAutocomplete" [displayWith]="displayFnPilotos">
+                          <mat-option (onSelectionChange)="Pilotos_ExecuteBusinessRules()" *ngFor="let option of optionsPilotos | async" [value]="option">
+                            {{option.Nombre_completo}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingPilotos" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPilotos && !isLoadingPilotos">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Pilotos').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Pilotos').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Pilotos de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divImprimir_solo_pilotos_activos" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Imprimir_solo_pilotos_activos_ExecuteBusinessRules()" formControlName="Imprimir_solo_pilotos_activos" class="example-margin">
+                        Imprimir solo pilotos activos
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divMostrar_Piloto" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Mostrar</mat-label>
+                        <input type="text" matInput formControlName="Mostrar_Piloto" [matAutocomplete]="autoMostrar_Piloto">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMostrar_Piloto="matAutocomplete" [displayWith]="displayFnMostrar_Piloto">
+                          <mat-option (onSelectionChange)="Mostrar_Piloto_ExecuteBusinessRules()" *ngFor="let option of optionsMostrar_Piloto | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMostrar_Piloto" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMostrar_Piloto && !isLoadingMostrar_Piloto">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Mostrar_Piloto').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Mostrar_Piloto').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Mostrar de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divVuelos_como_capitan_o_primer_oficial" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Vuelos_como_capitan_o_primer_oficial_ExecuteBusinessRules()" formControlName="Vuelos_como_capitan_o_primer_oficial" class="example-margin">
+                        Vuelos como capitan o primer oficial
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divAeropuerto" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Aeropuerto</mat-label>
+                        <input type="text" matInput formControlName="Aeropuerto" [matAutocomplete]="autoAeropuerto">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAeropuerto="matAutocomplete" [displayWith]="displayFnAeropuerto">
+                          <mat-option (onSelectionChange)="Aeropuerto_ExecuteBusinessRules()" *ngFor="let option of optionsAeropuerto | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAeropuerto" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsAeropuerto && !isLoadingAeropuerto">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Aeropuerto').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Aeropuerto').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Aeropuerto de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAeropuerto_Destino" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Aeropuerto Destino</mat-label>
+                        <input type="text" matInput formControlName="Aeropuerto_Destino" [matAutocomplete]="autoAeropuerto_Destino">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoAeropuerto_Destino="matAutocomplete" [displayWith]="displayFnAeropuerto_Destino">
+                          <mat-option (onSelectionChange)="Aeropuerto_Destino_ExecuteBusinessRules()" *ngFor="let option of optionsAeropuerto_Destino | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingAeropuerto_Destino" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsAeropuerto_Destino && !isLoadingAeropuerto_Destino">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Aeropuerto_Destino').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Filtros_de_reportesForm.get('Aeropuerto_Destino').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Aeropuerto Destino de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Filtros_de_reportesForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Filtros_de_reportesForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Filtros_de_reportesForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Filtros_de_reportesForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

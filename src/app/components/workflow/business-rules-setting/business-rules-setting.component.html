@@ -1,0 +1,358 @@
+<h3 mat-dialog-title class="titles">
+    <!-- <mat-icon>assignment</mat-icon> -->
+    <span class="title-text">&nbsp;Configuración de Reglas de Negocio</span>
+</h3>
+
+<mat-divider></mat-divider>
+
+<div mat-dialog-content style="padding-top: 16px;">
+    <div style="max-height: 600px;">
+
+        <!-- Header controls -->
+        <div>
+            <div class="row" style="padding-left: 20px; max-height: 150px;">
+                <!-- Scope -->
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <strong>Scope</strong> => {{scopes.selectedOptions.selected[0]?.value}}
+                    <div>
+                        <mat-selection-list #scopes [multiple]="false" class="select-list">
+                            <mat-list-option *ngFor="let scope of ScopeList" [value]="scope.ScopeId">
+                            {{ scope.Description }}
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </div>
+                </div>
+                <!-- Operation -->
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <strong>Operation</strong> => {{operations.selectedOptions.selected[0]?.value}}
+                    <div>
+                        <mat-selection-list #operations [multiple]="false" class="select-list">
+                            <mat-list-option *ngFor="let operation of OperationList" [value]="operation.OperationId">
+                            {{ operation.Description }}
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </div>
+                </div>
+                <!-- Event Process -->
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <strong>Event Process</strong> => {{events.selectedOptions.selected[0]?.value}}
+                    <div>
+                        <mat-selection-list #events [multiple]="false" class="select-list">
+                            <mat-list-option *ngFor="let event of EventList" [value]="event.ProcessEventId">
+                            {{ event.Description }}
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </div>
+                </div>        
+            </div>
+
+            <div style="padding-top: 20px;"></div>
+
+            <!-- Business Rule Name -->
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <strong>Business Rule Name</strong>
+                </div>            
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                    <textarea rows="3" style="width: 100%;"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding-top: 20px;"></div>
+
+        <!-- Condiciones -->
+        <div class="row" style="display: inline;">
+            <div>
+                <mat-accordion style="background-color: whitesmoke;">
+                    <mat-expansion-panel (opened)="OpenStateConditions = true" (closed)="OpenStateConditions = false" [expanded]="true">
+                        <mat-expansion-panel-header style="background-color: #2a6891;">
+                            <mat-panel-title>Condiciones</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div style="padding-top: 10px;"></div>
+                        <div>
+                            <button mat-flat-button color="primary" (click)="ActionAddCondition(); $event.stopPropagation();">
+                                <mat-icon>add_circle_outline</mat-icon>
+                                Agregar Condición
+                            </button>
+                        </div>
+                        <div style="padding-top: 10px;"></div>
+                        <div class="table-responsive" style="max-height: 400px;">
+                            <table mat-table [dataSource]="dataSourceConditions" matSort multiTemplateDataRows>
+                            
+                                <!-- Acciones -->
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                    <mat-cell *matCellDef="let element;">
+                                        <div class="actions">
+                                            <button mat-icon-button class="btn-tbl-edit" type="button" (click)="OnEditCondition(element);">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                            <button mat-icon-button class="btn-tbl-delete" type='button'
+                                                (click)="OnDeleteCondition(element); $event.stopPropagation();">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+                            
+                                <!-- Identificador -->
+                                <ng-container matColumnDef="ConditionsDetailId">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Identificador</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{ row.ConditionsDetailId }}</mat-cell>
+                                </ng-container>
+                            
+                                <!-- Regla -->
+                                <ng-container matColumnDef="Business_Rule">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Regla</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{ row.Business_Rule }}</mat-cell>
+                                </ng-container>
+                            
+                                <!-- Condition_Operator -->
+                                <ng-container matColumnDef="Condition_Operator">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Condition_Operator</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{ row.Condition_Operator }}</mat-cell>
+                                </ng-container>
+                            
+                                <!-- Tipo Operador 1 -->
+                                <ng-container matColumnDef="First_Operator_Type">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Operador 1</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{ row.First_Operator_Type }}</mat-cell>
+                                </ng-container>
+                            
+                                <!-- Valor Operador 1 -->
+                                <ng-container matColumnDef="First_Operator_Value">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Valor Operador 1</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{ row.First_Operator_Value }}</mat-cell>
+                                </ng-container>
+                            
+                                <!-- Condición -->
+                                <ng-container matColumnDef="Condition">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Condición</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{ row.Condition }}</mat-cell>
+                                </ng-container>
+                            
+                                <!-- Tipo Operador 2 -->
+                                <ng-container matColumnDef="Second_Operator_Type">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Operador 2</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{ row.Second_Operator_Type }}</mat-cell>
+                                </ng-container>
+                            
+                                <!-- Valor Operador 2 -->
+                                <ng-container matColumnDef="Second_Operator_Value">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Valor Operador 2</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{ row.Second_Operator_Value }}</mat-cell>
+                                </ng-container>
+                            
+                                <tr mat-header-row *matHeaderRowDef="ConditionsColumns"></tr>
+                            
+                            </table>
+                            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                
+            </div>
+        </div>
+
+        <div style="padding-top: 20px;"></div>
+
+        <!-- Acciones si se llena por completo -->
+        <div class="row" style="display: inline;">
+            <div>
+                <mat-accordion style="background-color: whitesmoke;">
+                    <mat-expansion-panel (opened)="OpenStateActionsFill = true"
+                        (closed)="OpenStateActionsFill = false" [expanded]="true">
+                        <mat-expansion-panel-header style="background-color: #6dbcf2;">
+                            <mat-panel-title>Acciones si se llena por completo</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div style="padding-top: 10px;"></div>
+                        <div>
+                            <button mat-flat-button color="primary" (click)="OnActionAddFill()">
+                                <mat-icon>add_circle_outline</mat-icon>
+                                Agregar Acción
+                            </button>
+                        </div>
+                        <div style="padding-top: 10px;"></div>
+                        <div class="table-responsive" style="max-height: 400px;">
+                            <mat-table #table [dataSource]="dataSourceActions">
+
+                                <!-- Classification -->
+                                <ng-container matColumnDef="Classification">
+                                    <mat-header-cell *matHeaderCellDef>Classification</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <mat-select placeholder="[ Seleccionar ]" [(ngModel)]="selectedOfferOne">
+                                            <mat-option *ngFor="let item of ConditionOperatorList" [value]="item.ConditionOperatorId">
+                                            {{ item.Description }}                  
+                                            </mat-option>
+                                        </mat-select>    
+                                    </mat-cell>
+                                </ng-container>
+                            
+                                <!-- Action -->
+                                <ng-container matColumnDef="Action">
+                                    <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <mat-select placeholder="[ Seleccionar ]" [(ngModel)]="selectedOfferOne">
+                                            <mat-option *ngFor="let item of ConditionConditionList" [value]="item.ConditionId">
+                                            {{ item.Description }}                  
+                                            </mat-option>
+                                        </mat-select>    
+                                    </mat-cell>
+                                </ng-container>
+                            
+                                <!-- Action Result -->
+                                <ng-container matColumnDef="ActionResult">
+                                    <mat-header-cell *matHeaderCellDef>Action Result</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <mat-select placeholder="[ Seleccionar ]" [(ngModel)]="selectedOfferOne">
+                                            <mat-option *ngFor="let item of ConditionOperatorType1List" [value]="item.OperatorTypeId">
+                                                {{ item.Description }}                  
+                                            </mat-option>
+                                        </mat-select>    
+                                    </mat-cell>
+                                </ng-container>
+                            
+                                <!-- Parameter 1 -->
+                                <ng-container matColumnDef="Parameter1">
+                                    <mat-header-cell *matHeaderCellDef>Parameter 1</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <mat-select placeholder="[ Seleccionar ]" [(ngModel)]="selectedOfferOne">
+                                            <mat-option *ngFor="let levelone of OperationList" [value]="levelone">
+                                                {{ levelone }}                  
+                                            </mat-option>
+                                        </mat-select>    
+                                    </mat-cell>
+                                </ng-container>
+                            
+                                <!-- Parameter 2 -->
+                                <ng-container matColumnDef="Parameter2">
+                                    <mat-header-cell *matHeaderCellDef>Parameter 2</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <mat-select placeholder="[ Seleccionar ]" [(ngModel)]="selectedOfferOne">
+                                            <mat-option *ngFor="let levelone of OperationList" [value]="levelone">
+                                                {{ levelone }}                  
+                                            </mat-option>
+                                        </mat-select>    
+                                    </mat-cell>
+                                </ng-container>
+                            
+                                <!-- Parameter 3 -->
+                                <ng-container matColumnDef="Parameter3">
+                                    <mat-header-cell *matHeaderCellDef>Parameter 3</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <mat-select placeholder="[ Seleccionar ]" [(ngModel)]="selectedOfferOne">
+                                            <mat-option *ngFor="let levelone of OperationList" [value]="levelone">
+                                                {{ levelone }}                  
+                                            </mat-option>
+                                        </mat-select>    
+                                    </mat-cell>
+                                </ng-container>
+                            
+                                <!-- Parameter 4 -->
+                                <ng-container matColumnDef="Parameter4">
+                                    <mat-header-cell *matHeaderCellDef>Parameter 4</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <mat-select placeholder="[ Seleccionar ]" [(ngModel)]="selectedOfferOne">
+                                            <mat-option *ngFor="let levelone of OperationList" [value]="levelone">
+                                                {{ levelone }}                  
+                                            </mat-option>
+                                        </mat-select>    
+                                    </mat-cell>
+                                </ng-container>
+                            
+                                <!-- Parameter 5 -->
+                                <ng-container matColumnDef="Parameter5">
+                                    <mat-header-cell *matHeaderCellDef>Parameter 5</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <mat-select placeholder="select" [(ngModel)]="selectedOfferOne">
+                                            <mat-option *ngFor="let levelone of OperationList" [value]="levelone">
+                                                {{ levelone }}                  
+                                            </mat-option>
+                                        </mat-select>    
+                                    </mat-cell>
+                                </ng-container>
+                            
+                                <mat-header-row *matHeaderRowDef="displayedColumnsActions"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumnsActions;"></mat-row>
+                            </mat-table>
+                            <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                
+            </div>
+        </div>
+
+        <div style="padding-top: 20px;"></div>
+
+        <!-- Acciones si no se llena por completo -->
+        <div class="row" style="display: inline;">
+            <div>
+                <mat-accordion style="background-color: whitesmoke;">
+                    <mat-expansion-panel (opened)="OpenStateActionsNotFill = true"
+                                        (closed)="OpenStateActionsNotFill = false" [expanded]="true">
+                    <mat-expansion-panel-header style="background-color: #db566c;">
+                        <mat-panel-title>
+                            Acciones si no se llena por completo
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div style="padding-top: 10px;"></div>
+                    <div>
+                        <button mat-flat-button color="primary" (click)="OnActionAddNotFill()">
+                            <mat-icon>add_circle_outline</mat-icon>
+                            Agregar Acción
+                        </button>
+                    </div>
+                    <div style="padding-top: 10px;"></div>
+                    <div class="table-responsive" style="max-height: 400px;">
+                        
+                        <mat-table #table [dataSource]="dataSource">
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="position">
+                            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+                            </ng-container>
+                        
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="name">
+                            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                            </ng-container>
+                        
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="weight">
+                            <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+                            </ng-container>
+                        
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="symbol">
+                            <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+                            </ng-container>
+                        
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </mat-table>
+                        <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+        
+                    </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Botonera -->
+<div mat-dialog-actions style="padding-top: 16px; text-align: right;" class="mb-1">
+    <button mat-flat-button color="primary" (click)="ActionPending()"hidden>Guardar y Copiar</button>
+    <button mat-flat-button color="primary" (click)="ActionPending()">Guardar</button>
+    <button mat-button (click)="ActionClose()" style="background-color:lightslategray;">Cancelar</button>
+</div>

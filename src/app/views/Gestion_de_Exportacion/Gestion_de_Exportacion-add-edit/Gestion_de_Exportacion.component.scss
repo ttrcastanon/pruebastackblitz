@@ -1,0 +1,51 @@
+﻿tr.example-detail-row {
+  height: 0;
+}
+
+.row-container {
+  visibility     : visible;
+  display        : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  flex-wrap      : wrap;
+  margin-top     : 10px;
+}
+
+.row-container>.mat-form-field {
+  width: 19%;
+}
+
+.row-container>.mat-checkbox {
+  padding-top: 15px;
+}
+
+.hide {
+  display: none;
+}
+
+.center {
+  text-align     : center;
+  justify-content: center;
+}
+
+:host ::ng-deep .no-padding div.mat-form-field-wrapper {
+  padding-bottom: 0
+}
+
+.mat-table .mat-header-cell {
+  padding-right: 20px;
+}
+
+.top-action-container-table {
+  display        : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  padding-top    : 15px;
+}
+
+.top-action-label {
+  display        : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  margin         : 1rem auto 1rem 1rem;
+}

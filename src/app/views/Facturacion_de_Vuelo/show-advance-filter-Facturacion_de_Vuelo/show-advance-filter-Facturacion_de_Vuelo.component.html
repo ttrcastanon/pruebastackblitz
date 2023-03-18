@@ -1,0 +1,1203 @@
+﻿<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Búsqueda Avanzada de Facturación de Vuelo</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/dashboard/main">
+                  <i class="fas fa-home"></i> Inicio</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Facturación de Vuelo</a>
+              </li>
+              <li class="breadcrumb-item active">Búsqueda Avanzada</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Basic Validation -->
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="header">
+              <h2>
+                Búsqueda Avanzada
+              </h2>
+              <ul class="header-dropdown m-r--5">
+                <li class="dropdown">
+                  <a href="#" onClick="return false;" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="material-icons">more_vert</i>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a href="#" onClick="return false;">Action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Another action</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick="return false;">Something else here</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="body">
+              <form class="advancefilter-form m-4" [formGroup]="advancefilter" (ngSubmit)="onadvancefilter()">
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio De</mat-label>
+                      <input matInput formControlName="fromFolio">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Folio A</mat-label>
+                      <input matInput formControlName="toFolio">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora De</mat-label>
+                      <input formControlName="fromHora" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Hora A</mat-label>
+                      <input formControlName="toHora" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="VueloFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Folio">
+                          {{ item.Numero_de_Vuelo }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Vuelo</mat-label>
+                      <input matInput formControlName="Vuelo" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Vuelo</mat-label>
+                      <mat-select placeholder="Vuelo"
+                        formControlName="VueloMultiple" multiple>
+                        <mat-option *ngFor="let item of solicitud_de_vuelos" [value]="item.Folio">
+                          {{ item.Numero_de_Vuelo }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Sección De</mat-label>
+                      <input matInput formControlName="fromSeccion">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Sección A</mat-label>
+                      <input matInput formControlName="toSeccion">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Tipo"
+                        formControlName="TipoFilter">
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Tipo</mat-label>
+                      <input matInput formControlName="Tipo" type="text" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="MatriculaFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Matricula">
+                          {{ item.Matricula }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Matricula</mat-label>
+                      <input matInput formControlName="Matricula" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Matricula</mat-label>
+                      <mat-select placeholder="Matricula"
+                        formControlName="MatriculaMultiple" multiple>
+                        <mat-option *ngFor="let item of aeronaves" [value]="item.Matricula">
+                          {{ item.Matricula }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="ModeloFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Modelo</mat-label>
+                      <input matInput formControlName="Modelo" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Modelo</mat-label>
+                      <mat-select placeholder="Modelo"
+                        formControlName="ModeloMultiple" multiple>
+                        <mat-option *ngFor="let item of modeloss" [value]="item.Clave">
+                          {{ item.Descripcion }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Año De</mat-label>
+                      <input matInput formControlName="fromAno">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Año A</mat-label>
+                      <input matInput formControlName="toAno">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="ClienteFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Razon_Social }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Cliente</mat-label>
+                      <input matInput formControlName="Cliente" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Cliente</mat-label>
+                      <mat-select placeholder="Cliente"
+                        formControlName="ClienteMultiple" multiple>
+                        <mat-option *ngFor="let item of clientes" [value]="item.Clave">
+                          {{ item.Razon_Social }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="Solicitante_1Filter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Id_User">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Solicitante</mat-label>
+                      <input matInput formControlName="Solicitante_1" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Solicitante</mat-label>
+                      <mat-select placeholder="Solicitante"
+                        formControlName="Solicitante_1Multiple" multiple>
+                        <mat-option *ngFor="let item of spartan_users" [value]="item.Id_User">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Horas de vuelo de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromHoras_de_vuelo" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Horas de vuelo a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toHoras_de_vuelo" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Horas de Espera de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromHoras_de_Espera" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Horas de Espera a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toHoras_de_Espera" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Pernocta de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromPercnota" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Pernocta a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toPercnota" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Filtrar</mat-label>
+                      <mat-select placeholder="Filtrar"
+                        formControlName="EstatusFilter" >
+                        <mat-option *ngFor="let item of filter" [value]="item.Clave">
+                          {{ item.Estatus }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Estatus</mat-label>
+                      <input matInput formControlName="Estatus" type="text" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Seleccionar Estatus</mat-label>
+                      <mat-select placeholder="Estatus"
+                        formControlName="EstatusMultiple" multiple>
+                        <mat-option *ngFor="let item of estatus_de_facturacion_de_vuelos" [value]="item.Clave">
+                          {{ item.Estatus }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha De</mat-label>
+                      <input matInput (focus)="rpickerde.open()" [matDatepicker]="rpickerde"
+                        formControlName="fromFecha_de_la_factura" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickerde"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickerde></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Fecha A</mat-label>
+                      <input matInput (focus)="rpickera.open()" [matDatepicker]="rpickera"
+                        formControlName="toFecha_de_la_factura" type="text" />
+                      <mat-datepicker-toggle matSuffix [for]="rpickera"></mat-datepicker-toggle>
+                      <mat-datepicker #rpickera></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Servicios Terminal Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromServicios_Terminal_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Servicios Terminal Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toServicios_Terminal_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Comisariato Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromComisariato_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Comisariato Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toComisariato_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Despacho de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromDespacho" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Despacho a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toDespacho" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>TUA Nacional de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromTUA_Nacional" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>TUA Nacional a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toTUA_Nacional" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>TUA Nacional Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromTUA_Nacional_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>TUA Nacional Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toTUA_Nacional_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>TUA Internacional de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromTUA_Internacional" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>TUA Internacional a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toTUA_Internacional" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>TUA Internacional Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromTUA_Internacional_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>TUA Internacional Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toTUA_Internacional_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> IVA Frontera De</mat-label>
+                      <input matInput formControlName="fromIVA_Frontera">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> IVA Frontera A</mat-label>
+                      <input matInput formControlName="toIVA_Frontera">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Frontera Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromIVA_Frontera_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Frontera Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toIVA_Frontera_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> IVA Nacional De</mat-label>
+                      <input matInput formControlName="fromIVA_Nacional">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> IVA Nacional A</mat-label>
+                      <input matInput formControlName="toIVA_Nacional">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Nacional Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromIVA_Nacional_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Nacional Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toIVA_Nacional_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Total Serv. Ext. de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromSubTotal" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Total Serv. Ext. a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toSubTotal" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Tiempo de Vuelo De</mat-label>
+                      <input formControlName="fromTiempo_de_Vuelo" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Tiempo de Vuelo A</mat-label>
+                      <input formControlName="toTiempo_de_Vuelo" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Tiempo de Vuelo Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromTiempo_de_Vuelo_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Tiempo de Vuelo Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toTiempo_de_Vuelo_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Tiempo de Espera De</mat-label>
+                      <input formControlName="fromTiempo_de_Espera" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Tiempo de Espera A</mat-label>
+                      <input formControlName="toTiempo_de_Espera" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Espera sin Cargo De</mat-label>
+                      <input formControlName="fromEspera_sin_Cargo" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Espera sin Cargo A</mat-label>
+                      <input formControlName="toEspera_sin_Cargo" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Espera con Cargo De</mat-label>
+                      <input formControlName="fromEspera_con_Cargo" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label> Espera con Cargo A</mat-label>
+                      <input formControlName="toEspera_con_Cargo" matInput placeholder="EX: 23:05:29 "
+                        mask="Hh:m0:s0" />
+                      <span matPrefix>
+                        <mat-icon class="mr-2">access_time</mat-icon>
+                      </span>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Espera con Cargo Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromEspera_con_Cargo_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Espera con Cargo Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toEspera_con_Cargo_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Pernoctas De</mat-label>
+                      <input matInput formControlName="fromPernocta">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Pernoctas A</mat-label>
+                      <input matInput formControlName="toPernocta">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Pernoctas Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromPernoctas_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Pernoctas Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toPernoctas_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>IVA Nacional Servicios de</mat-label>
+                      <input matInput formControlName="fromIVA_Nacional_Servicios">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>IVA Nacional Servicios a</mat-label>
+                      <input matInput formControlName="toIVA_Nacional_Servicios">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Nacional Servicios Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromIVA_Nacional_Servicios_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Nacional Servicios Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toIVA_Nacional_Servicios_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> IVA De</mat-label>
+                      <input matInput formControlName="fromIVA">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> IVA A</mat-label>
+                      <input matInput formControlName="toIVA">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Internacional Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromIVA_Internacional_Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Internacional Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toIVA_Internacional_Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Cargo vuelo int. De</mat-label>
+                      <input matInput formControlName="fromCargo_vuelo_int_">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> Cargo vuelo int. A</mat-label>
+                      <input matInput formControlName="toCargo_vuelo_int_">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Cargo Vuelo Int. Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromCargo_Vuelo_Int__Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Cargo Vuelo Int. Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toCargo_Vuelo_Int__Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> IVA vuelo int. De</mat-label>
+                      <input matInput formControlName="fromIVA_vuelo_int_">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label> IVA vuelo int. A</mat-label>
+                      <input matInput formControlName="toIVA_vuelo_int_">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Vuelo Int. Total de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromIVA_Vuelo_Int__Total" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>IVA Vuelo Int. Total a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toIVA_Vuelo_Int__Total" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Total Serv. Vuelo de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromSubTotal_1" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Total Serv. Vuelo a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toSubTotal_1" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Servicios de Terminal de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromServicios_de_Terminal" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Servicios de Terminal a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toServicios_de_Terminal" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Comisariato de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromComisariato_1" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Comisariato a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toComisariato_1" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Despacho de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromDespacho_1" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Despacho a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toDespacho_1" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Margen de</mat-label>
+                      <input matInput formControlName="fromMargen">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Margen a</mat-label>
+                      <input matInput formControlName="toMargen">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Total a pagar de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromTotal_a_pagar" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>Total a pagar a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toTotal_a_pagar" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>SAPSA Monto de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromSAPSA_Monto" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>SAPSA Monto a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toSAPSA_Monto" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>SAPSA % de</mat-label>
+                      <input matInput formControlName="fromSAPSA_Porcentaje">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>SAPSA % a</mat-label>
+                      <input matInput formControlName="toSAPSA_Porcentaje">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>GNP Monto de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromGNP_Monto" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>GNP Monto a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toGNP_Monto" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>GNP % de</mat-label>
+                      <input matInput formControlName="fromGNP_Porcentaje">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>GNP % a</mat-label>
+                      <input matInput formControlName="toGNP_Porcentaje">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>PH Monto de</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="fromPH_Monto" mask="separator.2" thousandSeparator="," />
+
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                      <mat-label>PH Monto a</mat-label>
+                      <span matPrefix>
+                        <mat-icon class="mr-2">attach_money</mat-icon>
+                      </span>
+                      <input matInput formControlName="toPH_Monto" mask="separator.2" thousandSeparator="," />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>PH % de</mat-label>
+                      <input matInput formControlName="fromPH_Porcentaje">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>PH % a</mat-label>
+                      <input matInput formControlName="toPH_Porcentaje">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="mr-3 mb-2" mat-raised-button
+                      color="primary" (click)="buscar()" > Buscar </button>
+                    <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #END# Basic Validation -->
+    </div>
+  </section>

@@ -1,0 +1,204 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Presupuesto Anual</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Presupuesto_Anual/list">Presupuesto Anual</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Presupuesto_AnualForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" style="display: initial;">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Presupuesto_AnualForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Presupuesto_AnualForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divEmpresa" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Empresa</mat-label>
+                        <input type="text" matInput formControlName="Empresa" [matAutocomplete]="autoEmpresa" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoEmpresa="matAutocomplete" [displayWith]="displayFnEmpresa">
+                          <mat-option (onSelectionChange)="Empresa_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsEmpresa | async" [value]="option">
+                            {{option.Razon_Social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingEmpresa" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsEmpresa && !isLoadingEmpresa">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Presupuesto_AnualForm.get('Empresa').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Presupuesto_AnualForm.get('Empresa').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Empresa de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAno_en_curso" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Año en curso</mat-label>
+                        <input (keyup)="Ano_en_curso_ExecuteBusinessRules()" matInput formControlName="Ano_en_curso"
+                          type="number" min="0" max="3000" maxLength="4"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          required />
+                        <mat-error *ngIf="Presupuesto_AnualForm.get('Ano_en_curso').hasError('required')">
+                          Año en curso es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMonto_Pres__Inicial_Ano" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Monto Pres. Inicial Año</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Monto_Pres__Inicial_Ano_ExecuteBusinessRules()" matInput
+                          formControlName="Monto_Pres__Inicial_Ano" mask="separator.2" thousandSeparator=","
+                          (keypress)="maxDigits($event.target.value,12)" required />
+                        <mat-error *ngIf="Presupuesto_AnualForm.get('Monto_Pres__Inicial_Ano').hasError('required')">
+                          Monto Pres. Inicial Año es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPorcentaje_Pres__Ano" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Porcentaje Pres. Año</mat-label>
+                        <input (change)="Porcentaje_Pres__Ano_ExecuteBusinessRules()" matInput
+                          formControlName="Porcentaje_Pres__Ano"
+                          [type]="Presupuesto_AnualForm.get('Porcentaje_Pres__Ano').value == 'Auto'  ? 'text':'number' "
+                          maxlength="3" required />
+                        <mat-error *ngIf="Presupuesto_AnualForm.get('Porcentaje_Pres__Ano').hasError('required')">
+                          Porcentaje Pres. Año es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divGasto_Real_Facturado" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Gasto Real Facturado</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Gasto_Real_Facturado_ExecuteBusinessRules()" matInput
+                          formControlName="Gasto_Real_Facturado" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error *ngIf="Presupuesto_AnualForm.get('Gasto_Real_Facturado').hasError('required')">
+                          Gasto Real Facturado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPto__Estimado_acumulado" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Pto. Estimado acumulado</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Pto__Estimado_acumulado_ExecuteBusinessRules()" matInput
+                          formControlName="Pto__Estimado_acumulado" mask="separator.2" thousandSeparator=","
+                          maxlength="12" required />
+                        <mat-error *ngIf="Presupuesto_AnualForm.get('Pto__Estimado_acumulado').hasError('required')">
+                          Pto. Estimado acumulado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPorcentaje_Estimado_Acumulado" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Porcentaje Estimado Acumulado</mat-label>
+                        <input (change)="Porcentaje_Estimado_Acumulado_ExecuteBusinessRules()" matInput
+                          formControlName="Porcentaje_Estimado_Acumulado"
+                          [type]="Presupuesto_AnualForm.get('Porcentaje_Estimado_Acumulado').value == 'Auto'  ? 'text':'number' "
+                          maxlength="3" required />
+                        <mat-error
+                          *ngIf="Presupuesto_AnualForm.get('Porcentaje_Estimado_Acumulado').hasError('required')">
+                          Porcentaje Estimado Acumulado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPorcentaje_Gasto_Real_Acumulado" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Porcentaje Gasto Real Acumulado</mat-label>
+                        <input (change)="Porcentaje_Gasto_Real_Acumulado_ExecuteBusinessRules()" matInput
+                          formControlName="Porcentaje_Gasto_Real_Acumulado"
+                          [type]="Presupuesto_AnualForm.get('Porcentaje_Gasto_Real_Acumulado').value == 'Auto'  ? 'text':'number' "
+                          maxlength="3" required />
+                        <mat-error
+                          *ngIf="Presupuesto_AnualForm.get('Porcentaje_Gasto_Real_Acumulado').hasError('required')">
+                          Porcentaje Gasto Real Acumulado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPorcentaje_Diferencia" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Porcentaje Diferencia</mat-label>
+                        <input (change)="Porcentaje_Diferencia_ExecuteBusinessRules()" matInput
+                          formControlName="Porcentaje_Diferencia"
+                          [type]="Presupuesto_AnualForm.get('Porcentaje_Diferencia').value == 'Auto'  ? 'text':'number' "
+                          maxlength="3" required />
+                        <mat-error *ngIf="Presupuesto_AnualForm.get('Porcentaje_Diferencia').hasError('required')">
+                          Porcentaje Diferencia es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!Presupuesto_AnualForm.valid || consult" mat-raised-button
+                    color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Presupuesto_AnualForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Presupuesto_AnualForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Presupuesto_AnualForm.valid || consult" mat-raised-button color="primary">Configurar
+                  </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

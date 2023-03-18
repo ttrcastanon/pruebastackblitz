@@ -1,0 +1,375 @@
+﻿.f-w {
+    width: 100%;
+}
+
+mat-table {
+    display       : flex;
+    flex-direction: column;
+}
+
+mat-cell:first-of-type,
+mat-header-cell:first-of-type,
+mat-footer-cell:first-of-type {
+    padding-left: 0;
+}
+
+.spinner-container {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+}
+
+mat-form-field.filter {
+    width: 100%;
+}
+
+mat-form-field.filter .mat-form-field-infix {
+    border: 1px solid #9e9e9e;
+}
+
+.filter {
+    font-size: 8px;
+    height   : 38px;
+}
+
+.mat-column-acciones,
+.mat-column-acciones_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Folio,
+.mat-column-Folio_filtro {
+    width: 50px;
+    flex : 0 0 50px !important;
+}
+
+.mat-column-No__Solicitud,
+.mat-column-No__Solicitud_filtro {
+    width: 80px;
+    flex : 0 0 80px !important;
+}
+
+.mat-column-Solicitante,
+.mat-column-Solicitante_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Fecha_de_Solicitud,
+.mat-column-Fecha_de_Solicitud_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Razon_de_la_Compra,
+.mat-column-Razon_de_la_Compra_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Departamento,
+.mat-column-Departamento_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Numero_de_Reporte,
+.mat-column-Numero_de_Reporte_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Numero_de_O_T,
+.mat-column-Numero_de_O_T_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Matricula,
+.mat-column-Matricula_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Modelo,
+.mat-column-Modelo_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Estatus,
+.mat-column-Estatus_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Proveedor1,
+.mat-column-Proveedor1_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Total_Proveedor1,
+.mat-column-Total_Proveedor1_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Total_Cotizacion_Proveedor1,
+.mat-column-Total_Cotizacion_Proveedor1_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Tipo_de_Moneda1,
+.mat-column-Tipo_de_Moneda1_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Proveedor2,
+.mat-column-Proveedor2_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Total_Proveedor2,
+.mat-column-Total_Proveedor2_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Total_Cotizacion_Proveedor2,
+.mat-column-Total_Cotizacion_Proveedor2_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Tipo_de_Moneda2,
+.mat-column-Tipo_de_Moneda2_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Proveedor3,
+.mat-column-Proveedor3_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Total_Proveedor3,
+.mat-column-Total_Proveedor3_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Total_Cotizacion_Proveedor3,
+.mat-column-Total_Cotizacion_Proveedor3_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Tipo_de_Moneda3,
+.mat-column-Tipo_de_Moneda3_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Proveedor4,
+.mat-column-Proveedor4_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Total_Proveedor4,
+.mat-column-Total_Proveedor4_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Total_Cotizacion_Proveedor4,
+.mat-column-Total_Cotizacion_Proveedor4_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Tipo_de_Moneda4,
+.mat-column-Tipo_de_Moneda4_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Total_Cotizacion,
+.mat-column-Total_Cotizacion_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Tipo_de_Cambio,
+.mat-column-Tipo_de_Cambio_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Tipo_de_Moneda,
+.mat-column-Tipo_de_Moneda_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Observaciones,
+.mat-column-Observaciones_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Estatus_de_Seguimiento,
+.mat-column-Estatus_de_Seguimiento_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-idComprasGenerales,
+.mat-column-idComprasGenerales_filtro {
+    width: 80px;
+    flex : 0 0 80px !important;
+}
+
+.mat-column-idGestionAprobacionMantenimiento,
+.mat-column-idGestionAprobacionMantenimiento_filtro {
+    width: 80px;
+    flex : 0 0 80px !important;
+}
+
+.mat-column-FolioComparativoProv,
+.mat-column-FolioComparativoProv_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Fecha_de_Autorizacion,
+.mat-column-Fecha_de_Autorizacion_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Hora_de_Autorizacion,
+.mat-column-Hora_de_Autorizacion_filtro {
+    width: 90px;
+    flex : 0 0 90px !important;
+}
+
+.mat-column-Autorizado_por,
+.mat-column-Autorizado_por_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Resultado,
+.mat-column-Resultado_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Motivo_de_Rechazo,
+.mat-column-Motivo_de_Rechazo_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Fecha_de_Autorizacion_DG,
+.mat-column-Fecha_de_Autorizacion_DG_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Hora_de_Autorizacion_DG,
+.mat-column-Hora_de_Autorizacion_DG_filtro {
+    width: 90px;
+    flex : 0 0 90px !important;
+}
+
+.mat-column-Autorizado_por_DG,
+.mat-column-Autorizado_por_DG_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Resultado_DG,
+.mat-column-Resultado_DG_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Motivo_de_Rechazo_DG,
+.mat-column-Motivo_de_Rechazo_DG_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Fecha_de_Autorizacion_Adm,
+.mat-column-Fecha_de_Autorizacion_Adm_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Hora_de_Autorizacion_Adm,
+.mat-column-Hora_de_Autorizacion_Adm_filtro {
+    width: 90px;
+    flex : 0 0 90px !important;
+}
+
+.mat-column-Autorizado_por_Adm,
+.mat-column-Autorizado_por_Adm_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Resultado_Adm,
+.mat-column-Resultado_Adm_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Motivo_de_Rechazo_Adm,
+.mat-column-Motivo_de_Rechazo_Adm_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+
+.mat-filtro-row mat-cell {
+    padding: 0 2px;
+}
+
+.mat-filtro-row :host ::ng-deep .mat-form-field-infix {
+    padding: 1px 2px 6px !important;
+}
+
+mat-datepicker-toggle {
+    display: inline-block;
+    width  : 25px;
+}
+
+.mat-header-row,
+.mat-row {
+    display: inline-flex;
+}
+
+.filter-select {
+    font-size: 9.5px;
+    height   : 38px;
+}
+
+.filter-select mat-option {
+    font-size: 12px !important;
+}
+
+:host ::ng-deep .mat-sort-header-container {
+    margin: 0 auto;
+}
+
+.mat-raised-button {
+    line-height: 20px;
+}

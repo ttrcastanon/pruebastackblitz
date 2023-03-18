@@ -1,0 +1,26 @@
+<div class="card mb-3 no-border">
+    <div class="text-center">
+        <div>
+            <img src="assets/images/cierre.png" class="user-img-cierre" alt="">
+        </div>
+        <strong class="h3">Cierre de sesión automática</strong>
+    </div>
+    <div class="card-body">
+        <div class="help-card-group">
+            <div class="help-card test-card-text">
+                <h6>Su sesión será cerrada por inactividad en {{counter}} segundos</h6>
+                <div class="d-flex justify-content-around">
+                    <div>
+                        <button (click)="closeModalEvent(true)" color="warn" class="mat-focus-indicator mat-raised-button mat-button-base succes-color">
+                            Continuar
+                        </button>
+                    </div>
+                    <div>
+                        <button (click)="closeModalEvent(false)" class="mat-focus-indicator mat-raised-button mat-button-base warn-color">
+                            Cerrar sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,305 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Listado Inspección Inical</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Listado_Inspeccion_Inical/list">Listado Inspección Inical</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Listado_Inspeccion_InicalForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Listado_Inspeccion_InicalForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Listado_Inspeccion_InicalForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divMatricula" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <mat-select (selectionChange)="Matricula_ExecuteBusinessRules()" placeholder="Matrícula" formControlName="Matricula" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAeronave" [value]="item.Matricula">
+                            {{ item.Matricula }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Listado_Inspeccion_InicalForm.get('Matricula').hasError('required')">
+                          Matrícula es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <mat-select (selectionChange)="Modelo_ExecuteBusinessRules()" placeholder="Modelo" formControlName="Modelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varModelos" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Listado_Inspeccion_InicalForm.get('Modelo').hasError('required')">
+                          Modelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCliente" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cliente</mat-label>
+                        <mat-select (selectionChange)="Cliente_ExecuteBusinessRules()" placeholder="Cliente" formControlName="Cliente" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCliente" [value]="item.Clave">
+                            {{ item.Razon_Social }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Listado_Inspeccion_InicalForm.get('Cliente').hasError('required')">
+                          Cliente es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_Estimada_de_Entrega" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha Estimada de Entrega</mat-label>
+                        <input (dateChange)="Fecha_Estimada_de_Entrega_ExecuteBusinessRules()" (blur)="Fecha_Estimada_de_Entrega_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_Estimada_de_Entrega.open()" [matDatepicker]="datePickerFecha_Estimada_de_Entrega" formControlName="Fecha_Estimada_de_Entrega" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_Estimada_de_Entrega"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_Estimada_de_Entrega></mat-datepicker>
+                        <mat-error *ngIf="Listado_Inspeccion_InicalForm.get('Fecha_Estimada_de_Entrega').hasError('required')">
+                          Fecha Estimada de Entrega  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDetalle_Listado_Inspeccion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Detalle Listado Inspección</h4>    
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" (click)="addDetalle_Listado_InspeccionToMR(); $event.stopPropagation();"(click)="MRaddDetalle_Listado_Inspeccion = true" [hidden]="MRaddDetalle_Listado_Inspeccion">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="Detalle_Listado_Inspeccion" mat-table [dataSource]="dataSourceDetalle_Listado_Inspeccion"  multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Listado_Inspeccion_InicalForm.disabled"  matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit"  type="button" (click)="editDetalle_Listado_Inspeccion(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteDetalle_Listado_Inspeccion(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Matricula">
+                            <th mat-header-cell *matHeaderCellDef> Matrícula</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Matricula_Aeronave?.Matricula}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Modelo">
+                            <th mat-header-cell *matHeaderCellDef> Modelo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Modelo_Modelos?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cliente">
+                            <th mat-header-cell *matHeaderCellDef> Cliente</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Cliente_Cliente?.Razon_Social}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_Inspeccion">
+                            <th mat-header-cell *matHeaderCellDef> Fecha Inspección </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_Inspeccion |date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No_Serie">
+                            <th mat-header-cell *matHeaderCellDef> No Serie </th>
+                            <td mat-cell *matCellDef="let element"> {{element.No_Serie}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Codigo_Computarizado">
+                            <th mat-header-cell *matHeaderCellDef> Código Computarizado</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Codigo_Computarizado_Codigo_Computarizado?.Codigo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> Descripción</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion_Codigo_Computarizado?.Descripcion}}
+                            </td>
+                          </ng-container>
+
+                 
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;" [attr.colspan]="getDetalle_Listado_InspeccionColumns().length">
+                        
+                              <div  [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">                       
+                                <div *ngIf="element.edit">                              
+                                    <form  [formArrayName]="Detalle_Listado_InspeccionItems"  >                               
+                                      
+                                      <div class="row form-group" [formGroup]="Detalle_Listado_InspeccionItemsByElemet(element)">
+
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Matrícula</mat-label>
+                                                <mat-select placeholder="Matrícula"
+                                                  formControlName="Matricula" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varAeronave" [value]="item.Matricula">
+                                                    {{ item.Matricula }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Modelo</mat-label>
+                                                <mat-select placeholder="Modelo"
+                                                  formControlName="Modelo" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varModelos" [value]="item.Clave">
+                                                    {{ item.Descripcion }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Cliente</mat-label>
+                                                <mat-select placeholder="Cliente"
+                                                  formControlName="Cliente" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varCliente" [value]="item.Clave">
+                                                    {{ item.Razon_Social }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Fecha Inspección</mat-label>
+                                                <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                                  formControlName="Fecha_Inspeccion" type="text" />
+                                                <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                                <mat-datepicker #rpicker></mat-datepicker>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>No Serie</mat-label>
+                                                <input matInput formControlName="No_Serie" type="text" />
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Código Computarizado</mat-label>
+                                                <mat-select placeholder="Código Computarizado"
+                                                  formControlName="Codigo_Computarizado" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varCodigo_Computarizado" [value]="item.Codigo">
+                                                    {{ item.Codigo }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Descripción</mat-label>
+                                                <mat-select placeholder="Descripción"
+                                                  formControlName="Descripcion" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varCodigo_Computarizado" [value]="item.Codigo">
+                                                    {{ item.Descripcion }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+    
+											
+                                      </div>
+                                      <!-- inicio seccion botones -->
+                                      <!-- fin seccion botones -->
+                                      <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                            (click)="element.edit = false; saveDetalle_Listado_Inspeccion(element);" color="primary">Guardar(click)="MRaddDetalle_Listado_Inspeccion = false"
+                                          </button>
+                                          <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                            (click)="cancelEditDetalle_Listado_Inspeccion(element)"(click)="MRaddDetalle_Listado_Inspeccion = false"
+                                            mat-button>Cancelar</button>
+                                        </div>
+                                      </div>
+                              
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getDetalle_Listado_InspeccionColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}" *matRowDef="let row; columns: getDetalle_Listado_InspeccionColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}" *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Listado_Inspeccion_InicalForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Listado_Inspeccion_InicalForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Listado_Inspeccion_InicalForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Listado_Inspeccion_InicalForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

@@ -1,0 +1,133 @@
+
+<h1 mat-dialog-title class="ml-4">Reabrir vuelo</h1>
+
+
+
+<div class="flex-row clearfix">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+    <div class="card">
+      <div class="body">
+        <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+            <p style="color: white">Procesando</p>
+        </ngx-spinner>
+        <form class="m-4" [formGroup]="Reabrir_vueloForm" (ngSubmit)="save()">
+          <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Folio</mat-label>
+                    <input matInput formControlName="Folio" [type]="Reabrir_vueloForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                    <mat-error *ngIf="Reabrir_vueloForm.get('Folio').hasError('required')">
+                      Folio es requerido
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div id="divFecha_de_Registro" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Fecha de Registro</mat-label>
+                    <input (dateChange)="Fecha_de_Registro_ExecuteBusinessRules()" (blur)="Fecha_de_Registro_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Registro.open()" [matDatepicker]="datePickerFecha_de_Registro" formControlName="Fecha_de_Registro" [max]="today" type="text" required />
+                    <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Registro"></mat-datepicker-toggle>
+                    <mat-datepicker #datePickerFecha_de_Registro></mat-datepicker>
+                    <mat-error *ngIf="Reabrir_vueloForm.get('Fecha_de_Registro').hasError('required')">
+                      Fecha de Registro  es requerido
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div id="divHora_de_Registro" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Hora de Registro</mat-label>
+                    <input (change)="Hora_de_Registro_ExecuteBusinessRules()" (blur)="Hora_de_Registro_ExecuteBusinessRules()" formControlName="Hora_de_Registro" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                    <span matPrefix>
+                      <mat-icon class="mr-2">access_time</mat-icon>
+                    </span>
+                    <mat-error *ngIf="Reabrir_vueloForm.get('Hora_de_Registro').hasError('required')">
+                      Hora de Registro  es requerido
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div id="divUsuario_que_Registra" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Usuario que Registra</mat-label>
+                    <input type="text" matInput formControlName="Usuario_que_Registra" [matAutocomplete]="autoUsuario_que_Registra">
+                    <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                    <mat-autocomplete #autoUsuario_que_Registra="matAutocomplete" [displayWith]="displayFnUsuario_que_Registra">
+                      <mat-option (onSelectionChange)="Usuario_que_Registra_ExecuteBusinessRules()" *ngFor="let option of optionsUsuario_que_Registra | async" [value]="option">
+                        {{option.Name}}
+                      </mat-option>
+                      <mat-option *ngIf="isLoadingUsuario_que_Registra" class="is-loading">
+                        <mat-spinner diameter="30"></mat-spinner>
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-hint *ngIf="!hasOptionsUsuario_que_Registra && !isLoadingUsuario_que_Registra">
+                      No se encontraron registros.
+                    </mat-hint>
+                    <mat-error *ngIf="Reabrir_vueloForm.get('Usuario_que_Registra').hasError('required')">
+                      Campo requerido
+                    </mat-error>
+                    <mat-error *ngIf="Reabrir_vueloForm.get('Usuario_que_Registra').hasError('invalidAutocompleteValue')">
+                      Valor inválido. Seleccione un Usuario que Registra de la lista de opciones.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div id="divNumero_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Número de Vuelo</mat-label>
+                    <input type="text" matInput formControlName="Numero_de_Vuelo" [matAutocomplete]="autoNumero_de_Vuelo">
+                    <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                    <mat-autocomplete #autoNumero_de_Vuelo="matAutocomplete" [displayWith]="displayFnNumero_de_Vuelo">
+                      <mat-option (onSelectionChange)="Numero_de_Vuelo_ExecuteBusinessRules()" *ngFor="let option of optionsNumero_de_Vuelo | async" [value]="option">
+                        {{option.Numero_de_Vuelo}}
+                      </mat-option>
+                      <mat-option *ngIf="isLoadingNumero_de_Vuelo" class="is-loading">
+                        <mat-spinner diameter="30"></mat-spinner>
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-hint *ngIf="!hasOptionsNumero_de_Vuelo && !isLoadingNumero_de_Vuelo">
+                      No se encontraron registros.
+                    </mat-hint>
+                    <mat-error *ngIf="Reabrir_vueloForm.get('Numero_de_Vuelo').hasError('required')">
+                      Campo requerido
+                    </mat-error>
+                    <mat-error *ngIf="Reabrir_vueloForm.get('Numero_de_Vuelo').hasError('invalidAutocompleteValue')">
+                      Valor inválido. Seleccione un Número de Vuelo de la lista de opciones.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div id="divMotivo_de_reapertura" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>Motivo de reapertura</mat-label>
+                    <input (change)="Motivo_de_reapertura_ExecuteBusinessRules()" #Motivo_de_reapertura matInput formControlName="Motivo_de_reapertura" type="text" maxlength="4000" required />
+                    <mat-error *ngIf="Reabrir_vueloForm.get('Motivo_de_reapertura').hasError('required')">
+                      Motivo de reapertura  es requerido
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+            </div>
+            </mat-tab>
+          </mat-tab-group>
+          
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div mat-dialog-actions class="ml-4">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+      <button type="submit" class="mr-3 mb-2" [disabled]="!Reabrir_vueloForm.valid || consult"
+          mat-raised-button color="primary" (click)="save()">
+          Guardar
+      </button>
+      <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+          [disabled]="!Reabrir_vueloForm.valid || consult" mat-raised-button color="primary">
+          Configurar
+      </button>
+      <button type="button" mat-button class="mb-2" mat-raised-button color="warning" mat-dialog-close
+          style="background-color:#ed5565 !important">Cancelar</button>
+  </div>
+</div>
+<div id="snackbar"></div>

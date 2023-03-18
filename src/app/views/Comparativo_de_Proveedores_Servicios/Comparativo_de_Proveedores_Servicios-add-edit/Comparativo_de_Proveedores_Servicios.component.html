@@ -1,0 +1,223 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Comparativo de Proveedores Servicios</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Comparativo_de_Proveedores_Servicios/list">Comparativo de Proveedores Servicios</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Comparativo_de_Proveedores_ServiciosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Comparativo_de_Proveedores_ServiciosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFolio_MR_Servicios" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio MR Servicios</mat-label>
+                        <mat-select (selectionChange)="Folio_MR_Servicios_ExecuteBusinessRules()" placeholder="Folio MR Servicios" formControlName="Folio_MR_Servicios" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varDetalle_de_Solicitud_de_Servicios_Herramientas_Materiales" [value]="item.Folio">
+                            {{ item.Folio_MR_Solicitud_de_Servicios }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Folio_MR_Servicios').hasError('required')">
+                          Folio MR Servicios es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFolio_MR_Fila_Servicios" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio MR Fila Servicios</mat-label>
+                        <mat-select (selectionChange)="Folio_MR_Fila_Servicios_ExecuteBusinessRules()" placeholder="Folio MR Fila Servicios" formControlName="Folio_MR_Fila_Servicios" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varDetalle_de_Solicitud_de_Servicios_Herramientas_Materiales" [value]="item.Folio">
+                            {{ item.Folio_MR_fila_Solicitud_de_Servicios }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Folio_MR_Fila_Servicios').hasError('required')">
+                          Folio MR Fila Servicios es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Parte" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>No. de Parte</mat-label>
+                        <input (change)="No__de_Parte_ExecuteBusinessRules()" matInput formControlName="No__de_Parte" [type]="Comparativo_de_Proveedores_ServiciosForm.get('No__de_Parte').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('No__de_Parte').hasError('required')">
+                          No. de Parte  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción </mat-label>
+                        <input (change)="Descripcion_ExecuteBusinessRules()" #Descripcion matInput formControlName="Descripcion" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Descripcion').hasError('required')">
+                          Descripción   es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNumero_de_Reporte" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Número de Reporte </mat-label>
+                        <input (change)="Numero_de_Reporte_ExecuteBusinessRules()" matInput formControlName="Numero_de_Reporte" [type]="Comparativo_de_Proveedores_ServiciosForm.get('Numero_de_Reporte').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Numero_de_Reporte').hasError('required')">
+                          Número de Reporte   es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNumero_de_O_T" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Número de O/T</mat-label>
+                        <input (change)="Numero_de_O_T_ExecuteBusinessRules()" matInput formControlName="Numero_de_O_T" [type]="Comparativo_de_Proveedores_ServiciosForm.get('Numero_de_O_T').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Numero_de_O_T').hasError('required')">
+                          Número de O/T  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMatricula" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <mat-select (selectionChange)="Matricula_ExecuteBusinessRules()" placeholder="Matrícula" formControlName="Matricula" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAeronave" [value]="item.Matricula">
+                            {{ item.Matricula }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Matricula').hasError('required')">
+                          Matrícula es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <mat-select (selectionChange)="Modelo_ExecuteBusinessRules()" placeholder="Modelo" formControlName="Modelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varModelos" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Modelo').hasError('required')">
+                          Modelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_Estimada_del_Mtto" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha Estimada del Mtto</mat-label>
+                        <input (dateChange)="Fecha_Estimada_del_Mtto_ExecuteBusinessRules()" (blur)="Fecha_Estimada_del_Mtto_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_Estimada_del_Mtto.open()" [matDatepicker]="datePickerFecha_Estimada_del_Mtto" formControlName="Fecha_Estimada_del_Mtto" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_Estimada_del_Mtto"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_Estimada_del_Mtto></mat-datepicker>
+                        <mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Fecha_Estimada_del_Mtto').hasError('required')">
+                          Fecha Estimada del Mtto  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__Solicitud" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>No. Solicitud</mat-label>
+                        <input (change)="No__Solicitud_ExecuteBusinessRules()" matInput formControlName="No__Solicitud" [type]="Comparativo_de_Proveedores_ServiciosForm.get('No__Solicitud').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('No__Solicitud').hasError('required')">
+                          No. Solicitud  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSolicitante" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Solicitante</mat-label>
+                        <mat-select (selectionChange)="Solicitante_ExecuteBusinessRules()" placeholder="Solicitante" formControlName="Solicitante" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Solicitante').hasError('required')">
+                          Solicitante es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Solicitud" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Solicitud</mat-label>
+                        <input (dateChange)="Fecha_de_Solicitud_ExecuteBusinessRules()" (blur)="Fecha_de_Solicitud_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Solicitud.open()" [matDatepicker]="datePickerFecha_de_Solicitud" formControlName="Fecha_de_Solicitud" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Solicitud"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Solicitud></mat-datepicker>
+                        <mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Fecha_de_Solicitud').hasError('required')">
+                          Fecha de Solicitud  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <input (change)="Estatus_ExecuteBusinessRules()" #Estatus matInput formControlName="Estatus" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Comparativo_de_Proveedores_ServiciosForm.get('Estatus').hasError('required')">
+                          Estatus  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Comparativo_de_Proveedores_ServiciosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Comparativo_de_Proveedores_ServiciosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Comparativo_de_Proveedores_ServiciosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Comparativo_de_Proveedores_ServiciosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

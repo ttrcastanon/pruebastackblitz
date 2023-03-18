@@ -1,0 +1,108 @@
+[
+    {
+        "AdditionalMenu" : [
+            {
+                "idMenu": 104,
+                "MenuName": "45004",
+                "ParentMenu": 0,
+                "OptionMenu": "Nueva Atención Inicial",
+                "OptionPath": "WFSend?Phase=1&Name=Nueva Atención Inicial&Page=Modulo_Atencion_Inicial_Create"
+            },
+            {
+                "idMenu": 105,
+                "MenuName": "45004",
+                "ParentMenu": 25,
+                "OptionMenu": "Orientador",
+                "OptionPath": "DynamicSearch?id=2&wf=3&p=2"
+            },
+            {
+                "idMenu": 108,
+                "MenuName": "45004",
+                "ParentMenu": 1,
+                "OptionMenu": "Validación de Acuerdo",
+                "OptionPath": "DynamicSearch?id=2&wf=3&p=5"
+            },
+            {
+                "idMenu": 109,
+                "MenuName": "45004",
+                "ParentMenu": 0,
+                "OptionMenu": "En Validación",
+                "OptionPath": "DynamicSearch?id=2&wf=3&p=6"
+            },
+            {
+                "idMenu": 110,
+                "MenuName": "45004",
+                "ParentMenu": 98,
+                "OptionMenu": "Canalizados",
+                "OptionPath": "DynamicSearch?id=2&wf=3&p=7"
+            },
+            {
+                "idMenu": 112,
+                "MenuName": "45004",
+                "ParentMenu": 0,
+                "OptionMenu": "Acuerdos Cumplidos",
+                "OptionPath": "DynamicSearch?id=2&wf=3&p=9"
+            },
+            {
+                "idMenu": 113,
+                "MenuName": "45004",
+                "ParentMenu": 14,
+                "OptionMenu": "Cerrados",
+                "OptionPath": "DynamicSearch?id=2&wf=3&p=10"
+            },
+            {
+                "idMenu": 114,
+                "MenuName": "45004",
+                "ParentMenu": 0,
+                "OptionMenu": "Expedientes Temporales",
+                "OptionPath": "DynamicSearch?id=2&wf=3&p=11"
+            }
+        ],
+
+        "AdditionalOptionMenu" : [
+            {
+                "Id": 0,
+                "badge": "",
+                "badgeClass": "",
+                "class": "menu-toggle",
+                "icon": "http://192.168.0.9:45455/api/Spartan_File/Files//11/Blank-Catalog.png",
+                "iconType": "material-icons-two-tone",
+                "isModule": true,
+                "moduleicon": "http://192.168.0.9:45455/api/Spartan_File/Files//11/Blank-Catalog.png",
+                "moduleid": 1,
+                "modulename": "Catálogos",
+                "moduleorder": 1,
+                "objecticon": "http://192.168.0.9:45455/api/Spartan_File/Files//11/Blank-Catalog.png",
+                "objectid": 44871,
+                "objectname": "Area",
+                "objectorder": 0,
+                "objecturl": "Area",
+                "path": "security/permissions",
+                "submenu": [
+                    {
+                        "Id": 0,
+                        "badge": "",
+                        "badgeClass": "",
+                        "class": "menu-toggle",
+                        "icon": "http://192.168.0.9:45455/api/Spartan_File/Files//11/Blank-Catalog.png",
+                        "iconType": "material-icons-two-tone",
+                        "isModule": true,
+                        "moduleicon": "http://192.168.0.9:45455/api/Spartan_File/Files//11/Blank-Catalog.png",
+                        "moduleid": 1,
+                        "modulename": "Catálogos",
+                        "moduleorder": 1,
+                        "objecticon": "http://192.168.0.9:45455/api/Spartan_File/Files//11/Blank-Catalog.png",
+                        "objectid": 44871,
+                        "objectname": "Area",
+                        "objectorder": 0,
+                        "objecturl": "Area",
+                        "path": "view/Area/list",
+                        "submenu": [],
+                        "title": "menu.module.1"
+                    }
+                ],
+                "title": "menu.module.1"
+            }
+        ]
+    }
+]

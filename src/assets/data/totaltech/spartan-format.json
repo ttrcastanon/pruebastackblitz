@@ -1,0 +1,44 @@
+[
+    {
+        "FormatId": 13,
+        "Registration_Date": "2018-01-01 00:00:00.000",
+        "Registration_Hour": "15:32",
+        "Registration_User": 1,
+        "Format_Name": "Solicitud de Certificado Previo de Lesiones (Agresiones Sexuales).",
+        "Format_Type": 4,
+        "Search": "",
+        "Object": 45109,
+        "Header": "",
+        "Body": "",
+        "Footer": "",
+        "Filters": ""
+    },
+    {
+        "FormatId": 14,
+        "Registration_Date": "2018-01-01 00:00:00.000",
+        "Registration_Hour": "15:32",
+        "Registration_User": 1,
+        "Format_Name": "Solicitud de Certificado Previo de Lesiones.",
+        "Format_Type": 4,
+        "Search": "",
+        "Object": 45109,
+        "Header": "",
+        "Body": "",
+        "Footer": "",
+        "Filters": ""
+    },
+    {
+        "FormatId": 15,
+        "Registration_Date": "2018-01-01 00:00:00.000",
+        "Registration_Hour": "15:32",
+        "Registration_User": 1,
+        "Format_Name": "Solicitud de Avaluó de Daños",
+        "Format_Type": 4,
+        "Search": "",
+        "Object": 45109,
+        "Header": "",
+        "Body": "",
+        "Footer": "",
+        "Filters": ""
+    }
+]

@@ -1,0 +1,129 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Detalle Cursos Pasajeros</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Detalle_Cursos_Pasajeros/list">Detalle Cursos Pasajeros</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Detalle_Cursos_PasajerosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Detalle_Cursos_PasajerosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Detalle_Cursos_PasajerosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divCurso" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Curso</mat-label>
+                        <input (change)="Curso_ExecuteBusinessRules()" #Curso matInput formControlName="Curso" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Detalle_Cursos_PasajerosForm.get('Curso').hasError('required')">
+                          Curso  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion_del_Curso" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción del Curso</mat-label>
+                        <input (change)="Descripcion_del_Curso_ExecuteBusinessRules()" #Descripcion_del_Curso matInput formControlName="Descripcion_del_Curso" type="text" maxlength="500" required />
+                        <mat-error *ngIf="Detalle_Cursos_PasajerosForm.get('Descripcion_del_Curso').hasError('required')">
+                          Descripción del Curso  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_del_Curso" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha del Curso</mat-label>
+                        <input (dateChange)="Fecha_del_Curso_ExecuteBusinessRules()" (blur)="Fecha_del_Curso_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_del_Curso.open()" [matDatepicker]="datePickerFecha_del_Curso" formControlName="Fecha_del_Curso" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_del_Curso"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_del_Curso></mat-datepicker>
+                        <mat-error *ngIf="Detalle_Cursos_PasajerosForm.get('Fecha_del_Curso').hasError('required')">
+                          Fecha del Curso  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divVencimiento" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Vencimiento_ExecuteBusinessRules()" formControlName="Vencimiento" class="example-margin">
+                        Vencimiento
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divFecha_de_Vencimiento" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Fecha_de_Vencimiento_ExecuteBusinessRules()" formControlName="Fecha_de_Vencimiento" class="example-margin">
+                        Fecha de Vencimiento
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divCargar_documento" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="Cargar_documentoName == '' && !Detalle_Cursos_PasajerosForm.disabled" class="example-full-width no-padding" appearance="outline" >
+                        <mat-label>Cargar documento</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="Cargar_documentoFile" required>
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+						<mat-error *ngIf="Detalle_Cursos_PasajerosForm.get('Cargar_documentoFile').hasError('required')">
+                          Cargar documento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                      <div *ngIf="Cargar_documentoName != '' ">
+                        <mat-label>Cargar documento</mat-label>
+                        <a href="{{Cargar_documentoUrl()}}"  target="_blank">
+                          {{Cargar_documentoName }} 
+                        </a>
+                        <button mat-icon-button (click)="removeCargar_documento()" *ngIf="!Detalle_Cursos_PasajerosForm.disabled" >
+                          <mat-icon aria-label="eliminar">close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Detalle_Cursos_PasajerosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Detalle_Cursos_PasajerosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Detalle_Cursos_PasajerosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Detalle_Cursos_PasajerosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

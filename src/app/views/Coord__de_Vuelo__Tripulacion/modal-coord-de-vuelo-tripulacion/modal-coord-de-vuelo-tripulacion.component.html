@@ -1,0 +1,830 @@
+<h1 mat-dialog-title class="ml-4">Coord de Vuelo - Tripulación</h1>
+
+
+<div mat-dialog-content class="flex-row clearfix">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="body">
+                <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                    <p style="color: white">Procesando</p>
+                </ngx-spinner>
+                <form class="m-4" [formGroup]="Coord__de_Vuelo__TripulacionForm" (ngSubmit)="save()">
+                    
+                    <mat-tab-group #tabGroup>
+                        <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                            <div id="tabDatos_Generales" class="row">
+                                <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Folio</mat-label>
+                                        <input matInput formControlName="Folio"
+                                            [type]="Coord__de_Vuelo__TripulacionForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                                            required />
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__TripulacionForm.get('Folio').hasError('required')">
+                                            Folio es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div id="divNumero_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Número de Vuelo</mat-label>
+                                        <input type="text" matInput formControlName="Numero_de_Vuelo"
+                                            [matAutocomplete]="autoNumero_de_Vuelo">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoNumero_de_Vuelo="matAutocomplete"
+                                            [displayWith]="displayFnNumero_de_Vuelo">
+                                            <mat-option (onSelectionChange)="Numero_de_Vuelo_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsNumero_de_Vuelo | async" [value]="option">
+                                                {{option.Numero_de_Vuelo}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingNumero_de_Vuelo" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsNumero_de_Vuelo && !isLoadingNumero_de_Vuelo">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__TripulacionForm.get('Numero_de_Vuelo').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__TripulacionForm.get('Numero_de_Vuelo').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Número de Vuelo de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divMatricula" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Matrícula</mat-label>
+                                        <input type="text" matInput formControlName="Matricula"
+                                            [matAutocomplete]="autoMatricula">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoMatricula="matAutocomplete"
+                                            [displayWith]="displayFnMatricula">
+                                            <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsMatricula | async" [value]="option">
+                                                {{option.Matricula}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__TripulacionForm.get('Matricula').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__TripulacionForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divRuta_de_Vuelo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Ruta de Vuelo</mat-label>
+                                        <input (change)="Ruta_de_Vuelo_ExecuteBusinessRules()" #Ruta_de_Vuelo matInput
+                                            formControlName="Ruta_de_Vuelo" type="text" maxlength="2000" required />
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__TripulacionForm.get('Ruta_de_Vuelo').hasError('required')">
+                                            Ruta de Vuelo es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divFecha_y_Hora_de_Salida" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Fecha y Hora de Salida</mat-label>
+                                        <input (change)="Fecha_y_Hora_de_Salida_ExecuteBusinessRules()"
+                                            #Fecha_y_Hora_de_Salida matInput formControlName="Fecha_y_Hora_de_Salida"
+                                            type="text" maxlength="50" required />
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__TripulacionForm.get('Fecha_y_Hora_de_Salida').hasError('required')">
+                                            Fecha y Hora de Salida es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divCalificacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Calificación</mat-label>
+                                        <input (change)="Calificacion_ExecuteBusinessRules()" matInput
+                                            formControlName="Calificacion"
+                                            [type]="Coord__de_Vuelo__TripulacionForm.get('Calificacion').value == 'Auto'  ? 'text':'number' "
+                                            maxlength="3" required />
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__TripulacionForm.get('Calificacion').hasError('required')">
+                                            Calificación es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Observaciones</mat-label>
+                                        <textarea (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput
+                                            formControlName="Observaciones" type="text" maxlength="500" required ></textarea>
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__TripulacionForm.get('Observaciones').hasError('required')">
+                                            Observaciones es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab aria-label="Tripulacion" label="Tripulación"> <br>
+                            <div id="tabTripulacion" class="row">
+                                <div id="divTripulacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <div class="table-responsive">
+                                        <div class="top-action-container-table">
+                                            <h4>Tripulación</h4>
+                                            <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab
+                                                [disabled]="!isTripulacionAdd"
+                                                type="button" (click)="addTripulacionToMR(); $event.stopPropagation();">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <table mat-table [dataSource]="dataSourceTripulacion" multiTemplateDataRows>
+
+                                            <ng-container *ngIf="!Coord__de_Vuelo__TripulacionForm.disabled"
+                                                matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                                <mat-cell *matCellDef="let element;">
+                                                    <div class="actions">
+                                                        <button mat-icon-button class="btn-tbl-edit" type="button"
+                                                            [disabled]="!isTripulacionAdd"
+                                                            (click)="editTripulacion(element);">
+                                                            <mat-icon>edit</mat-icon>
+                                                        </button>
+                                                        <button mat-icon-button class="btn-tbl-delete" type='button'
+                                                            [disabled]="!isTripulacionAdd"
+                                                            (click)="deleteTripulacion(element); $event.stopPropagation();">
+                                                            <mat-icon>delete</mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="_Tripulante">
+                                                <th mat-header-cell *matHeaderCellDef> Tripulante</th>
+                                                <td mat-cell *matCellDef="let element" style="padding: 0px 15px;">
+                                                    {{element._Tripulante_Tripulacion?.Nombre_completo}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Comisariato">
+                                                <th mat-header-cell *matHeaderCellDef> Comisariato </th>
+                                                <td mat-cell *matCellDef="let element"  style="
+                                                padding: 0px 15px;
+                                                max-width: 10em;
+                                                overflow: hidden;
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;" > {{element.Comisariato}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Fecha_de_Solicitud">
+                                                <th mat-header-cell *matHeaderCellDef> Fecha de Solicitud </th>
+                                                <td mat-cell *matCellDef="let element" style="padding: 0px 15px;"> {{element.Fecha_de_Solicitud
+                                                    |date}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="No_Solicitud">
+                                                <th mat-header-cell *matHeaderCellDef> No De Solicitud</th>
+                                                <td class="center" mat-cell *matCellDef="let element">
+                                                    {{element.No_Solicitud}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Proveedor">
+                                                <th mat-header-cell *matHeaderCellDef> Proveedor </th>
+                                                <td mat-cell *matCellDef="let element"   style="
+                                                padding: 0px 15px;
+                                                max-width: 10em;
+                                                overflow: hidden;
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;"> {{element.Proveedor}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Confirmado_por_Correo">
+                                                <th mat-header-cell *matHeaderCellDef> Confirmado por Correo</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div class="text-center f-w">
+                                                        <mat-checkbox [disabled]="true"
+                                                            [checked]="element.Confirmado_por_Correo"
+                                                            [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Confirmado_por_Telefono">
+                                                <th mat-header-cell *matHeaderCellDef> Confirmado por Teléfono</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div class="text-center f-w">
+                                                        <mat-checkbox [disabled]="true"
+                                                            [checked]="element.Confirmado_por_Telefono"
+                                                            [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Confirmado">
+                                                <th mat-header-cell *matHeaderCellDef> Confirmado</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Confirmado_Estatus_de_Confirmacion?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="expandedDetail">
+                                                <td mat-cell *matCellDef="let element; let i = index;"
+                                                    [attr.colspan]="getTripulacionColumns().length">
+
+                                                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                                        <div *ngIf="element.edit">
+                                                            <form formArrayName="Detalle_Coord_TripulacionItems">
+
+                                                                <div class="row form-group"
+                                                                    [formGroupName]="dataSourceTripulacion.data.indexOf(element)">
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label> Tripulante</mat-label>
+                                                                            <input type="text" matInput
+                                                                                formControlName="_Tripulante"
+                                                                                [matAutocomplete]="auto"
+                                                                                (change)="ValidarSeleccionTripulacionTripulante(element);" 
+                                                                                required
+                                                                                >
+                                                                            <mat-icon style="font-size: 24px;"
+                                                                                matSuffix>arrow_drop_down</mat-icon>
+                                                                            <mat-autocomplete
+                                                                                (optionSelected)="select_Tripulante_Detalle_Coord_Tripulacion($event, element)"
+                                                                                #auto="matAutocomplete"
+                                                                                [displayWith]="displayFn_Tripulante_Detalle_Coord_Tripulacion.bind(cthis, element)">
+                                                                                <mat-option
+                                                                                    *ngFor="let option of optionsTripulacionFiltered | async"
+                                                                                    [value]="option.Clave"
+                                                                                    (onSelectionChange)="updateOption_Tripulante_Detalle_Coord_Tripulacion($event, element)"
+                                                                                    
+                                                                                    >
+                                                                                    {{option.Description}}
+                                                                                </mat-option>
+                                                                                <!-- <mat-option
+                                                                                    *ngIf="isLoading_Tripulante_Detalle_Coord_Tripulacion"
+                                                                                    class="is-loading">
+                                                                                    <mat-spinner
+                                                                                        diameter="50"></mat-spinner>
+                                                                                </mat-option> -->
+                                                                            </mat-autocomplete>
+                                                                            <mat-error
+                                                                                *ngIf="!TripulacionItems.controls[dataSourceTripulacion.data.indexOf(element)].get('_Tripulante').value">
+                                                                                Valor inválido. Seleccione un pasajero de la lista de opciones.
+                                                                            </mat-error>
+                                                                            <mat-error
+                                                                                *ngIf="!TripulacionItems.controls[dataSourceTripulacion.data.indexOf(element)].get('_Tripulante').hasError('required')">
+                                                                                Campo requerido
+                                                                            </mat-error>
+                                                                            <!-- <mat-hint *ngIf="varTripulacion.length ==0 &&  !isLoading_Tripulante_Detalle_Coord_Tripulacion && search_Tripulante_Detalle_Coord_TripulacionCompleted">No se encontraron registros.</mat-hint> -->
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Comisariato</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Comisariato"
+                                                                                type="text" required maxlength="2000" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Fecha de Solicitud</mat-label>
+                                                                            <input matInput (focus)="rpicker.open()" (keypress)="soloFecha($event)"
+                                                                                [matDatepicker]="rpicker"
+                                                                                (focus)="Horas_iniciales_ExecuteBusinessRules()"
+                                                                                formControlName="Fecha_de_Solicitud"
+                                                                                id="Fecha_de_Solicitud"
+                                                                                type="text" required
+                                                                                (dateChange)="Fecha_de_Solicitud_ExecuteBusinessRules(element)"
+                                                                                (blur)="Fecha_de_Solicitud_ExecuteBusinessRules(element)"
+                                                                                />
+                                                                            <mat-datepicker-toggle matSuffix
+                                                                                [for]="rpicker"></mat-datepicker-toggle>
+                                                                            <mat-datepicker #rpicker></mat-datepicker>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>No De Solicitud</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="No_Solicitud" #inputValueHoras
+                                                                                type="number" required (keydown)="checkLength2($event, inputValueHoras, 9)" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Proveedor</mat-label>
+                                                                            <input matInput formControlName="Proveedor"
+                                                                                type="text" required maxlength="150" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-checkbox
+                                                                            formControlName="Confirmado_por_Correo"
+                                                                            [value]="element.Confirmado_por_Correo"
+                                                                            class="example-margin">
+                                                                            Confirmado por Correo
+                                                                        </mat-checkbox>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-checkbox
+                                                                            formControlName="Confirmado_por_Telefono"
+                                                                            [value]="element.Confirmado_por_Telefono"
+                                                                            class="example-margin">
+                                                                            Confirmado por Teléfono
+                                                                        </mat-checkbox>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Confirmado</mat-label>
+                                                                            <mat-select placeholder="Confirmado"
+                                                                                formControlName="Confirmado" required>
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varEstatus_de_Confirmacion"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <!-- inicio seccion botones -->
+                                                                <!-- fin seccion botones -->
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                                                        <button type='button' class="mr-3 btn-sm"
+                                                                            mat-raised-button
+                                                                            (click)="element.edit = false; saveTripulacion(element);"
+                                                                            [disabled]="!TripulacionItems.controls[dataSourceTripulacion.data.indexOf(element)].valid"
+                                                                            color="primary">Guardar
+                                                                        </button>
+                                                                        <button type="button" class="mr-3 btn-sm"
+                                                                            mat-raised-button color="basic"
+                                                                            (click)="cancelEditTripulacion(element) "
+                                                                            mat-button>Cancelar</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="getTripulacionColumns()"></tr>
+                                            <tr mat-row
+                                                [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                                                *matRowDef="let row; columns: getTripulacionColumns();let j = index">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                                class="example-detail-row"></tr>
+                                        </table>
+                                        <mat-paginator #PaginadorTripulacion [length]="getCountTripulacion()" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab aria-label="Reservaciones" label="Reservaciones"> <br>
+                            <div id="tabReservaciones" class="row">
+                                <div id="divReservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <div class="table-responsive">
+                                        <div class="top-action-container-table">
+                                            <h4>Reservaciones</h4>
+                                            <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab
+                                                type="button" [disabled]="!isReservacionAdd"
+                                                (click)="addReservacionesToMR(); $event.stopPropagation();">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <table mat-table [dataSource]="dataSourceReservaciones" multiTemplateDataRows>
+
+                                            <ng-container *ngIf="!Coord__de_Vuelo__TripulacionForm.disabled"
+                                                matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                                <mat-cell *matCellDef="let element;">
+                                                    <div class="actions">
+                                                        <button mat-icon-button class="btn-tbl-edit" type="button"
+                                                            [disabled]="!isReservacionAdd"
+                                                            (click)="editReservaciones(element);">
+                                                            <mat-icon>edit</mat-icon>
+                                                        </button>
+                                                        <button mat-icon-button class="btn-tbl-delete" type='button'
+                                                            [disabled]="!isReservacionAdd"
+                                                            (click)="deleteReservaciones(element); $event.stopPropagation();">
+                                                            <mat-icon>delete</mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Hospedaje">
+                                                <th mat-header-cell *matHeaderCellDef> Hospedaje</th>
+                                                <td mat-cell *matCellDef="let element" style="padding: 0px 15px;">
+                                                    {{element.Hospedaje_Tipo_de_Hospedaje?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Nombre_del_Hotel">
+                                                <th mat-header-cell *matHeaderCellDef> Nombre del Hotel </th>
+                                                <td mat-cell *matCellDef="let element" style="
+                                                padding: 0px 15px;
+                                                max-width: 10em;
+                                                overflow: hidden;
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;"> {{element.Nombre_del_Hotel}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Telefono">
+                                                <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+                                                <td mat-cell *matCellDef="let element" style="padding: 0px 15px;"> {{element.Telefono}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Numero_de_Confirmacion">
+                                                <th mat-header-cell *matHeaderCellDef> Número de Confirmación </th>
+                                                <td mat-cell *matCellDef="let element" style="padding: 0px 15px;">
+                                                    {{element.Numero_de_Confirmacion}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Confirmado_por_Correo">
+                                                <th mat-header-cell *matHeaderCellDef> Confirmado por Correo</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div class="text-center f-w">
+                                                        <mat-checkbox [disabled]="true"
+                                                            [checked]="element.Confirmado_por_Correo"
+                                                            [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Confirmado_por_Telefono">
+                                                <th mat-header-cell *matHeaderCellDef> Confirmado por Teléfono</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div class="text-center f-w">
+                                                        <mat-checkbox [disabled]="true"
+                                                            [checked]="element.Confirmado_por_Telefono"
+                                                            [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Confirmado">
+                                                <th mat-header-cell *matHeaderCellDef> Confirmado</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Confirmado_Estatus_de_Confirmacion?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="expandedDetail">
+                                                <td mat-cell *matCellDef="let element; let i = index;"
+                                                    [attr.colspan]="getReservacionesColumns().length">
+
+                                                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                                        <div *ngIf="element.edit">
+                                                            <form
+                                                                formArrayName="Detalle_Coord_Tripulacion_ReservacionesItems">
+
+                                                                <div class="row form-group"
+                                                                    [formGroupName]="dataSourceReservaciones.data.indexOf(element)">
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Hospedaje</mat-label>
+                                                                            <mat-select placeholder="Hospedaje"
+                                                                                formControlName="Hospedaje" required>
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varTipo_de_Hospedaje"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Nombre del Hotel</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Nombre_del_Hotel"
+                                                                                type="text" required maxlength="80" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Teléfono</mat-label>
+                                                                            <input matInput formControlName="Telefono"
+                                                                                placeholder="(XXX) XXX-XXXX"
+                                                                                mask="(000) 000-0000" type="text"
+                                                                                required />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3  "
+                                                                        style="text-align:center">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Número de
+                                                                                Confirmación</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Numero_de_Confirmacion"
+                                                                                type="text" required maxlength="20" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-checkbox
+                                                                            formControlName="Confirmado_por_Correo"
+                                                                            [value]="element.Confirmado_por_Correo"
+                                                                            class="example-margin">
+                                                                            Confirmado por Correo
+                                                                        </mat-checkbox>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-checkbox
+                                                                            formControlName="Confirmado_por_Telefono"
+                                                                            [value]="element.Confirmado_por_Telefono"
+                                                                            class="example-margin">
+                                                                            Confirmado por Teléfono
+                                                                        </mat-checkbox>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Confirmado</mat-label>
+                                                                            <mat-select placeholder="Confirmado"
+                                                                                formControlName="Confirmado" required>
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varEstatus_de_Confirmacion"
+                                                                                    [value]="item.Clave" required>
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+
+
+
+                                                                </div>
+                                                                <!-- inicio seccion botones -->
+                                                                <!-- fin seccion botones -->
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                                                        <button type='button' class="mr-3 btn-sm"
+                                                                            mat-raised-button
+                                                                            (click)="element.edit = false; saveReservaciones(element);"
+                                                                            [disabled]="!ReservacionesItems.controls[dataSourceReservaciones.data.indexOf(element)].valid"
+                                                                            color="primary">Guardar
+                                                                        </button>
+                                                                        <button type="button" class="mr-3 btn-sm"
+                                                                            mat-raised-button color="basic"
+                                                                            (click)="cancelEditReservaciones(element)"
+                                                                            mat-button>Cancelar</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="getReservacionesColumns()"></tr>
+                                            <tr mat-row
+                                                [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                                                *matRowDef="let row; columns: getReservacionesColumns();let j = index">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                                class="example-detail-row"></tr>
+                                        </table>
+                                        <mat-paginator #PaginadorReservacion [length]="getCountReservacion()" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+                                <div id="divTransportacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <div class="table-responsive">
+                                        <div class="top-action-container-table">
+                                            <h4>Transportación</h4>
+                                            <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab
+                                                type="button"
+                                                [disabled]="!isTransportacionAdd"
+                                                (click)="addTransportacionToMR(); $event.stopPropagation();">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <table mat-table [dataSource]="dataSourceTransportacion" multiTemplateDataRows>
+
+                                            <ng-container *ngIf="!Coord__de_Vuelo__TripulacionForm.disabled"
+                                                matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                                <mat-cell *matCellDef="let element;">
+                                                    <div class="actions">
+                                                        <button mat-icon-button class="btn-tbl-edit" type="button"
+                                                            [disabled]="!isTransportacionAdd"
+                                                            (click)="editTransportacion(element);">
+                                                            <mat-icon>edit</mat-icon>
+                                                        </button>
+                                                        <button mat-icon-button class="btn-tbl-delete" type='button'
+                                                            [disabled]="!isTransportacionAdd"
+                                                            (click)="deleteTransportacion(element); $event.stopPropagation();">
+                                                            <mat-icon>delete</mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Transportacion">
+                                                <th mat-header-cell *matHeaderCellDef> Transportación</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Transportacion_Tipo_de_Transportacion?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Especificaciones">
+                                                <th mat-header-cell *matHeaderCellDef> Especificaciones </th>
+                                                <td mat-cell *matCellDef="let element" style="
+                                                padding: 0px 15px;
+                                                max-width: 10em;
+                                                overflow: hidden;
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;"> {{element.Especificaciones}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Proveedor">
+                                                <th mat-header-cell *matHeaderCellDef> Proveedor </th>
+                                                <td mat-cell *matCellDef="let element" style="
+                                                padding: 0px 15px;
+                                                max-width: 10em;
+                                                overflow: hidden;
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;"> {{element.Proveedor}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Telefono">
+                                                <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+                                                <td mat-cell *matCellDef="let element" style="padding: 0px 15px;"> {{element.Telefono}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Numero_de_Confirmacion">
+                                                <th mat-header-cell *matHeaderCellDef> Número de Confirmación </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Numero_de_Confirmacion}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Confirmado">
+                                                <th mat-header-cell *matHeaderCellDef> Confirmado</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Confirmado_Estatus_de_Confirmacion?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="expandedDetail">
+                                                <td mat-cell *matCellDef="let element; let i = index;"
+                                                    [attr.colspan]="getTransportacionColumns().length">
+
+                                                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                                        <div *ngIf="element.edit">
+                                                            <form
+                                                                formArrayName="Detalle_Coord_Tripulacion_TransportacionItems">
+
+                                                                <div class="row form-group"
+                                                                    [formGroupName]="dataSourceTransportacion.data.indexOf(element)">
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                                                        style="max-width:50%">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Transportación</mat-label>
+                                                                            <mat-select placeholder="Transportación"
+                                                                                formControlName="Transportacion" required>
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varTipo_de_Transportacion"
+                                                                                    [value]="item.Clave" req>
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Especificaciones</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Especificaciones"
+                                                                                type="text" maxlength="500" required/>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Proveedor</mat-label>
+                                                                            <input matInput formControlName="Proveedor"
+                                                                                type="text" required maxlength="80" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Teléfono</mat-label>
+                                                                            <input matInput formControlName="Telefono"
+                                                                                placeholder="(XXX) XXX-XXXX"
+                                                                                mask="(000) 000-0000" type="text"
+                                                                                required />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3  "
+                                                                        style="text-align:center">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Número de
+                                                                                Confirmación</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Numero_de_Confirmacion"
+                                                                                type="text" required maxlength="20"/>
+                                                                        </mat-form-field>
+                                                                    </div>
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Confirmado</mat-label>
+                                                                            <mat-select placeholder="Confirmado"
+                                                                                formControlName="Confirmado" required>
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varEstatus_de_Confirmacion"
+                                                                                    [value]="item.Clave" required>
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <!-- inicio seccion botones -->
+                                                                <!-- fin seccion botones -->
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                                                        <button type='button' class="mr-3 btn-sm"
+                                                                            mat-raised-button
+                                                                            (click)="element.edit = false; saveTransportacion(element);"
+                                                                            [disabled]="!TransportacionItems.controls[dataSourceTransportacion.data.indexOf(element)].valid"
+                                                                            color="primary">Guardar
+                                                                        </button>
+                                                                        <button type="button" class="mr-3 btn-sm"
+                                                                            mat-raised-button color="basic"
+                                                                            (click)="cancelEditTransportacion(element)"
+                                                                            mat-button>Cancelar</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="getTransportacionColumns()"></tr>
+                                            <tr mat-row
+                                                [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                                                *matRowDef="let row; columns: getTransportacionColumns();let j = index">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                                class="example-detail-row"></tr>
+                                        </table>
+                                        <mat-paginator #PaginadorTransportacion [length]="getCountTransportacion()" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div mat-dialog-actions class="ml-4">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <button type='submit' class="mr-3 mb-2" [disabled]="!Coord__de_Vuelo__TripulacionForm.valid || consult" mat-raised-button
+            color="primary" (click)="save()">
+            Guardar
+        </button>
+        <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+            [disabled]="!Coord__de_Vuelo__TripulacionForm.valid || consult" mat-raised-button color="primary">
+            Configurar
+        </button>
+        <button type="button" class="mb-2" mat-button mat-raised-button color="warning" mat-dialog-close
+            style="background-color:#ed5565 !important">
+            Cancelar
+        </button>
+    </div>
+</div>
+
+<div id="snackbar"></div>

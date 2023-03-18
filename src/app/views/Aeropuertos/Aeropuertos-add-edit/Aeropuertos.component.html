@@ -1,0 +1,1318 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Catálogo aeropuertos</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Aeropuertos/list">Catálogo aeropuertos</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="AeropuertosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divAeropuerto_ID" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Aeropuerto ID</mat-label>
+                        <input matInput formControlName="Aeropuerto_ID"
+                          [type]="AeropuertosForm.get('Aeropuerto_ID').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="AeropuertosForm.get('Aeropuerto_ID').hasError('required')">
+                          Aeropuerto ID es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divICAO" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>ICAO</mat-label>
+                        <input (change)="ICAO_ExecuteBusinessRules()" #ICAO matInput formControlName="ICAO" type="text"
+                          maxlength="4" required />
+                        <mat-error *ngIf="AeropuertosForm.get('ICAO').hasError('required')">
+                          ICAO es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divIATA" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>IATA</mat-label>
+                        <input (change)="IATA_ExecuteBusinessRules()" #IATA matInput formControlName="IATA" type="text"
+                          maxlength="4" required />
+                        <mat-error *ngIf="AeropuertosForm.get('IATA').hasError('required')">
+                          IATA es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFAA" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>FAA</mat-label>
+                        <input (change)="FAA_ExecuteBusinessRules()" #FAA matInput formControlName="FAA" type="text"
+                          maxlength="4" required />
+                        <mat-error *ngIf="AeropuertosForm.get('FAA').hasError('required')">
+                          FAA es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNombre" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nombre</mat-label>
+                        <input (change)="Nombre_ExecuteBusinessRules()" #Nombre matInput formControlName="Nombre"
+                          type="text" maxlength="60" required />
+                        <mat-error *ngIf="AeropuertosForm.get('Nombre').hasError('required')">
+                          Nombre es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPais" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>País</mat-label>
+                        <input type="text" matInput formControlName="Pais" [matAutocomplete]="autoPais" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPais="matAutocomplete" [displayWith]="displayFnPais">
+                          <mat-option (onSelectionChange)="Pais_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsPais | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPais && !isLoadingPais">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="AeropuertosForm.get('Pais').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="AeropuertosForm.get('Pais').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un País de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstado" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estado</mat-label>
+                        <input type="text" matInput formControlName="Estado" [matAutocomplete]="autoEstado">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoEstado="matAutocomplete" [displayWith]="displayFnEstado">
+                          <mat-option (onSelectionChange)="Estado_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsEstado | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          
+                        </mat-autocomplete>
+                        <mat-error *ngIf="AeropuertosForm.get('Estado').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="AeropuertosForm.get('Estado').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Estado de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCiudad" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Ciudad</mat-label>
+                        <input type="text" matInput formControlName="Ciudad" [matAutocomplete]="autoCiudad">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoCiudad="matAutocomplete" [displayWith]="displayFnCiudad">
+                          <mat-option (onSelectionChange)="Ciudad_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsCiudad | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                         
+                        </mat-autocomplete>
+                        <mat-error *ngIf="AeropuertosForm.get('Ciudad').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="AeropuertosForm.get('Ciudad').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Ciudad de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHorario_de_operaciones" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Horario de operaciones</mat-label>
+                        <input (change)="Horario_de_operaciones_ExecuteBusinessRules()" #Horario_de_operaciones matInput
+                          formControlName="Horario_de_operaciones" type="text" maxlength="50" required />
+                        <mat-error *ngIf="AeropuertosForm.get('Horario_de_operaciones').hasError('required')">
+                          Horario de operaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divLatitud" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Latitud</mat-label>
+                        <input (change)="Latitud_ExecuteBusinessRules()" #Latitud matInput formControlName="Latitud"
+                          type="text" maxlength="15" required />
+                        <mat-error *ngIf="AeropuertosForm.get('Latitud').hasError('required')">
+                          Latitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divLongitud" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Longitud</mat-label>
+                        <input (change)="Longitud_ExecuteBusinessRules()" #Longitud matInput formControlName="Longitud"
+                          type="text" maxlength="15" required />
+                        <mat-error *ngIf="AeropuertosForm.get('Longitud').hasError('required')">
+                          Longitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divElevacion_pies" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Elevación (pies)</mat-label>
+                        <input (change)="Elevacion_pies_ExecuteBusinessRules()" matInput
+                          formControlName="Elevacion_pies" type="text" mask="000000000"
+                          maxlength="9" required />
+                        <mat-error *ngIf="AeropuertosForm.get('Elevacion_pies').hasError('required')">
+                          Elevación (pies) es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divVariacion" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Variación</mat-label>
+                        <input (change)="Variacion_ExecuteBusinessRules()" #Variacion matInput
+                          formControlName="Variacion" type="text" maxlength="20" required />
+                        <mat-error *ngIf="AeropuertosForm.get('Variacion').hasError('required')">
+                          Variación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Aeropuerto" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Aeropuerto</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_Aeropuerto_ExecuteBusinessRules()"
+                          placeholder="Tipo de Aeropuerto" formControlName="Tipo_de_Aeropuerto" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Aeropuerto" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="AeropuertosForm.get('Tipo_de_Aeropuerto').hasError('required')">
+                          Tipo de Aeropuerto es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCiudad_mas_cercana" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Ciudad más cercana</mat-label>
+                        <input type="text" matInput formControlName="Ciudad_mas_cercana"
+                          [matAutocomplete]="autoCiudad_mas_cercana">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoCiudad_mas_cercana="matAutocomplete"
+                          [displayWith]="displayFnCiudad_mas_cercana">
+                          <mat-option (onSelectionChange)="Ciudad_mas_cercana_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsCiudad_mas_cercana | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                        
+                        </mat-autocomplete>
+                        <mat-error *ngIf="AeropuertosForm.get('Ciudad_mas_cercana').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="AeropuertosForm.get('Ciudad_mas_cercana').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Ciudad más cercana de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDistancia_en_KM" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Distancia en KM</mat-label>
+                        <input (change)="Distancia_en_KM_ExecuteBusinessRules()" matInput
+                          formControlName="Distancia_en_KM"
+                          [value]="AeropuertosForm.get('Distancia_en_KM').value" type="text" mask="000000"
+                          maxlength="6" required />
+                        <mat-error *ngIf="AeropuertosForm.get('Distancia_en_KM').hasError('required')">
+                          Distancia en KM es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAeropuerto_Controlado" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Aeropuerto_Controlado_ExecuteBusinessRules()"
+                        formControlName="Aeropuerto_Controlado" class="example-margin">
+                        ¿Aeropuerto Controlado?
+                      </mat-checkbox>
+                    </div>
+                    <div id="divComandante_Honorario" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Comandante Honorario</mat-label>
+                        <input (change)="Comandante_Honorario_ExecuteBusinessRules()" matInput
+                          formControlName="Comandante_Honorario"
+                          [value]="AeropuertosForm.get('Comandante_Honorario').value" type="text"
+                          maxlength="200" />
+                        <mat-error *ngIf="AeropuertosForm.get('Comandante_Honorario').hasError('required')">
+                          Comandante Honorario es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPistas_del_Aeropuerto" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Pistas del Aeropuerto</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addPistas_del_AeropuertoToMR(); $event.stopPropagation();"(click)="MRaddPistas_del_Aeropuerto = true" 
+                            [disabled]="MRaddPistas_del_Aeropuerto">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourcePistas_del_Aeropuerto" multiTemplateDataRows class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                          <ng-container *ngIf="!AeropuertosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  [disabled]="MRaddPistas_del_Aeropuerto"
+                                  (click)="editPistas_del_Aeropuerto(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  [disabled]="MRaddPistas_del_Aeropuerto"
+                                  (click)="deletePistas_del_Aeropuerto(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Pista_Id">
+                            <th mat-header-cell *matHeaderCellDef> Pista Id </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Pista_Id}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Longitud">
+                            <th mat-header-cell *matHeaderCellDef> Longitud</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Longitud}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Ancho">
+                            <th mat-header-cell *matHeaderCellDef> Ancho</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Ancho}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Superficie">
+                            <th mat-header-cell *matHeaderCellDef> Superficie </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Superficie}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Iluminacion">
+                            <th mat-header-cell *matHeaderCellDef> Iluminación </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Iluminacion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Pavimento">
+                            <th mat-header-cell *matHeaderCellDef> Pavimento </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Pavimento}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getPistas_del_AeropuertoColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_Pista_de_AeropuertoItems">
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourcePistas_del_Aeropuerto.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Pista Id</mat-label>
+                                          <input (change)="VerificarMRPista(element)" matInput formControlName="Pista_Id" 
+                                            type="text" required maxlength="25" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Longitud</mat-label>
+                                          <input (change)="VerificarMRPista(element)" matInput formControlName="Longitud" #inputLongitud
+                                            (keydown)="checkLength2($event, inputLongitud, 9)"
+                                            type="number" required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Ancho</mat-label>
+                                          <input (change)="VerificarMRPista(element)" matInput formControlName="Ancho" #inputAncho
+                                            (keydown)="checkLength2($event, inputAncho, 9)"
+                                            type="number" required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Superficie</mat-label>
+                                          <input (change)="VerificarMRPista(element)" matInput formControlName="Superficie"
+                                            type="text" required maxlength="20" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Iluminación</mat-label>
+                                          <input (change)="VerificarMRPista(element)" matInput formControlName="Iluminacion"
+                                            type="text" required maxlength="20" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Pavimento</mat-label>
+                                          <input (change)="VerificarMRPista(element)" matInput formControlName="Pavimento"
+                                            type="text" required maxlength="20" />
+                                        </mat-form-field>
+                                      </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; savePistas_del_Aeropuerto(element);"(click)="MRaddPistas_del_Aeropuerto = false"
+                                          color="primary" [disabled]="SavePistaButton">
+                                          Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditPistas_del_Aeropuerto(element)" mat-button (click)="MRaddPistas_del_Aeropuerto = false">
+                                          Cancelar
+                                        </button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getPistas_del_AeropuertoColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Clave ==0 )}"
+                            *matRowDef="let row; columns: getPistas_del_AeropuertoColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator #paginatorPistas_del_Aeropuerto
+                          [length]="getCountPistas()"
+                          [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="UTC" label="UTC"> <br>
+                  <div id="tabUTC" class="row">
+                    <div id="divUTC_Estandar" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UTC Estándar</mat-label>
+                        <input (change)="UTC_Estandar_ExecuteBusinessRules()" #UTC_Estandar matInput
+                          formControlName="UTC_Estandar" type="text" maxlength="20"  />
+                        <mat-error *ngIf="AeropuertosForm.get('UTC_Estandar').hasError('required')">
+                          UTC Estándar es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                     <div id="divUTC_Estandar_Inicio" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UTC Estándar Inicio</mat-label>
+                        <input (dateChange)="UTC_Estandar_Inicio_ExecuteBusinessRules()" (keypress)="soloFecha($event)" [min]="fechaMinima" [max]="fechaMaxima"
+                          (blur)="UTC_Estandar_Inicio_ExecuteBusinessRules()" matInput
+                          [matDatepicker]="datePickerUTC_Estandar_Inicio" id="UTC_Estandar_Inicio"
+                          formControlName="UTC_Estandar_Inicio" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerUTC_Estandar_Inicio"
+                        (click)="datePickerUTC_Estandar_Inicio.open()"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerUTC_Estandar_Inicio></mat-datepicker>
+                        <mat-error *ngIf="AeropuertosForm.get('UTC_Estandar_Inicio').hasError('required')">
+                          UTC Estándar Inicio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUTC_Estandar_Fin" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UTC Estándar Fin</mat-label>
+                        <input (dateChange)="UTC_Estandar_Fin_ExecuteBusinessRules()" (keypress)="soloFecha($event)" [min]="fechaMinima" [max]="fechaMaxima"
+                          (blur)="UTC_Estandar_Fin_ExecuteBusinessRules()" matInput
+                           [matDatepicker]="datePickerUTC_Estandar_Fin" id="UTC_Estandar_Fin"
+                          formControlName="UTC_Estandar_Fin" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerUTC_Estandar_Fin"
+                        (click)="datePickerUTC_Estandar_Fin.open()"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerUTC_Estandar_Fin></mat-datepicker>
+                        <mat-error *ngIf="AeropuertosForm.get('UTC_Estandar_Fin').hasError('required')">
+                          UTC Estándar Fin es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUTC_DLTS" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UTC DLTS</mat-label>
+                        <input (change)="UTC_DLTS_ExecuteBusinessRules()" #UTC_DLTS matInput formControlName="UTC_DLTS"
+                          type="text" maxlength="20"  />
+                        <mat-error *ngIf="AeropuertosForm.get('UTC_DLTS').hasError('required')">
+                          UTC DLTS es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUTC_DLTS_Inicio" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UTC DLTS Inicio</mat-label>
+                        <input (dateChange)="UTC_DLTS_Inicio_ExecuteBusinessRules()" (keypress)="soloFecha($event)" [min]="fechaMinima" [max]="fechaMaxima"
+                          (blur)="UTC_DLTS_Inicio_ExecuteBusinessRules()" matInput
+                           [matDatepicker]="datePickerUTC_DLTS_Inicio" id="UTC_DLTS_Inicio"
+                          formControlName="UTC_DLTS_Inicio" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerUTC_DLTS_Inicio"
+                        (click)="datePickerUTC_DLTS_Inicio.open()"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerUTC_DLTS_Inicio></mat-datepicker>
+                        <mat-error *ngIf="AeropuertosForm.get('UTC_DLTS_Inicio').hasError('required')">
+                          UTC DLTS Inicio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUTC_DLTS_Fin" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UTC DLTS Fin</mat-label>
+                        <input (dateChange)="UTC_DLTS_Fin_ExecuteBusinessRules()" (keypress)="soloFecha($event)" [min]="fechaMinima" [max]="fechaMaxima"
+                          (blur)="UTC_DLTS_Fin_ExecuteBusinessRules()" matInput 
+                          [matDatepicker]="datePickerUTC_DLTS_Fin" formControlName="UTC_DLTS_Fin" id="UTC_DLTS_Fin"
+                          type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerUTC_DLTS_Fin"
+                        (click)="datePickerUTC_DLTS_Fin.open()"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerUTC_DLTS_Fin></mat-datepicker>
+                        <mat-error *ngIf="AeropuertosForm.get('UTC_DLTS_Fin').hasError('required')">
+                          UTC DLTS Fin es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUTC__Amanecer" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UTC - Amanecer</mat-label>
+                        <input (change)="UTC__Amanecer_ExecuteBusinessRules()"
+                          (blur)="UTC__Amanecer_ExecuteBusinessRules()" formControlName="UTC__Amanecer" matInput
+                          placeholder="EX: 23:05" mask="Hh:m0"  />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="AeropuertosForm.get('UTC__Amanecer').hasError('required')">
+                          UTC - Amanecer es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUTC__Atardecer" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UTC - Atardecer</mat-label>
+                        <input (change)="UTC__Atardecer_ExecuteBusinessRules()"
+                          (blur)="UTC__Atardecer_ExecuteBusinessRules()" formControlName="UTC__Atardecer" matInput
+                          placeholder="EX: 23:05" mask="Hh:m0"  />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="AeropuertosForm.get('UTC__Atardecer').hasError('required')">
+                          UTC - Atardecer es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divLocal_Amanecer" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Local Amanecer</mat-label>
+                        <input (change)="Local_Amanecer_ExecuteBusinessRules()"
+                          (blur)="Local_Amanecer_ExecuteBusinessRules()" formControlName="Local_Amanecer" matInput
+                          placeholder="EX: 23:05" mask="Hh:m0"  />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="AeropuertosForm.get('Local_Amanecer').hasError('required')">
+                          Local Amanecer es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divLocal_Atardecer" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Local Atardecer</mat-label>
+                        <input (change)="Local_Atardecer_ExecuteBusinessRules()"
+                          (blur)="Local_Atardecer_ExecuteBusinessRules()" formControlName="Local_Atardecer" matInput
+                          placeholder="EX: 23:05" mask="Hh:m0"  />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="AeropuertosForm.get('Local_Atardecer').hasError('required')">
+                          Local Atardecer es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Frecuencia" label="Frecuencia"> <br>
+                  <div id="tabFrecuencia" class="row">
+                    <div id="divTWR" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>TWR</mat-label>
+                        <input (change)="TWR_ExecuteBusinessRules()" matInput formControlName="TWR"
+                          [value]="AeropuertosForm.get('TWR').value" type="text" placeholder="EX: 123456" mask="000000" maxlength="6"
+                           />
+                        <mat-error *ngIf="AeropuertosForm.get('TWR').hasError('required')">
+                          TWR es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divGND" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>GND</mat-label>
+                        <input (change)="GND_ExecuteBusinessRules()" matInput formControlName="GND"
+                          [value]="AeropuertosForm.get('GND').value" type="text" placeholder="EX: 123456" mask="000000" maxlength="6"
+                           />
+                        <mat-error *ngIf="AeropuertosForm.get('GND').hasError('required')">
+                          GND es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUNICOM" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UNICOM</mat-label>
+                        <input (change)="UNICOM_ExecuteBusinessRules()" #UNICOM matInput formControlName="UNICOM"
+                          type="text" maxlength="20"  />
+                        <mat-error *ngIf="AeropuertosForm.get('UNICOM').hasError('required')">
+                          UNICOM es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCARDEL_1" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>CLRDEL 1</mat-label>
+                        <input (change)="CARDEL_1_ExecuteBusinessRules()" #CARDEL_1 matInput formControlName="CARDEL_1"
+                          type="text" maxlength="20"  />
+                        <mat-error *ngIf="AeropuertosForm.get('CARDEL_1').hasError('required')">
+                          CLRDEL 1 es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCARDEL_2" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>CLRDEL 2</mat-label>
+                        <input (change)="CARDEL_2_ExecuteBusinessRules()" #CARDEL_2 matInput formControlName="CARDEL_2"
+                          type="text" maxlength="20"  />
+                        <mat-error *ngIf="AeropuertosForm.get('CARDEL_2').hasError('required')">
+                          CLRDEL 2 es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAPPR" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>APPR</mat-label>
+                        <input (change)="APPR_ExecuteBusinessRules()" matInput formControlName="APPR"
+                          [value]="AeropuertosForm.get('APPR').value " placeholder="EX: 123456" mask="000000" maxlength="6"
+                           />
+                        <mat-error *ngIf="AeropuertosForm.get('APPR').hasError('required')">
+                          APPR es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDEP" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>DEP</mat-label>
+                        <input (change)="DEP_ExecuteBusinessRules()" matInput formControlName="DEP"
+                          [value]="AeropuertosForm.get('DEP').value " type="text" placeholder="EX: 123456" mask="000000" maxlength="6"
+                           />
+                        <mat-error *ngIf="AeropuertosForm.get('DEP').hasError('required')">
+                          DEP es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divATIS" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>ATIS</mat-label>
+                        <input (change)="ATIS_ExecuteBusinessRules()" #ATIS matInput formControlName="ATIS" type="text"
+                          maxlength="20"  />
+                        <mat-error *ngIf="AeropuertosForm.get('ATIS').hasError('required')">
+                          ATIS es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divATIS_Phone" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>ATIS Phone</mat-label>
+                        <input (change)="ATIS_Phone_ExecuteBusinessRules()" #ATIS_Phone matInput
+                          formControlName="ATIS_Phone" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000"  />
+                        <mat-error *ngIf="AeropuertosForm.get('ATIS_Phone').hasError('required')">
+                          ATIS Phone es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divASOS" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>ASOS</mat-label>
+                        <input (change)="ASOS_ExecuteBusinessRules()" #ASOS matInput formControlName="ASOS" type="text"
+                          maxlength="20"  />
+                        <mat-error *ngIf="AeropuertosForm.get('ASOS').hasError('required')">
+                          ASOS es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divASOS_Phone" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>ASOS Phone</mat-label>
+                        <input (change)="ASOS_Phone_ExecuteBusinessRules()" #ASOS_Phone matInput
+                          formControlName="ASOS_Phone" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" />
+                        <mat-error *ngIf="AeropuertosForm.get('ASOS_Phone').hasError('required')">
+                          ASOS Phone es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAWOS" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>AWOS</mat-label>
+                        <input (change)="AWOS_ExecuteBusinessRules()" #AWOS matInput formControlName="AWOS" type="text"
+                          maxlength="20"  />
+                        <mat-error *ngIf="AeropuertosForm.get('AWOS').hasError('required')">
+                          AWOS es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAWOS_Phone" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>AWOS Phone</mat-label>
+                        <input (change)="AWOS_Phone_ExecuteBusinessRules()" #AWOS_Phone matInput
+                          formControlName="AWOS_Phone" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" />
+                        <mat-error *ngIf="AeropuertosForm.get('AWOS_Phone').hasError('required')">
+                          AWOS Phone es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAWOS_Type" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>AWOS Type</mat-label>
+                        <input (change)="AWOS_Type_ExecuteBusinessRules()" #AWOS_Type matInput
+                          formControlName="AWOS_Type" type="text" maxlength="50"  />
+                        <mat-error *ngIf="AeropuertosForm.get('AWOS_Type').hasError('required')">
+                          AWOS Type es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Telefonos" label="Teléfonos"> <br>
+                  <div id="tabTelefonos" class="row">
+                    <div id="divCodigo_de_area___Lada" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Código de área / Lada</mat-label>
+                        <input (change)="Codigo_de_area___Lada_ExecuteBusinessRules()" #Codigo_de_area___Lada matInput
+                          formControlName="Codigo_de_area___Lada" type="text" maxlength="5"  />
+                        <mat-error *ngIf="AeropuertosForm.get('Codigo_de_area___Lada').hasError('required')">
+                          Código de área / Lada es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAdministracion_Aeropuerto" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Administración Aeropuerto</mat-label>
+                        <input (change)="Administracion_Aeropuerto_ExecuteBusinessRules()" #Administracion_Aeropuerto
+                          matInput formControlName="Administracion_Aeropuerto" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" />
+                        <mat-error *ngIf="AeropuertosForm.get('Administracion_Aeropuerto').hasError('required')">
+                          Administración Aeropuerto es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divComandancia" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Comandancia</mat-label>
+                        <input (change)="Comandancia_ExecuteBusinessRules()" #Comandancia matInput
+                          formControlName="Comandancia" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" />
+                        <mat-error *ngIf="AeropuertosForm.get('Comandancia').hasError('required')">
+                          Comandancia es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDespacho" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Despacho</mat-label>
+                        <input (change)="Despacho_ExecuteBusinessRules()" #Despacho matInput formControlName="Despacho"
+                          type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000"  />
+                        <mat-error *ngIf="AeropuertosForm.get('Despacho').hasError('required')">
+                          Despacho es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTorre_de_Control" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Torre de Control</mat-label>
+                        <input (change)="Torre_de_Control_ExecuteBusinessRules()" #Torre_de_Control matInput
+                          formControlName="Torre_de_Control" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" />
+                        <mat-error *ngIf="AeropuertosForm.get('Torre_de_Control').hasError('required')">
+                          Torre de Control es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div id="divDescripcion" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción</mat-label>
+                        <input (change)="Descripcion_ExecuteBusinessRules()" #Descripcion matInput
+                          formControlName="Descripcion" type="text" maxlength="500"  />
+                        <mat-error *ngIf="AeropuertosForm.get('Descripcion').hasError('required')">
+                          Descripción es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div> -->
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="FBO" label="FBO"> <br>
+                  <div id="tabFBO" class="row">
+                    <div id="divFBO" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>FBO</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addFBOToMR(); $event.stopPropagation();"(click)="MRaddFBO = true" [disabled]="MRaddFBO">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceFBO" multiTemplateDataRows class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                          <ng-container *ngIf="!AeropuertosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button" 
+                                  [disabled]="MRaddFBO"
+                                  (click)="editFBO(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  [disabled]="MRaddFBO"
+                                  (click)="deleteFBO(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Nombre">
+                            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Nombre}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Telefono_Local">
+                            <th mat-header-cell *matHeaderCellDef> Teléfono Local </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Telefono_Local}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Telefono_Gratuito">
+                            <th mat-header-cell *matHeaderCellDef> Teléfono Gratuito </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Telefono_Gratuito}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Sitio_Web">
+                            <th mat-header-cell *matHeaderCellDef> Sitio Web </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Sitio_Web}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getFBOColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_FBOItems">
+
+                                    <div class="row form-group" [formGroupName]="dataSourceFBO.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Nombre</mat-label>
+                                          <input matInput formControlName="Nombre" type="text" maxlength="70" required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Teléfono Local</mat-label>
+                                          <input matInput formControlName="Telefono_Local" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" 
+                                          required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Teléfono Gratuito</mat-label>
+                                          <input matInput formControlName="Telefono_Gratuito" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" 
+                                           />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Sitio Web</mat-label>
+                                          <input matInput formControlName="Sitio_Web" type="text" maxlength="100" />
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="MRaddFBO = false"
+                                          (click)="element.edit = false; saveFBO(element);" color="primary"
+                                          [disabled]="!FBOItems.controls[dataSourceFBO.data.indexOf(element)].valid">
+                                          Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="MRaddFBO = false" (click)="cancelEditFBO(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getFBOColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Clave ==0 )}"
+                            *matRowDef="let row; columns: getFBOColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator #paginatorFBO [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons
+                          [length]="getCountFBO()">
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Hoteles" label="Hoteles"> <br>
+                  <div id="tabHoteles" class="row">
+                    <div id="divHoteles" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Hoteles</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addHotelesToMR(); $event.stopPropagation();"(click)="MRaddHoteles = true" [disabled]="MRaddHoteles">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceHoteles" multiTemplateDataRows class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                          <ng-container *ngIf="!AeropuertosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  [disabled]="MRaddHoteles"
+                                  (click)="editHoteles(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  [disabled]="MRaddHoteles"
+                                  (click)="deleteHoteles(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Hotel">
+                            <th mat-header-cell *matHeaderCellDef> Hotel </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Hotel}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Telefono_Local">
+                            <th mat-header-cell *matHeaderCellDef> Teléfono Local </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Telefono_Local}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Distancia_del_Aeropuerto">
+                            <th mat-header-cell *matHeaderCellDef> Distancia del Aeropuerto</th>
+                            <td style="padding-right: 5em;" class="center" mat-cell *matCellDef="let element"> {{element.Distancia_del_Aeropuerto}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Sitio_Web">
+                            <th mat-header-cell *matHeaderCellDef> Sitio Web </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Sitio_Web}} </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getHotelesColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_HotelesItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceHoteles.data.indexOf(element)">
+
+                                      <div lass="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Hotel</mat-label>
+                                          <input matInput formControlName="Hotel" type="text" required maxlength="70" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Teléfono Local</mat-label>
+                                          <input matInput formControlName="Telefono_Local" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000"
+                                          required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Sitio Web</mat-label>
+                                          <input matInput formControlName="Sitio_Web" type="text" maxlength="100" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div lass="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Distancia del Aeropuerto</mat-label>
+                                          <input matInput #inputDistancia_del_Aeropuerto formControlName="Distancia_del_Aeropuerto" 
+                                          type="text" maxlength="6" (keypress)="soloNumeros($event)" />
+                                        </mat-form-field>
+                                      </div>
+
+                                    </div>
+                  
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="MRaddHoteles = false"
+                                          (click)="element.edit = false; saveHoteles(element);" color="primary"
+                                          [disabled]="!HotelesItems.controls[dataSourceHoteles.data.indexOf(element)].valid">
+                                          Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="MRaddHoteles = false" (click)="cancelEditHoteles(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getHotelesColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Clave ==0 )}"
+                            *matRowDef="let row; columns: getHotelesColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator #paginatorHoteles [pageSizeOptions]="[5, 10, 15, 20]" [length]="getCountHoteles()"
+                          showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Comisariatos" label="Comisariatos"> <br>
+                  <div id="tabComisariatos" class="row">
+                    <div id="divComisariatos" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Comisariatos</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addComisariatosToMR(); $event.stopPropagation();"(click)="MRaddComisariatos = true" [disabled]="MRaddComisariatos">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceComisariatos" multiTemplateDataRows class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                          <ng-container *ngIf="!AeropuertosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  [disabled]="MRaddComisariatos"
+                                  (click)="editComisariatos(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  [disabled]="MRaddComisariatos"
+                                  (click)="deleteComisariatos(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Comisariato">
+                            <th mat-header-cell *matHeaderCellDef> Comisariato </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Comisariato}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Telefono_Local">
+                            <th mat-header-cell *matHeaderCellDef> Teléfono Local </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Telefono_Local}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Telefono_Gratuito">
+                            <th mat-header-cell *matHeaderCellDef> Teléfono Gratuito </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Telefono_Gratuito}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Sitio_Web">
+                            <th mat-header-cell *matHeaderCellDef> Sitio Web </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Sitio_Web}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getComisariatosColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_ComisariatosItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceComisariatos.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Comisariato</mat-label>
+                                          <input matInput formControlName="Comisariato" type="text" maxlength="70" required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Teléfono Local</mat-label>
+                                          <input matInput formControlName="Telefono_Local" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" 
+                                          required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Teléfono Gratuito</mat-label>
+                                          <input matInput formControlName="Telefono_Gratuito" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" 
+                                           />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Sitio Web</mat-label>
+                                          <input matInput formControlName="Sitio_Web" type="text" maxlength="100" />
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveComisariatos(element);"(click)="MRaddComisariatos = false"
+                                          [disabled]="!ComisariatosItems.controls[dataSourceComisariatos.data.indexOf(element)].valid"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="MRaddComisariatos = false" (click)="cancelEditComisariatos(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getComisariatosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Clave ==0 )}"
+                            *matRowDef="let row; columns: getComisariatosColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator #paginatorComisariatos [pageSizeOptions]="[5, 10, 15, 20]" [length]="getCountComisariatos()"
+                          showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Transportes" label="Transportes"> <br>
+                  <div id="tabTransportes" class="row">
+                    <div id="divTransportes" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Transportes</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addTransportesToMR(); $event.stopPropagation();"(click)="MRaddTransportes = true" [disabled]="MRaddTransportes">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceTransportes" multiTemplateDataRows class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                          <ng-container *ngIf="!AeropuertosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  [disabled]="MRaddTransportes"
+                                  (click)="editTransportes(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  [disabled]="MRaddTransportes"
+                                  (click)="deleteTransportes(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Transporte">
+                            <th mat-header-cell *matHeaderCellDef> Transporte </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Transporte}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Telefono_Local">
+                            <th mat-header-cell *matHeaderCellDef> Teléfono Local </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Telefono_Local}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Telefono_Gratuito">
+                            <th mat-header-cell *matHeaderCellDef> Teléfono Gratuito </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Telefono_Gratuito}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Sitio_Web">
+                            <th mat-header-cell *matHeaderCellDef> Sitio Web </th>
+                            <td style="padding-right: 5em;" mat-cell *matCellDef="let element"> {{element.Sitio_Web}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getTransportesColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_TransportesItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceTransportes.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Transporte</mat-label>
+                                            <input matInput formControlName="Transporte" type="text" maxlength="70" required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Teléfono Local</mat-label>
+                                          <input matInput formControlName="Telefono_Local" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" 
+                                          required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Teléfono Gratuito</mat-label>
+                                          <input matInput formControlName="Telefono_Gratuito" type="text" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" 
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Sitio Web</mat-label>
+                                          <input matInput formControlName="Sitio_Web" type="text" maxlength="100" />
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveTransportes(element);"(click)="MRaddTransportes = false"
+                                          [disabled]="!TransportesItems.controls[dataSourceTransportes.data.indexOf(element)].valid"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="MRaddTransportes = false" (click)="cancelEditTransportes(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getTransportesColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Clave ==0 )}"
+                            *matRowDef="let row; columns: getTransportesColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator #paginatorTransportes [pageSizeOptions]="[5, 10, 15, 20]" [length]="getCountTransportes()"
+                          showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Notas_Aerovics" label="Notas Aerovics"> <br>
+                  <div id="tabNotas_Aerovics" class="row">
+                    <div id="divNotas" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Notas</mat-label>
+                        <textarea (change)="Notas_ExecuteBusinessRules()" style="height:30vh" #Notas matInput formControlName="Notas"
+                        maxlength="4000" >
+                        </textarea>
+                      
+                        <mat-error *ngIf="AeropuertosForm.get('Notas').hasError('required')">
+                          Notas es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divICAO_IATA" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" [hidden]="true">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>ICAO/IATA</mat-label>
+                        <input (change)="ICAO_IATA_ExecuteBusinessRules()" #ICAO_IATA matInput
+                          formControlName="ICAO_IATA" type="text" maxlength="4000"  />
+                        <mat-error *ngIf="AeropuertosForm.get('ICAO_IATA').hasError('required')">
+                          ICAO/IATA es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!AeropuertosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!AeropuertosForm.valid || consult" mat-raised-button color="primary" hidden>Guardar y
+                    Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!AeropuertosForm.valid || consult" mat-raised-button color="primary" hidden>Guardar y
+                    Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!AeropuertosForm.valid || consult" mat-raised-button color="primary">Configurar
+                  </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

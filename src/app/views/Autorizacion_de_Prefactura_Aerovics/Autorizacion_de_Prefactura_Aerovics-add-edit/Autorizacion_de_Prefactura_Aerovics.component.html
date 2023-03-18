@@ -1,0 +1,515 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Autorización de prefactura</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Autorizacion_de_Prefactura_Aerovics/list">Autorización de prefactura</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Autorizacion_de_Prefactura_AerovicsForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup (selectedTabChange)="onTabChanged($event)">
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Autorizacion_de_Prefactura_AerovicsForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNo_prefactura" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. prefactura</mat-label>
+                        <input (change)="No_prefactura_ExecuteBusinessRules()" matInput formControlName="No_prefactura"
+                          [type]="Autorizacion_de_Prefactura_AerovicsForm.get('No_prefactura').value == 'Auto'  ? 'text':'number' "
+                          maxlength="9" required />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('No_prefactura').hasError('required')">
+                          No. prefactura es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divVuelo" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Vuelo</mat-label>
+                        <mat-select (selectionChange)="Vuelo_ExecuteBusinessRules()" placeholder="Vuelo"
+                          formControlName="Vuelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSolicitud_de_Vuelo" [value]="item.Folio">
+                            {{ item.Numero_de_Vuelo }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Vuelo').hasError('required')">
+                          Vuelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPax_Solicitante" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Solicitante</mat-label>
+                        <mat-select (selectionChange)="Pax_Solicitante_ExecuteBusinessRules()" placeholder="Solicitante"
+                          formControlName="Pax_Solicitante" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Pax_Solicitante').hasError('required')">
+                          Solicitante es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEmpresa_Solicitante" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Empresa Solicitante</mat-label>
+                        <mat-select (selectionChange)="Empresa_Solicitante_ExecuteBusinessRules()"
+                          placeholder="Empresa Solicitante" formControlName="Empresa_Solicitante" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCliente" [value]="item.Clave">
+                            {{ item.Razon_Social }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Empresa_Solicitante').hasError('required')">
+                          Empresa Solicitante es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Salida" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Salida</mat-label>
+                        <input (dateChange)="Fecha_de_Salida_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Salida_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Salida.open()" [matDatepicker]="datePickerFecha_de_Salida"
+                          formControlName="Fecha_de_Salida" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Salida"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Salida></mat-datepicker>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Fecha_de_Salida').hasError('required')">
+                          Fecha de Salida es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Regreso" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Regreso</mat-label>
+                        <input (dateChange)="Fecha_de_Regreso_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Regreso_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Regreso.open()" [matDatepicker]="datePickerFecha_de_Regreso"
+                          formControlName="Fecha_de_Regreso" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Regreso"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Regreso></mat-datepicker>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Fecha_de_Regreso').hasError('required')">
+                          Fecha de Regreso es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMonto_de_Factura" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Monto de Factura</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Monto_de_Factura_ExecuteBusinessRules()" matInput
+                          formControlName="Monto_de_Factura" mask="separator.2" thousandSeparator="," maxlength="12"
+                          required />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Monto_de_Factura').hasError('required')">
+                          Monto de Factura es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus"
+                          formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_autorizacion_de_prefactura" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_rechazo_general" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo de rechazo general</mat-label>
+                        <input (change)="Motivo_de_rechazo_general_ExecuteBusinessRules()" #Motivo_de_rechazo_general
+                          matInput formControlName="Motivo_de_rechazo_general" type="text" maxlength="1000" required />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Motivo_de_rechazo_general').hasError('required')">
+                          Motivo de rechazo general es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput
+                          formControlName="Observaciones" type="text" maxlength="1500" required />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Observaciones').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Autorizacion_administrativo" label="Autorización administrativo"> <br>
+                  <div id="tabAutorizacion_administrativo" class="row">
+                    <div id="divFecha_de_autorizacion_adm" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de autorización</mat-label>
+                        <input (dateChange)="Fecha_de_autorizacion_adm_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_autorizacion_adm_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_autorizacion_adm.open()"
+                          [matDatepicker]="datePickerFecha_de_autorizacion_adm"
+                          formControlName="Fecha_de_autorizacion_adm" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerFecha_de_autorizacion_adm"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_autorizacion_adm></mat-datepicker>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Fecha_de_autorizacion_adm').hasError('required')">
+                          Fecha de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_autorizacion_adm" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de autorización</mat-label>
+                        <input (change)="Hora_de_autorizacion_adm_ExecuteBusinessRules()"
+                          (blur)="Hora_de_autorizacion_adm_ExecuteBusinessRules()"
+                          formControlName="Hora_de_autorizacion_adm" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0"
+                          required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Hora_de_autorizacion_adm').hasError('required')">
+                          Hora de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_autoriza_adm" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que autoriza</mat-label>
+                        <mat-select (selectionChange)="Usuario_que_autoriza_adm_ExecuteBusinessRules()"
+                          placeholder="Usuario que autoriza" formControlName="Usuario_que_autoriza_adm" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Usuario_que_autoriza_adm').hasError('required')">
+                          Usuario que autoriza es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divResultado_de_autorizacion_adm" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Resultado de autorización</mat-label>
+                        <mat-select (selectionChange)="Resultado_de_autorizacion_adm_ExecuteBusinessRules()"
+                          placeholder="Resultado de autorización" formControlName="Resultado_de_autorizacion_adm"
+                          required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_autorizacion_de_prefactura" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Resultado_de_autorizacion_adm').hasError('required')">
+                          Resultado de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_rechazo_adm" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo de rechazo</mat-label>
+                        <input (change)="Motivo_de_rechazo_adm_ExecuteBusinessRules()" #Motivo_de_rechazo_adm matInput
+                          formControlName="Motivo_de_rechazo_adm" type="text" maxlength="500" required />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Motivo_de_rechazo_adm').hasError('required')">
+                          Motivo de rechazo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones_adm" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_adm_ExecuteBusinessRules()" #Observaciones_adm matInput
+                          formControlName="Observaciones_adm" type="text" maxlength="500" />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Observaciones_adm').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Autorizacion_director_general" label="Autorización director general"> <br>
+                  <div id="tabAutorizacion_director_general" class="row">
+                    <div id="divFecha_de_autorizacion_dg" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de autorización</mat-label>
+                        <input (dateChange)="Fecha_de_autorizacion_dg_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_autorizacion_dg_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_autorizacion_dg.open()"
+                          [matDatepicker]="datePickerFecha_de_autorizacion_dg"
+                          formControlName="Fecha_de_autorizacion_dg" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerFecha_de_autorizacion_dg"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_autorizacion_dg></mat-datepicker>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Fecha_de_autorizacion_dg').hasError('required')">
+                          Fecha de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_autorizacion_dg" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de autorización</mat-label>
+                        <input (change)="Hora_de_autorizacion_dg_ExecuteBusinessRules()"
+                          (blur)="Hora_de_autorizacion_dg_ExecuteBusinessRules()"
+                          formControlName="Hora_de_autorizacion_dg" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0"
+                          required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Hora_de_autorizacion_dg').hasError('required')">
+                          Hora de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_autoriza_dg" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que autoriza</mat-label>
+                        <mat-select (selectionChange)="Usuario_que_autoriza_dg_ExecuteBusinessRules()"
+                          placeholder="Usuario que autoriza" formControlName="Usuario_que_autoriza_dg" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Usuario_que_autoriza_dg').hasError('required')">
+                          Usuario que autoriza es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divResultado_de_autorizacion_dg" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Resultado de autorización</mat-label>
+                        <mat-select (selectionChange)="Resultado_de_autorizacion_dg_ExecuteBusinessRules()"
+                          placeholder="Resultado de autorización" formControlName="Resultado_de_autorizacion_dg"
+                          required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_autorizacion_de_prefactura" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Resultado_de_autorizacion_dg').hasError('required')">
+                          Resultado de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_rechazo_dg" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo de rechazo</mat-label>
+                        <input (change)="Motivo_de_rechazo_dg_ExecuteBusinessRules()" #Motivo_de_rechazo_dg matInput
+                          formControlName="Motivo_de_rechazo_dg" type="text" maxlength="500" required />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Motivo_de_rechazo_dg').hasError('required')">
+                          Motivo de rechazo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones_dg" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_dg_ExecuteBusinessRules()" #Observaciones_dg matInput
+                          formControlName="Observaciones_dg" type="text" maxlength="500" required />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Observaciones_dg').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Autorizacion_director_corporativo" label="Autorización director corporativo"> <br>
+                  <div id="tabAutorizacion_director_corporativo" class="row">
+                    <div id="divFecha_de_autorizacion_dc" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de autorización</mat-label>
+                        <input (dateChange)="Fecha_de_autorizacion_dc_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_autorizacion_dc_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_autorizacion_dc.open()"
+                          [matDatepicker]="datePickerFecha_de_autorizacion_dc"
+                          formControlName="Fecha_de_autorizacion_dc" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerFecha_de_autorizacion_dc"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_autorizacion_dc></mat-datepicker>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Fecha_de_autorizacion_dc').hasError('required')">
+                          Fecha de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_autorizacion_dc" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de autorización</mat-label>
+                        <input (change)="Hora_de_autorizacion_dc_ExecuteBusinessRules()"
+                          (blur)="Hora_de_autorizacion_dc_ExecuteBusinessRules()"
+                          formControlName="Hora_de_autorizacion_dc" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0"
+                          required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Hora_de_autorizacion_dc').hasError('required')">
+                          Hora de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_autoriza_dc" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que autoriza</mat-label>
+                        <mat-select (selectionChange)="Usuario_que_autoriza_dc_ExecuteBusinessRules()"
+                          placeholder="Usuario que autoriza" formControlName="Usuario_que_autoriza_dc" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Usuario_que_autoriza_dc').hasError('required')">
+                          Usuario que autoriza es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divResultado_de_autorizacion_dc" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Resultado de autorización</mat-label>
+                        <mat-select (selectionChange)="Resultado_de_autorizacion_dc_ExecuteBusinessRules()"
+                          placeholder="Resultado de autorización" formControlName="Resultado_de_autorizacion_dc"
+                          required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_autorizacion_de_prefactura" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Resultado_de_autorizacion_dc').hasError('required')">
+                          Resultado de autorización es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_rechazo_dc" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo de rechazo</mat-label>
+                        <input (change)="Motivo_de_rechazo_dc_ExecuteBusinessRules()" #Motivo_de_rechazo_dc matInput
+                          formControlName="Motivo_de_rechazo_dc" type="text" maxlength="500" required />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Motivo_de_rechazo_dc').hasError('required')">
+                          Motivo de rechazo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones_dc" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_dc_ExecuteBusinessRules()" #Observaciones_dc matInput
+                          formControlName="Observaciones_dc" type="text" maxlength="500" required />
+                        <mat-error
+                          *ngIf="Autorizacion_de_Prefactura_AerovicsForm.get('Observaciones_dc').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!Autorizacion_de_Prefactura_AerovicsForm.valid || consult"
+                    mat-raised-button color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Autorizacion_de_Prefactura_AerovicsForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Autorizacion_de_Prefactura_AerovicsForm.valid || consult" mat-raised-button
+                    color="primary" hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Autorizacion_de_Prefactura_AerovicsForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

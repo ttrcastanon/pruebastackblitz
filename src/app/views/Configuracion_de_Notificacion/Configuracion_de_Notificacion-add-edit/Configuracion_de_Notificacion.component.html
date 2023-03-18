@@ -1,0 +1,404 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Configuración de Notificación</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Configuracion_de_Notificacion/list">Configuración de Notificación</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Configuracion_de_NotificacionForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Configuracion_de_NotificacionForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha_de_Registro" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Registro</mat-label>
+                        <input (dateChange)="Fecha_de_Registro_ExecuteBusinessRules()" (blur)="Fecha_de_Registro_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Registro.open()" [matDatepicker]="datePickerFecha_de_Registro" formControlName="Fecha_de_Registro" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Registro"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Registro></mat-datepicker>
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Fecha_de_Registro').hasError('required')">
+                          Fecha de Registro  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Registro" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Registro</mat-label>
+                        <input (change)="Hora_de_Registro_ExecuteBusinessRules()" (blur)="Hora_de_Registro_ExecuteBusinessRules()" formControlName="Hora_de_Registro" matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Hora_de_Registro').hasError('required')">
+                          Hora de Registro  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_Registra" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que Registra</mat-label>
+                        <input type="text" matInput formControlName="Usuario_que_Registra" [matAutocomplete]="autoUsuario_que_Registra">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoUsuario_que_Registra="matAutocomplete" [displayWith]="displayFnUsuario_que_Registra">
+                          <mat-option (onSelectionChange)="Usuario_que_Registra_ExecuteBusinessRules()" *ngFor="let option of optionsUsuario_que_Registra | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingUsuario_que_Registra" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsUsuario_que_Registra && !isLoadingUsuario_que_Registra">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Usuario_que_Registra').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Usuario_que_Registra').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Usuario que Registra de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNombre_de_la_Notificacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nombre de la Notificación</mat-label>
+                        <input (change)="Nombre_de_la_Notificacion_ExecuteBusinessRules()" #Nombre_de_la_Notificacion matInput formControlName="Nombre_de_la_Notificacion" type="text" maxlength="100" required />
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Nombre_de_la_Notificacion').hasError('required')">
+                          Nombre de la Notificación  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEs_Permanente" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Es_Permanente_ExecuteBusinessRules()" formControlName="Es_Permanente" class="example-margin">
+                        ¿Es Permanente?
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divFuncionalidad" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Funcionalidad</mat-label>
+                        <mat-select (selectionChange)="Funcionalidad_ExecuteBusinessRules()" placeholder="Funcionalidad" formControlName="Funcionalidad" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varFuncionalidades_para_Notificacion" [value]="item.Folio">
+                            {{ item.Funcionalidad }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Configuracion_de_NotificacionForm.get('Funcionalidad').hasError('required')">
+                          Funcionalidad es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Notificacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Notificación</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_Notificacion_ExecuteBusinessRules()" placeholder="Tipo de Notificación" formControlName="Tipo_de_Notificacion" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Notificacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Configuracion_de_NotificacionForm.get('Tipo_de_Notificacion').hasError('required')">
+                          Tipo de Notificación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Accion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Acción</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_Accion_ExecuteBusinessRules()" placeholder="Tipo de Acción" formControlName="Tipo_de_Accion" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Accion_Notificacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Configuracion_de_NotificacionForm.get('Tipo_de_Accion').hasError('required')">
+                          Tipo de Acción es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Recordatorio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Recordatorio</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_Recordatorio_ExecuteBusinessRules()" placeholder="Tipo de Recordatorio" formControlName="Tipo_de_Recordatorio" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Recordatorio_Notificacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Configuracion_de_NotificacionForm.get('Tipo_de_Recordatorio').hasError('required')">
+                          Tipo de Recordatorio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Inicio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Inicio</mat-label>
+                        <input (dateChange)="Fecha_de_Inicio_ExecuteBusinessRules()" (blur)="Fecha_de_Inicio_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_de_Inicio.open()" [matDatepicker]="datePickerFecha_de_Inicio" formControlName="Fecha_de_Inicio" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Inicio"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Inicio></mat-datepicker>
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Fecha_de_Inicio').hasError('required')">
+                          Fecha de Inicio  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiene_Fecha_de_Finalizacion_Definida" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Tiene_Fecha_de_Finalizacion_Definida_ExecuteBusinessRules()" formControlName="Tiene_Fecha_de_Finalizacion_Definida" class="example-margin">
+                        ¿Tiene Fecha de Finalización Definida?
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divCantidad_de_Dias_a_Validar" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Cantidad de Días a Validar</mat-label>
+                        <input (change)="Cantidad_de_Dias_a_Validar_ExecuteBusinessRules()" matInput formControlName="Cantidad_de_Dias_a_Validar" [type]="Configuracion_de_NotificacionForm.get('Cantidad_de_Dias_a_Validar').value == 'Auto'  ? 'text':'number' " maxlength="5" required />
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Cantidad_de_Dias_a_Validar').hasError('required')">
+                          Cantidad de Días a Validar  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_a_Validar" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha a Validar</mat-label>
+                        <mat-select (selectionChange)="Fecha_a_Validar_ExecuteBusinessRules()" placeholder="Fecha a Validar" formControlName="Fecha_a_Validar" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varNombre_del_Campo_en_MS" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Configuracion_de_NotificacionForm.get('Fecha_a_Validar').hasError('required')">
+                          Fecha a Validar es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_Fin" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha Fin</mat-label>
+                        <input (dateChange)="Fecha_Fin_ExecuteBusinessRules()" (blur)="Fecha_Fin_ExecuteBusinessRules()" matInput (focus)="datePickerFecha_Fin.open()" [matDatepicker]="datePickerFecha_Fin" formControlName="Fecha_Fin" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_Fin"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_Fin></mat-datepicker>
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Fecha_Fin').hasError('required')">
+                          Fecha Fin  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus" formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_Notificacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Configuracion_de_NotificacionForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNotificar__por_Correo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Notificar__por_Correo_ExecuteBusinessRules()" formControlName="Notificar__por_Correo" class="example-margin">
+                        ¿Notificar  por Correo?
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divTexto_que_llevara_el_Correo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Texto que llevara el Correo</mat-label>
+                        <input (change)="Texto_que_llevara_el_Correo_ExecuteBusinessRules()" #Texto_que_llevara_el_Correo matInput formControlName="Texto_que_llevara_el_Correo" type="text" maxlength="500" required />
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Texto_que_llevara_el_Correo').hasError('required')">
+                          Texto que llevara el Correo  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNotificacion_push" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Notificacion_push_ExecuteBusinessRules()" formControlName="Notificacion_push" class="example-margin">
+                        ¿Notificación push?
+                      </mat-checkbox> 
+                    </div>
+                    <div id="divTexto_a_Mostrar_en_la_Notificacion_push" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Texto a Mostrar en la Notificación push</mat-label>
+                        <input (change)="Texto_a_Mostrar_en_la_Notificacion_push_ExecuteBusinessRules()" #Texto_a_Mostrar_en_la_Notificacion_push matInput formControlName="Texto_a_Mostrar_en_la_Notificacion_push" type="text" maxlength="500" required />
+                        <mat-error *ngIf="Configuracion_de_NotificacionForm.get('Texto_a_Mostrar_en_la_Notificacion_push').hasError('required')">
+                          Texto a Mostrar en la Notificación push  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFrecuencia_Notificacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Frecuencia Notificación</h4>    
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" (click)="addFrecuencia_NotificacionToMR(); $event.stopPropagation();"(click)="MRaddFrecuencia_Notificacion = true" [hidden]="MRaddFrecuencia_Notificacion">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table formControlName="Frecuencia_Notificacion" mat-table [dataSource]="dataSourceFrecuencia_Notificacion"  multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Configuracion_de_NotificacionForm.disabled"  matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit"  type="button" (click)="editFrecuencia_Notificacion(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteFrecuencia_Notificacion(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Frecuencia">
+                            <th mat-header-cell *matHeaderCellDef> Frecuencia</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Frecuencia_Tipo_Frecuencia_Notificacion?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Dia">
+                            <th mat-header-cell *matHeaderCellDef> Día</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Dia_Tipo_Dia_Notificacion?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Hora">
+                            <th mat-header-cell *matHeaderCellDef> Hora </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Hora | mask : 'Hh:m0:s0'}} </td>
+                          </ng-container>
+
+                 
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;" [attr.colspan]="getFrecuencia_NotificacionColumns().length">
+                        
+                              <div  [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">                       
+                                <div *ngIf="element.edit">                              
+                                    <form  [formArrayName]="Frecuencia_NotificacionItems"  >                               
+                                      
+                                      <div class="row form-group" [formGroup]="Frecuencia_NotificacionItemsByElemet(element)">
+
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Frecuencia</mat-label>
+                                                <mat-select placeholder="Frecuencia"
+                                                  formControlName="Frecuencia" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varTipo_Frecuencia_Notificacion" [value]="item.Clave">
+                                                    {{ item.Descripcion }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Día</mat-label>
+                                                <mat-select placeholder="Día"
+                                                  formControlName="Dia" >
+                                                  <mat-option>
+                                                  </mat-option>
+                                                  <mat-option *ngFor="let item of varTipo_Dia_Notificacion" [value]="item.Clave">
+                                                    {{ item.Descripcion }}
+                                                  </mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                              <mat-form-field appearance="outline">
+                                                <mat-label>Hora</mat-label>
+                                                <input formControlName="Hora" matInput placeholder="EX: 23:05:29 "
+                                                mask="Hh:m0:s0" />
+                                                <span matPrefix>
+                                                  <mat-icon class="mr-2">access_time</mat-icon>
+                                                </span>
+                                              </mat-form-field>
+                                            </div>
+    
+											
+                                      </div>
+                                      <!-- inicio seccion botones -->
+                                      <!-- fin seccion botones -->
+                                      <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                            (click)="element.edit = false; saveFrecuencia_Notificacion(element);" color="primary">Guardar(click)="MRaddFrecuencia_Notificacion = false"
+                                          </button>
+                                          <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                            (click)="cancelEditFrecuencia_Notificacion(element)"(click)="MRaddFrecuencia_Notificacion = false"
+                                            mat-button>Cancelar</button>
+                                        </div>
+                                      </div>
+                              
+                                    </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getFrecuencia_NotificacionColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}" *matRowDef="let row; columns: getFrecuencia_NotificacionColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}" *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Configuracion_de_NotificacionForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Configuracion_de_NotificacionForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Configuracion_de_NotificacionForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Configuracion_de_NotificacionForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

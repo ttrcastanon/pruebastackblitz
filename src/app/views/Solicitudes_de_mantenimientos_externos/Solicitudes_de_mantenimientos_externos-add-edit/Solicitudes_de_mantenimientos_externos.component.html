@@ -1,0 +1,254 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Solicitudes de mantenimientos externos</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Solicitudes_de_mantenimientos_externos/list">Solicitudes de mantenimientos externos</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Solicitudes_de_mantenimientos_externosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Solicitudes_de_mantenimientos_externosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divMatricula" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula</mat-label>
+                        <input type="text" matInput formControlName="Matricula" [matAutocomplete]="autoMatricula">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoMatricula="matAutocomplete" [displayWith]="displayFnMatricula">
+                          <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules()" *ngFor="let option of optionsMatricula | async" [value]="option">
+                            {{option.Matricula}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Matricula').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divModelo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <input type="text" matInput formControlName="Modelo" [matAutocomplete]="autoModelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoModelo="matAutocomplete" [displayWith]="displayFnModelo">
+                          <mat-option (onSelectionChange)="Modelo_ExecuteBusinessRules()" *ngFor="let option of optionsModelo | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingModelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsModelo && !isLoadingModelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Modelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Modelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Modelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divN_Reporte" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>N° Reporte</mat-label>
+                        <input type="text" matInput formControlName="N_Reporte" [matAutocomplete]="autoN_Reporte">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoN_Reporte="matAutocomplete" [displayWith]="displayFnN_Reporte">
+                          <mat-option (onSelectionChange)="N_Reporte_ExecuteBusinessRules()" *ngFor="let option of optionsN_Reporte | async" [value]="option">
+                            {{option.No_Reporte}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingN_Reporte" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsN_Reporte && !isLoadingN_Reporte">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('N_Reporte').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('N_Reporte').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un N° Reporte de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPropietario" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Propietario</mat-label>
+                        <input type="text" matInput formControlName="Propietario" [matAutocomplete]="autoPropietario">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoPropietario="matAutocomplete" [displayWith]="displayFnPropietario">
+                          <mat-option (onSelectionChange)="Propietario_ExecuteBusinessRules()" *ngFor="let option of optionsPropietario | async" [value]="option">
+                            {{option.Nombre}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingPropietario" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsPropietario && !isLoadingPropietario">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Propietario').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Propietario').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Propietario de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divProveedor" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Proveedor</mat-label>
+                        <input type="text" matInput formControlName="Proveedor" [matAutocomplete]="autoProveedor">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoProveedor="matAutocomplete" [displayWith]="displayFnProveedor">
+                          <mat-option (onSelectionChange)="Proveedor_ExecuteBusinessRules()" *ngFor="let option of optionsProveedor | async" [value]="option">
+                            {{option.Razon_social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingProveedor" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsProveedor && !isLoadingProveedor">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Proveedor').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Proveedor').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Proveedor de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divN_Servicio" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>N° Servicio</mat-label>
+                        <input (change)="N_Servicio_ExecuteBusinessRules()" #N_Servicio matInput formControlName="N_Servicio" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('N_Servicio').hasError('required')">
+                          N° Servicio  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripción</mat-label>
+                        <input (change)="Descripcion_ExecuteBusinessRules()" #Descripcion matInput formControlName="Descripcion" type="text" maxlength="100" required />
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Descripcion').hasError('required')">
+                          Descripción  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCosto_pieza" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Costo pieza $</mat-label>
+                        <input (change)="Costo_pieza_ExecuteBusinessRules()" matInput formControlName="Costo_pieza" [value]="Solicitudes_de_mantenimientos_externosForm.get('Costo_pieza').value | number:'9.1-2'" type="number" maxlength="9" required />
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Costo_pieza').hasError('required')">
+                          Costo pieza $  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCosto_total" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Costo total $</mat-label>
+                        <input (change)="Costo_total_ExecuteBusinessRules()" matInput formControlName="Costo_total" [value]="Solicitudes_de_mantenimientos_externosForm.get('Costo_total').value | number:'9.1-2'" type="number" maxlength="9" required />
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Costo_total').hasError('required')">
+                          Costo total $  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNuevo_costo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nuevo costo $</mat-label>
+                        <input (change)="Nuevo_costo_ExecuteBusinessRules()" matInput formControlName="Nuevo_costo" [value]="Solicitudes_de_mantenimientos_externosForm.get('Nuevo_costo').value | number:'9.1-2'" type="number" maxlength="9" required />
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Nuevo_costo').hasError('required')">
+                          Nuevo costo $  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                </div>
+                </mat-tab>
+
+<mat-tab aria-label="Negociacion" label="Negociación"> <br> <div id="tabNegociacion" class="row">
+                    <div id="divNuevo_monto_negociado" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nuevo monto negociado $</mat-label>
+                        <input (change)="Nuevo_monto_negociado_ExecuteBusinessRules()" matInput formControlName="Nuevo_monto_negociado" [value]="Solicitudes_de_mantenimientos_externosForm.get('Nuevo_monto_negociado').value | number:'9.1-2'" type="number" maxlength="9" required />
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Nuevo_monto_negociado').hasError('required')">
+                          Nuevo monto negociado $  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <input (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput formControlName="Observaciones" type="text" maxlength="500" required />
+                        <mat-error *ngIf="Solicitudes_de_mantenimientos_externosForm.get('Observaciones').hasError('required')">
+                          Observaciones  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Solicitudes_de_mantenimientos_externosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Solicitudes_de_mantenimientos_externosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Solicitudes_de_mantenimientos_externosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Solicitudes_de_mantenimientos_externosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

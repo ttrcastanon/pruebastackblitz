@@ -1,0 +1,252 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Seguros Asociados a la Aeronave</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Seguros_Asociados_a_la_Aeronave/list">Seguros Asociados a la Aeronave</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Seguros_Asociados_a_la_AeronaveForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Seguros_Asociados_a_la_AeronaveForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error *ngIf="Seguros_Asociados_a_la_AeronaveForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divMatricula" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matrícula </mat-label>
+                        <mat-select (selectionChange)="Matricula_ExecuteBusinessRules()" placeholder="Matrícula "
+                          formControlName="Matricula" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAeronave" [value]="item.Matricula">
+                            {{ item.Matricula }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Seguros_Asociados_a_la_AeronaveForm.get('Matricula').hasError('required')">
+                          Matrícula es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSeguros_Asociados" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Seguros Asociados</h4>
+                          <!-- <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addSeguros_AsociadosToMR(); $event.stopPropagation();"(click)="MRaddSeguros_Asociados = true" [hidden]="MRaddSeguros_Asociados">
+                            <mat-icon>add</mat-icon>
+                          </button> -->
+                        </div>
+                        <table mat-table [dataSource]="dataSourceSeguros_Asociados" multiTemplateDataRows>
+
+                          <!-- <ng-container *ngIf="!Seguros_Asociados_a_la_AeronaveForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editSeguros_Asociados(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteSeguros_Asociados(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container> -->
+
+                          <ng-container matColumnDef="Proveedor_de_Seguro">
+                            <th mat-header-cell *matHeaderCellDef class="w-25"> Proveedor de Seguro</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Proveedor_de_Seguro_Proveedores_de_Seguros?.Nombre}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_Seguro">
+                            <th mat-header-cell *matHeaderCellDef class="w-25"> Tipo de Seguro</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Tipo_de_Seguro_Tipo_de_Seguro?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__Poliza">
+                            <th mat-header-cell *matHeaderCellDef class="w-25"> No. Póliza </th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.No__Poliza}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Vigencia" class="w-25">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Vigencia </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Vigencia |date}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex"
+                              [attr.colspan]="getSeguros_AsociadosColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_de_Seguros_AsociadosItems">
+
+                                    <div class="row form-group" [formGroupName]="dataIndex">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Proveedor de Seguro</mat-label>
+                                          <input type="text" matInput formControlName="Proveedor_de_Seguro"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectProveedor_de_Seguro_Detalle_de_Seguros_Asociados($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnProveedor_de_Seguro_Detalle_de_Seguros_Asociados.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varProveedores_de_Seguros"
+                                              [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionProveedor_de_Seguro_Detalle_de_Seguros_Asociados($event, element)">
+                                              {{option.Nombre}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingProveedor_de_Seguro_Detalle_de_Seguros_Asociados"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varProveedores_de_Seguros.length ==0 &&  !isLoadingProveedor_de_Seguro_Detalle_de_Seguros_Asociados && searchProveedor_de_Seguro_Detalle_de_Seguros_AsociadosCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tipo de Seguro</mat-label>
+                                          <input type="text" matInput formControlName="Tipo_de_Seguro"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectTipo_de_Seguro_Detalle_de_Seguros_Asociados($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnTipo_de_Seguro_Detalle_de_Seguros_Asociados.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varTipo_de_Seguro" [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionTipo_de_Seguro_Detalle_de_Seguros_Asociados($event, element)">
+                                              {{option.Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingTipo_de_Seguro_Detalle_de_Seguros_Asociados"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varTipo_de_Seguro.length ==0 &&  !isLoadingTipo_de_Seguro_Detalle_de_Seguros_Asociados && searchTipo_de_Seguro_Detalle_de_Seguros_AsociadosCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. Póliza </mat-label>
+                                          <input matInput formControlName="No__Poliza" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha de Vigencia</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_de_Vigencia" type="text" />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveSeguros_Asociados(element);"(click)="MRaddSeguros_Asociados = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+(click)="MRaddSeguros_Asociados = false"                                          (click)="cancelEditSeguros_Asociados(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getSeguros_AsociadosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getSeguros_AsociadosColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+
+                          <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell text-center" colspan="4">No hay registros disponibles
+                            </td>
+                          </tr>
+
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <!-- <button class="mr-3 mb-2" [disabled]="!Seguros_Asociados_a_la_AeronaveForm.valid || consult"
+                    mat-raised-button color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Seguros_Asociados_a_la_AeronaveForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Seguros_Asociados_a_la_AeronaveForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Seguros_Asociados_a_la_AeronaveForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button> -->
+                  <button type="button" class="mb-2" mat-raised-button color="warning" (click)="closeWindows()"
+                    style="background-color:#ed5565 !important" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

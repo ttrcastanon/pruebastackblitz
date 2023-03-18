@@ -1,0 +1,727 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Solicitud de Compras Generales</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Solicitud_de_Compras_Generales/list">Solicitud de Compras Generales</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #addSeleccionarReportes let-modal>
+      <div class="modal-header">
+
+        <div matTooltip="Agregar" class="ml-4">
+          <button mat-mini-fab color="primary" (click)="fnOpenWindowLista_Predeterminada()">
+            <mat-icon class="col-white">add</mat-icon>
+          </button>
+        </div>
+
+        <h4 class="page-title" id="modal-basic-title">
+          Lista Predeterminada
+        </h4>
+
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('cerrar')">
+          <i class="fa fa-window-close"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+
+          <div id="divSeleccionar_Reportes_OT" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="table-responsive">
+
+              <table mat-table [dataSource]="dataSourceLista_Predeterminada_Seleccionar" multiTemplateDataRows>
+
+                <ng-container *ngIf="!Solicitud_de_Compras_GeneralesForm.disabled" matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                  <mat-cell *matCellDef="let element;">
+                    <div class="actions">
+
+                    </div>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Seleccionar">
+                  <th mat-header-cell *matHeaderCellDef> Acción</th>
+                  <td mat-cell *matCellDef="let element" style="width:8% !important; padding-left:0 !important">
+                    <div class="text-center f-w">
+                      <mat-checkbox [disabled]="false" [checked]="element.Seleccionar"
+                        (change)="Lista_Predeterminada_Seleccionar_Toggle(element, $event)"
+                        [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Folio">
+                  <th mat-header-cell *matHeaderCellDef style="width:8% !important"> Folio </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Folio}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Fecha_de_Registro">
+                  <th mat-header-cell *matHeaderCellDef style="width:10% !important"> Fecha de Registro </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Registro | date}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Hora_de_Registro">
+                  <th mat-header-cell *matHeaderCellDef style="width:10% !important"> Hora de Registro </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Hora_de_Registro}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Usuario_que_Registra">
+                  <th mat-header-cell *matHeaderCellDef style="width:24% !important"> Usuario que Registra </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Usuario_que_Registra}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Nombre_Usuario_que_Registra">
+                  <th mat-header-cell *matHeaderCellDef> Usuario que Registra </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Nombre_Usuario_que_Registra}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Nombre_de_Lista_Predeterminada">
+                  <th mat-header-cell *matHeaderCellDef style="width:40% !important"> Nombre de Lista Predeterminada
+                  </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Nombre_de_Lista_Predeterminada}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expandedDetail">
+                  <td mat-cell *matCellDef="let element; let i = index;"
+                    [attr.colspan]="getLista_Predeterminada_SeleccionarColumns().length">
+
+                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                      <div *ngIf="element.edit">
+                        <form [formArrayName]="Lista_Predeterminada_Seleccionar_Items">
+
+                          <div class="row form-group"
+                            [formGroup]="Lista_Predeterminada_Seleccionar_ItemsByElemet(element)">
+
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3 ">
+                              <mat-checkbox formControlName="Seleccionar" [value]="element.Seleccionar"
+                                class="example-margin">
+                                Seleccionar
+                              </mat-checkbox>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_Reporte</mat-label>
+                                <input matInput formControlName="M_Reporte" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_TipoReporte</mat-label>
+                                <input matInput formControlName="M_TipoReporte" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_Descripcion</mat-label>
+                                <input matInput formControlName="M_Descripcion" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_CMP</mat-label>
+                                <input matInput formControlName="M_CMP" type="text" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_ATA</mat-label>
+                                <input matInput formControlName="M_ATA" type="text" />
+                              </mat-form-field>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>M_TecnicoNombre</mat-label>
+                                <input matInput formControlName="M_TecnicoNombre" type="text" />
+                              </mat-form-field>
+                            </div>
+
+                          </div>
+
+                        </form>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="getLista_Predeterminada_SeleccionarColumns()"></tr>
+                <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                  *matRowDef="let row; columns: getLista_Predeterminada_SeleccionarColumns();let j = index"></tr>
+                <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                  *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                </tr>
+              </table>
+
+              <br>
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" mat-raised-button color="primary"
+          (click)="GuardarDatos_Seleccionar_Lista_Predeterminada()">Seleccionar Lista</button>
+        <button type="button" mat-raised-button color="accent" class="ml-3 mr-3"
+          style="background-color:#ed5565 !important" (click)="modal.dismiss('cancelar')">Cancelar</button>
+      </div>
+    </ng-template>
+
+
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Solicitud_de_Compras_GeneralesForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+
+                    <div id="divNo_de_Solicitud" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Solicitud</mat-label>
+                        <input matInput formControlName="No_de_Solicitud"
+                          [type]="Solicitud_de_Compras_GeneralesForm.get('No_de_Solicitud').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('No_de_Solicitud').hasError('required')">
+                          No. de Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha_de_Registro" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Registro</mat-label>
+                        <input (dateChange)="Fecha_de_Registro_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Registro_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Registro.open()" [matDatepicker]="datePickerFecha_de_Registro"
+                          formControlName="Fecha_de_Registro" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Registro"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Registro></mat-datepicker>
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('Fecha_de_Registro').hasError('required')">
+                          Fecha de Registro es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Registro" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Registro</mat-label>
+                        <input (change)="Hora_de_Registro_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Registro_ExecuteBusinessRules()" formControlName="Hora_de_Registro" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('Hora_de_Registro').hasError('required')">
+                          Hora de Registro es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario_que_Registra" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que Registra</mat-label>
+                        <mat-select (selectionChange)="Usuario_que_Registra_ExecuteBusinessRules()"
+                          placeholder="Usuario que Registra" formControlName="Usuario_que_Registra" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('Usuario_que_Registra').hasError('required')">
+                          Usuario que Registra es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divRazon_de_la_Compra" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Razón de la Compra</mat-label>
+                        <textarea (change)="Razon_de_la_Compra_ExecuteBusinessRules()" #Razon_de_la_Compra matInput
+                          rows="3" formControlName="Razon_de_la_Compra" type="text" maxlength="500" required>
+                        </textarea>
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('Razon_de_la_Compra').hasError('required')">
+                          Razón de la Compra es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divProveedor" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2 clsBottomSelect">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Proveedor</mat-label>
+                        <ng-select ngSelectMat formControlName="Proveedor" dropdownPosition="bottom"
+                          (search)="searchProveedores($event.term)" (clear)="searchProveedores()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingProveedor">
+                          <ng-option *ngFor="let option of listaProveedores | async"
+                            [value]="option.Clave">{{option.Razon_social}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNo_de_Vuelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2 clsBottomSelect">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>No. de Vuelo</mat-label>
+                        <ng-select ngSelectMat formControlName="No_de_Vuelo" dropdownPosition="bottom"
+                          (search)="searchNo_de_Vuelo($event.term)" (clear)="searchNo_de_Vuelo()"
+                          (change)="onChangeNumero_de_Vuelo(0)" [loadingText]="loadingText" [notFoundText]="notFound"
+                          [loading]="isLoadingNo_de_Vuelo">
+                          <ng-option *ngFor="let option of listaNo_de_Vuelo | async"
+                            [value]="option.Folio">{{option.Numero_de_Vuelo}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+
+                    <div id="divTramo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2 clsBottomSelect">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Tramo</mat-label>
+                        <ng-select ngSelectMat formControlName="Tramo" dropdownPosition="bottom"
+                          [notFoundText]="notFound">
+                          <ng-option *ngFor="let option of listaTramo" [value]="option.Aeropuerto_ID">
+                            {{option.ICAO_IATA}}
+                          </ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNumero_de_O_S" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2 clsBottomSelect">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Número de O/S</mat-label>
+                        <ng-select ngSelectMat formControlName="Numero_de_O_S" dropdownPosition="bottom"
+                          (search)="searchNumero_de_O_S($event.term)" (clear)="searchNumero_de_O_S()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingNumero_de_O_S">
+                          <ng-option *ngFor="let option of listaNumero_de_O_S | async"
+                            [value]="option.Folio">{{option.Folio_OS}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+
+                    <div id="divNumero_de_O_T" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2 clsBottomSelect">
+
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Número de O/T</mat-label>
+                        <ng-select ngSelectMat formControlName="Numero_de_O_T" dropdownPosition="bottom"
+                          (search)="searchNumero_de_O_T($event.term)" (clear)="searchNumero_de_O_T()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingNumero_de_O_T">
+                          <ng-option *ngFor="let option of listaNumero_de_O_T | async"
+                            [value]="option.Folio">{{option.numero_de_orden}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+
+                    </div>
+
+                    <div id="divDepartamento" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Departamento</mat-label>
+                        <mat-select (selectionChange)="Departamento_ExecuteBusinessRules()" placeholder="Departamento"
+                          formControlName="Departamento" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varDepartamento" [value]="item.Folio">
+                            {{ item.Nombre }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Solicitud_de_Compras_GeneralesForm.get('Departamento').hasError('required')">
+                          Departamento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo </mat-label>
+                        <mat-select (selectionChange)="Tipo_ExecuteBusinessRules()" placeholder="Tipo "
+                          formControlName="Tipo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Solicitud_de_Compras"
+                            [value]="item.Tipo_de_Solicitud">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Solicitud_de_Compras_GeneralesForm.get('Tipo').hasError('required')">
+                          Tipo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observaciones</mat-label>
+                        <textarea (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput rows="3"
+                          formControlName="Observaciones" type="text" maxlength="200" required></textarea>
+                        <mat-error *ngIf="Solicitud_de_Compras_GeneralesForm.get('Observaciones').hasError('required')">
+                          Observaciones es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo_de_Cancelacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo de Cancelación</mat-label>
+                        <input (change)="Motivo_de_Cancelacion_ExecuteBusinessRules()" #Motivo_de_Cancelacion matInput
+                          formControlName="Motivo_de_Cancelacion" type="text" maxlength="200" required />
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('Motivo_de_Cancelacion').hasError('required')">
+                          Motivo de Cancelación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEnviar_Solicitud" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Enviar_Solicitud_ExecuteBusinessRules()"
+                        formControlName="Enviar_Solicitud" class="example-margin">
+                        Enviar Solicitud
+                      </mat-checkbox>
+                    </div>
+                    <div id="divEstatus_de_Solicitud" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus de Solicitud</mat-label>
+                        <mat-select (selectionChange)="Estatus_de_Solicitud_ExecuteBusinessRules()"
+                          placeholder="Estatus de Solicitud" formControlName="Estatus_de_Solicitud" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Solicitud_de_Compras_Generales"
+                            [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('Estatus_de_Solicitud').hasError('required')">
+                          Estatus de Solicitud es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divItem_Compras_Generales" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Item Compras Generales</h4>
+
+                          <button *ngIf="operation !== 'Consult' && Phase==1" color="primary" mat-mini-fab type="button"
+                            [disabled]="!isItem_Compras_GeneralesAdd"
+                            (click)="addItem_Compras_GeneralesToMR(); $event.stopPropagation();"(click)="MRaddItem_Compras_Generales = true" [hidden]="MRaddItem_Compras_Generales">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <div>
+                          <button type="button" mat-raised-button
+                            (click)="OpenModal_Lista_Compras_Seleccionar(addSeleccionarReportes)" class="mr-3 mb-2"
+                            [disabled]="consult || Phase!=1" color="primary">
+                            Seleccionar Lista Predeterminada
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceItem_Compras_Generales" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Solicitud_de_Compras_GeneralesForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  [disabled]="!isItem_Compras_GeneralesAdd" *ngIf="Phase==1"
+                                  (click)="editItem_Compras_Generales(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  [disabled]="!isItem_Compras_GeneralesAdd" *ngIf="Phase==1"
+                                  (click)="deleteItem_Compras_Generales(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Descripcion">
+                            <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Cantidad_Requerida">
+                            <th mat-header-cell *matHeaderCellDef> Cantidad Requerida</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Cantidad_Requerida}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Unidad_de_Medida">
+                            <th mat-header-cell *matHeaderCellDef> Unidad de Medida</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Unidad_de_Medida_Unidad?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Urgencia">
+                            <th mat-header-cell *matHeaderCellDef> Urgencia</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Urgencia_Urgencia?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Aplicacion_y_Justificacion">
+                            <th mat-header-cell *matHeaderCellDef> Aplicación y Justificación </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Aplicacion_y_Justificacion}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_requerida">
+                            <th mat-header-cell *matHeaderCellDef> Fecha requerida </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_requerida |date}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Observaciones">
+                            <th mat-header-cell *matHeaderCellDef> Observaciones </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Observaciones}} </td>
+                          </ng-container>
+                          <!-- <ng-container matColumnDef="Estatus_de_Seguimiento">
+                            <th mat-header-cell *matHeaderCellDef> Estatus de Seguimiento </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Estatus_de_Seguimiento_Estatus_de_Seguimiento?.Descripcion}}
+                            </td>
+                          </ng-container> -->
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex"
+                              [attr.colspan]="getItem_Compras_GeneralesColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_de_Item_Compras_GeneralesItems" class="mt-3">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceItem_Compras_Generales.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Descripción</mat-label>
+                                          <input matInput formControlName="Descripcion" type="text" maxlength="100"
+                                            required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Cantidad Requerida</mat-label>
+                                          <input matInput formControlName="Cantidad_Requerida" type="number" min="0"
+                                            max="999999999" maxLength="9"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3 clsBottomSelect">
+                                        <mat-form-field class="lbl-ng-select">
+                                          <mat-label>Unidad de Medida</mat-label>
+                                          <ng-select ngSelectMat formControlName="Unidad_de_Medida"
+                                            dropdownPosition="bottom" [notFoundText]="notFound">
+                                            <ng-option *ngFor="let option of varUnidadMedida" [value]="option.Clave">
+                                              {{option.Descripcion}}
+                                            </ng-option>
+                                          </ng-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3 clsBottomSelect">
+                                        <mat-form-field class="lbl-ng-select">
+                                          <mat-label>Urgencia</mat-label>
+                                          <ng-select ngSelectMat formControlName="Urgencia" dropdownPosition="bottom"
+                                            [notFoundText]="notFound">
+                                            <ng-option *ngFor="let option of varUrgenciaArray" [value]="option.Folio">
+                                              {{option.Descripcion}}
+                                            </ng-option>
+                                          </ng-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Aplicación y Justificación</mat-label>
+                                          <input matInput formControlName="Aplicacion_y_Justificacion" type="text"
+                                            maxlength="200" required />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha requerida</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_requerida" type="text" required />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Observaciones</mat-label>
+                                          <input matInput formControlName="Observaciones" type="text" maxlength="200" />
+                                        </mat-form-field>
+                                      </div>
+                                      <!-- <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Estatus de Seguimiento </mat-label>
+                                          <mat-select placeholder="Estatus de Seguimiento "
+                                            formControlName="Estatus_de_Seguimiento">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varEstatus_de_Seguimiento"
+                                              [value]="item.Folio">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div> -->
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                                          (click)="element.edit = false; saveItem_Compras_Generales(element);"(click)="MRaddItem_Compras_Generales = false"
+                                          [disabled]="!Item_Compras_GeneralesItems.controls[dataIndex].valid">
+                                          Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditItem_Compras_Generales(element)"(click)="MRaddItem_Compras_Generales = false"
+                                          mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getItem_Compras_GeneralesColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getItem_Compras_GeneralesColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator #paginatorItem_Compras_Generales="matPaginator" [pageSizeOptions]="[5, 10, 20]"
+                          showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab aria-label="Autorizado_por_Jefe_Inmediato" label="Autorizado por Jefe Inmediato"> <br>
+                  <div id="tabAutorizado_por_Jefe_Inmediato" class="row">
+                    <div id="divFecha_de_Autorizacion" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Autorizacion</mat-label>
+                        <input (dateChange)="Fecha_de_Autorizacion_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Autorizacion_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Autorizacion.open()"
+                          [matDatepicker]="datePickerFecha_de_Autorizacion" formControlName="Fecha_de_Autorizacion"
+                          type="text" required />
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerFecha_de_Autorizacion"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Autorizacion></mat-datepicker>
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('Fecha_de_Autorizacion').hasError('required')">
+                          Fecha de Autorizacion es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHora_de_Autorizacion" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Hora de Autorizacion</mat-label>
+                        <input (change)="Hora_de_Autorizacion_ExecuteBusinessRules()"
+                          (blur)="Hora_de_Autorizacion_ExecuteBusinessRules()" formControlName="Hora_de_Autorizacion"
+                          matInput placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('Hora_de_Autorizacion').hasError('required')">
+                          Hora de Autorizacion es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAutorizado_por" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario que Autoriza</mat-label>
+                        <mat-select (selectionChange)="Autorizado_por_ExecuteBusinessRules()"
+                          placeholder="Usuario que Autoriza" formControlName="Autorizado_por" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSpartan_User" [value]="item.Id_User">
+                            {{ item.Name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="Solicitud_de_Compras_GeneralesForm.get('Autorizado_por').hasError('required')">
+                          Usuario que Autoriza es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divResultado" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Resultado</mat-label>
+                        <mat-select (selectionChange)="Resultado_ExecuteBusinessRules()" placeholder="Resultado"
+                          formControlName="Resultado" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varAutorizacion" [value]="item.Folio">
+                            {{ item.Resultado }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Solicitud_de_Compras_GeneralesForm.get('Resultado').hasError('required')">
+                          Resultado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divObservacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Observación</mat-label>
+                        <input (change)="Observacion_ExecuteBusinessRules()" #Observacion matInput
+                          formControlName="Observacion" type="text" maxlength="100" />
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" mat-raised-button
+                    [disabled]="!Solicitud_de_Compras_GeneralesForm.valid || consult" [hidden]="Solicitud_de_Compras_GeneralesForm.controls['Usuario_que_Registra'].value == UserId &&
+                  Solicitud_de_Compras_GeneralesForm.controls['Estatus_de_Solicitud'].value == 2" color="primary">
+                    Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Solicitud_de_Compras_GeneralesForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Solicitud_de_Compras_GeneralesForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Solicitud_de_Compras_GeneralesForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+
+                  <button type="button" class="mr-3 mb-2" mat-raised-button color="warning" (click)="cancel()"
+                    style="background-color:#ed5565 !important" mat-button>Cancelar</button>
+
+                  <button type="button" (click)="sendRequest()" class="mr-3 mb-2"
+                    *ngIf="operation == 'New' || Solicitud_de_Compras_GeneralesForm.controls['Estatus_de_Solicitud'].value == 5"
+                    [disabled]="!Solicitud_de_Compras_GeneralesForm.valid || consult" mat-raised-button color="primary">
+                    Enviar Solicitar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

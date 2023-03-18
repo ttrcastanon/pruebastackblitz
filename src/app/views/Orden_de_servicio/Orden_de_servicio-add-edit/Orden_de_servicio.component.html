@@ -1,0 +1,2041 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Orden de servicio</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a
+              >
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Orden_de_servicio/list">Orden de servicio</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner
+              name="loading"
+              type="ball-spin-fade"
+              fullScreen="false"
+            >
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form
+              class="m-4"
+              [formGroup]="Orden_de_servicioForm"
+              (ngSubmit)="save()"
+            >
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales">
+                  <br />
+                  <div id="tabDatos_Generales" class="row">
+                    <div
+                      id="divFolio"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Folio</mat-label>
+                        <input
+                          matInput
+                          formControlName="Folio"
+                          [type]="
+                            Orden_de_servicioForm.get('Folio').value == 'Auto'
+                              ? 'text'
+                              : 'number'
+                          "
+                          required
+                        />
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Folio').hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div
+                      id="divFolio_OS"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Folio OS</mat-label>
+                        <input
+                          (change)="Folio_OS_ExecuteBusinessRules()"
+                          #Folio_OS
+                          matInput
+                          formControlName="Folio_OS"
+                          type="text"
+                          maxlength="20"
+                          required
+                        />
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Folio_OS').hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Folio OS es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div
+                      id="divNumero_de_OT"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Número de OT *</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="Numero_de_OT"
+                          [matAutocomplete]="autoNumero_de_OT"
+                        />
+                        <mat-icon style="font-size: 24px" matSuffix
+                          >arrow_drop_down</mat-icon
+                        >
+                        <mat-autocomplete
+                          #autoNumero_de_OT="matAutocomplete"
+                          [displayWith]="displayFnNumero_de_OT"
+                        >
+                          <mat-option
+                            (onSelectionChange)="
+                              Numero_de_OT_ExecuteBusinessRules()
+                            "
+                            *ngFor="let option of optionsNumero_de_OT | async"
+                            [value]="option"
+                          >
+                            {{ option.numero_de_orden }}
+                          </mat-option>
+                          <mat-option
+                            *ngIf="isLoadingNumero_de_OT"
+                            class="is-loading"
+                          >
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint
+                          *ngIf="
+                            !hasOptionsNumero_de_OT && !isLoadingNumero_de_OT
+                          "
+                        >
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Numero_de_OT').hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Numero_de_OT').hasError(
+                              'invalidAutocompleteValue'
+                            )
+                          "
+                        >
+                          Valor inválido. Seleccione un Número de OT de la lista
+                          de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    
+                    <div
+                      id="divModelo"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Modelo</mat-label>
+                        <input matInput type="text" #Modelo [value]="Orden_de_servicioForm.controls.Modelo.value?.Description ?? ''" disabled/>
+                      </mat-form-field>
+                    </div>
+
+
+                    <!-- <div
+                      id="divModelo"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Modelo</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="Modelo"
+                          [matAutocomplete]="autoModelo"
+                        />
+                        <mat-icon style="font-size: 24px" matSuffix
+                          >arrow_drop_down</mat-icon
+                        >
+                        <mat-autocomplete
+                          #autoModelo="matAutocomplete"
+                          [displayWith]="displayFnModelo"
+                        >
+                          <mat-option
+                            (onSelectionChange)="Modelo_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsModelo | async"
+                            [value]="option"
+                          >
+                            {{ option.Descripcion }}
+                          </mat-option>
+                          <mat-option
+                            *ngIf="isLoadingModelo"
+                            class="is-loading"
+                          >
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsModelo && !isLoadingModelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Modelo').hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Modelo').hasError(
+                              'invalidAutocompleteValue'
+                            )
+                          "
+                        >
+                          Valor inválido. Seleccione un Modelo de la lista de
+                          opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div> -->
+                    <div
+                      id="divMatricula"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Matrícula *</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="Matricula"
+                          [matAutocomplete]="autoMatricula"
+                          (change)="onMatriculaChange($event)"
+                        />
+                        <mat-icon style="font-size: 24px" matSuffix
+                          >arrow_drop_down</mat-icon
+                        >
+                        <mat-autocomplete
+                          #autoMatricula="matAutocomplete"
+                          [displayWith]="displayFnMatricula"
+                          (optionSelected)="Matricula_ExecuteBusinessRules()"
+                        >
+                        <!-- (onSelectionChange)="
+                          Matricula_ExecuteBusinessRules()
+                        " -->
+                          <mat-option
+                            *ngFor="let option of optionsMatricula | async"
+                            [value]="option"
+                          >
+                            {{ option.Matricula }}
+                          </mat-option>
+                          <mat-option
+                            *ngIf="isLoadingMatricula"
+                            class="is-loading"
+                          >
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint
+                          *ngIf="!hasOptionsMatricula && !isLoadingMatricula"
+                        >
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Matricula').hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Matricula').hasError(
+                              'invalidAutocompleteValue'
+                            )
+                          "
+                        >
+                          Valor inválido. Seleccione un Matrícula de la lista de
+                          opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div
+                      id="divPropietario"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Propietario</mat-label>
+                        <input matInput type="text" #Propietario [value]="Orden_de_servicioForm.controls.Propietario.value?.Description ?? ''" disabled/>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div
+                      id="divPropietario"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Propietario</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="Propietario"
+                          [matAutocomplete]="autoPropietario"
+                        />
+                        <mat-icon style="font-size: 24px" matSuffix
+                          >arrow_drop_down</mat-icon
+                        >
+                        <mat-autocomplete
+                          #autoPropietario="matAutocomplete"
+                          [displayWith]="displayFnPropietario"
+                        >
+                          <mat-option
+                            (onSelectionChange)="
+                              Propietario_ExecuteBusinessRules()
+                            "
+                            *ngFor="let option of optionsPropietario | async"
+                            [value]="option"
+                          >
+                            {{ option.Nombre }}
+                          </mat-option>
+                          <mat-option
+                            *ngIf="isLoadingPropietario"
+                            class="is-loading"
+                          >
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint
+                          *ngIf="
+                            !hasOptionsPropietario && !isLoadingPropietario
+                          "
+                        >
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Propietario').hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Propietario').hasError(
+                              'invalidAutocompleteValue'
+                            )
+                          "
+                        >
+                          Valor inválido. Seleccione un Propietario de la lista
+                          de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div> -->
+                    <div
+                      id="divFecha_de_apertura"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Fecha de apertura</mat-label>
+                        <input
+                          (dateChange)="
+                            Fecha_de_apertura_ExecuteBusinessRules()
+                          "
+                          (blur)="Fecha_de_apertura_ExecuteBusinessRules()"
+                          matInput
+                          (focus)="datePickerFecha_de_apertura.open()"
+                          [matDatepicker]="datePickerFecha_de_apertura"
+                          formControlName="Fecha_de_apertura"
+                          [max]="today"
+                          type="text"
+                          required
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="datePickerFecha_de_apertura"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker
+                          #datePickerFecha_de_apertura
+                        ></mat-datepicker>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get(
+                              'Fecha_de_apertura'
+                            ).hasError('required')
+                          "
+                        >
+                          Fecha de apertura es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div
+                      id="divFecha_de_cierre"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Fecha de cierre</mat-label>
+                        <input
+                          (dateChange)="Fecha_de_cierre_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_cierre_ExecuteBusinessRules()"
+                          matInput
+                          (focus)="datePickerFecha_de_cierre.open()"
+                          [matDatepicker]="datePickerFecha_de_cierre"
+                          formControlName="Fecha_de_cierre"
+                          [max]="today"
+                          type="text"
+                          required
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="datePickerFecha_de_cierre"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker
+                          #datePickerFecha_de_cierre
+                        ></mat-datepicker>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get(
+                              'Fecha_de_cierre'
+                            ).hasError('required')
+                          "
+                        >
+                          Fecha de cierre es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div
+                      id="divEstatus"
+                      class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width no-padding"
+                        appearance="outline"
+                      >
+                        <mat-label>Estatus</mat-label>
+                        <mat-select
+                          (selectionChange)="Estatus_ExecuteBusinessRules()"
+                          placeholder="Estatus"
+                          formControlName="Estatus"
+                          required
+                        >
+                          <mat-option> </mat-option>
+                          <mat-option
+                            *ngFor="let item of varEstatus_Reporte"
+                            [value]="item.Clave"
+                          >
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="
+                            Orden_de_servicioForm.get('Estatus').hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <!-- REPORTE DE COMPONENTES -->
+                    <div
+                      id="divReportes_por_Componentes"
+                      class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Reportes por Componentes</h4>
+                          <button
+                            *ngIf="operation !== 'Consult'"
+                            color="primary"
+                            mat-mini-fab
+                            type="button"
+                            [disabled]="!can_add_mr_componentes"
+                            (click)="
+                              addReportes_por_ComponentesToMR();
+                              $event.stopPropagation()
+                            "
+                          >
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table
+                          formControlName="Reportes_por_Componentes"
+                          mat-table
+                          [dataSource]="dataSourceReportes_por_Componentes"
+                          multiTemplateDataRows
+                        >
+                          <ng-container
+                            *ngIf="!Orden_de_servicioForm.disabled"
+                            matColumnDef="actions"
+                          >
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element">
+                              <div class="actions">
+                                <button
+                                  mat-icon-button
+                                  class="btn-tbl-edit"
+                                  type="button"
+                                  (click)="
+                                    editReportes_por_Componentes(element)
+                                  "
+                                >
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button
+                                  mat-icon-button
+                                  class="btn-tbl-delete"
+                                  type="button"
+                                  (click)="
+                                    deleteReportes_por_Componentes(element);
+                                    $event.stopPropagation()
+                                  "
+                                >
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Reporte">
+                            <th mat-header-cell *matHeaderCellDef>Reporte</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Reporte_Crear_Reporte?.No_Reporte }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_OS">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Tipo de OS
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{
+                                element.Tipo_de_OS_Reportes_para_OS
+                                  ?.Reporte_de_OS
+                              }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Descripcion_de_Reporte">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Descripción de Reporte
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Descripcion_de_Reporte }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Descripcion_del_componente">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Descripción del componente
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Descripcion_del_componente }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Numero_de_parte">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Número de parte
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Numero_de_parte }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Numero_de_serie">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Número de serie
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Numero_de_serie }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Datos_del_cliente">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Datos del cliente
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Datos_del_cliente }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_1">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_1_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_2">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_2_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_3">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_3_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_4">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_4_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Notificado">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Notificado
+                            </th>
+                            <td
+                              class="center"
+                              mat-cell
+                              *matCellDef="let element"
+                            >
+                              {{ element.Notificado }}
+                            </td>
+                          </ng-container>
+
+                          <!-- Formulario componentes -->
+                          <ng-container matColumnDef="expandedDetail">
+                            <td
+                              mat-cell
+                              *matCellDef="let element; let i = index"
+                              [attr.colspan]="
+                                getReportes_por_ComponentesColumns().length
+                              "
+                            >
+                              <div
+                                [@detailExpand]="
+                                  collapseAll ? 'expanded' : 'collapsed'
+                                "
+                              >
+                                <div *ngIf="element.edit">
+                                  <form
+                                    [formArrayName]="
+                                      Reportes_por_ComponentesItems
+                                    "
+                                  >
+                                    <div
+                                      class="row form-group"
+                                      [formGroup]="
+                                        Reportes_por_ComponentesItemsByElemet(
+                                          element
+                                        )
+                                      "
+                                    >
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Reporte</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Reporte"
+                                            [matAutocomplete]="auto"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectReporte_Detalle_de_reportes_por_componentes(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #auto="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnReporte_Detalle_de_reportes_por_componentes.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of varCrear_Reporte
+                                              "
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="
+                                                updateOptionReporte_Detalle_de_reportes_por_componentes(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.No_Reporte }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingReporte_Detalle_de_reportes_por_componentes
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              varCrear_Reporte.length == 0 &&
+                                              !isLoadingReporte_Detalle_de_reportes_por_componentes &&
+                                              searchReporte_Detalle_de_reportes_por_componentesCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tipo de OS</mat-label>
+                                          <mat-select
+                                            placeholder="Tipo de OS"
+                                            formControlName="Tipo_de_OS"
+                                            (selectionChange)="
+                                              selectTipo_de_OS_Detalle_de_reportes_por_componentes(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option></mat-option>
+                                            <mat-option
+                                              *ngFor="
+                                                let item of varReportes_para_OS
+                                              "
+                                              [value]="item.Folio"
+                                            >
+                                              {{ item.Reporte_de_OS }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label
+                                            >Descripción de Reporte</mat-label
+                                          >
+                                          <input
+                                            matInput
+                                            formControlName="Descripcion_de_Reporte"
+                                            type="text"
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label
+                                            >Descripción del
+                                            componente</mat-label
+                                          >
+                                          <input
+                                            matInput
+                                            formControlName="Descripcion_del_componente"
+                                            type="text"
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Número de parte</mat-label>
+                                          <input
+                                            matInput
+                                            formControlName="Numero_de_parte"
+                                            type="text"
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Número de serie</mat-label>
+                                          <input
+                                            matInput
+                                            formControlName="Numero_de_serie"
+                                            type="text"
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label
+                                            >Datos del cliente</mat-label
+                                          >
+                                          <input
+                                            matInput
+                                            formControlName="Datos_del_cliente"
+                                            type="text"
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a"
+                                            [matAutocomplete]="autoAsignado0"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_Detalle_de_reportes_por_componentes(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #autoAsignado0="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_Detalle_de_reportes_por_componentes.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_Detalle_de_reportes_por_componentes(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_Detalle_de_reportes_por_componentes
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                            element.users.length == 0 &&
+                                              !isLoadingAsignado_a_Detalle_de_reportes_por_componentes &&
+                                              searchAsignado_a_Detalle_de_reportes_por_componentesCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a_1"
+                                            [matAutocomplete]="autoAsignado1"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_1_Detalle_de_reportes_por_componentes(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #autoAsignado1="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_1_Detalle_de_reportes_por_componentes.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users1
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_1_Detalle_de_reportes_por_componentes(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_1_Detalle_de_reportes_por_componentes
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              element.users1.length == 0 &&
+                                              !isLoadingAsignado_a_1_Detalle_de_reportes_por_componentes &&
+                                              searchAsignado_a_1_Detalle_de_reportes_por_componentesCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a_2"
+                                            [matAutocomplete]="autoAsignado2"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_2_Detalle_de_reportes_por_componentes(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #autoAsignado2="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_2_Detalle_de_reportes_por_componentes.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users2
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_2_Detalle_de_reportes_por_componentes(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_2_Detalle_de_reportes_por_componentes
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              element.users2.length == 0 &&
+                                              !isLoadingAsignado_a_2_Detalle_de_reportes_por_componentes &&
+                                              searchAsignado_a_2_Detalle_de_reportes_por_componentesCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a_3"
+                                            [matAutocomplete]="autoAsignado3"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_3_Detalle_de_reportes_por_componentes(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #autoAsignado3="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_3_Detalle_de_reportes_por_componentes.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users3
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_3_Detalle_de_reportes_por_componentes(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_3_Detalle_de_reportes_por_componentes
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              element.users3.length == 0 &&
+                                              !isLoadingAsignado_a_3_Detalle_de_reportes_por_componentes &&
+                                              searchAsignado_a_3_Detalle_de_reportes_por_componentesCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a_4"
+                                            [matAutocomplete]="autoAsignado4"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_4_Detalle_de_reportes_por_componentes(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #autoAsignado4="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_4_Detalle_de_reportes_por_componentes.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users4
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_4_Detalle_de_reportes_por_componentes(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_4_Detalle_de_reportes_por_componentes
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              element.users4.length == 0 &&
+                                              !isLoadingAsignado_a_4_Detalle_de_reportes_por_componentes &&
+                                              searchAsignado_a_4_Detalle_de_reportes_por_componentesCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Notificado</mat-label>
+                                          <input
+                                            matInput
+                                            formControlName="Notificado"
+                                            type="number"
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div
+                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                                      >
+                                        <button
+                                          type="button"
+                                          class="mr-3 btn-sm"
+                                          mat-raised-button
+                                          (click)="
+                                            element.edit = false;
+                                            saveReportes_por_Componentes(
+                                              element
+                                            )
+                                          "
+                                          color="primary"
+                                        >
+                                          Guardar
+                                        </button>
+                                        <button
+                                          type="button"
+                                          class="mr-3 btn-sm"
+                                          mat-raised-button
+                                          color="basic"
+                                          (click)="
+                                            cancelEditReportes_por_Componentes(
+                                              element
+                                            )
+                                          "
+                                          mat-button
+                                        >
+                                          Cancelar
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <tr
+                            mat-header-row
+                            *matHeaderRowDef="
+                              getReportes_por_ComponentesColumns()
+                            "
+                          ></tr>
+                          <tr
+                            mat-row
+                            [ngClass]="{
+                              hide:
+                                row.IsDeleted || (row.edit && row.Folio == 0)
+                            }"
+                            *matRowDef="
+                              let row;
+                              columns: getReportes_por_ComponentesColumns();
+                              let j = index
+                            "
+                          ></tr>
+                          <tr
+                            mat-row
+                            [ngClass]="{ hide: row.IsDeleted }"
+                            *matRowDef="
+                              let row;
+                              columns: ['expandedDetail'];
+                              let j = index
+                            "
+                            class="example-detail-row"
+                          ></tr>
+                        </table>
+                        <mat-paginator
+                          [pageSizeOptions]="[5, 10, 20]"
+                          showFirstLastButtons
+                        >
+                        </mat-paginator>
+                      </div>
+                    </div>
+
+                    <!-- REPORTE DE AERONAVE -->
+                    <div
+                      id="divReportes_por_Aeronave"
+                      class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Reportes por Aeronave</h4>
+                          <button
+                            *ngIf="operation !== 'Consult'"
+                            color="primary"
+                            mat-mini-fab
+                            type="button"
+                            [disabled]="!can_add_mr_aeronaves"
+                            (click)="
+                              addReportes_por_AeronaveToMR();
+                              $event.stopPropagation()
+                            "
+                          >
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table
+                          formControlName="Reportes_por_Aeronave"
+                          mat-table
+                          [dataSource]="dataSourceReportes_por_Aeronave"
+                          multiTemplateDataRows
+                        >
+                          <ng-container
+                            *ngIf="!Orden_de_servicioForm.disabled"
+                            matColumnDef="actions"
+                          >
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element">
+                              <div class="actions">
+                                <button
+                                  mat-icon-button
+                                  class="btn-tbl-edit"
+                                  type="button"
+                                  (click)="editReportes_por_Aeronave(element)"
+                                >
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button
+                                  mat-icon-button
+                                  class="btn-tbl-delete"
+                                  type="button"
+                                  (click)="
+                                    deleteReportes_por_Aeronave(element);
+                                    $event.stopPropagation()
+                                  "
+                                >
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Reporte">
+                            <th mat-header-cell *matHeaderCellDef>Reporte</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Reporte_Crear_Reporte?.No_Reporte }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_OS">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Tipo de OS
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{
+                                element.Tipo_de_OS_Reportes_para_OS
+                                  ?.Reporte_de_OS
+                              }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Descripcion_de_Reporte">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Descripción de Reporte
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Descripcion_de_Reporte }}
+                            </td>
+                          </ng-container>
+                          
+                          <ng-container matColumnDef="Matricula">
+                            <th mat-header-cell *matHeaderCellDef>Matricula</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Matricula }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Modelo">
+                            <th mat-header-cell *matHeaderCellDef>Modelo</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Modelo }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Numero_de_serie">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Numero de serie
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Numero_de_serie }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Datos_del_cliente">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Datos del cliente
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Datos_del_cliente }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_1">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_1_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_2">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_2_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_3">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_3_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Asignado_a_4">
+                            <th mat-header-cell *matHeaderCellDef>
+                              Asignado a:
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.Asignado_a_4_Spartan_User?.Name }}
+                            </td>
+                          </ng-container>
+
+                          <!-- Formulario -->
+                          <ng-container matColumnDef="expandedDetail">
+                            <td
+                              mat-cell
+                              *matCellDef="let element; let i = index"
+                              [attr.colspan]="
+                                getReportes_por_AeronaveColumns().length
+                              "
+                            >
+                              <div
+                                [@detailExpand]="
+                                  collapseAll ? 'expanded' : 'collapsed'
+                                "
+                              >
+                                <div *ngIf="element.edit">
+                                  <form
+                                    [formArrayName]="Reportes_por_AeronaveItems"
+                                  >
+                                    <div
+                                      class="row form-group"
+                                      [formGroup]="
+                                        Reportes_por_AeronaveItemsByElemet(
+                                          element
+                                        )
+                                      "
+                                    >
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Reporte</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Reporte"
+                                            [matAutocomplete]="AeroautoReporte"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectReporte_Detalle_de_reportes_por_aeronave(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #AeroautoReporte="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnReporte_Detalle_de_reportes_por_aeronave.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of varCrear_Reporte
+                                              "
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="
+                                                updateOptionReporte_Detalle_de_reportes_por_aeronave(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.No_Reporte }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingReporte_Detalle_de_reportes_por_aeronave
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              varCrear_Reporte.length == 0 &&
+                                              !isLoadingReporte_Detalle_de_reportes_por_aeronave &&
+                                              searchReporte_Detalle_de_reportes_por_aeronaveCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Matricula</mat-label>
+                                          <input
+                                            matInput
+                                            formControlName="Matricula"
+                                            type="text"
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Modelo</mat-label>
+                                          <input
+                                            matInput
+                                            formControlName="Modelo"
+                                            type="text"
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Numero de serie</mat-label>
+                                          <input
+                                            matInput
+                                            formControlName="Numero_de_serie"
+                                            type="text"
+                                          />
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a"
+                                            [matAutocomplete]="AeroautoAsignado0"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_Detalle_de_reportes_por_aeronave(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #AeroautoAsignado0="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_Detalle_de_reportes_por_aeronave.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_Detalle_de_reportes_por_aeronave(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_Detalle_de_reportes_por_aeronave
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              element.users.length == 0 &&
+                                              !isLoadingAsignado_a_Detalle_de_reportes_por_aeronave &&
+                                              searchAsignado_a_Detalle_de_reportes_por_aeronaveCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a_1"
+                                            [matAutocomplete]="AeroautoAsignado1"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_1_Detalle_de_reportes_por_aeronave(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #AeroautoAsignado1="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_1_Detalle_de_reportes_por_aeronave.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users1
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_1_Detalle_de_reportes_por_aeronave(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_1_Detalle_de_reportes_por_aeronave
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              element.users1.length == 0 &&
+                                              !isLoadingAsignado_a_1_Detalle_de_reportes_por_aeronave &&
+                                              searchAsignado_a_1_Detalle_de_reportes_por_aeronaveCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a_2"
+                                            [matAutocomplete]="AeroautoAsignado2"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_2_Detalle_de_reportes_por_aeronave(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #AeroautoAsignado2="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_2_Detalle_de_reportes_por_aeronave.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users2
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_2_Detalle_de_reportes_por_aeronave(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_2_Detalle_de_reportes_por_aeronave
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              element.users2.length == 0 &&
+                                              !isLoadingAsignado_a_2_Detalle_de_reportes_por_aeronave &&
+                                              searchAsignado_a_2_Detalle_de_reportes_por_aeronaveCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a_3"
+                                            [matAutocomplete]="AeroautoAsignado3"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_3_Detalle_de_reportes_por_aeronave(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #AeroautoAsignado3="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_3_Detalle_de_reportes_por_aeronave.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users3
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_3_Detalle_de_reportes_por_aeronave(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_3_Detalle_de_reportes_por_aeronave
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              element.users3.length == 0 &&
+                                              !isLoadingAsignado_a_3_Detalle_de_reportes_por_aeronave &&
+                                              searchAsignado_a_3_Detalle_de_reportes_por_aeronaveCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                      <div
+                                        class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                      >
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Asignado a:</mat-label>
+                                          <input
+                                            type="text"
+                                            matInput
+                                            formControlName="Asignado_a_4"
+                                            [matAutocomplete]="AeroautoAsignado4"
+                                          />
+                                          <mat-icon
+                                            style="font-size: 24px"
+                                            matSuffix
+                                            >arrow_drop_down</mat-icon
+                                          >
+                                          <mat-autocomplete
+                                            (optionSelected)="
+                                              selectAsignado_a_4_Detalle_de_reportes_por_aeronave(
+                                                $event,
+                                                element
+                                              )
+                                            "
+                                            #AeroautoAsignado4="matAutocomplete"
+                                            [displayWith]="
+                                              displayFnAsignado_a_4_Detalle_de_reportes_por_aeronave.bind(
+                                                cthis,
+                                                element
+                                              )
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let option of element.users4
+                                              "
+                                              [value]="option.Id_User"
+                                              (onSelectionChange)="
+                                                updateOptionAsignado_a_4_Detalle_de_reportes_por_aeronave(
+                                                  $event,
+                                                  element
+                                                )
+                                              "
+                                            >
+                                              {{ option.Name }}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="
+                                                isLoadingAsignado_a_4_Detalle_de_reportes_por_aeronave
+                                              "
+                                              class="is-loading"
+                                            >
+                                              <mat-spinner
+                                                diameter="50"
+                                              ></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="
+                                              element.users4.length == 0 &&
+                                              !isLoadingAsignado_a_4_Detalle_de_reportes_por_aeronave &&
+                                              searchAsignado_a_4_Detalle_de_reportes_por_aeronaveCompleted
+                                            "
+                                            >No se encontraron
+                                            registros.</mat-hint
+                                          >
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div
+                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                                      >
+                                        <button
+                                          type="button"
+                                          class="mr-3 btn-sm"
+                                          mat-raised-button
+                                          (click)="
+                                            element.edit = false;
+                                            saveReportes_por_Aeronave(element)
+                                          "
+                                          color="primary"
+                                        >
+                                          Guardar
+                                        </button>
+                                        <button
+                                          type="button"
+                                          class="mr-3 btn-sm"
+                                          mat-raised-button
+                                          color="basic"
+                                          (click)="
+                                            cancelEditReportes_por_Aeronave(
+                                              element
+                                            )
+                                          "
+                                          mat-button
+                                        >
+                                          Cancelar
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <tr
+                            mat-header-row
+                            *matHeaderRowDef="getReportes_por_AeronaveColumns()"
+                          ></tr>
+                          <tr
+                            mat-row
+                            [ngClass]="{
+                              hide:
+                                row.IsDeleted || (row.edit && row.Folio == 0)
+                            }"
+                            *matRowDef="
+                              let row;
+                              columns: getReportes_por_AeronaveColumns();
+                              let j = index
+                            "
+                          ></tr>
+                          <tr
+                            mat-row
+                            [ngClass]="{ hide: row.IsDeleted }"
+                            *matRowDef="
+                              let row;
+                              columns: ['expandedDetail'];
+                              let j = index
+                            "
+                            class="example-detail-row"
+                          ></tr>
+                        </table>
+                        <mat-paginator
+                          [pageSizeOptions]="[5, 10, 20]"
+                          showFirstLastButtons
+                        >
+                        </mat-paginator>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="mr-3 mb-2"
+                    [disabled]="!Orden_de_servicioForm.valid || consult"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    Guardar
+                  </button>
+                  <button
+                    type="button"
+                    class="mr-3 mb-2"
+                    (click)="saveAndNew()"
+                    [disabled]="!Orden_de_servicioForm.valid || consult"
+                    mat-raised-button
+                    color="primary"
+                    hidden
+                  >
+                    Guardar y Nuevo
+                  </button>
+                  <button
+                    type="button"
+                    class="mr-3 mb-2"
+                    (click)="saveAndCopy()"
+                    [disabled]="!Orden_de_servicioForm.valid || consult"
+                    mat-raised-button
+                    color="primary"
+                    hidden
+                  >
+                    Guardar y Copia
+                  </button>
+                  <button
+                    [hidden]="!hasPermision('Configure')"
+                    class="mr-3 mb-2"
+                    [disabled]="!Orden_de_servicioForm.valid || consult"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    Configurar
+                  </button>
+                  <button
+                    type="button"
+                    class="mb-2"
+                    mat-raised-button
+                    color="basic"
+                    (click)="goToList()"
+                    mat-button
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

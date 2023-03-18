@@ -1,0 +1,144 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Layout Incidencia Vuelos</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Layout_Incidencia_Vuelos/list">Layout Incidencia Vuelos</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Layout_Incidencia_VuelosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Layout_Incidencia_VuelosForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Layout_Incidencia_VuelosForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFolio_de_carga_manual" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Folio de carga manual</mat-label>
+                        <input (change)="Folio_de_carga_manual_ExecuteBusinessRules()" matInput formControlName="Folio_de_carga_manual" [type]="Layout_Incidencia_VuelosForm.get('Folio_de_carga_manual').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Layout_Incidencia_VuelosForm.get('Folio_de_carga_manual').hasError('required')">
+                          Folio de carga manual  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha</mat-label>
+                        <input (dateChange)="Fecha_ExecuteBusinessRules()" (blur)="Fecha_ExecuteBusinessRules()" matInput (focus)="datePickerFecha.open()" [matDatepicker]="datePickerFecha" formControlName="Fecha" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha></mat-datepicker>
+                        <mat-error *ngIf="Layout_Incidencia_VuelosForm.get('Fecha').hasError('required')">
+                          Fecha  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divVuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Vuelo</mat-label>
+                        <mat-select (selectionChange)="Vuelo_ExecuteBusinessRules()" placeholder="Vuelo" formControlName="Vuelo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varSolicitud_de_Vuelo" [value]="item.Folio">
+                            {{ item.Numero_de_Vuelo }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Layout_Incidencia_VuelosForm.get('Vuelo').hasError('required')">
+                          Vuelo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipoIncidencia" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>TipoIncidencia</mat-label>
+                        <mat-select (selectionChange)="TipoIncidencia_ExecuteBusinessRules()" placeholder="TipoIncidencia" formControlName="TipoIncidencia" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_Incidencia_Vuelos" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Layout_Incidencia_VuelosForm.get('TipoIncidencia').hasError('required')">
+                          TipoIncidencia es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divResponsable" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Responsable</mat-label>
+                        <mat-select (selectionChange)="Responsable_ExecuteBusinessRules()" placeholder="Responsable" formControlName="Responsable" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varResponsable_Incidencia_Vuelo" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Layout_Incidencia_VuelosForm.get('Responsable').hasError('required')">
+                          Responsable es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotivo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Motivo</mat-label>
+                        <input (change)="Motivo_ExecuteBusinessRules()" #Motivo matInput formControlName="Motivo" type="text" maxlength="4000" required />
+                        <mat-error *ngIf="Layout_Incidencia_VuelosForm.get('Motivo').hasError('required')">
+                          Motivo  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Layout_Incidencia_VuelosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Layout_Incidencia_VuelosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Layout_Incidencia_VuelosForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Layout_Incidencia_VuelosForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

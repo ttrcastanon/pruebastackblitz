@@ -1,0 +1,262 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{title}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active">
+              {{title}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="row justify-content-center align-items-center" style="height: 70vh"
+            *ngIf="dataSource.loading$ | async; else formTemplate">
+            <mat-spinner></mat-spinner>
+          </div>
+          <ng-template #formTemplate>
+            <div class="body">
+              <div class="row">
+                <button class="mx-1" mat-raised-button (click)="clearFilter()">
+                  Limpiar filtro
+                </button>
+              </div>
+              <div class="table-responsive p-1" style="max-height: 70vh">
+                <form [formGroup]="filtrosForm">
+                  <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label> Desde</mat-label>
+                        <input matInput (focus)="rpickerafechaDesde.open()" [matDatepicker]="rpickerafechaDesde"
+                          formControlName="FechaDesde" type="text" (dateChange)="setMinFechaHasta()" />
+                        <mat-datepicker-toggle matSuffix [for]="rpickerafechaDesde"></mat-datepicker-toggle>
+                        <mat-datepicker #rpickerafechaDesde></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label> Hasta</mat-label>
+                        <input matInput (focus)="rpickerafechaHasta.open()" [matDatepicker]="rpickerafechaHasta"
+                          formControlName="FechaHasta" [min]="minFechaHasta" type="text" />
+                        <mat-datepicker-toggle matSuffix [for]="rpickerafechaHasta"></mat-datepicker-toggle>
+                        <mat-datepicker #rpickerafechaHasta></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 bottom-select">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Aeropuerto</mat-label>
+                        <ng-select ngSelectMat formControlName="Aeropuerto" dropdownPosition="bottom"
+                          (search)="searchAeropuerto($event.term)" (clear)="searchAeropuerto()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingAeropuerto">
+                          <ng-option *ngFor="let option of listaAeropuertos | async"
+                            [value]="option.Aeropuerto_ID">{{option.Descripcion}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 bottom-select">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Aeropuerto Destino</mat-label>
+                        <ng-select ngSelectMat formControlName="Aeropuerto_Destino" dropdownPosition="bottom"
+                          (search)="searchAeropuerto_Destino($event.term)" (clear)="searchAeropuerto_Destino('')"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingAeropuerto_Destino">
+                          <ng-option *ngFor="let option of listaAeropuerto_Destino | async"
+                            [value]="option.Aeropuerto_ID">{{option.Descripcion}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 bottom-select">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Aeronaves</mat-label>
+                        <ng-select ngSelectMat formControlName="Aeronaves" dropdownPosition="bottom"
+                          (search)="searchAeronaves($event.term)" (clear)="searchAeronaves('')"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingAeronaves">
+                          <ng-option *ngFor="let option of listaAeronaves | async"
+                            [value]="option.Matricula">{{option.Matricula}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Imprimir Solo Aeronaves Activas</mat-label>
+                        <mat-select formControlName="Imprimir_solo_aeronaves_activas">
+                          <mat-option [value]="''"> Todos </mat-option>
+                          <mat-option [value]="1"> Si </mat-option>
+                          <mat-option [value]="2"> No </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Mostrar</mat-label>
+                        <mat-select formControlName="Mostrar_Aeronave">
+                          <mat-option [value]="3"> Todos </mat-option>
+                          <mat-option [value]="2"> Terceros </mat-option>
+                          <mat-option [value]="1"> Del Grupo </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 bottom-select">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Clientes</mat-label>
+                        <ng-select ngSelectMat formControlName="Clientes" dropdownPosition="bottom"
+                          (search)="searchClientes($event.term)" (clear)="searchClientes('')"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingClientes">
+                          <ng-option *ngFor="let option of listaClientes | async"
+                            [value]="option.Clave">{{option.Razon_Social}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Imprimir Solo Clientes Activas</mat-label>
+                        <mat-select formControlName="Imprimir_solo_clientes_activos">
+                          <mat-option [value]="''"> Todos </mat-option>
+                          <mat-option [value]="1"> Si </mat-option>
+                          <mat-option [value]="2"> No </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Mostrar</mat-label>
+                        <mat-select formControlName="Mostrar_Cliente">
+                          <mat-option [value]="3"> Todos </mat-option>
+                          <mat-option [value]="2"> Terceros </mat-option>
+                          <mat-option [value]="1"> Del Grupo </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 bottom-select">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Pasajeros</mat-label>
+                        <ng-select ngSelectMat formControlName="Pasajeros" dropdownPosition="bottom" appendTo="body"
+                          (search)="searchPasajeros($event.term)" (clear)="searchPasajeros('')"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingPasajeros">
+                          <ng-option *ngFor="let option of listaPasajeros | async"
+                            [value]="option.Clave">{{option.Nombre_completo}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Imprimir Solo Pasajeros Activos</mat-label>
+                        <mat-select formControlName="Imprimir_solo_pasajeros_activos">
+                          <mat-option [value]="''"> Todos </mat-option>
+                          <mat-option [value]="1"> Si </mat-option>
+                          <mat-option [value]="0"> No </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Mostrar</mat-label>
+                        <mat-select formControlName="Mostrar_Pasajero">
+                          <mat-option [value]="3"> Todos </mat-option>
+                          <mat-option [value]="2"> Terceros </mat-option>
+                          <mat-option [value]="1"> Dle Grupo </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+
+                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 bottom-select">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Pilotos</mat-label>
+                        <ng-select ngSelectMat formControlName="Pilotos" dropdownPosition="bottom" appendTo="body"
+                          (search)="searchPilotos($event.term)" (clear)="searchPilotos('')" [loadingText]="loadingText"
+                          [notFoundText]="notFound" [loading]="isLoadingPilotos">
+                          <ng-option *ngFor="let option of listaPilotos | async"
+                            [value]="option.Clave">{{option.Nombre_completo}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+
+                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Imprimir Solo Pilotos Activos</mat-label>
+                        <mat-select formControlName="Imprimir_solo_pilotos_activos">
+                          <mat-option [value]="''"> Todos </mat-option>
+                          <mat-option [value]="1"> Si </mat-option>
+                          <mat-option [value]="2"> No </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Mostrar</mat-label>
+                        <mat-select formControlName="Mostrar_Piloto">
+                          <mat-option [value]="3"> Todos </mat-option>
+                          <mat-option [value]="2"> Terceros </mat-option>
+                          <mat-option [value]="1"> Del Grupo </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Vuelos Como Capitan o Primer Oficial</mat-label>
+                        <mat-select formControlName="Vuelos_como_capitan_o_primer_oficial">
+                          <mat-option [value]="''"> Todos </mat-option>
+                          <mat-option [value]="1"> Si </mat-option>
+                          <mat-option [value]="2"> No </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+
+
+                </form>
+              </div>
+              <!-- Exportar -->
+              <div class="row justify-content-end">
+                <button class="mx-1" mat-raised-button title="Excel" (click)="ActionExport(ExportType.XLS)">
+                  Excel
+                </button>
+                <button class="mx-1" mat-raised-button title="PDF" (click)="ActionExport(ExportType.PDF)">
+                  PDF
+                </button>
+
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

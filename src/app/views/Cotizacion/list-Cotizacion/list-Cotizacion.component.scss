@@ -1,0 +1,323 @@
+﻿.f-w {
+    width: 100%;
+}
+
+mat-table {
+    display       : flex;
+    flex-direction: column;
+}
+
+mat-cell:first-of-type,
+mat-header-cell:first-of-type,
+mat-footer-cell:first-of-type {
+    padding-left: 0;
+}
+
+.spinner-container {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+}
+
+mat-form-field.filter {
+    width: 100%;
+}
+
+mat-form-field.filter .mat-form-field-infix {
+    border: 1px solid #9e9e9e;
+}
+
+.filter {
+    font-size: 8px;
+    height   : 38px;
+}
+
+.mat-column-acciones,
+.mat-column-acciones_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Folio,
+.mat-column-Folio_filtro {
+    width: 50px;
+    flex : 0 0 50px !important;
+}
+
+.mat-column-Fecha_de_Registro,
+.mat-column-Fecha_de_Registro_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Hora_de_Registro,
+.mat-column-Hora_de_Registro_filtro {
+    width: 90px;
+    flex : 0 0 90px !important;
+}
+
+.mat-column-Usuario_que_Registra,
+.mat-column-Usuario_que_Registra_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Numero_de_Cotizacion,
+.mat-column-Numero_de_Cotizacion_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Orden_de_Trabajo_Origen,
+.mat-column-Orden_de_Trabajo_Origen_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Orden_de_Trabajo_Generada,
+.mat-column-Orden_de_Trabajo_Generada_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Tipo_de_Reporte,
+.mat-column-Tipo_de_Reporte_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Tipo_de_ingreso,
+.mat-column-Tipo_de_ingreso_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Cliente,
+.mat-column-Cliente_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Matricula,
+.mat-column-Matricula_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Modelo,
+.mat-column-Modelo_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Contacto,
+.mat-column-Contacto_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Tiempo_de_Ejecucion,
+.mat-column-Tiempo_de_Ejecucion_filtro {
+    width: 80px;
+    flex : 0 0 80px !important;
+}
+
+.mat-column-Enviar_Cotizacion_a_Cliente,
+.mat-column-Enviar_Cotizacion_a_Cliente_filtro {
+    width: 100px;
+    flex : 0 0 100px !important;
+}
+
+.mat-column-Redaccion_Correo_para_Cliente,
+.mat-column-Redaccion_Correo_para_Cliente_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Clausulas_Especificas,
+.mat-column-Clausulas_Especificas_filtro {
+    width          : 150px;
+    flex           : 0 0 150px !important;
+    flex-direction : column;
+    justify-content: center;
+}
+
+.btn-tbl-Clausulas_Especificas {
+    color: #3f51b5;
+}
+
+.mat-column-Clausulas_Generales,
+.mat-column-Clausulas_Generales_filtro {
+    width          : 150px;
+    flex           : 0 0 150px !important;
+    flex-direction : column;
+    justify-content: center;
+}
+
+.btn-tbl-Clausulas_Generales {
+    color: #3f51b5;
+}
+
+.mat-column-Estatus,
+.mat-column-Estatus_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Mano_de_Obra,
+.mat-column-Mano_de_Obra_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Partes,
+.mat-column-Partes_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Consumibles,
+.mat-column-Consumibles_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Total,
+.mat-column-Total_filtro {
+    width: 120px;
+    flex : 0 0 120px !important;
+}
+
+.mat-column-Porcentaje_de_Consumibles,
+.mat-column-Porcentaje_de_Consumibles_filtro {
+    width: 80px;
+    flex : 0 0 80px !important;
+}
+
+.mat-column-Porcentaje_de_Anticipo,
+.mat-column-Porcentaje_de_Anticipo_filtro {
+    width: 80px;
+    flex : 0 0 80px !important;
+}
+
+.mat-column-Comentarios_Mantenimiento,
+.mat-column-Comentarios_Mantenimiento_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Reporte,
+.mat-column-Reporte_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Item_de_Inspeccion,
+.mat-column-Item_de_Inspeccion_filtro {
+    width: 80px;
+    flex : 0 0 80px !important;
+}
+
+.mat-column-Motivo_de_Edicion,
+.mat-column-Motivo_de_Edicion_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Observaciones,
+.mat-column-Observaciones_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Fecha_de_Respuesta,
+.mat-column-Fecha_de_Respuesta_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Hora_de_Respuesta,
+.mat-column-Hora_de_Respuesta_filtro {
+    width: 90px;
+    flex : 0 0 90px !important;
+}
+
+.mat-column-Usuario_que_Registra_Respuesta,
+.mat-column-Usuario_que_Registra_Respuesta_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Respuesta,
+.mat-column-Respuesta_filtro {
+    width: 110px;
+    flex : 0 0 110px !important;
+}
+
+.mat-column-Observaciones_Respeusta,
+.mat-column-Observaciones_Respeusta_filtro {
+    width: 180px;
+    flex : 0 0 180px !important;
+}
+
+.mat-column-Dia_de_Llegada_del_Avion,
+.mat-column-Dia_de_Llegada_del_Avion_filtro {
+    width: 150px;
+    flex : 0 0 150px !important;
+}
+
+.mat-column-Hora_de_Llegada_del_Avion,
+.mat-column-Hora_de_Llegada_del_Avion_filtro {
+    width: 90px;
+    flex : 0 0 90px !important;
+}
+
+
+.mat-filtro-row mat-cell {
+    padding: 0 2px;
+}
+
+.mat-filtro-row :host ::ng-deep .mat-form-field-infix {
+    padding: 1px 2px 6px !important;
+}
+
+mat-datepicker-toggle {
+    display: inline-block;
+    width  : 25px;
+}
+
+.mat-header-row,
+.mat-row {
+    display: inline-flex;
+}
+
+.filter-select {
+    font-size: 9.5px;
+    height   : 38px;
+}
+
+.filter-select mat-option {
+    font-size: 12px !important;
+}
+
+:host ::ng-deep .mat-sort-header-container {
+    margin: 0 auto;
+}
+
+.mat-raised-button {
+    line-height: 20px;
+}
+
+
+@media print {
+    @page {
+        size  : auto;
+        size  : tabloid;
+        margin: 0mm;
+    }
+
+    .pagina {
+        page-break-inside: avoid;
+        page-break-after : always;
+    }
+}

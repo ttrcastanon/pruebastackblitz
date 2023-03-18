@@ -1,0 +1,60 @@
+tr.example-detail-row {
+    height: 0;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.row-container {
+    visibility     : visible;
+    display        : flex;
+    flex-direction : row;
+    justify-content: space-between;
+    flex-wrap      : wrap;
+    margin-top     : 10px;
+}
+
+.row-container>.mat-form-field {
+    width: 19%;
+}
+
+.row-container>.mat-checkbox {
+    padding-top: 15px;
+}
+
+.hide {
+    display: none;
+}
+
+.center {
+    text-align     : center;
+    justify-content: center;
+}
+
+:host ::ng-deep .no-padding div.mat-form-field-wrapper {
+    padding-bottom: 0
+}
+
+.mat-table .mat-header-cell {
+    padding-right: 20px;
+}
+
+.top-action-container-table {
+    display        : flex;
+    flex-direction : row;
+    justify-content: space-between;
+    padding-top    : 15px;
+}
+
+
+::ng-deep .cdk-overlay-container mat-datepicker-content{
+    z-index:2000;
+  }

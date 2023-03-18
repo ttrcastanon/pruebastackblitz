@@ -1,0 +1,304 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Cliente</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Cliente/list">Cliente</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="ClienteForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divClave" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Clave</mat-label>
+                        <input matInput formControlName="Clave" [type]="ClienteForm.get('Clave').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="ClienteForm.get('Clave').hasError('required')">
+                          Clave es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divID_Dynamics" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>ID Dynamics</mat-label>
+                        <input (change)="ID_Dynamics_ExecuteBusinessRules()" #ID_Dynamics matInput formControlName="ID_Dynamics" type="text" maxlength="50"  />
+                        <mat-error *ngIf="ClienteForm.get('ID_Dynamics').hasError('required')">
+                          ID Dynamics  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divRFC" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>RFC</mat-label>
+                        <input (change)="RFC_ExecuteBusinessRules()" #RFC matInput formControlName="RFC" type="text" maxlength="50"  />
+                        <mat-error *ngIf="ClienteForm.get('RFC').hasError('required')">
+                          RFC  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divRazon_Social" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Razón Social</mat-label>
+                        <input (change)="Razon_Social_ExecuteBusinessRules()" #Razon_Social matInput formControlName="Razon_Social" type="text" maxlength="120" required />
+                        <mat-error *ngIf="ClienteForm.get('Razon_Social').hasError('required')">
+                          Razón Social  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNombre_Corto" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nombre Corto</mat-label>
+                        <input (change)="Nombre_Corto_ExecuteBusinessRules()" #Nombre_Corto matInput formControlName="Nombre_Corto" type="text" maxlength="80" required />
+                        <mat-error *ngIf="ClienteForm.get('Nombre_Corto').hasError('required')">
+                          Nombre Corto  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divContacto" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Contacto</mat-label>
+                        <input (change)="Contacto_ExecuteBusinessRules()" #Contacto matInput formControlName="Contacto" type="text" maxlength="120" required />
+                        <mat-error *ngIf="ClienteForm.get('Contacto').hasError('required')">
+                          Contacto  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDireccion_Fiscal" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Dirección Fiscal</mat-label>
+                        <input (change)="Direccion_Fiscal_ExecuteBusinessRules()" #Direccion_Fiscal matInput formControlName="Direccion_Fiscal" type="text" maxlength="255"  />
+                        <mat-error *ngIf="ClienteForm.get('Direccion_Fiscal').hasError('required')">
+                          Dirección Fiscal  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDireccion_Postal" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Dirección Postal</mat-label>
+                        <input (change)="Direccion_Postal_ExecuteBusinessRules()" #Direccion_Postal matInput formControlName="Direccion_Postal" type="text" maxlength="255"  />
+                        <mat-error *ngIf="ClienteForm.get('Direccion_Postal').hasError('required')">
+                          Dirección Postal  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCorreo_Electronico" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Correo Electrónico</mat-label>
+                        <input (change)="Correo_Electronico_ExecuteBusinessRules()" #Correo_Electronico matInput formControlName="Correo_Electronico" type="email" maxlength="60" required />
+                        <mat-error *ngIf="ClienteForm.get('Correo_Electronico').hasError('required')">
+                          Correo Electrónico  es requerido
+                        </mat-error>
+                        <mat-error *ngIf="ClienteForm.get('Correo_Electronico').hasError('pattern')">
+                          Correo electrónico invalido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTelefono_de_Contacto" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Teléfono de Contacto</mat-label>
+                        <input (change)="Telefono_de_Contacto_ExecuteBusinessRules()" #Telefono_de_Contacto
+                         matInput formControlName="Telefono_de_Contacto" type="text" maxlength="20" required placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" />
+                        <mat-error *ngIf="ClienteForm.get('Telefono_de_Contacto').hasError('required')">
+                          Teléfono de Contacto  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTelefono_de_Contacto_2" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Teléfono de Contacto 2</mat-label>
+                        <input (change)="Telefono_de_Contacto_2_ExecuteBusinessRules()" #Telefono_de_Contacto_2
+                         matInput formControlName="Telefono_de_Contacto_2" type="text" maxlength="20"  placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000"  />
+                        <mat-error *ngIf="ClienteForm.get('Telefono_de_Contacto_2').hasError('required')">
+                          Teléfono de Contacto 2  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCelular_de_Contacto" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Celular de Contacto</mat-label>
+                        <input (change)="Celular_de_Contacto_ExecuteBusinessRules()" #Celular_de_Contacto
+                         matInput formControlName="Celular_de_Contacto" type="text" maxlength="20"  placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" />
+                        <mat-error *ngIf="ClienteForm.get('Celular_de_Contacto').hasError('required')">
+                          Celular de Contacto  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFax" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fax</mat-label>
+                        <input (change)="Fax_ExecuteBusinessRules()" #Fax matInput formControlName="Fax" maxlength="20" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000"  />
+                        <mat-error *ngIf="ClienteForm.get('Fax').hasError('required')">
+                          Fax  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus" formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Cliente" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="ClienteForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPertenece_a_grupo_BAL" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>¿Pertenece a grupo BAL?</mat-label>
+                        <mat-select (selectionChange)="Pertenece_a_grupo_BAL_ExecuteBusinessRules()" placeholder="¿Pertenece a grupo BAL?" formControlName="Pertenece_a_grupo_BAL" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varRespuesta" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="ClienteForm.get('Pertenece_a_grupo_BAL').hasError('required')">
+                          ¿Pertenece a grupo BAL? es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Cliente" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Cliente</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_Cliente_ExecuteBusinessRules()" placeholder="Tipo de Cliente" formControlName="Tipo_de_Cliente" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Cliente" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="ClienteForm.get('Tipo_de_Cliente').hasError('required')">
+                          Tipo de Cliente es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divVigencia_de_Contrato" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Vigencia de Contrato</mat-label>
+                        <input (dateChange)="Vigencia_de_Contrato_ExecuteBusinessRules()" (keypress)="soloFecha($event)" (blur)="Vigencia_de_Contrato_ExecuteBusinessRules()" matInput (focus)="datePickerVigencia_de_Contrato.open()" [matDatepicker]="datePickerVigencia_de_Contrato" formControlName="Vigencia_de_Contrato" [min]="today" type="text"  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerVigencia_de_Contrato"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerVigencia_de_Contrato></mat-datepicker>
+                        <mat-error *ngIf="ClienteForm.get('Vigencia_de_Contrato').hasError('matDatepickerMin')">
+                          La fecha no puede ser menor a hoy
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCuota_de_mantenimiento" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cuota de mantenimiento</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Cuota_de_mantenimiento_ExecuteBusinessRules()" matInput formControlName="Cuota_de_mantenimiento" mask="separator.2" thousandSeparator="," maxlength="12"  />
+                        <mat-error *ngIf="ClienteForm.get('Cuota_de_mantenimiento').hasError('required')">
+                          Cuota de mantenimiento  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCosto_de_Hora_Rampa" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Costo de Hora Rampa</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Costo_de_Hora_Rampa_ExecuteBusinessRules()" matInput formControlName="Costo_de_Hora_Rampa" mask="separator.2" thousandSeparator="," maxlength="12"  />
+                        <mat-error *ngIf="ClienteForm.get('Costo_de_Hora_Rampa').hasError('required')">
+                          Costo de Hora Rampa  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCostos_Hora_Tecnico" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Costos Hora Técnico</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Costos_Hora_Tecnico_ExecuteBusinessRules()" matInput formControlName="Costos_Hora_Tecnico" mask="separator.2" thousandSeparator="," maxlength="12"  />
+                        <mat-error *ngIf="ClienteForm.get('Costos_Hora_Tecnico').hasError('required')">
+                          Costos Hora Técnico  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divContrato" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="ContratoName == '' && !ClienteForm.disabled" class="example-full-width no-padding" appearance="outline" >
+                        <mat-label>Contrato</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="ContratoFile" >
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+						<mat-error *ngIf="ClienteForm.get('ContratoFile').hasError('required')">
+                          Contrato es requerido
+                        </mat-error>
+                      </mat-form-field>
+                      <div *ngIf="ContratoName != '' ">
+                        <mat-label>Contrato</mat-label>
+                        <a href="{{ContratoUrl()}}"  target="_blank">
+                          {{ContratoName }} 
+                        </a>
+                        <button mat-icon-button (click)="removeContrato()" *ngIf="!ClienteForm.disabled" >
+                          <mat-icon aria-label="eliminar">close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <div id="divPart_en_div_por_tramo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Part_en_div_por_tramo_ExecuteBusinessRules()" formControlName="Part_en_div_por_tramo" class="example-margin">
+                        Participa en división por tramo
+                      </mat-checkbox> 
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!ClienteForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!ClienteForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!ClienteForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!ClienteForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

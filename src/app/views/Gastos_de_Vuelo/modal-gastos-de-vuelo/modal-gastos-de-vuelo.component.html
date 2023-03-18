@@ -1,0 +1,1359 @@
+<h1 mat-dialog-title class="ml-4">Gastos de Vuelo</h1>
+
+<div mat-dialog-content class="flex-row clearfix">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="body">
+                <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                    <p style="color: white">Procesando</p>
+                </ngx-spinner>
+                <form class="m-4" [formGroup]="Gastos_de_VueloForm">
+                    <mat-tab-group #tabGroup>
+                        <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                            <div id="tabDatos_Generales" class="row">
+                                <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Folio</mat-label>
+                                        <input matInput formControlName="Folio"
+                                            [type]="Gastos_de_VueloForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                                            required />
+                                        <mat-error *ngIf="Gastos_de_VueloForm.get('Folio').hasError('required')">
+                                            Folio es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div id="divFecha_de_Registro" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Fecha de Registro</mat-label>
+                                        <input (dateChange)="Fecha_de_Registro_ExecuteBusinessRules()"
+                                            (blur)="Fecha_de_Registro_ExecuteBusinessRules()" matInput
+                                            (focus)="datePickerFecha_de_Registro.open()"
+                                            [matDatepicker]="datePickerFecha_de_Registro"
+                                            formControlName="Fecha_de_Registro" [max]="today" type="text" required />
+                                        <mat-datepicker-toggle matSuffix
+                                            [for]="datePickerFecha_de_Registro"></mat-datepicker-toggle>
+                                        <mat-datepicker #datePickerFecha_de_Registro></mat-datepicker>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Fecha_de_Registro').hasError('required')">
+                                            Fecha de Registro es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divTipo_de_Ingreso_de_Gasto"
+                                    class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Tipo de Ingreso de Gasto</mat-label>
+                                        <mat-select (selectionChange)="Tipo_de_Ingreso_de_Gasto_ExecuteBusinessRules()"
+                                            placeholder="Tipo de Ingreso de Gasto"
+                                            formControlName="Tipo_de_Ingreso_de_Gasto" required>
+                                            <mat-option>
+
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varTipo_de_Ingreso_de_Gasto"
+                                                [value]="item.Clave">
+                                                {{ item.Descripcion }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Tipo_de_Ingreso_de_Gasto').hasError('required')">
+                                            Tipo de Ingreso de Gasto es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divOrden_de_Trabajo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Orden de Trabajo</mat-label>
+                                        <input type="text" matInput formControlName="Orden_de_Trabajo"
+                                            [matAutocomplete]="autoOrden_de_Trabajo">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoOrden_de_Trabajo="matAutocomplete"
+                                            [displayWith]="displayFnOrden_de_Trabajo">
+                                            <mat-option (onSelectionChange)="Orden_de_Trabajo_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsOrden_de_Trabajo | async" [value]="option">
+                                                {{option.numero_de_orden}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingOrden_de_Trabajo" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsOrden_de_Trabajo && !isLoadingOrden_de_Trabajo">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Orden_de_Trabajo').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Orden_de_Trabajo').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Orden de Trabajo de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divNumero_de_Vuelo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Número de Vuelo</mat-label>
+                                        <input type="text" matInput formControlName="Numero_de_Vuelo"
+                                            [matAutocomplete]="autoNumero_de_Vuelo">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoNumero_de_Vuelo="matAutocomplete"
+                                            [displayWith]="displayFnNumero_de_Vuelo">
+                                            <mat-option (onSelectionChange)="Numero_de_Vuelo_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsNumero_de_Vuelo | async" [value]="option">
+                                                {{option.Numero_de_Vuelo}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingNumero_de_Vuelo" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsNumero_de_Vuelo && !isLoadingNumero_de_Vuelo">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Numero_de_Vuelo').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Numero_de_Vuelo').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Número de Vuelo de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Matrícula</mat-label>
+                                        <input type="text" matInput formControlName="Matricula"
+                                            [matAutocomplete]="autoMatricula">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoMatricula="matAutocomplete"
+                                            [displayWith]="displayFnMatricula">
+                                            <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsMatricula | async" [value]="option">
+                                                {{option.Matricula}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsMatricula && !isLoadingMatricula">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error *ngIf="Gastos_de_VueloForm.get('Matricula').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divTramo_de_Vuelo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Tramo de Vuelo</mat-label>
+                                        <input type="text" matInput formControlName="Tramo_de_Vuelo"
+                                            [matAutocomplete]="autoTramo_de_Vuelo">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoTramo_de_Vuelo="matAutocomplete"
+                                            [displayWith]="displayFnTramo_de_Vuelo">
+                                            <mat-option (onSelectionChange)="Tramo_de_Vuelo_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsTramo_de_Vuelo | async" [value]="option">
+                                                {{option.Numero_de_Tramo}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingTramo_de_Vuelo" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsTramo_de_Vuelo && !isLoadingTramo_de_Vuelo">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Tramo_de_Vuelo').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Tramo_de_Vuelo').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Tramo de Vuelo de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divSalida" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Salida</mat-label>
+                                        <input type="text" matInput formControlName="Salida"
+                                            [matAutocomplete]="autoSalida">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoSalida="matAutocomplete" [displayWith]="displayFnSalida">
+                                            <mat-option (onSelectionChange)="Salida_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsSalida | async" [value]="option">
+                                                {{option.Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingSalida" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsSalida && !isLoadingSalida">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error *ngIf="Gastos_de_VueloForm.get('Salida').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Salida').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Salida de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divDestino" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Destino</mat-label>
+                                        <input type="text" matInput formControlName="Destino"
+                                            [matAutocomplete]="autoDestino">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoDestino="matAutocomplete"
+                                            [displayWith]="displayFnDestino">
+                                            <mat-option (onSelectionChange)="Destino_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsDestino | async" [value]="option">
+                                                {{option.Descripcion}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingDestino" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsDestino && !isLoadingDestino">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error *ngIf="Gastos_de_VueloForm.get('Destino').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Destino').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Destino de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divEmpleado" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Empleado</mat-label>
+                                        <input type="text" matInput formControlName="Empleado"
+                                            [matAutocomplete]="autoEmpleado">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoEmpleado="matAutocomplete"
+                                            [displayWith]="displayFnEmpleado">
+                                            <mat-option (onSelectionChange)="Empleado_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsEmpleado | async" [value]="option">
+                                                {{option.Name}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingEmpleado" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsEmpleado && !isLoadingEmpleado">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error *ngIf="Gastos_de_VueloForm.get('Empleado').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('Empleado').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Empleado de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divAnticipo_de_Viaticos" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <div class="table-responsive">
+                                        <div class="top-action-container-table">
+                                            <h4>Anticipo de Viáticos</h4>
+                                            <!-- <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                              (click)="addAnticipo_de_ViaticosToMR(); $event.stopPropagation();">
+                              <mat-icon>add</mat-icon>
+                            </button> -->
+                                        </div>
+                                        <table mat-table [dataSource]="dataSourceAnticipo_de_Viaticos"
+                                            multiTemplateDataRows class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                                            <ng-container *ngIf="!Gastos_de_VueloForm.disabled" matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef style="width:15%">Acciones</th>
+                                                <mat-cell *matCellDef="let element;">
+                                                    <div class="actions">
+                                                        <button mat-icon-button class="btn-tbl-edit" type="button"
+                                                            (click)="editAnticipo_de_Viaticos(element);"
+                                                            [disabled]="IsDisableEdit">
+                                                            <mat-icon>edit</mat-icon>
+                                                        </button>
+                                                        <!-- <button mat-icon-button class="btn-tbl-delete" type='button'
+                                    (click)="deleteAnticipo_de_Viaticos(element); $event.stopPropagation();">
+                                    <mat-icon>delete</mat-icon>
+                                  </button> -->
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Monto">
+                                                <th mat-header-cell *matHeaderCellDef>Monto</th>
+                                                <td class="center" mat-cell *matCellDef="let element"
+                                                    style="text-align:left">
+                                                    {{element.Monto |currency}} </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Moneda">
+                                                <th mat-header-cell *matHeaderCellDef> Moneda</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Moneda_Moneda?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="expandedDetail">
+                                                <td mat-cell *matCellDef="let element; let i = index;"
+                                                    [attr.colspan]="getAnticipo_de_ViaticosColumns().length">
+
+                                                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                                        <div *ngIf="element.edit">
+                                                            <form formArrayName="Detalle_Anticipo_de_ViaticosItems">
+
+                                                                <div class="row form-group"
+                                                                    [formGroupName]="dataSourceAnticipo_de_Viaticos.data.indexOf(element)">
+
+                                                                    <div class="col">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Monto</mat-label>
+                                                                            <span matPrefix>
+                                                                                <mat-icon
+                                                                                    class="mr-2">attach_money</mat-icon>
+                                                                            </span>
+                                                                            <input matInput formControlName="Monto"
+                                                                                mask="separator.2"
+                                                                                thousandSeparator=","
+                                                                                maxlength="12" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Moneda</mat-label>
+                                                                            <mat-select placeholder="Moneda"
+                                                                                formControlName="Moneda">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varMoneda"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                                                        <button type='button' class="mr-3 btn-sm"
+                                                                            mat-raised-button
+                                                                            (click)="element.edit = false; saveAnticipo_de_Viaticos(element);"
+                                                                            color="primary">Guardar
+                                                                        </button>
+                                                                        <button type="button" class="mr-3 btn-sm"
+                                                                            mat-raised-button color="basic"
+                                                                            (click)="cancelEditAnticipo_de_Viaticos(element)"
+                                                                            mat-button>Cancelar</button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="getAnticipo_de_ViaticosColumns()"></tr>
+                                            <tr mat-row
+                                                [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                                                *matRowDef="let row; columns: getAnticipo_de_ViaticosColumns();let j = index">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                                class="example-detail-row">
+                                            </tr>
+                                        </table>
+                                        <mat-paginator #PaginadorAnticipos [length]="getCountAnticipos()"
+                                            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+                                <div id="divEstatus" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Estatus</mat-label>
+                                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()"
+                                            placeholder="Estatus" formControlName="Estatus" required>
+                                            <mat-option>
+
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varEstatus_de_Gastos_de_Vuelo"
+                                                [value]="item.Clave">
+                                                {{ item.Descripcion }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="Gastos_de_VueloForm.get('Estatus').hasError('required')">
+                                            Estatus es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab aria-label="Gastos_de_Empleado" label="Gastos de Empleado"> <br>
+                            <div id="tabGastos_de_Empleado" class="row">
+                                <div id="divConcepto_de_Gasto_por_Empleado"
+                                    class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <div class="table-responsive">
+                                        <div class="top-action-container-table">
+                                            <h4>Concepto de Gasto por Empleado</h4>
+                                            <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab
+                                                type="button"
+                                                (click)="addConcepto_de_Gasto_por_EmpleadoToMR(); $event.stopPropagation();">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <table mat-table [dataSource]="dataSourceConcepto_de_Gasto_por_Empleado"
+                                            multiTemplateDataRows>
+
+                                            <ng-container *ngIf="!Gastos_de_VueloForm.disabled" matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                                <mat-cell *matCellDef="let element;">
+                                                    <div class="actions">
+                                                        <button mat-icon-button class="btn-tbl-edit" type="button"
+                                                            (click)="editConcepto_de_Gasto_por_Empleado(element);">
+                                                            <mat-icon>edit</mat-icon>
+                                                        </button>
+                                                        <button mat-icon-button class="btn-tbl-delete" type='button'
+                                                            (click)="deleteConcepto_de_Gasto_por_Empleado(element); $event.stopPropagation();">
+                                                            <mat-icon>delete</mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Fecha_de_gasto">
+                                                <th mat-header-cell *matHeaderCellDef> Fecha de gasto </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Fecha_de_gasto |date}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Concepto">
+                                                <th mat-header-cell *matHeaderCellDef> Concepto</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Concepto_Concepto_de_Gasto_de_Empleado?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Descripcion">
+                                                <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Monto">
+                                                <th mat-header-cell *matHeaderCellDef> Monto </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Monto | currency}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Moneda">
+                                                <th mat-header-cell *matHeaderCellDef> Moneda </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Moneda}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Forma_de_Pago">
+                                                <th mat-header-cell *matHeaderCellDef> Forma de Pago</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Forma_de_Pago_Forma_de_Pago?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Comprobante">
+                                                <th mat-header-cell *matHeaderCellDef>Comprobante</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div class="text-center f-w"
+                                                        *ngIf="element.Comprobante_Spartane_File">
+                                                        <a *ngIf="element.Folio > 0" mat-button class="btn-tbl-foto"
+                                                            [disabled]="!element.Comprobante"
+                                                            [href]="spartanFileService.url(element.Comprobante, element.Comprobante_Spartane_File)"
+                                                            target="_blank" matTooltip="Comprobante">
+                                                            <mat-icon>image_search</mat-icon>
+                                                            <span>{{element.Comprobante_Spartane_File}}</span>
+                                                        </a>
+                                                    </div>
+                                                    <a *ngIf="getComprobante_Detalle_Gastos_Empleado(element) != ''"
+                                                        mat-button class="btn-tbl-foto" href="#"
+                                                        (click)="getComprobante_Detalle_Gastos_EmpleadoClick(element); $event.stopPropagation();$event.preventDefault();">
+                                                        {{getComprobante_Detalle_Gastos_Empleado(element)}}
+                                                    </a>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Autorizacion">
+                                                <th mat-header-cell *matHeaderCellDef> Autorización</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Autorizacion_Resultado_de_Autorizacion_de_Vuelo?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Observaciones">
+                                                <th mat-header-cell *matHeaderCellDef> Observaciones </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Observaciones}} </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="expandedDetail">
+                                                <td mat-cell *matCellDef="let element; let i = index;"
+                                                    [attr.colspan]="getConcepto_de_Gasto_por_EmpleadoColumns().length">
+
+                                                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                                        <div *ngIf="element.edit">
+                                                            <form formArrayName="Detalle_Gastos_EmpleadoItems">
+
+                                                                <div class="row form-group"
+                                                                    [formGroupName]="dataSourceConcepto_de_Gasto_por_Empleado.data.indexOf(element)">
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Fecha de gasto</mat-label>
+                                                                            <input matInput (focus)="rpicker.open()"
+                                                                                [matDatepicker]="rpicker"
+                                                                                formControlName="Fecha_de_gasto"
+                                                                                type="text" />
+                                                                            <mat-datepicker-toggle matSuffix
+                                                                                [for]="rpicker"></mat-datepicker-toggle>
+                                                                            <mat-datepicker #rpicker></mat-datepicker>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Concepto</mat-label>
+                                                                            <mat-select placeholder="Concepto"
+                                                                                formControlName="Concepto">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varConcepto_de_Gasto_de_Empleado"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Descripción</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Descripcion"
+                                                                                type="text" maxlength="500" />
+                                                                        </mat-form-field>
+                                                                    </div>
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field
+                                                                            class="example-full-width no-padding"
+                                                                            appearance="outline">
+                                                                            <mat-label>Monto</mat-label>
+                                                                            <span matPrefix>
+                                                                                <mat-icon
+                                                                                    class="mr-2">attach_money</mat-icon>
+                                                                            </span>
+                                                                            <input matInput formControlName="Monto"
+                                                                                mask="separator.2" thousandSeparator=","
+                                                                                maxlength="12" />
+                                                                        </mat-form-field>
+                                                                    </div>
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Moneda</mat-label>
+                                                                            <mat-select placeholder="Moneda"
+                                                                                formControlName="Moneda">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varMoneda"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Forma de Pago</mat-label>
+                                                                            <mat-select placeholder="Forma de Pago"
+                                                                                formControlName="Forma_de_Pago">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varForma_de_Pago"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field
+                                                                            *ngIf="!hasComprobante_Detalle_Gastos_Empleado(element)"
+                                                                            class="example-full-width no-padding"
+                                                                            appearance="outline">
+                                                                            <mat-label>Comprobante</mat-label>
+                                                                            <ngx-mat-file-input #removableInputFamiliar
+                                                                                formControlName="ComprobanteFile">
+                                                                            </ngx-mat-file-input>
+                                                                            <button mat-icon-button matSuffix
+                                                                                *ngIf="!removableInputFamiliar.empty"
+                                                                                (click)="removableInputFamiliar.clear($event)">
+                                                                                <mat-icon>clear</mat-icon>
+                                                                            </button>
+                                                                        </mat-form-field>
+                                                                        <div style="padding-left: 5px;"
+                                                                            *ngIf="hasComprobante_Detalle_Gastos_Empleado(element)">
+                                                                            <mat-label>Comprobante</mat-label><br>
+                                                                            <div
+                                                                                *ngIf="element.Comprobante_Spartane_File">
+                                                                                <a [href]="spartanFileService.url(element.Comprobante,element.Comprobante_Spartane_File)"
+                                                                                    role="button" target="_blank">
+                                                                                    {{ element.Comprobante_Spartane_File
+                                                                                    }}
+                                                                                </a>
+                                                                            </div>
+                                                                            <a *ngIf="getComprobante_Detalle_Gastos_Empleado(element) != ''"
+                                                                                mat-button class="btn-tbl-foto" href="#"
+                                                                                (click)="getComprobante_Detalle_Gastos_EmpleadoClick(element); $event.stopPropagation(); $event.preventDefault();">
+                                                                                {{getComprobante_Detalle_Gastos_Empleado(element)}}
+                                                                            </a>
+                                                                            <button mat-icon-button
+                                                                                (click)="removeComprobante_Detalle_Gastos_Empleado(element)"
+                                                                                *ngIf="!Gastos_de_VueloForm.disabled">
+                                                                                <mat-icon
+                                                                                    aria-label="eliminar">close</mat-icon>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Autorización</mat-label>
+                                                                            <mat-select placeholder="Autorización"
+                                                                                formControlName="Autorizacion">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varResultado_de_Autorizacion_de_Vuelo"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Observaciones</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Observaciones"
+                                                                                type="text" maxlength="500" />
+                                                                        </mat-form-field>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <!-- inicio seccion botones -->
+                                                                <!-- fin seccion botones -->
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                                                        <button type='button' class="mr-3 btn-sm"
+                                                                            mat-raised-button
+                                                                            (click)="element.edit = false; saveConcepto_de_Gasto_por_Empleado(element);"
+                                                                            color="primary">Guardar
+                                                                        </button>
+                                                                        <button type="button" class="mr-3 btn-sm"
+                                                                            mat-raised-button color="basic"
+                                                                            (click)="cancelEditConcepto_de_Gasto_por_Empleado(element)"
+                                                                            mat-button>Cancelar</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row
+                                                *matHeaderRowDef="getConcepto_de_Gasto_por_EmpleadoColumns()"></tr>
+                                            <tr mat-row
+                                                [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                                                *matRowDef="let row; columns: getConcepto_de_Gasto_por_EmpleadoColumns();let j = index">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                                class="example-detail-row">
+                                            </tr>
+                                        </table>
+                                        <mat-paginator #PaginadorGastosEmpleados [length]="getCountGastosEmpleado()"
+                                            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+                                <div id="divempleado_total_mxn" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total MXN</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="empleado_total_mxn_ExecuteBusinessRules()" matInput
+                                            formControlName="empleado_total_mxn" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('empleado_total_mxn').hasError('required')">
+                                            Total MXN es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divempleado_total_usd" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total USD</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="empleado_total_usd_ExecuteBusinessRules()" matInput
+                                            formControlName="empleado_total_usd" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('empleado_total_usd').hasError('required')">
+                                            Total USD es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divempleado_total_eur" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total EUR</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="empleado_total_eur_ExecuteBusinessRules()" matInput
+                                            formControlName="empleado_total_eur" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('empleado_total_eur').hasError('required')">
+                                            Total EUR es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divempleado_total_libras" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total LIBRAS</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="empleado_total_libras_ExecuteBusinessRules()" matInput
+                                            formControlName="empleado_total_libras" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('empleado_total_libras').hasError('required')">
+                                            Total LIBRAS es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divempleado_total_cad" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total CAD</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="empleado_total_cad_ExecuteBusinessRules()" matInput
+                                            formControlName="empleado_total_cad" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('empleado_total_cad').hasError('required')">
+                                            Total CAD es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+
+
+                        <mat-tab aria-label="Gastos_de_Aeronave" label="Gastos de Aeronave"> <br>
+                            <div id="tabGastos_de_Aeronave" class="row">
+                                <div id="divConcepto_de_Gasto_de_Aeronave"
+                                    class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <div class="table-responsive">
+                                        <div class="top-action-container-table">
+                                            <h4>Concepto de Gasto de Aeronave</h4>
+                                            <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab
+                                                type="button"
+                                                (click)="addConcepto_de_Gasto_de_AeronaveToMR(); $event.stopPropagation();">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <table mat-table [dataSource]="dataSourceConcepto_de_Gasto_de_Aeronave"
+                                            multiTemplateDataRows>
+
+                                            <ng-container *ngIf="!Gastos_de_VueloForm.disabled" matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                                <mat-cell *matCellDef="let element;">
+                                                    <div class="actions">
+                                                        <button mat-icon-button class="btn-tbl-edit" type="button"
+                                                            (click)="editConcepto_de_Gasto_de_Aeronave(element);">
+                                                            <mat-icon>edit</mat-icon>
+                                                        </button>
+                                                        <button mat-icon-button class="btn-tbl-delete" type='button'
+                                                            (click)="deleteConcepto_de_Gasto_de_Aeronave(element); $event.stopPropagation();">
+                                                            <mat-icon>delete</mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Fecha_de_gasto">
+                                                <th mat-header-cell *matHeaderCellDef> Fecha de gasto </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Fecha_de_gasto |date}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Concepto_Aeronave">
+                                                <th mat-header-cell *matHeaderCellDef> Concepto</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Concepto_Concepto_de_Gasto_de_Aeronave?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Descripcion_Aeronave">
+                                                <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Monto_Aeronave">
+                                                <th mat-header-cell *matHeaderCellDef> Monto </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Monto | currency}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Moneda_Aeronave">
+                                                <th mat-header-cell *matHeaderCellDef> Moneda </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Moneda}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Forma_de_Pago_Aeronave">
+                                                <th mat-header-cell *matHeaderCellDef> Forma de Pago</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Forma_de_Pago_Forma_de_Pago?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Comprobante_Aeronave">
+                                                <th mat-header-cell *matHeaderCellDef>Comprobante</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div class="text-center f-w"
+                                                        *ngIf="element.Comprobante_Spartane_File">
+                                                        <a *ngIf="element.Folio > 0" mat-button class="btn-tbl-foto"
+                                                            [disabled]="!element.Comprobante"
+                                                            [href]="spartanFileService.url(element.Comprobante, element.Comprobante_Spartane_File)"
+                                                            target="_blank" matTooltip="Comprobante">
+                                                            <mat-icon>image_search</mat-icon>
+                                                            <span>{{element.Comprobante_Spartane_File}}</span>
+                                                        </a>
+                                                    </div>
+                                                    <a *ngIf="getComprobante_Detalle_Gastos_Aeronave(element) != ''"
+                                                        mat-button class="btn-tbl-foto" href="#"
+                                                        (click)="getComprobante_Detalle_Gastos_AeronaveClick(element); $event.stopPropagation();$event.preventDefault();">
+                                                        {{getComprobante_Detalle_Gastos_Aeronave(element)}}
+                                                    </a>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Autorizacion_Aeronave">
+                                                <th mat-header-cell *matHeaderCellDef> Autorización</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Autorizacion_Resultado_de_Autorizacion_de_Vuelo?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Observaciones_Aeronave">
+                                                <th mat-header-cell *matHeaderCellDef> Observaciones </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Observaciones}} </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="expandedDetail">
+                                                <td mat-cell *matCellDef="let element; let i = index;"
+                                                    [attr.colspan]="getConcepto_de_Gasto_de_AeronaveColumns().length">
+
+                                                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                                        <div *ngIf="element.edit">
+                                                            <form formArrayName="Detalle_Gastos_AeronaveItems">
+
+                                                                <div class="row form-group"
+                                                                    [formGroupName]="dataSourceConcepto_de_Gasto_de_Aeronave.data.indexOf(element)">
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Fecha de gasto</mat-label>
+                                                                            <input matInput (focus)="rpicker.open()"
+                                                                                [matDatepicker]="rpicker"
+                                                                                formControlName="Fecha_de_gasto"
+                                                                                type="text" />
+                                                                            <mat-datepicker-toggle matSuffix
+                                                                                [for]="rpicker"></mat-datepicker-toggle>
+                                                                            <mat-datepicker #rpicker></mat-datepicker>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Concepto</mat-label>
+                                                                            <mat-select placeholder="Concepto"
+                                                                                formControlName="Concepto">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varConcepto_de_Gasto_de_Aeronave"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Descripción</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Descripcion"
+                                                                                type="text" maxlength="500" />
+                                                                        </mat-form-field>
+                                                                    </div>
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field
+                                                                            class="example-full-width no-padding"
+                                                                            appearance="outline">
+                                                                            <mat-label>Monto</mat-label>
+                                                                            <span matPrefix>
+                                                                                <mat-icon
+                                                                                    class="mr-2">attach_money</mat-icon>
+                                                                            </span>
+                                                                            <input matInput formControlName="Monto"
+                                                                                mask="separator.2" thousandSeparator=","
+                                                                                maxlength="12" />
+                                                                        </mat-form-field>
+                                                                    </div>
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Moneda</mat-label>
+                                                                            <mat-select placeholder="Moneda"
+                                                                                formControlName="Moneda">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varMoneda"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Forma de Pago</mat-label>
+                                                                            <mat-select placeholder="Forma de Pago"
+                                                                                formControlName="Forma_de_Pago">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varForma_de_Pago"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field
+                                                                            *ngIf="!hasComprobante_Detalle_Gastos_Aeronave(element)"
+                                                                            class="example-full-width no-padding"
+                                                                            appearance="outline">
+                                                                            <mat-label>Comprobante</mat-label>
+                                                                            <ngx-mat-file-input #removableInputFamiliar
+                                                                                formControlName="ComprobanteFile">
+                                                                            </ngx-mat-file-input>
+                                                                            <button mat-icon-button matSuffix
+                                                                                *ngIf="!removableInputFamiliar.empty"
+                                                                                (click)="removableInputFamiliar.clear($event)">
+                                                                                <mat-icon>clear</mat-icon>
+                                                                            </button>
+                                                                        </mat-form-field>
+                                                                        <div style="padding-left: 5px;"
+                                                                            *ngIf="hasComprobante_Detalle_Gastos_Aeronave(element)">
+                                                                            <mat-label>Comprobante</mat-label><br>
+                                                                            <div
+                                                                                *ngIf="element.Comprobante_Spartane_File">
+                                                                                <a [href]="spartanFileService.url(element.Comprobante,element.Comprobante_Spartane_File)"
+                                                                                    role="button" target="_blank">
+                                                                                    {{ element.Comprobante_Spartane_File
+                                                                                    }}
+                                                                                </a>
+                                                                            </div>
+                                                                            <a *ngIf="getComprobante_Detalle_Gastos_Aeronave(element) != ''"
+                                                                                mat-button class="btn-tbl-foto" href="#"
+                                                                                (click)="getComprobante_Detalle_Gastos_AeronaveClick(element); $event.stopPropagation(); $event.preventDefault();">
+                                                                                {{getComprobante_Detalle_Gastos_Aeronave(element)}}
+                                                                            </a>
+                                                                            <button mat-icon-button
+                                                                                (click)="removeComprobante_Detalle_Gastos_Aeronave(element)"
+                                                                                *ngIf="!Gastos_de_VueloForm.disabled">
+                                                                                <mat-icon
+                                                                                    aria-label="eliminar">close</mat-icon>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Autorización</mat-label>
+                                                                            <mat-select placeholder="Autorización"
+                                                                                formControlName="Autorizacion">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varResultado_de_Autorizacion_de_Vuelo"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Observaciones</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Observaciones"
+                                                                                type="text" maxlength="500" />
+                                                                        </mat-form-field>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <!-- inicio seccion botones -->
+                                                                <!-- fin seccion botones -->
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                                                        <button type='button' class="mr-3 btn-sm"
+                                                                            mat-raised-button
+                                                                            (click)="element.edit = false; saveConcepto_de_Gasto_de_Aeronave(element);"
+                                                                            color="primary">Guardar
+                                                                        </button>
+                                                                        <button type="button" class="mr-3 btn-sm"
+                                                                            mat-raised-button color="basic"
+                                                                            (click)="cancelEditConcepto_de_Gasto_de_Aeronave(element)"
+                                                                            mat-button>Cancelar</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row
+                                                *matHeaderRowDef="getConcepto_de_Gasto_de_AeronaveColumns()"></tr>
+                                            <tr mat-row
+                                                [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                                                *matRowDef="let row; columns: getConcepto_de_Gasto_de_AeronaveColumns();let j = index">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                                class="example-detail-row">
+                                            </tr>
+                                        </table>
+                                        <mat-paginator #PaginadorGastosAeronaves [length]="getCountGastosAeronave()"
+                                            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+
+
+                                <div id="divaeronave_total_mxn" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total MXN</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="aeronave_total_mxn_ExecuteBusinessRules()" matInput
+                                            formControlName="aeronave_total_mxn" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('aeronave_total_mxn').hasError('required')">
+                                            Total MXN es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divaeronave_total_usd" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total USD</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="aeronave_total_usd_ExecuteBusinessRules()" matInput
+                                            formControlName="aeronave_total_usd" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('aeronave_total_usd').hasError('required')">
+                                            Total USD es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divaeronave_total_eur" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total EUR</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="aeronave_total_eur_ExecuteBusinessRules()" matInput
+                                            formControlName="aeronave_total_eur" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('aeronave_total_eur').hasError('required')">
+                                            Total EUR es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divaeronave_total_libras" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total LIBRAS</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="aeronave_total_libras_ExecuteBusinessRules()" matInput
+                                            formControlName="aeronave_total_libras" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('aeronave_total_libras').hasError('required')">
+                                            Total LIBRAS es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divaeronave_total_cad" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Total CAD</mat-label>
+                                        <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                        </span>
+                                        <input (change)="aeronave_total_cad_ExecuteBusinessRules()" matInput
+                                            formControlName="aeronave_total_cad" mask="separator.2"
+                                            thousandSeparator="," maxlength="12" required />
+                                        <mat-error
+                                            *ngIf="Gastos_de_VueloForm.get('aeronave_total_cad').hasError('required')">
+                                            Total CAD es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                        </mat-tab>
+
+
+                        <mat-tab aria-label="Resumen_de_Gastos" label="Resumen de Gastos"> <br>
+                            <div id="tabResumen_de_Gastos" class="row">
+                                <div id="divResumen_de_Gastos" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <div class="table-responsive">
+                                        <div class="top-action-container-table">
+                                            <h4>Resumen de Gastos</h4>
+                                            <!-- <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                              (click)="addResumen_de_GastosToMR(); $event.stopPropagation();">
+                              <mat-icon>add</mat-icon>
+                            </button> -->
+                                        </div>
+                                        <table mat-table [dataSource]="dataSourceResumen_de_Gastos"
+                                            multiTemplateDataRows class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                                            <ng-container *ngIf="!Gastos_de_VueloForm.disabled" matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                                <mat-cell *matCellDef="let element;">
+                                                    <div class="actions">
+                                                        <!-- <button mat-icon-button class="btn-tbl-edit" type="button"
+                                    (click)="editResumen_de_Gastos(element);">
+                                    <mat-icon>edit</mat-icon>
+                                  </button> -->
+                                                        <!-- <button mat-icon-button class="btn-tbl-delete" type='button'
+                                    (click)="deleteResumen_de_Gastos(element); $event.stopPropagation();">
+                                    <mat-icon>delete</mat-icon>
+                                  </button> -->
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Concepto">
+                                                <th mat-header-cell *matHeaderCellDef> Concepto </th>
+                                                <td mat-cell *matCellDef="let element" style="text-align:left">
+                                                    {{element.Concepto}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="MXN">
+                                                <th mat-header-cell *matHeaderCellDef>MXN</th>
+                                                <td class="center" mat-cell *matCellDef="let element"
+                                                    style="text-align:left"> {{element.MXN
+                                                    |currency}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="USD">
+                                                <th mat-header-cell *matHeaderCellDef>USD</th>
+                                                <td class="center" mat-cell *matCellDef="let element"
+                                                    style="text-align:left"> {{element.USD
+                                                    |currency}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="EUR">
+                                                <th mat-header-cell *matHeaderCellDef>EUR</th>
+                                                <td class="center" mat-cell *matCellDef="let element"
+                                                    style="text-align:left"> {{element.EUR
+                                                    |currency}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="LIBRA">
+                                                <th mat-header-cell *matHeaderCellDef>LIBRA</th>
+                                                <td class="center" mat-cell *matCellDef="let element"
+                                                    style="text-align:left">
+                                                    {{element.LIBRA |currency}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="CAD">
+                                                <th mat-header-cell *matHeaderCellDef>CAD</th>
+                                                <td class="center" mat-cell *matCellDef="let element"
+                                                    style="text-align:left"> {{element.CAD
+                                                    |currency}} </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="expandedDetail">
+                                                <td mat-cell *matCellDef="let element; let i = index;"
+                                                    [attr.colspan]="getResumen_de_GastosColumns().length">
+
+                                                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                                        <div *ngIf="element.edit">
+                                                            <form formArrayName="Detalle_Gastos_ResumenItems">
+
+                                                                <div class="row form-group"
+                                                                    [formGroupName]="dataSourceResumen_de_Gastos.data.indexOf(element)">
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Concepto</mat-label>
+                                                                            <input matInput formControlName="Concepto"
+                                                                                type="text" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>MXN</mat-label>
+                                                                            <span matPrefix>
+                                                                                <mat-icon
+                                                                                    class="mr-2">attach_money</mat-icon>
+                                                                            </span>
+                                                                            <input matInput formControlName="MXN"
+                                                                                mask="separator.2"
+                                                                                thousandSeparator="," />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>USD</mat-label>
+                                                                            <span matPrefix>
+                                                                                <mat-icon
+                                                                                    class="mr-2">attach_money</mat-icon>
+                                                                            </span>
+                                                                            <input matInput formControlName="USD"
+                                                                                mask="separator.2"
+                                                                                thousandSeparator="," />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>EUR</mat-label>
+                                                                            <span matPrefix>
+                                                                                <mat-icon
+                                                                                    class="mr-2">attach_money</mat-icon>
+                                                                            </span>
+                                                                            <input matInput formControlName="EUR"
+                                                                                mask="separator.2"
+                                                                                thousandSeparator="," />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>LIBRA</mat-label>
+                                                                            <span matPrefix>
+                                                                                <mat-icon
+                                                                                    class="mr-2">attach_money</mat-icon>
+                                                                            </span>
+                                                                            <input matInput formControlName="LIBRA"
+                                                                                mask="separator.2"
+                                                                                thousandSeparator="," />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>CAD</mat-label>
+                                                                            <span matPrefix>
+                                                                                <mat-icon
+                                                                                    class="mr-2">attach_money</mat-icon>
+                                                                            </span>
+                                                                            <input matInput formControlName="CAD"
+                                                                                mask="separator.2"
+                                                                                thousandSeparator="," />
+                                                                        </mat-form-field>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <!-- inicio seccion botones -->
+                                                                <!-- fin seccion botones -->
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                                                        <button type='button' class="mr-3 btn-sm"
+                                                                            mat-raised-button
+                                                                            (click)="element.edit = false; saveResumen_de_Gastos(element);"
+                                                                            color="primary">Guardar
+                                                                        </button>
+                                                                        <button type="button" class="mr-3 btn-sm"
+                                                                            mat-raised-button color="basic"
+                                                                            (click)="cancelEditResumen_de_Gastos(element)"
+                                                                            mat-button>Cancelar</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="getResumen_de_GastosColumns()"></tr>
+                                            <tr mat-row
+                                                [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                                                *matRowDef="let row; columns: getResumen_de_GastosColumns();let j = index">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                                class="example-detail-row">
+                                            </tr>
+                                        </table>
+                                        <mat-paginator #PaginadorResumenGastos [length]="getCountResumenGastos()"
+                                            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div mat-dialog-actions class="ml-4">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <button type='submit' class="mr-3 mb-2" [disabled]="!Gastos_de_VueloForm.valid || consult" mat-raised-button
+            color="primary" (click)="save()">
+            Guardar
+        </button>
+        <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+            [disabled]="!Gastos_de_VueloForm.valid || consult" mat-raised-button color="primary">
+            Configurar
+        </button>
+        <button type="button" class="mb-2" mat-button mat-raised-button color="warning" mat-dialog-close
+            style="background-color:#ed5565 !important">
+            Cancelar
+        </button>
+    </div>
+</div>
+
+<div id="snackbar"></div>

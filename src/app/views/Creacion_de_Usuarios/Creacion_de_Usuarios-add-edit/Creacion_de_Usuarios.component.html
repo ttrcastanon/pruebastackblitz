@@ -1,0 +1,497 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Configuración de Usuarios</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Creacion_de_Usuarios/list">Configuración de Usuarios</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Creacion_de_UsuariosForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divClave" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuarios ID</mat-label>
+                        <input matInput formControlName="Clave"
+                          [type]="Creacion_de_UsuariosForm.get('Clave').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Clave').hasError('required')">
+                          Usuarios ID es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNombres" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nombre(s)</mat-label>
+                        <input (change)="Nombres_ExecuteBusinessRules()" (change)="setFullName()" #Nombres matInput
+                          formControlName="Nombres" type="text" maxlength="75" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Nombres').hasError('required')">
+                          Nombre(s) es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divApellido_paterno" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Apellido paterno</mat-label>
+                        <input (change)="Apellido_paterno_ExecuteBusinessRules()" (change)="setFullName()"
+                          #Apellido_paterno matInput formControlName="Apellido_paterno" type="text" maxlength="75"
+                          required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Apellido_paterno').hasError('required')">
+                          Apellido paterno es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divApellido_materno" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Apellido materno</mat-label>
+                        <input (change)="Apellido_materno_ExecuteBusinessRules()" (change)="setFullName()"
+                          #Apellido_materno matInput formControlName="Apellido_materno" type="text" maxlength="75"
+                          required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Apellido_materno').hasError('required')">
+                          Apellido materno es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNombre_completo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nombre completo</mat-label>
+                        <input (change)="Nombre_completo_ExecuteBusinessRules()" #Nombre_completo matInput
+                          formControlName="Nombre_completo" type="text" maxlength="225" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Nombre_completo').hasError('required')">
+                          Nombre completo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCurp" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>CURP</mat-label>
+                        <input (change)="Curp_ExecuteBusinessRules()" #Curp matInput formControlName="Curp"
+                          placeholder="AAAA000000AAAAAA00" mask="SSSS000000SSSSSS00" maxlength="50" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Curp').hasError('required')">
+                          CURP es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Nacimiento" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Nacimiento</mat-label>
+                        <input (dateChange)="Fecha_de_Nacimiento_ExecuteBusinessRules()" (blur)="Fecha_de_Nacimiento_ExecuteBusinessRules()"
+                          matInput (focus)="datePickerFecha_de_Nacimiento.open()"
+                          [matDatepicker]="datePickerFecha_de_Nacimiento" formControlName="Fecha_de_Nacimiento"
+                          [max]="today" type="text" (keypress)="soloFecha($event)" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Nacimiento"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Nacimiento></mat-datepicker>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Fecha_de_Nacimiento').hasError('required')">
+                          Fecha de Nacimiento es requerido
+                        </mat-error>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Fecha_de_Nacimiento').hasError('matDatepickerMax')">
+                          Fecha de Nacimiento no puede ser mayor que hoy
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Ingreso" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Ingreso a la Empresa</mat-label>
+                        <input (dateChange)="Fecha_de_Ingreso_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Ingreso_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Ingreso.open()" [matDatepicker]="datePickerFecha_de_Ingreso"
+                          formControlName="Fecha_de_Ingreso" (keypress)="soloFecha($event)"  [max]="today" type="text" required  />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Ingreso"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Ingreso ></mat-datepicker>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Fecha_de_Ingreso').hasError('required')">
+                          Fecha de Ingreso a la Empresa es requerido
+                        </mat-error>
+                        <!-- <mat-error *ngIf="Creacion_de_UsuariosForm.get('Fecha_de_Ingreso').hasError('matDatepickerMax')">
+                          Fecha de Ingreso a la Empresa no puede ser mayor que hoy
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divCreacion_de_Usuario" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Creación de Usuario</mat-label>
+                        <input (dateChange)="Creacion_de_Usuario_ExecuteBusinessRules()"
+                          (blur)="Creacion_de_Usuario_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerCreacion_de_Usuario.open()" [matDatepicker]="datePickerCreacion_de_Usuario"
+                          formControlName="Creacion_de_Usuario" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerCreacion_de_Usuario"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerCreacion_de_Usuario></mat-datepicker>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Creacion_de_Usuario').hasError('required')">
+                          Creación de Usuario es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEdad" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Edad</mat-label>
+                        <input (change)="Edad_ExecuteBusinessRules()" #Edad matInput formControlName="Edad" type="text"
+                          maxlength="10" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Edad').hasError('required')">
+                          Edad es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTiempo_en_la_Empresa" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tiempo en la Empresa</mat-label>
+                        <input (change)="Tiempo_en_la_Empresa_ExecuteBusinessRules()" #Tiempo_en_la_Empresa matInput
+                          formControlName="Tiempo_en_la_Empresa" type="text" maxlength="100" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Tiempo_en_la_Empresa').hasError('required')">
+                          Tiempo en la Empresa es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCargo_desempenado" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Rol en el Sistema</mat-label>
+                        <mat-select (selectionChange)="Cargo_desempenado_ExecuteBusinessRules()"
+                          placeholder="Rol en el Sistema" formControlName="Cargo_desempenado" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCargos" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Cargo_desempenado').hasError('required')">
+                          Rol en el Sistema es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divJefe_inmediato" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Jefe inmediato</mat-label>
+                        <input type="text" matInput formControlName="Jefe_inmediato"
+                          [matAutocomplete]="autoJefe_inmediato" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoJefe_inmediato="matAutocomplete" [displayWith]="displayFnJefe_inmediato">
+                          <mat-option (onSelectionChange)="Jefe_inmediato_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsJefe_inmediato | async" [value]="option">
+                            {{option.Name}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingJefe_inmediato" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsJefe_inmediato && !isLoadingJefe_inmediato">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Jefe_inmediato').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Creacion_de_UsuariosForm.get('Jefe_inmediato').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Jefe inmediato de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDepartamento" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Departamento</mat-label>
+                        <mat-select (selectionChange)="Departamento_ExecuteBusinessRules()" placeholder="Departamento"
+                          formControlName="Departamento" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varDepartamento" [value]="item.Folio">
+                            {{ item.Nombre }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Departamento').hasError('required')">
+                          Departamento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUsuario" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario</mat-label>
+                        <input id="inputUsuario" placeholder="{{usuarioPlaceholder}}"
+                          (change)="Usuario_ExecuteBusinessRules()" #Usuario matInput formControlName="Usuario"
+                          type="text" maxlength="50" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Usuario').hasError('required')">
+                          Usuario es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divContrasena" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Contraseña</mat-label>
+                        <input (change)="Contrasena_ExecuteBusinessRules()" #Contrasena matInput
+                          formControlName="Contrasena" type="password" maxlength="50" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Contrasena').hasError('required')">
+                          Contraseña es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEstatus" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus"
+                          formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_de_Usuario" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+                    <div id="divCorreo_electronico" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Correo electrónico</mat-label>
+                        <input id="inputCorreo_electronico" placeholder="{{correoPlaceholder}}"
+                          (change)="Correo_electronico_ExecuteBusinessRules()" (change)="validateEmail()"
+                          #Correo_electronico matInput formControlName="Correo_electronico" type="email" maxlength="50"
+                          [email]="true" required />
+                        <mat-error
+                          *ngIf="Creacion_de_UsuariosForm.get('Correo_electronico').hasError('required') || Creacion_de_UsuariosForm.get('Correo_electronico').invalid">
+                          <span *ngIf="!emailEnpty">Correo electrónico es requerido</span>
+                          <span *ngIf="emailEnpty">Correo electrónico invalido</span>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+
+                    <div id="divTelefono" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Teléfono</mat-label>
+                        <input (change)="Telefono_ExecuteBusinessRules()" #Telefono matInput formControlName="Telefono"
+                          placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" required maxlength="20"/>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Telefono').hasError('required')">
+                          Teléfono es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+                    <div id="divCelular" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Celular</mat-label>
+                        <input (change)="Celular_ExecuteBusinessRules()" #Celular matInput formControlName="Celular"
+                          placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" required maxlength="20"/>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Celular').hasError('required')">
+                          Celular es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+                    <div id="divDireccion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Dirección</mat-label>
+                        <input (change)="Direccion_ExecuteBusinessRules()" #Direccion matInput
+                          formControlName="Direccion" type="text" maxlength="250" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Direccion').hasError('required')">
+                          Dirección es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHorario_de_trabajo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Horario de trabajo</mat-label>
+                        <mat-select (selectionChange)="Horario_de_trabajo_ExecuteBusinessRules()"
+                          placeholder="Horario de trabajo" formControlName="Horario_de_trabajo" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varHorarios_de_Trabajo" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Horario_de_trabajo').hasError('required')">
+                          Horario de trabajo es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFirma_digital" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field *ngIf="Firma_digitalName == '' && !Creacion_de_UsuariosForm.disabled"
+                        class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Firma digital</mat-label>
+                        <ngx-mat-file-input #removableInput formControlName="Firma_digitalFile">
+                        </ngx-mat-file-input>
+                        <button type="button" mat-icon-button matSuffix *ngIf="!removableInput.empty"
+                          (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+                      </mat-form-field>
+                      <div *ngIf="Firma_digitalName != '' ">
+                        <mat-label>Firma digital</mat-label>
+                        <a href="{{Firma_digitalUrl()}}" target="_blank">
+                          {{Firma_digitalName }}
+                        </a>
+                        <button mat-icon-button (click)="removeFirma_digital()" [hidden]="operation == 'Consult'"
+                          *ngIf="!Creacion_de_UsuariosForm.disabled">
+                          <mat-icon aria-label="eliminar" >close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <div id="divUsuario_Registrado" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Usuario Registrado</mat-label>
+                        <input (change)="Usuario_Registrado_ExecuteBusinessRules()" matInput
+                          formControlName="Usuario_Registrado"
+                          [type]="Creacion_de_UsuariosForm.get('Usuario_Registrado').value == 'Auto'  ? 'text':'number' "
+                          maxlength="9" required />
+                        <mat-error *ngIf="Creacion_de_UsuariosForm.get('Usuario_Registrado').hasError('required')">
+                          Usuario Registrado es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEmpresa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Empresa</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addEmpresaToMR(); $event.stopPropagation();"(click)="MRaddEmpresa = true" [disabled]="MRaddEmpresa">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceEmpresa" multiTemplateDataRows class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+
+                          <ng-container *ngIf="!Creacion_de_UsuariosForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editEmpresa(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteEmpresa(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Empresa">
+                            <th mat-header-cell *matHeaderCellDef> Empresa</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Empresa_Cliente?.Razon_Social}}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getEmpresaColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_Empresas_Conf_UsuarioItems">
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourceEmpresa.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Empresa</mat-label>
+                                          <input type="text" matInput formControlName="Empresa"
+                                            [matAutocomplete]="auto" required>
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectEmpresa_Detalle_Empresas_Conf_Usuario($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnEmpresa_Detalle_Empresas_Conf_Usuario.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCliente" [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionEmpresa_Detalle_Empresas_Conf_Usuario($event, element)">
+                                              {{option.Razon_Social}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingEmpresa_Detalle_Empresas_Conf_Usuario"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <!-- <mat-hint
+                                            *ngIf="varCliente.length ==0 &&  !isLoadingEmpresa_Detalle_Empresas_Conf_Usuario && searchEmpresa_Detalle_Empresas_Conf_UsuarioCompleted">No
+                                            se encontraron registros.</mat-hint> -->
+                                        </mat-form-field>
+                                      </div>
+
+
+                                    </div>
+                                    <!-- inicio seccion botones -->
+                                    <!-- fin seccion botones -->
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveEmpresa(element);" (click)="MRaddEmpresa = false" [disabled]="!EmpresaItems.valid"color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                        (click)="MRaddEmpresa = false" (click)="cancelEditEmpresa(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getEmpresaColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getEmpresaColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 15,20]" [length]="getCountEmpresas()" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!Creacion_de_UsuariosForm.valid || consult" mat-raised-button
+                    color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Creacion_de_UsuariosForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Creacion_de_UsuariosForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Creacion_de_UsuariosForm.valid || consult" mat-raised-button color="primary">Configurar
+                  </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

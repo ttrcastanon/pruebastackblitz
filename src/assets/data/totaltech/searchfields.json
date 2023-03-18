@@ -1,0 +1,38 @@
+﻿[
+  {
+    "Label": "NUAT",
+    "TypeControl": "text",
+    "FieldDB": "Modulo_Atencion_Inicial.NUAT",
+    "Value": null,
+    "Values": null,
+    "Group": null,
+    "SelAllName": null
+  },
+  {
+    "Label": "Involucrado",
+    "TypeControl": "text",
+    "FieldDB": "Detalle_de_Datos_Generales.nombre_completo",
+    "Value": null,
+    "Values": null,
+    "Group": null,
+    "SelAllName": null
+  },
+  {
+    "Label": "Responsable",
+    "TypeControl": "text",
+    "FieldDB": "Detalle_de_Imputado.Nombre_Completo_Detenido",
+    "Value": null,
+    "Values": null,
+    "Group": null,
+    "SelAllName": null
+  },
+  {
+    "Label": "Número de Turno",
+    "TypeControl": "text",
+    "FieldDB": "Asignacion_de_Turnos.Numero_de_Turno",
+    "Value": null,
+    "Values": null,
+    "Group": null,
+    "SelAllName": null
+  }
+]

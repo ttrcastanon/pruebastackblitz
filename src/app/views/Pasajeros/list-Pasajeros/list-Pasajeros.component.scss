@@ -1,0 +1,256 @@
+﻿.f-w{
+    width: 100%;
+}
+
+mat-table {
+    display: flex;
+    flex-direction: column;
+}
+    
+mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type{
+    padding-left: 0;
+}
+    
+.spinner-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+    
+mat-form-field.filter {
+    width: 100%;
+}
+    
+mat-form-field.filter .mat-form-field-infix {
+    border: 1px solid #9e9e9e;
+}
+    
+.filter{
+    font-size: 8px;
+    height: 38px;
+}
+    
+.mat-column-acciones,.mat-column-acciones_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+
+.mat-column-Clave,.mat-column-Clave_filtro{
+    width:  50px;
+    flex: 0 0 50px !important;
+}
+.mat-column-Identificador_Alias,.mat-column-Identificador_Alias_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Nombre_s,.mat-column-Nombre_s_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Apellido_paterno,.mat-column-Apellido_paterno_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Apellido_materno,.mat-column-Apellido_materno_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Nombre_completo,.mat-column-Nombre_completo_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Telefono,.mat-column-Telefono_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Celular,.mat-column-Celular_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Correo_electronico,.mat-column-Correo_electronico_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Fecha_de_nacimiento,.mat-column-Fecha_de_nacimiento_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Edad,.mat-column-Edad_filtro {
+    width: 80px;
+    flex: 0 0 80px !important;
+}
+.mat-column-Nacionalidad_1,.mat-column-Nacionalidad_1_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Nacionalidad_2,.mat-column-Nacionalidad_2_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Genero,.mat-column-Genero_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Pertenece_al_grupo,.mat-column-Pertenece_al_grupo_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Activo,.mat-column-Activo_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Numero_de_Pasaporte_1,.mat-column-Numero_de_Pasaporte_1_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Fecha_de_Emision_Pasaporte_1,.mat-column-Fecha_de_Emision_Pasaporte_1_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Fecha_de_vencimiento_pasaporte_1,.mat-column-Fecha_de_vencimiento_pasaporte_1_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Alerta_de_vencimiento_pasaporte_1,.mat-column-Alerta_de_vencimiento_pasaporte_1_filtro {
+    width: 100px;
+    flex: 0 0 100px !important;
+}
+.mat-column-Pais,.mat-column-Pais_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Cargar_Pasaporte_1,.mat-column-Cargar_Pasaporte_1_filtro {
+    width: 120px;
+    flex: 0 0 120px !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.btn-tbl-Cargar_Pasaporte_1{
+    color:#3f51b5;
+}
+.mat-column-Numero_de_Pasaporte_2,.mat-column-Numero_de_Pasaporte_2_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Fecha_de_Emision_Pasaporte_2,.mat-column-Fecha_de_Emision_Pasaporte_2_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Fecha_de_vencimiento_pasaporte_2,.mat-column-Fecha_de_vencimiento_pasaporte_2_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Alerta_de_vencimiento_pasaporte_2,.mat-column-Alerta_de_vencimiento_pasaporte_2_filtro {
+    width: 100px;
+    flex: 0 0 100px !important;
+}
+.mat-column-Pais_1,.mat-column-Pais_1_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Cargar_Pasaporte_2,.mat-column-Cargar_Pasaporte_2_filtro {
+    width: 120px;
+    flex: 0 0 120px !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.btn-tbl-Cargar_Pasaporte_2{
+    color:#3f51b5;
+}
+.mat-column-Numero_de_Visa_1,.mat-column-Numero_de_Visa_1_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Fecha_de_Emision_Visa_1,.mat-column-Fecha_de_Emision_Visa_1_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Fecha_de_vencimiento_visa_1,.mat-column-Fecha_de_vencimiento_visa_1_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Alerta_de_vencimiento_Visa_1,.mat-column-Alerta_de_vencimiento_Visa_1_filtro {
+    width: 100px;
+    flex: 0 0 100px !important;
+}
+.mat-column-Pais_2,.mat-column-Pais_2_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Cargar_Visa_1,.mat-column-Cargar_Visa_1_filtro {
+    width: 120px;
+    flex: 0 0 120px !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.btn-tbl-Cargar_Visa_1{
+    color:#3f51b5;
+}
+.mat-column-Numero_de_Visa_2,.mat-column-Numero_de_Visa_2_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Fecha_de_Emision_Visa_2,.mat-column-Fecha_de_Emision_Visa_2_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Fecha_de_vencimiento_visa_2,.mat-column-Fecha_de_vencimiento_visa_2_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Alerta_de_vencimiento_visa_2,.mat-column-Alerta_de_vencimiento_visa_2_filtro {
+    width: 100px;
+    flex: 0 0 100px !important;
+}
+.mat-column-Pais_4,.mat-column-Pais_4_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Cargar_Visa_2,.mat-column-Cargar_Visa_2_filtro {
+    width: 120px;
+    flex: 0 0 120px !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.btn-tbl-Cargar_Visa_2{
+    color:#3f51b5;
+}
+    
+    
+.mat-filtro-row mat-cell{
+    padding: 0 2px;
+}
+    
+.mat-filtro-row :host ::ng-deep .mat-form-field-infix{
+    padding: 1px 2px 6px !important;
+}
+    
+mat-datepicker-toggle{
+    display: inline-block;
+    width: 25px;
+}
+    
+.mat-header-row, .mat-row {
+    display: inline-flex;
+}
+    
+.filter-select{
+    font-size: 9.5px;
+    height: 38px;
+}
+    
+.filter-select mat-option{
+    font-size: 12px !important;
+}
+    
+:host ::ng-deep .mat-sort-header-container{
+    margin:0 auto;
+}
+    
+.mat-raised-button {
+    line-height: 20px;
+}

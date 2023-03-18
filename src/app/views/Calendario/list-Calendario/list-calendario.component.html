@@ -1,0 +1,30 @@
+<section class="content">
+
+
+    <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+        <p style="color: white">Procesando</p>
+    </ngx-spinner>
+    
+    <button id="btnAddVuelo" title="Vuelo" mat-raised-button color="warn" (click)="NewFligth()" 
+        aria-label="Nueva Solicitud de Vuelo" *ngIf="showBtnNuevaSolicitud">
+        Nueva Solicitud de Vuelo
+    </button>
+    <button id='btn' (click)="ngOpenModal(template)" class="btn btn-primary btn-sm" hidden> Abrir modal </button>
+    <div style="align-content: center;" id="prueba ">
+        <full-calendar [options]="calendarOptions" style="margin-left: auto; margin-left: auto;">
+        </full-calendar>
+    </div>
+
+    <ng-template #template>
+        <div class="modal-header">
+            <button id="closeModal" type="button" class="btn-close close pull-right" aria-label="Close"
+                (click)="modalRef?.hide()">
+                <span aria-hidden="true" class="visually-hidden">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <app-modal [dataInicio]="detalleEvento"></app-modal>
+            <button id="btnUrl" class="btn btn-primary btn-sm" (click)="irUrl()">Ir a solicitud</button>
+        </div>
+    </ng-template>
+</section>

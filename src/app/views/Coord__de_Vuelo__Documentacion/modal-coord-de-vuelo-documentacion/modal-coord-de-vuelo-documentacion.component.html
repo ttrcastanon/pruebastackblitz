@@ -1,0 +1,385 @@
+<h1 mat-dialog-title class="ml-4">Coord de Vuelo - Documentación</h1>
+
+<div mat-dialog-content class="flex-row clearfix">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="body">
+                <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                    <p style="color: white">Procesando</p>
+                </ngx-spinner>
+                <form class="m-4" [formGroup]="Coord__de_Vuelo__DocumentacionForm" (ngSubmit)="save()">
+                    <mat-tab-group #tabGroup>
+                        <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                            <div id="tabDatos_Generales" class="row">
+                                <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Folio</mat-label>
+                                        <input matInput formControlName="Folio"
+                                            [type]="Coord__de_Vuelo__DocumentacionForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                                            required />
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__DocumentacionForm.get('Folio').hasError('required')">
+                                            Folio es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div id="divNumero_de_Vuelo" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Número de Vuelo</mat-label>
+                                        <input type="text" matInput formControlName="Numero_de_Vuelo"
+                                            [matAutocomplete]="autoNumero_de_Vuelo">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoNumero_de_Vuelo="matAutocomplete"
+                                            [displayWith]="displayFnNumero_de_Vuelo">
+                                            <mat-option (onSelectionChange)="Numero_de_Vuelo_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsNumero_de_Vuelo | async" [value]="option">
+                                                {{option.Numero_de_Vuelo}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingNumero_de_Vuelo" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint *ngIf="!hasOptionsNumero_de_Vuelo && !isLoadingNumero_de_Vuelo">
+                                            No se encontraron registros.
+                                        </mat-hint>
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__DocumentacionForm.get('Numero_de_Vuelo').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__DocumentacionForm.get('Numero_de_Vuelo').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Número de Vuelo de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divMatricula" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Matrícula</mat-label>
+                                        <input type="text" matInput formControlName="Matricula"
+                                            [matAutocomplete]="autoMatricula">
+                                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                        <mat-autocomplete #autoMatricula="matAutocomplete"
+                                            [displayWith]="displayFnMatricula">
+                                            <mat-option (onSelectionChange)="Matricula_ExecuteBusinessRules()"
+                                                *ngFor="let option of optionsMatricula | async" [value]="option">
+                                                {{option.Matricula}}
+                                            </mat-option>
+                                            <mat-option *ngIf="isLoadingMatricula" class="is-loading">
+                                                <mat-spinner diameter="30"></mat-spinner>
+                                            </mat-option>
+                                        </mat-autocomplete>
+
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__DocumentacionForm.get('Matricula').hasError('required')">
+                                            Campo requerido
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__DocumentacionForm.get('Matricula').hasError('invalidAutocompleteValue')">
+                                            Valor inválido. Seleccione un Matrícula de la lista de opciones.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divRuta_de_Vuelo" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Ruta de Vuelo</mat-label>
+                                        <input (change)="Ruta_de_Vuelo_ExecuteBusinessRules()" #Ruta_de_Vuelo matInput
+                                            formControlName="Ruta_de_Vuelo" type="text" maxlength="2000" required />
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__DocumentacionForm.get('Ruta_de_Vuelo').hasError('required')">
+                                            Ruta de Vuelo es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divFecha_y_Hora_de_Salida" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Fecha y Hora de Salida</mat-label>
+                                        <input (change)="Fecha_y_Hora_de_Salida_ExecuteBusinessRules()"
+                                            #Fecha_y_Hora_de_Salida matInput formControlName="Fecha_y_Hora_de_Salida"
+                                            type="text" maxlength="50" required />
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__DocumentacionForm.get('Fecha_y_Hora_de_Salida').hasError('required')">
+                                            Fecha y Hora de Salida es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divCalificacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Calificación</mat-label>
+                                        <input (change)="Calificacion_ExecuteBusinessRules()" matInput
+                                            formControlName="Calificacion"
+                                            [type]="Coord__de_Vuelo__DocumentacionForm.get('Calificacion').value == 'Auto'  ? 'text':'number' "
+                                            maxlength="3" required />
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__DocumentacionForm.get('Calificacion').hasError('required')">
+                                            Calificación es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div id="divObservaciones" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width no-padding" appearance="outline">
+                                        <mat-label>Observaciones</mat-label>
+                                        <textarea (change)="Observaciones_ExecuteBusinessRules()" #Observaciones matInput
+                                            formControlName="Observaciones"  maxlength="500" required >
+                                            </textarea>
+                                        <mat-error
+                                            *ngIf="Coord__de_Vuelo__DocumentacionForm.get('Observaciones').hasError('required')">
+                                            Observaciones es requerido
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab aria-label="Aeronave" label="Aeronave"> <br>
+                            <div id="tabAeronave" class="row">
+                                <div id="divAeronave_Documentacion"
+                                    class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <div class="table-responsive">
+                                        <div class="top-action-container-table">
+                                            <h4>Documentación</h4>
+
+                                        </div>
+                                        <table mat-table [dataSource]="dataSourceAeronave_Documentacion"
+                                            multiTemplateDataRows>
+
+                                            <ng-container *ngIf="!Coord__de_Vuelo__DocumentacionForm.disabled"
+                                                matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                                <mat-cell *matCellDef="let element;">
+                                                    <div class="actions">
+                                                        <button mat-icon-button class="btn-tbl-edit" type="button"
+                                                            (click)="editAeronave_Documentacion(element);">
+                                                            <mat-icon>edit</mat-icon>
+                                                        </button>
+
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Descripcion">
+                                                <th mat-header-cell *matHeaderCellDef style="width: 75%;"> Descripción
+                                                </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Confirmado">
+                                                <th mat-header-cell *matHeaderCellDef> Confirmado</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Confirmado_Estatus_de_Confirmacion?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="expandedDetail">
+                                                <td mat-cell *matCellDef="let element; let i = index;"
+                                                    [attr.colspan]="getAeronave_DocumentacionColumns().length">
+
+                                                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                                        <div *ngIf="element.edit">
+                                                            <form
+                                                                formArrayName="Detalle_Coord_Documentacion_AeronaveItems">
+
+                                                                <div class="row form-group"
+                                                                    [formGroupName]="dataSourceAeronave_Documentacion.data.indexOf(element)">
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                                                        style="max-width:50%">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Descripción</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Descripcion"
+                                                                                type="text" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Confirmado</mat-label>
+                                                                            <mat-select placeholder="Confirmado"
+                                                                                formControlName="Confirmado">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varEstatus_de_Confirmacion"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                                                        <button type='button' class="mr-3 btn-sm"
+                                                                            mat-raised-button
+                                                                            (click)="element.edit = false; saveAeronave_Documentacion(element);"
+                                                                            color="primary">Guardar
+                                                                        </button>
+                                                                        <button type="button" class="mr-3 btn-sm"
+                                                                            mat-raised-button color="basic"
+                                                                            (click)="cancelEditAeronave_Documentacion(element)"
+                                                                            mat-button>Cancelar</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="getAeronave_DocumentacionColumns()">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit  )}"
+                                                *matRowDef="let row; columns: getAeronave_DocumentacionColumns();let j = index">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                                class="example-detail-row"></tr>
+                                        </table>
+                                        <mat-paginator #PaginadorAeronave [length]="getCountAeronaves()" [pageSize]="20"
+                                            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab aria-label="PAXs" label="PAXs"> <br>
+                            <div id="tabPAXs" class="row">
+                                <div id="divPAXS_Documentacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <div class="table-responsive">
+                                        <div class="top-action-container-table">
+                                            <h4>Documentación</h4>
+
+                                        </div>
+                                        <table mat-table [dataSource]="dataSourcePAXS_Documentacion"
+                                            multiTemplateDataRows>
+
+                                            <ng-container *ngIf="!Coord__de_Vuelo__DocumentacionForm.disabled"
+                                                matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                                <mat-cell *matCellDef="let element;">
+                                                    <div class="actions">
+                                                        <button mat-icon-button class="btn-tbl-edit" type="button"
+                                                            (click)="editPAXS_Documentacion(element);">
+                                                            <mat-icon>edit</mat-icon>
+                                                        </button>
+
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Descripcion">
+                                                <th mat-header-cell *matHeaderCellDef style="width: 75%;"> Descripción
+                                                </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Confirmado">
+                                                <th mat-header-cell *matHeaderCellDef> Confirmado</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.Confirmado_Estatus_de_Confirmacion?.Descripcion}}
+                                                </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="expandedDetail">
+                                                <td mat-cell *matCellDef="let element; let i = index;"
+                                                    [attr.colspan]="getPAXS_DocumentacionColumns().length">
+
+                                                    <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                                        <div *ngIf="element.edit">
+                                                            <form formArrayName="Detalle_Coord_Documentacion_PAXsItems">
+
+                                                                <div class="row form-group"
+                                                                    [formGroupName]="dataSourcePAXS_Documentacion.data.indexOf(element)">
+
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3"
+                                                                        style="max-width:50%">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Descripción</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="Descripcion"
+                                                                                type="text" disabled />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                                                        <mat-form-field appearance="outline">
+                                                                            <mat-label>Confirmado</mat-label>
+                                                                            <mat-select placeholder="Confirmado"
+                                                                                formControlName="Confirmado">
+                                                                                <mat-option>
+                                                                                </mat-option>
+                                                                                <mat-option
+                                                                                    *ngFor="let item of varEstatus_de_Confirmacion"
+                                                                                    [value]="item.Clave">
+                                                                                    {{ item.Descripcion }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                                                        <button type='button' class="mr-3 btn-sm"
+                                                                            mat-raised-button
+                                                                            (click)="element.edit = false; savePAXS_Documentacion(element);"
+                                                                            color="primary">Guardar
+                                                                        </button>
+                                                                        <button type="button" class="mr-3 btn-sm"
+                                                                            mat-raised-button color="basic"
+                                                                            (click)="cancelEditPAXS_Documentacion(element)"
+                                                                            mat-button>Cancelar</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="getPAXS_DocumentacionColumns()"></tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit )}"
+                                                *matRowDef="let row; columns: getPAXS_DocumentacionColumns();let j = index">
+                                            </tr>
+                                            <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                                                *matRowDef="let row; columns: ['expandedDetail']; let j = index"
+                                                class="example-detail-row"></tr>
+                                        </table>
+                                        <mat-paginator #PaginadorPAX [length]="getCountPAX()" [pageSize]="20"
+                                            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div mat-dialog-actions class="ml-4">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <button type='submit' class="mr-3 mb-2" [disabled]="!Coord__de_Vuelo__DocumentacionForm.valid || consult"
+            mat-raised-button color="primary" (click)="save()">
+            Guardar
+        </button>
+        <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+            [disabled]="!Coord__de_Vuelo__DocumentacionForm.valid || consult" mat-raised-button color="primary">
+            Configurar
+        </button>
+        <button type="button" class="mb-2" mat-button mat-raised-button color="warning" mat-dialog-close
+            style="background-color:#ed5565 !important">
+            Cancelar
+        </button>
+    </div>
+</div>
+
+<div id="snackbar"></div>

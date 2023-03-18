@@ -1,0 +1,26 @@
+:host ::ng-deep .test-card-text > h6 {
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 1.2rem;
+}
+
+:host ::ng-deep .user-img-cierre {
+    max-width: 6.5em;
+    margin-bottom: 1em;
+}
+
+:host ::ng-deep .no-border {
+    border: none!important;
+}
+
+:host ::ng-deep .warn-color {
+    background-color: #b11509!important;
+    min-width: 8.5em;
+}
+
+:host ::ng-deep .succes-color {
+    background-color: #28a745!important;
+    min-width: 8.5em;
+}
+
+

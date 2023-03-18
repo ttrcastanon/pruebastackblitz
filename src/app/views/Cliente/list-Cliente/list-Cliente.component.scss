@@ -1,0 +1,166 @@
+﻿.f-w{
+    width: 100%;
+}
+
+mat-table {
+    display: flex;
+    flex-direction: column;
+}
+    
+mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type{
+    padding-left: 0;
+}
+    
+.spinner-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+    
+mat-form-field.filter {
+    width: 100%;
+}
+    
+mat-form-field.filter .mat-form-field-infix {
+    border: 1px solid #9e9e9e;
+}
+    
+.filter{
+    font-size: 8px;
+    height: 38px;
+}
+    
+.mat-column-acciones,.mat-column-acciones_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+
+.mat-column-Clave,.mat-column-Clave_filtro{
+    width:  50px;
+    flex: 0 0 50px !important;
+}
+.mat-column-ID_Dynamics,.mat-column-ID_Dynamics_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-RFC,.mat-column-RFC_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Razon_Social,.mat-column-Razon_Social_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Nombre_Corto,.mat-column-Nombre_Corto_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Contacto,.mat-column-Contacto_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Direccion_Fiscal,.mat-column-Direccion_Fiscal_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Direccion_Postal,.mat-column-Direccion_Postal_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Correo_Electronico,.mat-column-Correo_Electronico_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Telefono_de_Contacto,.mat-column-Telefono_de_Contacto_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Telefono_de_Contacto_2,.mat-column-Telefono_de_Contacto_2_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Celular_de_Contacto,.mat-column-Celular_de_Contacto_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Fax,.mat-column-Fax_filtro {
+    width: 180px;
+    flex: 0 0 180px !important;
+}
+.mat-column-Estatus,.mat-column-Estatus_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Pertenece_a_grupo_BAL,.mat-column-Pertenece_a_grupo_BAL_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Tipo_de_Cliente,.mat-column-Tipo_de_Cliente_filtro {
+    width: 110px;
+    flex: 0 0 110px !important;
+}
+.mat-column-Vigencia_de_Contrato,.mat-column-Vigencia_de_Contrato_filtro {
+    width: 150px;
+    flex: 0 0 150px !important;
+}
+.mat-column-Cuota_de_mantenimiento,.mat-column-Cuota_de_mantenimiento_filtro {
+    width: 120px;
+    flex: 0 0 120px !important;
+}
+.mat-column-Costo_de_Hora_Rampa,.mat-column-Costo_de_Hora_Rampa_filtro {
+    width: 120px;
+    flex: 0 0 120px !important;
+}
+.mat-column-Costos_Hora_Tecnico,.mat-column-Costos_Hora_Tecnico_filtro {
+    width: 120px;
+    flex: 0 0 120px !important;
+}
+.mat-column-Contrato,.mat-column-Contrato_filtro {
+    width: 120px;
+    flex: 0 0 120px !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.btn-tbl-Contrato{
+    color:#3f51b5;
+}
+.mat-column-Part_en_div_por_tramo,.mat-column-Part_en_div_por_tramo_filtro {
+    width: 100px;
+    flex: 0 0 100px !important;
+}
+    
+    
+.mat-filtro-row mat-cell{
+    padding: 0 2px;
+}
+    
+.mat-filtro-row :host ::ng-deep .mat-form-field-infix{
+    padding: 1px 2px 6px !important;
+}
+    
+mat-datepicker-toggle{
+    display: inline-block;
+    width: 25px;
+}
+    
+.mat-header-row, .mat-row {
+    display: inline-flex;
+}
+    
+.filter-select{
+    font-size: 9.5px;
+    height: 38px;
+}
+    
+.filter-select mat-option{
+    font-size: 12px !important;
+}
+    
+:host ::ng-deep .mat-sort-header-container{
+    margin:0 auto;
+}
+    
+.mat-raised-button {
+    line-height: 20px;
+}

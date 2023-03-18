@@ -1,0 +1,173 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Layout Cuentas por pagar</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Layout_Cuentas_por_pagar/list">Layout Cuentas por pagar</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Layout_Cuentas_por_pagarForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Layout_Cuentas_por_pagarForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFolio_de_carga_manual" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Folio de carga manual</mat-label>
+                        <input (change)="Folio_de_carga_manual_ExecuteBusinessRules()" matInput formControlName="Folio_de_carga_manual" [type]="Layout_Cuentas_por_pagarForm.get('Folio_de_carga_manual').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('Folio_de_carga_manual').hasError('required')">
+                          Folio de carga manual  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha</mat-label>
+                        <input (dateChange)="Fecha_ExecuteBusinessRules()" (blur)="Fecha_ExecuteBusinessRules()" matInput (focus)="datePickerFecha.open()" [matDatepicker]="datePickerFecha" formControlName="Fecha" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha></mat-datepicker>
+                        <mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('Fecha').hasError('required')">
+                          Fecha  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divRFC_Cliente" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>RFC_Cliente</mat-label>
+                        <mat-select (selectionChange)="RFC_Cliente_ExecuteBusinessRules()" placeholder="RFC_Cliente" formControlName="RFC_Cliente" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCliente" [value]="item.Clave">
+                            {{ item.Razon_Social }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('RFC_Cliente').hasError('required')">
+                          RFC_Cliente es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion_Cliente" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripcion_Cliente</mat-label>
+                        <mat-select (selectionChange)="Descripcion_Cliente_ExecuteBusinessRules()" placeholder="Descripcion_Cliente" formControlName="Descripcion_Cliente" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCliente" [value]="item.Clave">
+                            {{ item.Razon_Social }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('Descripcion_Cliente').hasError('required')">
+                          Descripcion_Cliente es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFacturacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Facturación</mat-label>
+                        <input (change)="Facturacion_ExecuteBusinessRules()" matInput formControlName="Facturacion" [value]="Layout_Cuentas_por_pagarForm.get('Facturacion').value | number:'18.1-2'" type="number" maxlength="18" required />
+                        <mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('Facturacion').hasError('required')">
+                          Facturación  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCobranza" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cobranza</mat-label>
+                        <input (change)="Cobranza_ExecuteBusinessRules()" matInput formControlName="Cobranza" [value]="Layout_Cuentas_por_pagarForm.get('Cobranza').value | number:'18.1-2'" type="number" maxlength="18" required />
+                        <mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('Cobranza').hasError('required')">
+                          Cobranza  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSaldo30dias" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Saldo30dias</mat-label>
+                        <input (change)="Saldo30dias_ExecuteBusinessRules()" matInput formControlName="Saldo30dias" [value]="Layout_Cuentas_por_pagarForm.get('Saldo30dias').value | number:'18.1-2'" type="number" maxlength="18" required />
+                        <mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('Saldo30dias').hasError('required')">
+                          Saldo30dias  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSaldo60dias" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Saldo60dias</mat-label>
+                        <input (change)="Saldo60dias_ExecuteBusinessRules()" matInput formControlName="Saldo60dias" [value]="Layout_Cuentas_por_pagarForm.get('Saldo60dias').value | number:'18.1-2'" type="number" maxlength="18" required />
+                        <mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('Saldo60dias').hasError('required')">
+                          Saldo60dias  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSaldo90dias" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Saldo90dias</mat-label>
+                        <input (change)="Saldo90dias_ExecuteBusinessRules()" matInput formControlName="Saldo90dias" [value]="Layout_Cuentas_por_pagarForm.get('Saldo90dias').value | number:'18.1-2'" type="number" maxlength="18" required />
+                        <mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('Saldo90dias').hasError('required')">
+                          Saldo90dias  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divSaldoMayor180dias" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>SaldoMayor180dias</mat-label>
+                        <input (change)="SaldoMayor180dias_ExecuteBusinessRules()" matInput formControlName="SaldoMayor180dias" [value]="Layout_Cuentas_por_pagarForm.get('SaldoMayor180dias').value | number:'18.1-2'" type="number" maxlength="18" required />
+                        <mat-error *ngIf="Layout_Cuentas_por_pagarForm.get('SaldoMayor180dias').hasError('required')">
+                          SaldoMayor180dias  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Layout_Cuentas_por_pagarForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Layout_Cuentas_por_pagarForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Layout_Cuentas_por_pagarForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Layout_Cuentas_por_pagarForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

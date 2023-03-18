@@ -1,0 +1,242 @@
+﻿{
+  "Columns": [
+    "Clave",
+    "No. Expediente",
+    "NUAT",
+    "Tipo de Denuncia",
+    "Turno Asignado",
+    "Orientador",
+    "Estatus",
+    "Hechos",
+    "Delitos",
+    "Solicitantes",
+    "Requeridos"
+  ],
+  "ValuesColumns": [
+    {
+      "Values": [
+        "183",
+        "CLN/MASC/0000006/2020/D",
+        "NUAT-0000001-2020-D/CNT",
+        "Denuncia",
+        "1",
+        "Orientador",
+        "Orientador",
+        "Robo de casa habitación ",
+        "HOMICIDIO ATENUADO EN GRADO DE TENTATIVA, HOMICIDIO AGRAVADO EN GRADO DE TENTATIVA",
+        "CRISTIAN SIFUENTES COVARRUBIAS, MIGUEL ANGEL SIFUENTES COVARRUBIA, HILDA  COVARRUBIAS CARRANZA, LUIS CARMON, FELIPE RODRIGUEZ ESPINOZA, X X X, GOKU LOPEZ ASD",
+        "DANIEL  CALDERA MARTINEZ"
+      ]
+    },
+    {
+      "Values": [
+        "185",
+        "",
+        "NUAT-0000002-2020-D/CNT",
+        "Denuncia",
+        "4",
+        "Orientador",
+        "Orientador",
+        "SE HA ENCONTRADO A LA VICTIMA CON SEVERAS MARCAS DE GOLPES EN DISTINTAS PARTES DEL CUERPO",
+        "HOMICIDIO",
+        "FELIPE GUADALUPE RAMÍREZ RODRÍGUEZ",
+        "BELTRAN CASTRO MABEL HERNÁNDEZ"
+      ]
+    },
+    {
+      "Values": [
+        "186",
+        "",
+        "NUAT-0000002-2020-AE/CNT",
+        "Atención a Extravío ",
+        "5",
+        "Orientador",
+        "Orientador",
+        "me asaltaron en un estacionamiento afuera de la plaza",
+        "HOMICIDIO CALIFICADO",
+        "RAMON VAZQUEZ TOVAR",
+        "YSIDORO RUIZ GALLEGOS"
+      ]
+    },
+    {
+      "Values": [
+        "237",
+        "",
+        "",
+        "Denuncia",
+        "18",
+        "Orientador Alex",
+        "Orientador",
+        "",
+        "",
+        "JOSE LOPEZ MOLINA",
+        ""
+      ]
+    },
+    {
+      "Values": [
+        "238",
+        "",
+        "",
+        "Denuncia",
+        "19",
+        "Orientador",
+        "Orientador",
+        "",
+        "",
+        "MICHELLE MARTINEZ  SOLIS",
+        ""
+      ]
+    },
+    {
+      "Values": [
+        "239",
+        "",
+        "",
+        "Denuncia",
+        "20",
+        "Orientador Alex",
+        "Orientador",
+        "",
+        "",
+        "JOSE LOPEZ PEREZ",
+        ""
+      ]
+    },
+    {
+      "Values": [
+        "240",
+        "",
+        "",
+        "Denuncia",
+        "21",
+        "Orientador",
+        "Orientador",
+        "",
+        "",
+        "ERIKA RODRIGUEZ MURILLO",
+        ""
+      ]
+    },
+    {
+      "Values": [
+        "242",
+        "CMASC/00000011/2020/D",
+        "NUAT-0000007-2020-D/CNTE",
+        "Denuncia",
+        "23",
+        "Orientador",
+        "Orientador",
+        "robo Narrativa Breve de los Hechos",
+        "ABANDONO DE PERSONAS, ROBO AGRAVADO",
+        "JUAN FERMIN SIFUENTES ARGUMEDO, MARIA ELENA GOMEZ, MIGUEL ANGEL SIFUENTES COVARRUBIAS, MIGUEAL PAOLA GOMEZ GOMEZ, RAMON HINOJOS HINOJOS",
+        "ERIKA RODRIGUEZ GOMEZ, PAMELA ESTRADA LOZANO"
+      ]
+    },
+    {
+      "Values": [
+        "243",
+        "",
+        "NUAT-00000038-2020-D/CEN",
+        "Denuncia",
+        "3",
+        "Orientador",
+        "Orientador",
+        "",
+        "",
+        "ALEYDA  VERDUGO PEREZ",
+        ""
+      ]
+    },
+    {
+      "Values": [
+        "244",
+        "CMASC/00000012/2020/D",
+        "NUAT-00000039-2020-D/CEN",
+        "Denuncia",
+        "1",
+        "Orientador",
+        "Orientador",
+        "Me robaron mi casa en vacaciones",
+        "ROBO AGRAVADO",
+        "PROBAR ARCHIVO  INICIO DENUNCIA, RAMON HINOJOS LOZANO, RAMIRO GOMEZ PEREZ",
+        "DIANA JOHANA MENA"
+      ]
+    },
+    {
+      "Values": [
+        "253",
+        "CMASC/00000013/2020/D",
+        "NUAT-00000048-2020-D/CEN",
+        "Denuncia",
+        "9",
+        "Orientador Alex",
+        "Orientador",
+        "Nos robaron en el parque con arma blanca, se llevaron todas nuestras pertenencias.",
+        "ASALTO, ROBO AGRAVADO",
+        "KARLA MEDINA PEREZ, FELIPE GUZMAN LOPEX, GRISELDA PATIÑO GARCIA, JUAN ESCUTIA RIGOVAR",
+        "CARLOS MERLIN GOMEZ, MANUEL LAVASTIDA PERAZA"
+      ]
+    },
+    {
+      "Values": [
+        "255",
+        "CMASC/00000014/2020/D",
+        "NUAT-00000050-2020-D/CEN",
+        "Denuncia",
+        "1",
+        "Orientador Alex",
+        "Orientador",
+        "Robo para probar documentacion",
+        "ROBO AGRAVADO",
+        "DOCUMENTO GERMA 66, LUCIA MENDEZ MOLINA",
+        "CARMEN VASQUEZ MENDEZ"
+      ]
+    },
+    {
+      "Values": [
+        "259",
+        "CMASC/00000015/2020/D",
+        "NUAT-00000054-2020-D/CEN",
+        "Denuncia",
+        "5",
+        "Orientador",
+        "Orientador",
+        "fue robada mi casa",
+        "ROBO AGRAVADO",
+        "FIX FILE FIX FILE FIX FILE, MIGUEL ANGEL SIFUENTES ARGUMEDO, HILDA COVARRUBIAS CARRANZA, JOSE MARIA DE LA O ESTRADA, OTRO VICTIMA D, JUAN ESCUTIA ITURBIDE",
+        "JUAN FERMIN SIFUENTES ARGUMEDO"
+      ]
+    },
+    {
+      "Values": [
+        "269",
+        "",
+        "NUAT-00000064-2020-D/CEN",
+        "Denuncia",
+        "2",
+        "Orientador",
+        "Orientador",
+        "",
+        "",
+        "MUARICIO PEREZ CASTILLO",
+        ""
+      ]
+    },
+    {
+      "Values": [
+        "272",
+        "",
+        "NUAT-00000010-2020-AE/CEN",
+        "Atención a Extravío ",
+        "1",
+        "Orientador",
+        "Orientador",
+        "",
+        "",
+        "TURNO PRUEBA TURNO",
+        ""
+      ]
+    }
+  ]
+}

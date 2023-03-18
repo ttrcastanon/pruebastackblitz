@@ -1,0 +1,381 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Costos de Importación</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Costos_de_Importacion/list">Costos de Importación</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Costos_de_ImportacionForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Costos_de_ImportacionForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divMiscelaneas" class="col-xl-5 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>¿Misceláneas?</mat-label>
+                        <mat-select (selectionChange)="Miscelaneas_ExecuteBusinessRules()" placeholder="¿Misceláneas?"
+                          formControlName="Miscelaneas" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Miscelaneas" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Miscelaneas').hasError('required')">
+                          ¿Misceláneas? es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__items_asociados" class="col-xl-5 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. items asociados</mat-label>
+                        <input (change)="No__items_asociados_ExecuteBusinessRules()" matInput
+                          formControlName="No__items_asociados"
+                          [type]="Costos_de_ImportacionForm.get('No__items_asociados').value == 'Auto'  ? 'text':'number' "
+                          maxlength="9" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('No__items_asociados').hasError('required')">
+                          No. items asociados es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divTransporte" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Transporte</mat-label>
+                        <mat-select (selectionChange)="Transporte_ExecuteBusinessRules()" placeholder="Transporte"
+                          formControlName="Transporte" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Transporte" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Transporte').hasError('required')">
+                          Transporte es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCosto_flete_" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Costo flete $</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Costo_flete__ExecuteBusinessRules()" matInput formControlName="Costo_flete_"
+                          mask="separator.2" thousandSeparator="," maxlength="14" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Costo_flete_').hasError('required')">
+                          Costo flete $ es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- [value]="Costos_de_ImportacionForm.get('Tipo_de_Cambio_T').value | number:'9.1-2'" -->
+                    <div id="divTipo_de_Cambio_T" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Cambio T</mat-label>
+                        <input (change)="Tipo_de_Cambio_T_ExecuteBusinessRules()" matInput
+                          formControlName="Tipo_de_Cambio_T"
+                          type="number" maxlength="11" required
+                          (keypress)="numberOnly($event,9)" />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Tipo_de_Cambio_T').hasError('required')">
+                          Tipo de Cambio T es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Factura_T" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Factura T</mat-label>
+                        <input (change)="No__de_Factura_T_ExecuteBusinessRules()" #No__de_Factura_T matInput
+                          formControlName="No__de_Factura_T" type="text" maxlength="11" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('No__de_Factura_T').hasError('required')">
+                          No. de Factura es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Factura_T" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Factura T</mat-label>
+                        <input (dateChange)="Fecha_de_Factura_T_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Factura_T_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Factura_T.open()" [matDatepicker]="datePickerFecha_de_Factura_T"
+                          formControlName="Fecha_de_Factura_T" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Factura_T"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Factura_T></mat-datepicker>
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Fecha_de_Factura_T').hasError('required')">
+                          Fecha de Factura es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divServicios_Aduanales" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Agencia Aduanal</mat-label>
+                        <mat-select (selectionChange)="Servicios_Aduanales_ExecuteBusinessRules()"
+                          placeholder="Agencia Aduanal" formControlName="Servicios_Aduanales" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varServicios_Aduanales" [value]="item.Folio">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Servicios_Aduanales').hasError('required')">
+                          Agencia Aduanal es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCosto_Servicios_" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Costo Servicios $</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Costo_Servicios__ExecuteBusinessRules()" matInput
+                          formControlName="Costo_Servicios_" mask="separator.2" thousandSeparator="," maxlength="14"
+                          required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Costo_Servicios_').hasError('required')">
+                          Costo Servicios $ es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- [value]="Costos_de_ImportacionForm.get('Tipo_de_Cambio_SA').value | number:'9.1-2'" -->
+                    <div id="divTipo_de_Cambio_SA" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Cambio SA</mat-label>
+                        <input (change)="Tipo_de_Cambio_SA_ExecuteBusinessRules()" matInput
+                          formControlName="Tipo_de_Cambio_SA"
+                          type="number" maxlength="11" (keypress)="numberOnly($event,9)"  required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Tipo_de_Cambio_SA').hasError('required')">
+                          Tipo de Cambio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Factura_SA" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Factura SA</mat-label>
+                        <input (change)="No__de_Factura_SA_ExecuteBusinessRules()" #No__de_Factura_SA matInput
+                          formControlName="No__de_Factura_SA" type="text" maxlength="11" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('No__de_Factura_SA').hasError('required')">
+                          No. de Factura es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha_de_Factura_SA" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha de Factura SA</mat-label>
+                        <input (dateChange)="Fecha_de_Factura_SA_ExecuteBusinessRules()"
+                          (blur)="Fecha_de_Factura_SA_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_de_Factura_SA.open()" [matDatepicker]="datePickerFecha_de_Factura_SA"
+                          formControlName="Fecha_de_Factura_SA" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_de_Factura_SA"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_de_Factura_SA></mat-datepicker>
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Fecha_de_Factura_SA').hasError('required')">
+                          Fecha de Factura es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divImpuestos_Aduanales" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2"
+                     >
+                      <h4>Impuestos Aduanales</h4>
+                      <!-- <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Impuestos Aduanales</mat-label>
+                        <input (change)="Impuestos_Aduanales_ExecuteBusinessRules()" #Impuestos_Aduanales matInput
+                          formControlName="Impuestos_Aduanales" type="text" maxlength="50" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Impuestos_Aduanales').hasError('required')">
+                          Impuestos Aduanales es requerido
+                        </mat-error>
+                      </mat-form-field> -->
+                    </div>
+
+                    <div id="divCosto_Impuesto_" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Costo Impuesto $</mat-label>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">attach_money</mat-icon>
+                        </span>
+                        <input (change)="Costo_Impuesto__ExecuteBusinessRules()" matInput
+                          formControlName="Costo_Impuesto_" mask="separator.2" thousandSeparator="," maxlength="14"
+                          required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Costo_Impuesto_').hasError('required')">
+                          Costo Impuesto $ es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- [value]="Costos_de_ImportacionForm.get('Tipo_de_Cambio_IA').value | number:'9.1-2'" -->
+                    <div id="divTipo_de_Cambio_IA" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Cambio IA</mat-label>
+                        <input (change)="Tipo_de_Cambio_IA_ExecuteBusinessRules()" matInput
+                          formControlName="Tipo_de_Cambio_IA"
+                          type="number" maxlength="11" (keypress)="numberOnly($event,9)"  required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Tipo_de_Cambio_IA').hasError('required')">
+                          Tipo de Cambio IA es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                
+
+                    <div id="divNo__de_Factura_IA" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Factura IA</mat-label>
+                        <input (change)="No__de_Factura_IA_ExecuteBusinessRules()" #No__de_Factura_IA matInput
+                          formControlName="No__de_Factura_IA" type="text" maxlength="11" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('No__de_Factura_IA').hasError('required')">
+                          No. de Factura IA es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Factura_IA2" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Factura IA2</mat-label>
+                        <input (dateChange)="No__de_Factura_IA2_ExecuteBusinessRules()"
+                          (blur)="No__de_Factura_IA2_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerNo__de_Factura_IA2.open()" [matDatepicker]="datePickerNo__de_Factura_IA2"
+                          formControlName="No__de_Factura_IA2" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerNo__de_Factura_IA2"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerNo__de_Factura_IA2></mat-datepicker>
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('No__de_Factura_IA2').hasError('required')">
+                          No. de Factura IA2 es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <!-- <div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    </div>
+                    <div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    </div> -->
+
+                    <div id="divClave_de_Pedimento" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Clave de Pedimento</mat-label>
+                        <input (change)="Clave_de_Pedimento_ExecuteBusinessRules()" #Clave_de_Pedimento matInput
+                          formControlName="Clave_de_Pedimento" type="text" maxlength="10" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('Clave_de_Pedimento').hasError('required')">
+                          Clave de Pedimento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Pedimento" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Pedimento</mat-label>
+                        <input (change)="No__de_Pedimento_ExecuteBusinessRules()" matInput
+                          formControlName="No__de_Pedimento"
+                          [type]="Costos_de_ImportacionForm.get('No__de_Pedimento').value == 'Auto'  ? 'text':'number' "
+                          maxlength="9" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('No__de_Pedimento').hasError('required')">
+                          No. de Pedimento es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNo__de_Guia" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>No. de Guía</mat-label>
+                        <input (change)="No__de_Guia_ExecuteBusinessRules()" matInput formControlName="No__de_Guia"
+                          [type]="Costos_de_ImportacionForm.get('No__de_Guia').value == 'Auto'  ? 'text':'number' "
+                          maxlength="9" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('No__de_Guia').hasError('required')">
+                          No. de Guía es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFolioGestionIportacion" class="col-xl-2 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio Gestion Importación</mat-label>
+                        <input type="text" matInput formControlName="FolioGestionIportacion"
+                          [matAutocomplete]="autoFolioGestionIportacion" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoFolioGestionIportacion="matAutocomplete"
+                          [displayWith]="displayFnFolioGestionIportacion">
+                          <mat-option (onSelectionChange)="FolioGestionIportacion_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsFolioGestionIportacion | async" [value]="option">
+                            {{option.FolioGestiondeImportacion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingFolioGestionIportacion" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsFolioGestionIportacion && !isLoadingFolioGestionIportacion">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('FolioGestionIportacion').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error
+                          *ngIf="Costos_de_ImportacionForm.get('FolioGestionIportacion').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un FolioGestionIportacion de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFolioCostosImportacion" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio Costos Importación</mat-label>
+                        <input (change)="FolioCostosImportacion_ExecuteBusinessRules()" #FolioCostosImportacion matInput
+                          formControlName="FolioCostosImportacion" type="text" maxlength="11" required />
+                        <mat-error *ngIf="Costos_de_ImportacionForm.get('FolioCostosImportacion').hasError('required')">
+                          Folio Costos Importación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!Costos_de_ImportacionForm.valid || consult" mat-raised-button
+                    color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Costos_de_ImportacionForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Costos_de_ImportacionForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Costos_de_ImportacionForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

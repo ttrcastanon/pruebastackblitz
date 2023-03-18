@@ -1,0 +1,953 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Catálogo de Aeronave</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Aeronave/list">Catálogo de Aeronave</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="AeronaveForm" (ngSubmit)="save()">
+              <mdb-tabs [fill]="true">
+                <mdb-tab title="Datos Generales">
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divMatricula" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Matricula</mat-label>
+                        <input (change)="Matricula_ExecuteBusinessRules()" #Matricula matInput
+                          formControlName="Matricula" type="text" maxlength="20" required />
+                        <mat-error *ngIf="AeronaveForm.get('Matricula').hasError('required')">
+                          Matricula es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divModelo" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Modelo</mat-label>
+                        <input type="text" matInput formControlName="Modelo" [matAutocomplete]="autoModelo">
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoModelo="matAutocomplete" [displayWith]="displayFnModelo">
+                          <mat-option (onSelectionChange)="Modelo_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsModelo | async" [value]="option">
+                            {{option.Descripcion}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingModelo" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsModelo && !isLoadingModelo">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="AeronaveForm.get('Modelo').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="AeronaveForm.get('Modelo').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Modelo de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPropietario" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Propietario</mat-label>
+                        <mat-select (selectionChange)="Propietario_ExecuteBusinessRules()" placeholder="Propietario"
+                          formControlName="Propietario" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varPropietarios" [value]="item.Folio">
+                            {{ item.Nombre }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="AeronaveForm.get('Propietario').hasError('required')">
+                          Propietario es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFabricante" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fabricante</mat-label>
+                        <mat-select (selectionChange)="Fabricante_ExecuteBusinessRules()" placeholder="Fabricante"
+                          formControlName="Fabricante" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varFabricante" [value]="item.Folio">
+                            {{ item.Nombre }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="AeronaveForm.get('Fabricante').hasError('required')">
+                          Fabricante es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNumero_de_Serie" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de Serie</mat-label>
+                        <input (change)="Numero_de_Serie_ExecuteBusinessRules()" #Numero_de_Serie matInput
+                          formControlName="Numero_de_Serie" type="text" maxlength="50" required />
+                        <mat-error *ngIf="AeronaveForm.get('Numero_de_Serie').hasError('required')">
+                          Número de Serie es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divCliente" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cliente</mat-label>
+                        <input type="text" matInput formControlName="Cliente" [matAutocomplete]="autoCliente" required>
+                        <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                        <mat-autocomplete #autoCliente="matAutocomplete" [displayWith]="displayFnCliente">
+                          <mat-option (onSelectionChange)="Cliente_ExecuteBusinessRules()"
+                            *ngFor="let option of optionsCliente | async" [value]="option">
+                            {{option.Razon_Social}}
+                          </mat-option>
+                          <mat-option *ngIf="isLoadingCliente" class="is-loading">
+                            <mat-spinner diameter="30"></mat-spinner>
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint *ngIf="!hasOptionsCliente && !isLoadingCliente">
+                          No se encontraron registros.
+                        </mat-hint>
+                        <mat-error *ngIf="AeronaveForm.get('Cliente').hasError('required')">
+                          Campo requerido
+                        </mat-error>
+                        <mat-error *ngIf="AeronaveForm.get('Cliente').hasError('invalidAutocompleteValue')">
+                          Valor inválido. Seleccione un Cliente de la lista de opciones.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divAno_de_Fabricacion" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Año de Fabricación</mat-label>
+                        <input (change)="Ano_de_Fabricacion_ExecuteBusinessRules()" matInput
+                          formControlName="Ano_de_Fabricacion" maxlength="4"
+                          [type]="AeronaveForm.get('Ano_de_Fabricacion').value == 'Auto'  ? 'text':'number' "
+                          min="0" maxlength="4" onkeydown="if(event.key==='.'){event.preventDefault();}"  
+                          oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,''); if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"required />
+                        <mat-error *ngIf="AeronaveForm.get('Ano_de_Fabricacion').hasError('required')">
+                          Año de Fabricación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divOrigen_de_Aeronave" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Origen de Aeronave</mat-label>
+                        <mat-select (selectionChange)="Origen_de_Aeronave_ExecuteBusinessRules()"
+                          placeholder="Origen de Aeronave" formControlName="Origen_de_Aeronave" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varOrigen_de_Aeronave" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="AeronaveForm.get('Origen_de_Aeronave').hasError('required')">
+                          Origen de Aeronave es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divPropia" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Propia_ExecuteBusinessRules()" formControlName="Propia"
+                        class="example-margin">
+                        Propia
+                      </mat-checkbox>
+                    </div>
+                    <div id="divEstatus" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Estatus</mat-label>
+                        <mat-select (selectionChange)="Estatus_ExecuteBusinessRules()" placeholder="Estatus"
+                          formControlName="Estatus" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEstatus_Aeronave" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="AeronaveForm.get('Estatus').hasError('required')">
+                          Estatus es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <h6>Uso de Aeronave</h6>
+                    </div>
+                    <div id="divOperaciones" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Operaciones_ExecuteBusinessRules()" formControlName="Operaciones"
+                        class="example-margin">
+                        Operaciones
+                      </mat-checkbox>
+                    </div>
+                    <div id="divMantenimiento" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Mantenimiento_ExecuteBusinessRules()" formControlName="Mantenimiento"
+                        class="example-margin">
+                        Mantenimiento
+                      </mat-checkbox>
+                    </div>
+                    <div id="divFotografias_de_la_aeronave" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Fotografías de la aeronave</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addFotografias_de_la_aeronaveToMR(); $event.stopPropagation();"(click)="MRaddFotografias_de_la_aeronave = true; " [disabled]="MRaddFotografias_de_la_aeronave">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+
+                        <table mat-table [dataSource]="dataSourceFotografias_de_la_aeronave" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!AeronaveForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element; let dataIndex = dataIndex">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editFotografias_de_la_aeronave(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteFotografias_de_la_aeronave(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Fotografia">
+                            <th mat-header-cell *matHeaderCellDef>Fotografía</th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="text-center f-w" *ngIf="element.Fotografia_Spartane_File">
+                                <a *ngIf="element.Folio > 0" mat-button class="btn-tbl-foto"
+                                  [disabled]="!element.Fotografia"
+                                  [href]="spartanFileService.url(element.Fotografia, element.Fotografia_Spartane_File)"
+                                  target="_blank" matTooltip="Fotografía">
+                                  <mat-icon>image_search</mat-icon>
+                                  <span>{{element.Fotografia_Spartane_File}}</span>
+                                </a>
+                              </div>
+                              <a *ngIf="getFotografia_detalle_de_imagenes_de_aeronave(element) != ''" mat-button
+                                class="btn-tbl-foto" href="#"
+                                (click)="getFotografia_detalle_de_imagenes_de_aeronaveClick(element); $event.stopPropagation();$event.preventDefault();">
+                                {{getFotografia_detalle_de_imagenes_de_aeronave(element)}}
+                              </a>
+                            </td>
+                          </ng-container>
+
+                          <ng-container *ngIf="!AeronaveForm.disabled" matColumnDef="actionsForm">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element; let dataIndex = dataIndex">
+                              <div class="actions" *ngIf="element.edit">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="element.edit = false; saveFotografias_de_la_aeronave(element);"(click)="MRaddFotografias_de_la_aeronave = false"
+                                  >
+                                  <mat-icon>check</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="cancelEditFotografias_de_la_aeronave(element)"(click)="MRaddFotografias_de_la_aeronave = false">
+                                  <mat-icon>close</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index;"
+                              [attr.colspan]="getFotografias_de_la_aeronaveColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="detalle_de_imagenes_de_aeronaveItems">
+
+                                    <div class="row form-group"
+                                      [formGroup]="dataSourceFotografias_de_la_aeronave.data.indexOf(element)">
+
+                                      <div class="col">
+                                        <mat-form-field *ngIf="!hasFotografia_detalle_de_imagenes_de_aeronave(element)"
+                                          class="example-full-width no-padding" appearance="outline">
+                                          <mat-label>Fotografía</mat-label>
+                                          <ngx-mat-file-input #removableInputFamiliar formControlName="FotografiaFile" required>
+                                          </ngx-mat-file-input>
+                                          <button mat-icon-button matSuffix *ngIf="!removableInputFamiliar.empty"
+                                            (click)="removableInputFamiliar.clear($event)">
+                                            <mat-icon>clear</mat-icon>
+                                          </button>
+                                        </mat-form-field>
+                                        <div style="padding-left: 5px;"
+                                          *ngIf="hasFotografia_detalle_de_imagenes_de_aeronave(element)">
+                                          <mat-label>Fotografía</mat-label><br>
+                                          <div *ngIf="element.Fotografia_Spartane_File">
+                                            <a [href]="spartanFileService.url(element.Fotografia_Spartane_File.File_Id,element.Fotografia_Spartane_File.Description)"
+                                              role="button" target="_blank">
+                                              {{ element.Fotografia_Spartane_File.Description }}
+                                            </a>
+                                          </div>
+                                          <a *ngIf="getFotografia_detalle_de_imagenes_de_aeronave(element) != ''"
+                                            mat-button class="btn-tbl-foto" href="#"
+                                            (click)="getFotografia_detalle_de_imagenes_de_aeronaveClick(element); $event.stopPropagation(); $event.preventDefault();">
+                                            {{getFotografia_detalle_de_imagenes_de_aeronave(element)}}
+                                          </a>
+                                          <button mat-icon-button
+                                            (click)="removeFotografia_detalle_de_imagenes_de_aeronave(element.Fotografia_Spartane_File)"
+                                            *ngIf="!AeronaveForm.disabled">
+                                            <mat-icon aria-label="eliminar">close</mat-icon>
+                                          </button>
+                                        </div>
+                                      </div>
+
+                                    </div>
+
+                                    <!-- <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; saveFotografias_de_la_aeronave(element);"(click)="MRaddFotografias_de_la_aeronave = false"(click)="MRaddFotografias_de_la_aeronave = false"
+                                          color="primary">
+                                          Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+                                          (click)="cancelEditFotografias_de_la_aeronave(element)" mat-button(click)="MRaddFotografias_de_la_aeronave = false">
+                                          Cancelar
+                                        </button>
+                                      </div>
+                                    </div> -->
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getFotografias_de_la_aeronaveColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio == 0 )}"
+                            *matRowDef="let row; columns: getFotografias_de_la_aeronaveColumns();let index = index">
+                          </tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['actionsForm','expandedDetail']; let index = index"
+                            class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mdb-tab>
+                <mdb-tab title="Equipamiento de aeronave">
+                  <div id="tabEquipamiento_de_aeronave" class="row">
+                    <div id="divCapacidad_de_pasajeros" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Capacidad de pasajeros</mat-label>
+                        <input (change)="Capacidad_de_pasajeros_ExecuteBusinessRules()" matInput
+                          formControlName="Capacidad_de_pasajeros"
+                          [type]="AeronaveForm.get('Capacidad_de_pasajeros').value == 'Auto'  ? 'text':'number' "
+                           min="0" maxlength="9" onkeydown="if(event.key==='.'){event.preventDefault();}"  
+                          oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,''); if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required />
+                        <mat-error *ngIf="AeronaveForm.get('Capacidad_de_pasajeros').hasError('required')">
+                          Capacidad de pasajeros es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divNivel_de_ruido" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Nivel de ruido</mat-label>
+                        <mat-select (selectionChange)="Nivel_de_ruido_ExecuteBusinessRules()"
+                          placeholder="Nivel de ruido" formControlName="Nivel_de_ruido" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varNivel_de_Ruido" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="AeronaveForm.get('Nivel_de_ruido').hasError('required')">
+                          Nivel de ruido es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTurbulencia" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Turbulencia de Estela</mat-label>
+                        <mat-select (selectionChange)="Turbulencia_ExecuteBusinessRules()"
+                          placeholder="Turbulencia de Estela" formControlName="Turbulencia" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTurbulencia_de_Estela" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="AeronaveForm.get('Turbulencia').hasError('required')">
+                          Turbulencia de Estela es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEquipo_de_navegacion" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Equipo de navegación</mat-label>
+                        <mat-select (selectionChange)="Equipo_de_navegacion_ExecuteBusinessRules()"
+                          placeholder="Equipo de navegación" formControlName="Equipo_de_navegacion" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varEquipo_de_Navegacion" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="AeronaveForm.get('Equipo_de_navegacion').hasError('required')">
+                          Equipo de navegación es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <h6>Equipo de Emergencia</h6>
+                    </div>
+                    <div id="divUHV" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="UHV_ExecuteBusinessRules()" formControlName="UHV" class="example-margin">
+                        UHV
+                      </mat-checkbox>
+                    </div>
+                    <div id="divVHF" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="VHF_ExecuteBusinessRules()" formControlName="VHF" class="example-margin">
+                        VHF
+                      </mat-checkbox>
+                    </div>
+                    <div id="divELT" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="ELT_ExecuteBusinessRules()" formControlName="ELT" class="example-margin">
+                        ELT
+                      </mat-checkbox>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <h6>Equipo de Supervivencia</h6>
+                    </div>
+                    <div id="divDesierto" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Desierto_ExecuteBusinessRules()" formControlName="Desierto"
+                        class="example-margin">
+                        Desierto
+                      </mat-checkbox>
+                    </div>
+                    <div id="divPolar" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Polar_ExecuteBusinessRules()" formControlName="Polar"
+                        class="example-margin">
+                        Polar
+                      </mat-checkbox>
+                    </div>
+                    <div id="divSelva" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Selva_ExecuteBusinessRules()" formControlName="Selva"
+                        class="example-margin">
+                        Selva
+                      </mat-checkbox>
+                    </div>
+                    <div id="divMaritimo" class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-checkbox (change)="Maritimo_ExecuteBusinessRules()" formControlName="Maritimo"
+                        class="example-margin">
+                        Marítimo
+                      </mat-checkbox>
+                    </div>
+                    <div id="divChalecos_salvavidas" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Chalecos salvavidas</mat-label>
+                        <input (change)="Chalecos_salvavidas_ExecuteBusinessRules()" matInput
+                          formControlName="Chalecos_salvavidas"
+                          [type]="AeronaveForm.get('Chalecos_salvavidas').value == 'Auto'  ? 'text':'number' "
+                           min="0" maxlength="9" onkeydown="if(event.key==='.'){event.preventDefault();}"  
+                          oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,''); if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                      </mat-form-field>
+                    </div>
+                    <div id="divNumero_de_lanchas_salvavidas" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Número de lanchas salvavidas</mat-label>
+                        <input (change)="Numero_de_lanchas_salvavidas_ExecuteBusinessRules()" matInput
+                          formControlName="Numero_de_lanchas_salvavidas"
+                          [type]="AeronaveForm.get('Numero_de_lanchas_salvavidas').value == 'Auto'  ? 'text':'number' "
+                           min="0" maxlength="9" onkeydown="if(event.key==='.'){event.preventDefault();}"  
+                          oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,''); if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                      </mat-form-field>
+                    </div>
+                    <div id="divCapacidad" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Capacidad de lancha Salvavidas</mat-label>
+                        <input (change)="Capacidad_ExecuteBusinessRules()" matInput formControlName="Capacidad"
+                          [type]="AeronaveForm.get('Capacidad').value == 'Auto'  ? 'text':'number' "
+                           min="0" maxlength="9" onkeydown="if(event.key==='.'){event.preventDefault();}"  
+                          oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,''); if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           />
+                      </mat-form-field>
+                    </div>
+                    <div id="divColor_de_la_aeronave" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Color de la aeronave</mat-label>
+                        <input (change)="Color_de_la_aeronave_ExecuteBusinessRules()" #Color_de_la_aeronave matInput
+                          formControlName="Color_de_la_aeronave" type="text" maxlength="50"  />
+                      </mat-form-field>
+                    </div>
+                    <div id="divColor_cubierta_de_los_botes" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Color cubierta de los botes</mat-label>
+                        <input (change)="Color_cubierta_de_los_botes_ExecuteBusinessRules()"
+                          #Color_cubierta_de_los_botes matInput formControlName="Color_cubierta_de_los_botes"
+                          type="text" maxlength="50" required />
+                        <mat-error *ngIf="AeronaveForm.get('Color_cubierta_de_los_botes').hasError('required')">
+                          Color cubierta de los botes es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divVelocidad" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Velocidad</mat-label>
+                        <input (change)="Velocidad_ExecuteBusinessRules()" matInput formControlName="Velocidad"
+                          [type]="AeronaveForm.get('Velocidad').value == 'Auto'  ? 'text':'number' "
+                          min="0" maxlength="4" onkeydown="if(event.key==='.'){event.preventDefault();}"  
+                          oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,''); if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          required />
+                        <mat-error *ngIf="AeronaveForm.get('Velocidad').hasError('required')">
+                          Velocidad es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divTipo_de_Ala" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Tipo de Ala</mat-label>
+                        <mat-select (selectionChange)="Tipo_de_Ala_ExecuteBusinessRules()" placeholder="Tipo de Ala"
+                          formControlName="Tipo_de_Ala" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Ala" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="AeronaveForm.get('Tipo_de_Ala').hasError('required')">
+                          Tipo de Ala es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divUPA" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UPA</mat-label>
+                        <input (change)="UPA_ExecuteBusinessRules()" #UPA matInput formControlName="UPA" type="text"
+                          maxlength="30"  />
+                      </mat-form-field>
+                    </div>
+                    <div id="divUPA_MODELO" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UPA MODELO</mat-label>
+                        <input (change)="UPA_MODELO_ExecuteBusinessRules()" #UPA_MODELO matInput
+                          formControlName="UPA_MODELO" type="text" maxlength="30"  />
+                      </mat-form-field>
+                    </div>
+                    <div id="divUPA_SERIE" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>UPA SERIE</mat-label>
+                        <input (change)="UPA_SERIE_ExecuteBusinessRules()" #UPA_SERIE matInput
+                          formControlName="UPA_SERIE" type="text" maxlength="30"  />
+                      </mat-form-field>
+                    </div>
+                    <div id="divMotores_de_Aeronave" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Motores de Aeronave</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addMotores_de_AeronaveToMR(); $event.stopPropagation();"(click)="MRaddMotores_de_Aeronave = true" [disabled]="MRaddMotores_de_Aeronave">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceMotores_de_Aeronave" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!AeronaveForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editMotores_de_Aeronave(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteMotores_de_Aeronave(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Motor">
+                            <th mat-header-cell *matHeaderCellDef> Motor</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Motor_Motores?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Marca">
+                            <th mat-header-cell *matHeaderCellDef> Marca </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Marca}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Modelo">
+                            <th mat-header-cell *matHeaderCellDef> Modelo </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Modelo}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__Serie">
+                            <th mat-header-cell *matHeaderCellDef> No. Serie </th>
+                            <td mat-cell *matCellDef="let element"> {{element.No__Serie}} </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex;"
+                              [attr.colspan]="getMotores_de_AeronaveColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_Motores_de_AeronaveItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataIndex">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Motor</mat-label>
+                                          <mat-select placeholder="Motor" formControlName="Motor" required>
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varMotores" [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Marca</mat-label>
+                                          <input matInput formControlName="Marca" type="text" required/>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Modelo</mat-label>
+                                          <input matInput formControlName="Modelo" type="text" required/>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. Serie</mat-label>
+                                          <input matInput formControlName="No__Serie" type="text" required/>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                        [disabled]="!Motores_de_AeronaveItems.controls[dataIndex].valid"
+                                          (click)="element.edit = false; saveMotores_de_Aeronave(element);"(click)="MRaddMotores_de_Aeronave = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+(click)="MRaddMotores_de_Aeronave = false"                                          (click)="cancelEditMotores_de_Aeronave(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getMotores_de_AeronaveColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Clave ==0 )}"
+                            *matRowDef="let row; columns: getMotores_de_AeronaveColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+                  </div>
+                </mdb-tab>
+                <mdb-tab title="Información Adicional">
+                  <div id="tabInformacion_Adicional" class="row">
+                    <div id="divCiclos_iniciales" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Ciclos iniciales</mat-label>
+                        <input (change)="Ciclos_iniciales_ExecuteBusinessRules()" matInput
+                          formControlName="Ciclos_iniciales"
+                          [type]="AeronaveForm.get('Ciclos_iniciales').value == 'Auto'  ? 'text':'number' "
+                          min="0" maxlength="9" onkeydown="if(event.key==='.'){event.preventDefault();}"  
+                          oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,''); if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required />
+                        <!-- <mat-error *ngIf="AeronaveForm.get('Ciclos_iniciales').hasError('required')">
+                          Ciclos iniciales es requerido
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div id="divCiclos_actuales" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Ciclos actuales</mat-label>
+                        <input (change)="Ciclos_actuales_ExecuteBusinessRules()" matInput
+                          formControlName="Ciclos_actuales"
+                          [type]="AeronaveForm.get('Ciclos_actuales').value == 'Auto'  ? 'text':'number' " maxlength="9"
+                          required />
+                        <mat-error *ngIf="AeronaveForm.get('Ciclos_actuales').hasError('required')">
+                          Ciclos actuales es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHoras_iniciales" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Horas iniciales</mat-label>
+                        <input (change)="Horas_iniciales_ExecuteBusinessRules()"
+                          (blur)="Horas_iniciales_ExecuteBusinessRules()" formControlName="Horas_iniciales" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" required/>
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="AeronaveForm.get('Horas_iniciales').hasError('required')">
+                          Horas iniciales es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divHoras_actuales" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Horas actuales</mat-label>
+                        <input (change)="Horas_actuales_ExecuteBusinessRules()"
+                          (blur)="Horas_actuales_ExecuteBusinessRules()" formControlName="Horas_actuales" matInput
+                          placeholder="EX: 23:05:29" mask="Hh:m0:s0" required />
+                        <span matPrefix>
+                          <mat-icon class="mr-2">access_time</mat-icon>
+                        </span>
+                        <mat-error *ngIf="AeronaveForm.get('Horas_actuales').hasError('required')">
+                          Horas actuales es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divInicio_de_operaciones" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Inicio de operaciones</mat-label>
+                        <input (dateChange)="Inicio_de_operaciones_ExecuteBusinessRules()"
+                          (blur)="Inicio_de_operaciones_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerInicio_de_operaciones.open()"
+                          [matDatepicker]="datePickerInicio_de_operaciones" formControlName="Inicio_de_operaciones"
+                          [max]="today" type="text" (keypress)="soloFecha($event)" required/>
+                        <mat-datepicker-toggle matSuffix
+                          [for]="datePickerInicio_de_operaciones"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerInicio_de_operaciones></mat-datepicker>
+                        
+                      </mat-form-field>
+                    </div>
+                    <div id="divBitacora" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Bitácora</mat-label>
+                        <mat-select (selectionChange)="Bitacora_ExecuteBusinessRules()" placeholder="Bitácora"
+                          formControlName="Bitacora" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varTipo_de_Bitacora_de_Aeronave" [value]="item.Clave">
+                            {{ item.Descripcion }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div id="divEnvergadura" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Envergadura</mat-label>
+                        <input  matInput
+                          formControlName="Envergadura"
+                          type="number"
+                          />
+                      </mat-form-field>
+                    </div>
+                    <div id="divCuota_SENEAM" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Cuota SENEAM</mat-label>
+                        <input matInput
+                          formControlName="Cuota_SENEAM"
+                          type="number" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mdb-tab>
+                <mdb-tab title="Seguros Asociados">
+                  <div id="tabSeguros_Asociados" class="row">
+                    <div id="divSeguros_Asociados" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Seguros Asociados</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button"
+                            (click)="addSeguros_AsociadosToMR(); $event.stopPropagation();"(click)="MRaddSeguros_Asociados = true" [disabled]="MRaddSeguros_Asociados">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourceSeguros_Asociados" multiTemplateDataRows class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                          <ng-container *ngIf="!AeronaveForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="editSeguros_Asociados(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="deleteSeguros_Asociados(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Proveedor_de_Seguro">
+                            <th mat-header-cell *matHeaderCellDef> Proveedor de Seguro</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Proveedor_de_Seguro_Proveedores_de_Seguros?.Nombre}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tipo_de_Seguro">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de Seguro</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.Tipo_de_Seguro_Tipo_de_Seguro?.Descripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Numero_de_Poliza">
+                            <th mat-header-cell *matHeaderCellDef> Número de Poliza </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Numero_de_Poliza}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_De_Vigencia">
+                            <th mat-header-cell *matHeaderCellDef> Fecha De Vigencia </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_De_Vigencia |date}} </td>
+                          </ng-container>
+
+                          <ng-container *ngIf="!AeronaveForm.disabled" matColumnDef="actionsForm">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element; let dataIndex = dataIndex;">
+                              <div class="actions" *ngIf="element.edit">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  (click)="element.edit = false; saveSeguros_Asociados(element);"(click)="MRaddSeguros_Asociados = false"
+                                  [disabled]="!Seguros_AsociadosItems.controls[dataIndex].valid">
+                                  <mat-icon>check</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  (click)="cancelEditSeguros_Asociados(element)"(click)="MRaddSeguros_Asociados = false">
+                                  <mat-icon>close</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex;"
+                              [attr.colspan]="getSeguros_AsociadosColumns().length" style="padding-left:0px">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_Seguros_Asociados_aItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataIndex">
+
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Proveedor de Seguro</mat-label>
+                                          <mat-select placeholder="Proveedor de Seguro"
+                                            formControlName="Proveedor_de_Seguro">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varProveedores_de_Seguros"
+                                              [value]="item.Clave">
+                                              {{ item.Nombre }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tipo de Seguro</mat-label>
+                                          <mat-select placeholder="Tipo de Seguro" formControlName="Tipo_de_Seguro" required>
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varTipo_de_Seguro" [value]="item.Clave">
+                                              {{ item.Descripcion }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Numero de Poliza</mat-label>
+                                          <input matInput formControlName="Numero_de_Poliza" type="text" required/>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha De Vigencia</mat-label>
+                                          <input matInput (focus)="rpicker.open()" (keypress)="soloFecha($event)" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_De_Vigencia" type="text" required />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker" ></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getSeguros_AsociadosColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getSeguros_AsociadosColumns();let index = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['actionsForm','expandedDetail']; let index = index"
+                            class="example-detail-row">
+                          </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mdb-tab>
+              </mdb-tabs>
+              
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="mr-3 mb-2" [disabled]="!AeronaveForm.valid || consult || MRaddFotografias_de_la_aeronave || MRaddMotores_de_Aeronave || MRaddSeguros_Asociados" mat-raised-button
+                    color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!AeronaveForm.valid || consult" mat-raised-button color="primary" hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!AeronaveForm.valid || consult" mat-raised-button color="primary" hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!AeronaveForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()"
+                    mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

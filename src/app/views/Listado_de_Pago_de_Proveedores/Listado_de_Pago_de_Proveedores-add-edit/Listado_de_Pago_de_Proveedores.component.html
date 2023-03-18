@@ -1,0 +1,553 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Listado de Pago de Proveedores</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/Listado_de_Pago_de_Proveedores/list">Listado de Pago de Proveedores</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+              <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Listado_de_Pago_de_ProveedoresForm">
+              <mat-tab-group #tabGroup>
+                <mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br>
+                  <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio"
+                          [type]="Listado_de_Pago_de_ProveedoresForm.get('Folio').value == 'Auto' ? 'text':'number'"
+                          required />
+                        <mat-error *ngIf="Listado_de_Pago_de_ProveedoresForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+                    <div id="divProveedor" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 bottom-select">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Proveedor</mat-label>
+                        <ng-select ngSelectMat formControlName="Proveedor" dropdownPosition="bottom"
+                          (search)="searchProveedor($event.term)" (clear)="searchProveedor()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingProveedor">
+                          <ng-option *ngFor="let option of listaProveedor | async"
+                            [value]="option.Clave">{{option.Razon_social}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divNo__de_OC" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 bottom-select">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>No. de OC</mat-label>
+                        <ng-select ngSelectMat formControlName="No__de_OC" dropdownPosition="bottom"
+                          (search)="searchNo__de_OC($event.term)" (clear)="searchNo__de_OC()"
+                          [loadingText]="loadingText" [notFoundText]="notFound" [loading]="isLoadingNo__de_OC">
+                          <ng-option *ngFor="let option of listaNo__de_OC | async"
+                            [value]="option.Folio">{{option.FolioGeneracionOC}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divEstatus" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 bottom-select">
+                      <mat-form-field class="lbl-ng-select">
+                        <mat-label>Estatus</mat-label>
+                        <ng-select ngSelectMat formControlName="Estatus" dropdownPosition="bottom"
+                          (search)="searchEstatus($event.term)" (clear)="searchEstatus()" [notFoundText]="notFound">
+                          <ng-option *ngFor="let option of listaEstatus | async"
+                            [value]="option.Folio">{{option.Descripcion}}</ng-option>
+                        </ng-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFecha_Requerida" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha Requerida</mat-label>
+                        <input (dateChange)="Fecha_Requerida_ExecuteBusinessRules()"
+                          (blur)="Fecha_Requerida_ExecuteBusinessRules()" matInput
+                          (focus)="datePickerFecha_Requerida.open()" [matDatepicker]="datePickerFecha_Requerida"
+                          formControlName="Fecha_Requerida" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha_Requerida"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha_Requerida></mat-datepicker>
+                        <mat-error
+                          *ngIf="Listado_de_Pago_de_ProveedoresForm.get('Fecha_Requerida').hasError('required')">
+                          Fecha Requerida es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-1" style="padding-top: 2rem;">
+                      <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                        (click)="getDataTable()">
+                        Consultar
+                      </button>
+                    </div>
+
+                    <div class="col-md-1 mb-2" style="padding-top: 2rem;">
+                      <button type='button' class="mr-3 btn-sm" mat-raised-button color="primary"
+                        (click)="fnClearFilter()">
+                        Limpiar
+                      </button>
+                    </div>
+
+                    <div id="divPago_de_Proveedores" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="table-responsive">
+                        <div class="top-action-container-table">
+                          <h4>Pago de Proveedores</h4>
+                          <button *ngIf="operation !== 'Consult'" color="primary" mat-mini-fab type="button" hidden
+                            (click)="addPago_de_ProveedoresToMR(); $event.stopPropagation();"(click)="MRaddPago_de_Proveedores = true" [hidden]="MRaddPago_de_Proveedores">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </div>
+                        <table mat-table [dataSource]="dataSourcePago_de_Proveedores" multiTemplateDataRows>
+
+                          <ng-container *ngIf="!Listado_de_Pago_de_ProveedoresForm.disabled" matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <mat-cell *matCellDef="let element;">
+                              <div class="actions">
+                                <button mat-icon-button class="btn-tbl-edit" type="button"
+                                  [hidden]="element.Estatus == 7 || RoleId == 40"
+                                  (click)="openWindowIngreso_de_Costos(element);">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-tbl-delete" type='button'
+                                  *ngIf="element.IdSolicitudPago > 0 && (element.Estatus != 7 && RoleId != 40)"
+                                  (click)="deleteSolicitudPago(element); $event.stopPropagation();">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Partida">
+                            <th mat-header-cell *matHeaderCellDef> Partida </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Partida}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Proveedor">
+                            <th mat-header-cell *matHeaderCellDef> Proveedor</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.ProveedorRazon_social}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Matricula">
+                            <th mat-header-cell *matHeaderCellDef> Matricula</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Matricula_Aeronave?.Matricula}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__de_Factura">
+                            <th mat-header-cell *matHeaderCellDef> No. de Factura </th>
+                            <td mat-cell *matCellDef="let element"> {{element.No__de_Factura}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Factura">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Factura </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Factura}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Total_de_Factura_">
+                            <th mat-header-cell *matHeaderCellDef>Total de Factura $</th>
+                            <td class="center" mat-cell *matCellDef="let element">
+                              {{element.Total_de_Factura_== null ? "0.00" : element.Total_de_Factura_
+                              |number:'1.2-2':'en-US'}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Moneda">
+                            <th mat-header-cell *matHeaderCellDef> Moneda</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Moneda}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="No__de_OC">
+                            <th mat-header-cell *matHeaderCellDef> No. de OC</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.No__de_OCFolioGeneracionOC}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_de_Pago">
+                            <th mat-header-cell *matHeaderCellDef> Fecha de Pago </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_de_Pago}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Fecha_Requerida">
+                            <th mat-header-cell *matHeaderCellDef> Fecha Requerida </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Fecha_Requerida}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Tiempos_de_Pago">
+                            <th mat-header-cell *matHeaderCellDef> Tiempos de Pago</th>
+                            <td class="center" mat-cell *matCellDef="let element"> {{element.Tiempos_de_Pago}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Nota_de_Credito">
+                            <th mat-header-cell *matHeaderCellDef> Nota de Crédito </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Nota_de_Credito}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Observaciones">
+                            <th mat-header-cell *matHeaderCellDef> Observaciones </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Observaciones}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Estatus">
+                            <th mat-header-cell *matHeaderCellDef> Estatus</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.EstatusDescripcion}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Solicitud_de_Pago">
+                            <th mat-header-cell *matHeaderCellDef class="width: 15% !important"> Solicitud de Pago</th>
+                            <td mat-cell *matCellDef="let element">
+
+                              <div class="row" style="display: table;">
+                                <button type="button" mat-raised-button color="basic" class="mb-2 mr-1" mat-button
+                                  [disabled]=" RoleId == 40 || ( element.IdSolicitudPago>0 && element.Estatus==7) "
+                                  (click)="fnSolicitudDePago(element)">
+                                  Solicitud de Pago
+                                </button>
+                                <div class="text-center f-w" style="display: table-cell">
+                                  <mat-checkbox
+                                    [disabled]=" RoleId == 40 || ( element.IdSolicitudPago>0 && element.Estatus==7) "
+                                    [ngClass]="'tbl-checkbox'" class="clsMatcheckbox"
+                                    [checked]="element.Solicitud_de_Pago"
+                                    (change)="onChangeSolicitud_de_Pago($event, element)"></mat-checkbox>
+                                </div>
+                                <button type="button" class="btnPlus" *ngIf="element.IdSolicitudPago>0 "
+                                  (click)="addSolicitudPago(element)">
+                                  <a class="text-center f-w">
+                                    <i class="fas fa-plus"></i>
+                                  </a>
+                                </button>
+                              </div>
+
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="IdSolicitudPago">
+                            <th mat-header-cell *matHeaderCellDef> IdSolicitudPago</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.IdSolicitudPago_Ingreso_de_Costos?.IdSolicitudPago}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="EsPrincipal">
+                            <th mat-header-cell *matHeaderCellDef> EsPrincipal</th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="text-center f-w">
+                                <mat-checkbox [disabled]="true" [checked]="element.EsPrincipal"
+                                  [ngClass]="'tbl-checkbox'"></mat-checkbox>
+                              </div>
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element; let i = index; let dataIndex = dataIndex"
+                              [attr.colspan]="getPago_de_ProveedoresColumns().length">
+
+                              <div [@detailExpand]="collapseAll ? 'expanded':'collapsed' ">
+                                <div *ngIf="element.edit">
+                                  <form formArrayName="Detalle_de_Listado_de_Pago_de_ProveedoresItems">
+
+                                    <div class="row form-group"
+                                      [formGroupName]="dataSourcePago_de_Proveedores.data.indexOf(element)">
+
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Partida</mat-label>
+                                          <input matInput formControlName="Partida" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Proveedor</mat-label>
+                                          <input type="text" matInput formControlName="Proveedor"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectProveedor_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnProveedor_Detalle_de_Listado_de_Pago_de_Proveedores.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varCreacion_de_Proveedores"
+                                              [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionProveedor_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)">
+                                              {{option.Razon_social}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingProveedor_Detalle_de_Listado_de_Pago_de_Proveedores"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varCreacion_de_Proveedores.length ==0 &&  !isLoadingProveedor_Detalle_de_Listado_de_Pago_de_Proveedores && searchProveedor_Detalle_de_Listado_de_Pago_de_ProveedoresCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Matricula</mat-label>
+                                          <input type="text" matInput formControlName="Matricula"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectMatricula_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnMatricula_Detalle_de_Listado_de_Pago_de_Proveedores.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varAeronave" [value]="option.Matricula"
+                                              (onSelectionChange)="updateOptionMatricula_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)">
+                                              {{option.Matricula}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingMatricula_Detalle_de_Listado_de_Pago_de_Proveedores"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varAeronave.length ==0 &&  !isLoadingMatricula_Detalle_de_Listado_de_Pago_de_Proveedores && searchMatricula_Detalle_de_Listado_de_Pago_de_ProveedoresCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. de Factura</mat-label>
+                                          <input matInput formControlName="No__de_Factura" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha de Factura</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_de_Factura" type="text" />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Total de Factura $</mat-label>
+                                          <span matPrefix>
+                                            <mat-icon class="mr-2">attach_money</mat-icon>
+                                          </span>
+                                          <input matInput formControlName="Total_de_Factura_" mask="separator.2"
+                                            thousandSeparator="," />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Moneda</mat-label>
+                                          <input type="text" matInput formControlName="Moneda" [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectMoneda_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnMoneda_Detalle_de_Listado_de_Pago_de_Proveedores.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varMoneda" [value]="option.Clave"
+                                              (onSelectionChange)="updateOptionMoneda_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)">
+                                              {{option.Descripcion}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingMoneda_Detalle_de_Listado_de_Pago_de_Proveedores"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varMoneda.length ==0 &&  !isLoadingMoneda_Detalle_de_Listado_de_Pago_de_Proveedores && searchMoneda_Detalle_de_Listado_de_Pago_de_ProveedoresCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>No. de OC</mat-label>
+                                          <input type="text" matInput formControlName="No__de_OC"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectNo__de_OC_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnNo__de_OC_Detalle_de_Listado_de_Pago_de_Proveedores.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varGeneracion_de_Orden_de_Compras"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionNo__de_OC_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)">
+                                              {{option.FolioGeneracionOC}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingNo__de_OC_Detalle_de_Listado_de_Pago_de_Proveedores"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varGeneracion_de_Orden_de_Compras.length ==0 &&  !isLoadingNo__de_OC_Detalle_de_Listado_de_Pago_de_Proveedores && searchNo__de_OC_Detalle_de_Listado_de_Pago_de_ProveedoresCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha de Pago</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_de_Pago" type="text" />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Fecha Requerida</mat-label>
+                                          <input matInput (focus)="rpicker.open()" [matDatepicker]="rpicker"
+                                            formControlName="Fecha_Requerida" type="text" />
+                                          <mat-datepicker-toggle matSuffix [for]="rpicker"></mat-datepicker-toggle>
+                                          <mat-datepicker #rpicker></mat-datepicker>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Tiempos de Pago</mat-label>
+                                          <input matInput formControlName="Tiempos_de_Pago" type="number" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Nota de Crédito</mat-label>
+                                          <input matInput formControlName="Nota_de_Credito" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Observaciones</mat-label>
+                                          <input matInput formControlName="Observaciones" type="text" />
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>Estatus</mat-label>
+                                          <input type="text" matInput formControlName="Estatus"
+                                            [matAutocomplete]="auto">
+                                          <mat-icon style="font-size: 24px;" matSuffix>arrow_drop_down</mat-icon>
+                                          <mat-autocomplete
+                                            (optionSelected)="selectEstatus_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)"
+                                            #auto="matAutocomplete"
+                                            [displayWith]="displayFnEstatus_Detalle_de_Listado_de_Pago_de_Proveedores.bind(cthis, element)">
+                                            <mat-option *ngFor="let option of varEstatus_de_Seguimiento"
+                                              [value]="option.Folio"
+                                              (onSelectionChange)="updateOptionEstatus_Detalle_de_Listado_de_Pago_de_Proveedores($event, element)">
+                                              {{option.Descripcion}}
+                                            </mat-option>
+                                            <mat-option
+                                              *ngIf="isLoadingEstatus_Detalle_de_Listado_de_Pago_de_Proveedores"
+                                              class="is-loading">
+                                              <mat-spinner diameter="50"></mat-spinner>
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                          <mat-hint
+                                            *ngIf="varEstatus_de_Seguimiento.length ==0 &&  !isLoadingEstatus_Detalle_de_Listado_de_Pago_de_Proveedores && searchEstatus_Detalle_de_Listado_de_Pago_de_ProveedoresCompleted">No
+                                            se encontraron registros.</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-checkbox formControlName="Solicitud_de_Pago"
+                                          [value]="element.Solicitud_de_Pago" class="example-margin">
+                                          Solicitud de Pago
+                                        </mat-checkbox>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-form-field appearance="outline">
+                                          <mat-label>IdSolicitudPago</mat-label>
+                                          <mat-select placeholder="IdSolicitudPago" formControlName="IdSolicitudPago">
+                                            <mat-option>
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of varIngreso_de_Costos" [value]="item.Folio">
+                                              {{ item.IdSolicitudPago }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3">
+                                        <mat-checkbox formControlName="EsPrincipal" [value]="element.EsPrincipal"
+                                          class="example-margin">
+                                          EsPrincipal
+                                        </mat-checkbox>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <button type='button' class="mr-3 btn-sm" mat-raised-button
+                                          (click)="element.edit = false; savePago_de_Proveedores(element);"(click)="MRaddPago_de_Proveedores = false"
+                                          color="primary">Guardar
+                                        </button>
+                                        <button type="button" class="mr-3 btn-sm" mat-raised-button color="basic"
+(click)="MRaddPago_de_Proveedores = false"                                          (click)="cancelEditPago_de_Proveedores(element)" mat-button>Cancelar</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+                                </div>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="getPago_de_ProveedoresColumns()"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted || (row.edit && row.Folio ==0 )}"
+                            *matRowDef="let row; columns: getPago_de_ProveedoresColumns();let j = index"></tr>
+                          <tr mat-row [ngClass]="{'hide': row.IsDeleted}"
+                            *matRowDef="let row; columns: ['expandedDetail']; let j = index" class="example-detail-row">
+                          </tr>
+
+                          <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell text-center" colspan="15">No hay registros disponibles
+                            </td>
+                          </tr>
+
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button type='button' class="mr-3 mb-2"
+                    [disabled]="!Listado_de_Pago_de_ProveedoresForm.valid || consult" hidden mat-raised-button
+                    color="primary">Guardar
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()"
+                    [disabled]="!Listado_de_Pago_de_ProveedoresForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()"
+                    [disabled]="!Listado_de_Pago_de_ProveedoresForm.valid || consult" mat-raised-button color="primary"
+                    hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2"
+                    [disabled]="!Listado_de_Pago_de_ProveedoresForm.valid || consult" mat-raised-button
+                    color="primary">Configurar </button>
+                  <button type="button" class="mb-2" mat-raised-button color="basic" (click)="goToList()" hidden
+                    mat-button>Cancelar</button>
+
+                  <button type='button' mat-raised-button class="mr-3 mb-2" (click)="GenerarSolicitudPagoMultiple()"
+                    color="primary">Solicitud de Pago Multiple
+                  </button>
+                  <button type='button' mat-raised-button class="mr-3 mb-2" (click)="fnRegistroFactura()"
+                    color="primary">Registro Factura
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

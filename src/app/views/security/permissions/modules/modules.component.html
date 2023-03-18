@@ -1,0 +1,68 @@
+<div style="background-color: white;" >
+    <div class="row" style="margin-top: 15px; margin-left: -5px;">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6 ml-2">
+            <h2><strong>{{ 'Seguridad.Permisos.modules.Módulos' | translate }}</strong></h2>
+        </div>
+        <div class="col-xl-7 col-lg-7 col-md-7 col-sm-4 col-xs-4" style="margin-top: 15px;"> 
+            {{ 'Seguridad.Permisos.modules.Configuración' | translate }}
+        </div>
+    </div>
+
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-5 col-xl-5">
+                <mat-form-field class="example-full-width no-padding" appearance="outline">
+                    <mat-label>{{ 'Seguridad.Permisos.modules.Rol del usuario' | translate }}</mat-label>
+                    <mat-select [(ngModel)]="selectedValue" placeholder="Rol del usuario" (selectionChange)="changeSelectedRole()">
+                        <mat-option *ngFor="let role of userRoles" [value]="role.User_Role_Id"  >{{role.Description}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-1 col-xl-1" (click)="openDialogRol(0)">
+                <div class="font-icon" style="margin-top: 8px">
+                    <div class="icon-preview" style="cursor: pointer;"><i class="fas fa-plus"></i></div>
+                </div>
+            </div>
+            <div  class="col-xs-5 col-sm-5 col-md-5 col-lg-4 col-xl-4" (click)="openDialogRol(1)">
+                <div class="font-icon" style="margin-top: 8px">
+                    <div class="icon-preview" style="cursor: pointer;"><i class="fas fa-edit"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <app-module-tree class="col-xs-7 col-sm-7 col-md-7 col-lg-6 col-xl-6"></app-module-tree>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 col-xl-1"></div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-4 col-xl-5 mt-4">
+                <div class="col-xl-12 col-lg-12 col-md-2 col-sm-2 col-xs-2">
+                    <div class="font-icon" (click)="openDialogModule(0)" style="cursor: pointer;">
+                        <div class="icon-preview" ><i class="fas fa-plus"></i></div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-2 col-sm-2 col-xs-2">
+                    <div class="font-icon" (click)="openDialogModule(1)" style="cursor: pointer;">
+                        <div class="icon-preview" ><i class="fas fa-edit"></i></div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-2 col-sm-2 col-xs-2">
+                    <div class="font-icon" (click)="deleteModule()" style="cursor: pointer;">
+                        <div class="icon-preview" ><i class="fas fa-trash"></i></div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-12 col-lg-12 col-md-2 col-sm-2 col-xs-2 mt-5" style="padding-bottom: 0;margin-bottom: 0;">
+                    <div class="font-icon" (click)="upModule()" style="cursor: pointer; padding-bottom: 0;margin-bottom: 0;">
+                        <div class="icon-preview" ><i class="fas fa-caret-up"></i></div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-2 col-sm-2 col-xs-2">
+                    <div class="font-icon" (click)="downModule()" style="cursor: pointer;">
+                        <div class="icon-preview" ><i class="fas fa-caret-down"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

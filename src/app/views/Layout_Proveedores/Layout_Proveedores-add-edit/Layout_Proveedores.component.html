@@ -1,0 +1,137 @@
+﻿<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Layout Proveedores</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/dashboard/main">
+                <i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+			  <a routerLink="/Layout_Proveedores/list">Layout Proveedores</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <ngx-spinner name="loading" type="ball-spin-fade" fullScreen="false">
+                <p style="color: white">Procesando</p>
+            </ngx-spinner>
+            <form class="m-4" [formGroup]="Layout_ProveedoresForm" (ngSubmit)="save()">
+              <mat-tab-group #tabGroup>
+<mat-tab aria-label="Datos_Generales" label="Datos Generales"> <br> <div id="tabDatos_Generales" class="row">
+                    <div id="divFolio" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Folio</mat-label>
+                        <input matInput formControlName="Folio" [type]="Layout_ProveedoresForm.get('Folio').value == 'Auto' ? 'text':'number'" required />
+                        <mat-error *ngIf="Layout_ProveedoresForm.get('Folio').hasError('required')">
+                          Folio es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div id="divFolio_de_carga_manual" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline"  >
+                        <mat-label>Folio de carga manual</mat-label>
+                        <input (change)="Folio_de_carga_manual_ExecuteBusinessRules()" matInput formControlName="Folio_de_carga_manual" [type]="Layout_ProveedoresForm.get('Folio_de_carga_manual').value == 'Auto'  ? 'text':'number' " maxlength="9" required />
+                        <mat-error *ngIf="Layout_ProveedoresForm.get('Folio_de_carga_manual').hasError('required')">
+                          Folio de carga manual  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divFecha" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Fecha</mat-label>
+                        <input (dateChange)="Fecha_ExecuteBusinessRules()" (blur)="Fecha_ExecuteBusinessRules()" matInput (focus)="datePickerFecha.open()" [matDatepicker]="datePickerFecha" formControlName="Fecha" [max]="today" type="text" required />
+                        <mat-datepicker-toggle matSuffix [for]="datePickerFecha"></mat-datepicker-toggle>
+                        <mat-datepicker #datePickerFecha></mat-datepicker>
+                        <mat-error *ngIf="Layout_ProveedoresForm.get('Fecha').hasError('required')">
+                          Fecha  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divID_Proveedor" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>ID_Proveedor</mat-label>
+                        <mat-select (selectionChange)="ID_Proveedor_ExecuteBusinessRules()" placeholder="ID_Proveedor" formControlName="ID_Proveedor" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCreacion_de_Proveedores" [value]="item.Clave">
+                            {{ item.Razon_social }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Layout_ProveedoresForm.get('ID_Proveedor').hasError('required')">
+                          ID_Proveedor es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divRFC_Proveedor" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>RFC_Proveedor</mat-label>
+                        <mat-select (selectionChange)="RFC_Proveedor_ExecuteBusinessRules()" placeholder="RFC_Proveedor" formControlName="RFC_Proveedor" required>
+                          <mat-option>
+
+                          </mat-option>
+                          <mat-option *ngFor="let item of varCreacion_de_Proveedores" [value]="item.Clave">
+                            {{ item.Razon_social }}
+                          </mat-option>
+                        </mat-select>
+						<mat-error *ngIf="Layout_ProveedoresForm.get('RFC_Proveedor').hasError('required')">
+                          RFC_Proveedor es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divDescripcion_Proveedor" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Descripcion_Proveedor</mat-label>
+                        <input (change)="Descripcion_Proveedor_ExecuteBusinessRules()" #Descripcion_Proveedor matInput formControlName="Descripcion_Proveedor" type="text" maxlength="500" required />
+                        <mat-error *ngIf="Layout_ProveedoresForm.get('Descripcion_Proveedor').hasError('required')">
+                          Descripcion_Proveedor  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div id="divMonto" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width no-padding" appearance="outline">
+                        <mat-label>Monto</mat-label>
+                        <input (change)="Monto_ExecuteBusinessRules()" matInput formControlName="Monto" [value]="Layout_ProveedoresForm.get('Monto').value | number:'18.1-2'" type="number" maxlength="18" required />
+                        <mat-error *ngIf="Layout_ProveedoresForm.get('Monto').hasError('required')">
+                          Monto  es requerido
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                </div>
+                </mat-tab>
+              </mat-tab-group>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button  class="mr-3 mb-2" [disabled]="!Layout_ProveedoresForm.valid || consult" mat-raised-button
+                    color="primary">Guardar 
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndNew()" [disabled]="!Layout_ProveedoresForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Nuevo
+                  </button>
+                  <button type='button' class="mr-3 mb-2" (click)="saveAndCopy()" [disabled]="!Layout_ProveedoresForm.valid || consult"
+                    mat-raised-button color="primary"hidden>Guardar y Copia
+                  </button>
+                  <button [hidden]="!hasPermision('Configure')" class="mr-3 mb-2" [disabled]="!Layout_ProveedoresForm.valid || consult" mat-raised-button color="primary">Configurar </button>
+                  <button type="button" class="mb-2"  mat-raised-button color="basic" (click)="goToList()" mat-button>Cancelar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="snackbar"></div>

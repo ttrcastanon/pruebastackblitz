@@ -1,0 +1,32 @@
+﻿import { BaseView } from '../shared/base-views/base-view';
+import { FormArray, Validators } from '@angular/forms';
+import { FormField } from '../shared/base-views/decorators/reactive-form-decorators';
+import { FileInput } from 'ngx-material-file-input';
+import { Spartan_User } from './Spartan_User';
+import { Solicitud_de_Vuelo } from './Solicitud_de_Vuelo';
+
+
+export class Reabrir_vuelo  extends BaseView {
+    @FormField('Folio', [0])
+    Folio = 0;
+    @FormField('Fecha_de_Registro', [''])
+    Fecha_de_Registro = '';
+    @FormField('Hora_de_Registro', [''])
+    Hora_de_Registro = '';
+    @FormField('Usuario_que_Registra', [''])
+    Usuario_que_Registra = null;
+    Usuario_que_Registra_Spartan_User: Spartan_User;
+    @FormField('Numero_de_Vuelo', [''])
+    Numero_de_Vuelo = null;
+    Numero_de_Vuelo_Solicitud_de_Vuelo: Solicitud_de_Vuelo;
+    @FormField('Motivo_de_reapertura', [''])
+    Motivo_de_reapertura = '';
+
+     @FormField('Reabrir_vuelos', [''])
+     Reabrir_vuelos: Reabrir_vuelo[] = [];
+
+     edit = false;
+     isNew = false;        
+     IsDeleted = false;
+}
+
